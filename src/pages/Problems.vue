@@ -283,6 +283,10 @@ onMounted(() => {
             @include border_color('fill12');
             @include font_color('fill12');
           }
+
+          &::placeholder {
+            @include font_color('font3');
+          }
         }
       }
     }
@@ -306,6 +310,11 @@ onMounted(() => {
         display: flex;
         align-items: center;
         justify-content: center;
+      }
+      
+      &:hover > div {
+        @include border_color('fill12');
+        @include font_color('fill12');
       }
     }
   }

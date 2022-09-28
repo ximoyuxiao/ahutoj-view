@@ -816,26 +816,28 @@ onMounted(() => {
       border-radius: 15px;
       padding: 10px 15px;
     }
-
-    .function > div {
-      position: relative;
-      overflow: hidden;
-      margin: 8px 0;
-      width: 220px;
-      height: 40px;
-      border-radius: 15px;
-      font-size: $fontSize8;
+    .function {
       @include font_color('font1');
-      letter-spacing: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      @include box_shadow(0, 0, 2px, 1px, 'border2');
-      transition-duration: 200ms;
+      
+      > div {
+        position: relative;
+        overflow: hidden;
+        margin: 8px 0;
+        width: 220px;
+        height: 40px;
+        border-radius: 15px;
+        font-size: $fontSize8;
+        letter-spacing: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        @include box_shadow(0, 0, 2px, 1px, 'border2');
+        transition-duration: 200ms;
 
-      &:hover {
-        @include box_shadow(0, 0, 2px, 1px, 'fill12');
-        @include fill_color('fill16');
+        &:hover {
+          @include box_shadow(0, 0, 2px, 1px, 'fill12');
+          @include fill_color('fill16');
+        }
       }
     }
   }

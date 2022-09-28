@@ -36,6 +36,12 @@
         </router-link>
       </div>
       <div class="right">
+        <img
+          v-show="store.state.themeSwitch.theme == 2"
+          class="cyberpunkTheme cursor_pointer"
+          src="../assets/image/global/cyberpunk.svg"
+          @click="cyberpunkTheme"
+        />
         <label class="switch">
           <input
             ref="themeSwitch"
@@ -429,6 +435,12 @@ function changeTheme() {
   store.commit('themeSwitch/switch', config.theme)
 }
 
+function cyberpunkTheme() {
+  if (config.theme == 1) config.theme = 2
+  proxy.$refs.themeSwitch.checked = true
+  store.commit('themeSwitch/switchCyberpunkTheme')
+}
+
 //登录窗口
 function loginDialog() {
   config.showLoginDialog = config.showLoginDialog == 0 ? 1 : 0
@@ -778,6 +790,12 @@ onMounted(() => {
           }
         }
       }
+    }
+
+    .cyberpunkTheme {
+      width: 35px;
+      height: 35px;
+      margin: 0 20px;
     }
   }
 }
