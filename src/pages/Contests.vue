@@ -1,0 +1,383 @@
+<template>
+  <div class="contest">
+    <div
+      class="top"
+      ref="searchResult"
+      v-show="contests.list.length != 0"
+    >
+      <div class="list">
+        <div
+          class="item"
+          v-for="(item, index) in contests.list"
+          :key="index"
+        >
+          <div class="goingFlag">
+            <div
+              v-if="item.EndTime > config.serverTime"
+              class="going"
+              style="background-color: #5ebd00"
+            ></div>
+            <div
+              v-else
+              class="finish"
+              style="background-color: #969696"
+            ></div>
+          </div>
+          <div class="publicFlag">
+            <div
+              v-if="item.IsPublic == 1"
+              style="color: #5ebd00"
+            >
+              <el-icon
+                color="#5ebd00"
+                size="22px"
+              >
+                <Unlock />
+              </el-icon>公开
+            </div>
+            <div
+              v-else
+              style="color: #ff3300"
+            >
+              <el-icon
+                color="#ff3300"
+                size="22px"
+              >
+                <Lock />
+              </el-icon>私有
+            </div>
+          </div>
+          <div class="cidFlag">&nbsp;#{{ item.CID }}&nbsp;</div>
+          <div
+            class="content cursor_pointer"
+            @click="() => getContestById(item)"
+          >
+            <div class="title">
+              {{ item.Title }}
+            </div>
+            <div class="contestInfo">
+              创建者：{{ item.UID }}
+              <el-divider direction="vertical" />
+              类型：{{ item.Type == 1 ? "ACM" : "OI" }}
+            </div>
+            <div class="timeInfo">
+              开始时间：{{ proxy.Utils.timestampToTime(item.BeginTime) }}
+              <el-divider direction="vertical" />
+              结束时间：{{ proxy.Utils.timestampToTime(item.EndTime) }}
+              <el-divider direction="vertical" />
+              时长：
+              {{ proxy.Utils.timeIntervalToTime(item.EndTime, item.BeginTime) }}
+            </div>
+          </div>
+          <div class=""></div>
+        </div>
+      </div>
+      <div class="pagination">
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :page-size="config.limit"
+          :total="config.Count"
+          :current-page="config.currentPage"
+          @current-change="config.changePage"
+        />
+        <el-radio-group
+          v-model="config.limit"
+          @change="config.changePage(1)"
+          style="margin: 0 20px"
+        >
+          <el-radio-button :label="20" />
+          <el-radio-button :label="30" />
+          <el-radio-button :label="50" />
+        </el-radio-group>
+      </div>
+    </div>
+    <div
+      class="notFound"
+      v-show="contests.list.length == 0"
+    >
+      <el-empty description="未找到结果" />
+    </div>
+  </div>
+</template>
+
+<script lang="ts" setup name="Contests">
+import { getCurrentInstance, onMounted, reactive } from 'vue'
+import { useStore } from 'vuex'
+import { ElMessageBox } from 'element-plus'
+const { proxy } = getCurrentInstance() as any
+const store = useStore()
+
+//页面数据
+type contestsType = {
+  list: {
+    BeginTime: number
+    CID: number
+    EndTime: number
+    IsPublic: number
+    Title: string
+    Type: number
+    UID: string
+  }[]
+}
+var contests = reactive<contestsType>({
+  list: [],
+})
+
+//页面配置数据
+type configType = {
+  Count: number
+  currentPage: number
+  limit: number
+  loading: any
+  serverTime: number
+  [item: string]: any
+}
+var config = reactive<configType>({
+  Count: 0,
+  currentPage: 1,
+  limit: 20,
+  loading: null,
+  serverTime: Date.now(),
+  init() {
+    this.Count = 0
+    this.currentPage = 1
+    this.limit = 20
+    this.loading = null
+    this.serverTime = Date.now()
+  },
+  //切换页面
+  changePage: (page: number): void => {
+    config.currentPage = page
+    SyncUrl()
+    getContests()
+  },
+})
+
+//获取竞赛列表
+function getContests() {
+  config.loading = proxy.elLoading({
+    node: proxy.$refs.searchResult,
+  })
+  proxy
+    .$get(
+      'api/contest/list?Page=' +
+        (config.currentPage - 1) +
+        '&Limit=' +
+        config.limit
+    )
+    .then((res) => {
+      let data = res.data
+      if (data.code == 0) {
+        // console.log(data)
+        config.Count = data.Size
+        contests.list = data.Data
+      }
+      config.loading.close()
+      proxy.codeProcessor(data.code)
+    })
+
+  //同步服务器时间
+  proxy.getServerTime().then((res) => {
+    let now = Date.now()
+    if (res.time == null || Math.abs(res.time * 1000 - now) < 1500) {
+      return
+    }
+    config.serverTime = res.time
+  })
+}
+
+//跳转题目
+function getContestById(contest) {
+  //验证策略
+  if (contest.IsPublic == 1) {
+    proxy.$router.push({
+      path: '/Contest',
+      query: {
+        CID: contest.CID,
+      },
+    })
+  } else {
+    ElMessageBox.prompt('请输入竞赛“' + contest.Title + '”的密码：', '验证', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      inputValidator: function f(s) {
+        if (s == '') return '请输入密码'
+      },
+      inputErrorMessage: '',
+    }).then((res) => {
+      let pass: string = res.value
+      if (!pass) {
+        proxy.elMessage({
+          message: '密码不能为空!',
+          type: 'warning',
+        })
+        return
+      }
+      proxy.$router.push({
+        path: '/Contest',
+        query: {
+          CID: contest.CID,
+          Pass: pass,
+        },
+      })
+    })
+  }
+}
+
+//用于同步浏览器url
+function SyncUrl() {
+  //仅用于展示实时url，可用于复制跳转
+  proxy.$router.replace({
+    path: '/Contests',
+    query: {
+      Page: config.currentPage,
+      Limit: config.limit,
+    },
+  })
+}
+
+onMounted(() => {
+  //同步url参数
+  if (proxy.$route.query.Page) config.currentPage = proxy.$route.query.Page - 0
+  if (proxy.$route.query.Limit) config.limit = proxy.$route.query.Limit - 0
+  getContests()
+})
+</script>
+
+<style  scoped>
+.contest {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--page_outerPaddingTop) var(--page_outerPaddingLeft);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.top {
+  width: 100%;
+  background-color: var(--bcg_color2);
+  border-radius: 10px;
+}
+
+.top .notFound {
+  width: 100%;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.top .list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+  padding: 5px;
+}
+
+.top .list .item {
+  width: 100%;
+  height: 70px;
+  box-sizing: border-box;
+  padding: 3px 10px;
+  margin: 5px 0;
+  border-radius: 8px;
+  border: 1px solid var(--border_color1);
+  display: flex;
+  align-items: center;
+  transition-duration: 300ms;
+}
+
+.top .list .item:hover {
+  background-color: var(--bcg_color34);
+  border: 1px solid var(--bcg_color32);
+}
+
+.top .list .item:hover > .goingFlag {
+  width: 22px;
+}
+
+.top .list .item:hover > .publicFlag {
+  width: 80px;
+  opacity: 1;
+}
+
+.top .list .item:hover > .cidFlag {
+  width: 100px;
+  font-size: var(--FontSize8);
+  color: var(--font_color3);
+  opacity: 1;
+}
+
+.top .list .item .content {
+  width: fit-content;
+  font-size: var(--FontSize7);
+  color: var(--font_color1);
+}
+
+.top .list .item .content .contestInfo {
+  width: fit-content;
+  font-size: var(--FontSize3);
+  color: var(--font_color2);
+}
+
+.top .list .item .content .timeInfo {
+  width: fit-content;
+  font-size: var(--FontSize2);
+  color: var(--font_color3);
+}
+
+.top .list .item .goingFlag {
+  height: 100%;
+  width: 15px;
+  transition-duration: 300ms;
+}
+
+.top .list .item .goingFlag .going,
+.top .list .item .goingFlag .finish {
+  height: 100%;
+  width: 100%;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.top .list .item .publicFlag,
+.top .list .item .cidFlag {
+  width: 15px;
+  opacity: 0;
+  transition-duration: 300ms;
+  overflow: hidden;
+  text-align: center;
+  font-size: 18px;
+}
+
+.top .list .item .publicFlag > div,
+.top .list .item .cidFlag > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pagination {
+  margin: 25px 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+}
+
+.notFound {
+  width: 100%;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>

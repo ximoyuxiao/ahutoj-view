@@ -1,0 +1,34 @@
+{
+  "name": "ahutoj-vue3",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.0.9",
+    "ace-builds": "^1.11.2",
+    "animate.css": "^4.1.1",
+    "axios": "^0.27.2",
+    "core-js": "^3.25.3",
+    "element-plus": "^2.2.17",
+    "qs": "^6.11.0",
+    "vue": "^3.2.37",
+    "vue-router": "^4.1.5",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.23",
+    "@types/qs": "^6.9.7",
+    "@vitejs/plugin-vue": "^3.1.0",
+    "node-sass": "^7.0.3",
+    "sass": "^1.55.0",
+    "sass-loader": "^7.3.1",
+    "typescript": "^4.6.4",
+    "vite": "^3.1.0",
+    "vue-tsc": "^0.40.4"
+  }
+}

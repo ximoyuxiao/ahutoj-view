@@ -1,0 +1,62 @@
+import axios, { AxiosRequestConfig } from "axios";
+import { App } from "vue";
+
+//默认请求地址
+axios.defaults.baseURL = "http://127.0.0.1:4212/";
+
+// http request拦截器
+axios.interceptors.request.use(
+	function (config: AxiosRequestConfig): AxiosRequestConfig {
+		let Token: string | null = localStorage.getItem("ahutOjToken");
+		if (Token && config.headers) {
+			config.headers.Authorization = Token;
+		}
+		return config;
+	},
+	function (error) {
+		return Promise.reject(error);
+	}
+);
+// http respense拦截器
+axios.interceptors.response.use(
+	(res) => {
+		return res;
+	},
+	(err) => {
+		console.log(err);
+		return err.response;
+	}
+);
+
+const contentType = [
+	"application/json; charset=UTF-8",
+	"application/json; charset=UTF-8",
+	"multipart/form-data",
+];
+
+export default {
+	install: (app: App<Element>) => {
+		app.config.globalProperties.$axios = axios;
+		//封装get请求
+		app.config.globalProperties.$get = function get(
+			url: string,
+			params: object | null,
+			content: number = 0
+		) {
+			return axios.get(url, {
+				params,
+				headers: { "content-type": contentType[content] },
+			});
+		};
+		//封装post请求
+		app.config.globalProperties.$post = function post(
+			url: string,
+			data: object | null,
+			content: number = 0
+		) {
+			return axios.post(url, data, {
+				headers: { "content-type": contentType[content] },
+			});
+		};
+	},
+};
