@@ -16,10 +16,10 @@
         <div>{{ store.state.userData.UserName }}</div>
         <div class="acStatus">
           <div class="acCount">
-            AC&nbsp;&nbsp;&nbsp;<span style="font-size: var(--FontSize7)">114514</span>
+            AC&nbsp;&nbsp;&nbsp;<span>114514</span>
           </div>
           <div class="submittedCount">
-            Sub&nbsp;&nbsp;&nbsp;<span style="font-size: var(--FontSize7)">1919810</span>
+            Sub&nbsp;&nbsp;&nbsp;<span>1919810</span>
           </div>
         </div>
       </div>
@@ -453,7 +453,7 @@ onMounted(() => {
 })
 </script>
 
-<style  scoped>
+<style  scoped lang="scss">
 * {
   transition-duration: 150ms;
 }
@@ -463,200 +463,193 @@ onMounted(() => {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: var(--userCenter_outerPaddingTop) var(--userCenter_outerPaddingLeft);
+  padding: $userCenter_outerPaddingTop $userCenter_outerPaddingLeft;
   box-sizing: border-box;
   z-index: 1;
+
+  .infoBox {
+    position: relative;
+    height: 280px;
+    border-radius: 20px;
+    overflow: hidden;
+    @include box_shadow(0, 0, 8px, 1px, 'fill52');
+
+    &:hover {
+      @include fill_color('fill2');
+      @include box_shadow(0, 0, 8px, 1px, 'fill51');
+    }
+
+    .filter {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: blur(30px) opacity(0.25);
+    }
+
+    .user {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+
+      > img {
+        margin: 15px;
+        height: 120px;
+        width: 120px;
+        border-radius: 20px;
+      }
+
+      > div {
+        font-size: $fontSize12;
+        font-weight: 600;
+        height: 115px;
+        display: flex;
+        align-items: flex-end;
+      }
+
+      .acStatus {
+        height: 100%;
+        position: absolute;
+        right: 30px;
+        font-size: $fontSize5;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: flex-end;
+
+        > div {
+          font-weight: 500;
+          margin-bottom: 5px;
+        }
+      }
+    }
+
+    .userInfo {
+      width: 100%;
+      height: 115px;
+      padding: 0 20px;
+      box-sizing: border-box;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+
+      > div {
+        @include font_color('font1');
+        font-size: $fontSize6;
+        letter-spacing: 1px;
+        display: flex;
+        align-items: center;
+
+        span {
+          margin: 0 1px;
+        }
+      }
+
+      .set {
+        position: absolute;
+        right: 20px;
+        height: 115px;
+        display: flex;
+        align-items: center;
+        transition-duration: 500ms;
+
+        &:hover {
+          transform: rotateZ(360deg);
+        }
+      }
+    }
+  }
+
+  .changeInfo {
+    margin-top: $modelDistance;
+    padding: 10px 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-radius: 20px;
+    @include box_shadow(0, 0, 8px, 1px, 'fill52');
+
+    > div {
+      @include font_color('font1');
+      font-size: $fontSize6;
+      letter-spacing: 1px;
+      display: flex;
+      min-width: 100%;
+      margin: 5px 0;
+
+      span {
+        width: 60px;
+      }
+    }
+
+    > .btn {
+      position: relative;
+      overflow: hidden;
+      margin: 8px 0;
+      width: 220px;
+      height: 40px;
+      border-radius: 15px;
+      font-size: $fontSize5;
+      @include font_color('font1');
+      letter-spacing: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      @include box_shadow(0, 0, 2px, 1px, 'border2');
+      transition-duration: 200ms;
+
+      &:hover {
+        @include box_shadow(0, 0, 2px, 1px, 'fill12');
+        @include fill_color('fill15');
+      }
+    }
+  }
+
+  .contentBox {
+    margin: $modelDistance 0;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    .leftBox {
+      width: $userCenter_toolnavWidth;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      box-sizing: border-box;
+      overflow: hidden;
+      border-radius: 20px;
+      @include box_shadow(0, 0, 8px, 1px, 'fill52');
+
+      > div {
+        margin: 5px 0;
+        font-size: $fontSize7;
+      }
+    }
+
+    .rightBox {
+      width: calc(100% - $userCenter_toolnavWidth - $modelDistance);
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      box-sizing: border-box;
+      overflow: hidden;
+      border-radius: 20px;
+      @include box_shadow(0, 0, 8px, 1px, 'fill52');
+      @include fill_color('fill3');
+
+      .activityCalendar {
+        width: fit-content;
+      }
+    }
+  }
 }
-
-/* #region infoBox */
-
-.userCenter .infoBox {
-  position: relative;
-  height: 280px;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 0 8px 1px var(--bcg_color5);
-}
-
-.userCenter .infoBox:hover {
-  background-color: var(--dec_color131);
-}
-
-.userCenter .infoBox .filter {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: blur(30px) opacity(0.25);
-}
-
-.userCenter .infoBox .user {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.userCenter .infoBox .user > div {
-  font-size: var(--FontSize11);
-  font-weight: 600;
-  height: 115px;
-  display: flex;
-  align-items: flex-end;
-}
-
-.userCenter .infoBox .user > img {
-  margin: 15px;
-  height: 120px;
-  width: 120px;
-  border-radius: 20px;
-}
-
-.userCenter .infoBox .user .acStatus {
-  height: 100%;
-  position: absolute;
-  right: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: flex-end;
-}
-
-.userCenter .infoBox .user .acStatus > div {
-  font-size: var(--FontSize4);
-  font-weight: 500;
-  margin-bottom: 5px;
-}
-
-.userCenter .infoBox .userInfo {
-  width: 100%;
-  height: 115px;
-  padding: 0 20px;
-  box-sizing: border-box;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
-
-.userCenter .infoBox .userInfo > div {
-  color: var(--font_color2);
-  font-size: var(--FontSize6);
-  letter-spacing: 1px;
-  display: flex;
-  align-items: center;
-}
-
-.userCenter .infoBox .userInfo > div span {
-  margin: 0 1px;
-}
-
-.userCenter .infoBox .userInfo .set {
-  position: absolute;
-  right: 20px;
-  height: 115px;
-  display: flex;
-  align-items: center;
-  transition-duration: 500ms;
-}
-
-.userCenter .infoBox .userInfo .set:hover {
-  transform: rotateZ(360deg);
-}
-
-/* #endregion */
-
-.userCenter .changeInfo {
-  margin-top: var(--modelDistance);
-  padding: 10px 80px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  border-radius: 20px;
-  box-shadow: 0 0 8px 1px var(--bcg_color5);
-}
-
-.userCenter .changeInfo > div {
-  color: var(--font_color2);
-  font-size: var(--FontSize6);
-  letter-spacing: 1px;
-  display: flex;
-  min-width: 100%;
-  margin: 5px 0;
-}
-
-.userCenter .changeInfo > .btn {
-  position: relative;
-  overflow: hidden;
-  margin: 8px 0;
-  width: 220px;
-  height: 40px;
-  border-radius: 15px;
-  font-size: var(--FontSize8);
-  color: var(--font_color1);
-  letter-spacing: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 2px 1px var(--border_color2);
-  transition-duration: 200ms;
-}
-
-.userCenter .changeInfo > .btn:hover {
-  box-shadow: 0 0 2px 1px var(--border_color31);
-  background-color: var(--bcg_color35);
-}
-
-.userCenter .changeInfo > div > span {
-  width: 60px;
-}
-
-/* #region contentBox */
-
-.userCenter .contentBox {
-  margin: var(--modelDistance) 0;
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-
-.userCenter .contentBox .leftBox {
-  width: var(--userCenter_toolnavWidth);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px;
-  box-sizing: border-box;
-  overflow: hidden;
-  border-radius: 20px;
-  box-shadow: 0 0 8px 1px var(--bcg_color5);
-}
-
-.userCenter .contentBox .leftBox > div {
-  margin: 5px 0;
-  font-size: var(--FontSize7);
-}
-
-.userCenter .contentBox .rightBox {
-  width: calc(100% - var(--userCenter_toolnavWidth) - var(--modelDistance));
-  min-height: 300px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px;
-  box-sizing: border-box;
-  overflow: hidden;
-  border-radius: 20px;
-  box-shadow: 0 0 8px 1px var(--bcg_color5);
-  background-color: var(--bcg_color4);
-}
-
-.userCenter .contentBox .rightBox .activityCalendar {
-  width: fit-content;
-}
-
-/* #endregion */
 </style>

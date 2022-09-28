@@ -589,7 +589,7 @@ var submit = reactive<submitType>({
         this.process += 3
         proxy.$refs.submitCover.style.width = this.process + '%'
         this.middleware()
-      }, 25)
+      }, 15)
     }
   },
   submitTouchStart() {
@@ -598,7 +598,7 @@ var submit = reactive<submitType>({
     //设置点击事件计时器
     this.time = setTimeout(() => {
       this.middleware()
-    }, 25)
+    }, 15)
   },
   submitTouchEnd() {
     proxy.$refs.submitCover.style.width = 0 + '%'
@@ -676,176 +676,170 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-.problem {
-  position: relative;
-  width: 100%;
-  box-sizing: border-box;
-  padding: var(--page_outerPaddingTop) var(--page_outerPaddingLeft);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-/* #region left */
-
-.problem .left {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: calc(100% - var(--problem_rightWidth) - var(--modelDistance));
-  background-color: var(--bcg_color2);
-  border-radius: 15px;
-}
-
-.problem .left .title {
-  font-size: var(--FontSize12);
-  color: var(--font_color1);
-  text-align: center;
-  padding: var(--modelDistance) 0;
-}
-
-.problem .left .label {
-  box-sizing: border-box;
-  padding: var(--modelDistance) 0 var(--modelDistanceMini) 20px;
-  font-size: var(--FontSize7);
-  color: var(--font_color31);
-}
-
-.problem .left .text {
-  box-sizing: border-box;
-  padding: 0 30px;
-  font-size: var(--FontSize6);
-  color: var(--font_color1);
-}
-
-.problem .left .textarea {
-  width: calc(100% - 60px);
-  box-sizing: border-box;
-  margin: 0 30px;
-  padding: 15px;
-  line-height: var(--FontSize6);
-  font-size: var(--FontSize6);
-  color: var(--font_color1);
-  background-color: var(--bcg_color3);
-  resize: none;
-  border-radius: 12px;
-  overflow: visible;
-}
-
-.problem .left > .ace {
-  margin-top: var(--modelDistanceLarge);
-  font-size: var(--FontSize6);
-  height: auto !important;
-  overflow: hidden;
-  border-radius: 8px;
-  outline: 2px solid var(--font_color5);
-  box-sizing: border-box;
-  scrollbar-base-color: var(--bcg_color2);
-}
-
+<style scoped lang="scss">
 * {
   touch-action: none;
 }
 
-/* #endregion */
-
-/* #region right */
-.problem .right {
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  width: var(--problem_rightWidth);
-  top: calc(var(--page_outerPaddingTop) + 60px);
-  right: var(--page_outerPaddingLeft);
-  height: 200px;
-}
-
-.problem .right .demand,
-.problem .right .function,
-.problem .right .contestInfo {
-  margin-bottom: var(--modelDistance);
-  padding: 10px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: var(--bcg_color2);
-  border-radius: 15px;
-}
-
-.problem .right .tags {
-  margin-bottom: var(--modelDistance);
-  background-color: var(--bcg_color2);
-  border-radius: 15px;
-  padding: 10px 15px;
-}
-
-.problem .right .contestInfo .problemBox {
-  padding: 15px;
-  box-sizing: border-box;
-  width: 100%;
-  display: grid;
-  grid-template-columns: 20% 20% 20% 20% 20%;
-  grid-template-rows: 40px;
-}
-
-.problem .right .contestInfo .problemBox > div {
-  width: 100%;
-  text-align: center;
-  line-height: 40px;
-  color: var(--font_color1);
-  font-size: var(--fontSize10);
-  border-radius: 10px;
-}
-
-.problem .right .contestInfo .problemBox .nowProblem {
-  box-sizing: border-box;
-  border: dotted 2px var(--border_color31);
-}
-
-.problem .right .contestInfo .problemBox > div:hover {
-  color: var(--font_color31);
-  background-color: var(--bcg_color3);
-}
-
-.problem .right .demand > div {
-  margin: 4px 0;
-  font-size: var(--FontSize5);
-  color: var(--font_color1);
-  letter-spacing: 1px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.problem .right .tags > span {
-  margin: 0 1px;
-}
-
-.problem .right .function > div {
+.problem {
   position: relative;
-  overflow: hidden;
-  margin: 8px 0;
-  width: 220px;
-  height: 40px;
-  border-radius: 15px;
-  font-size: var(--FontSize8);
-  color: var(--font_color1);
-  letter-spacing: 4px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: $page_outerPaddingTop $page_outerPaddingLeft;
   display: flex;
   align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 2px 1px var(--border_color2);
-  transition-duration: 200ms;
+  justify-content: space-between;
+
+  .left {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - $problem_rightWidth - $modelDistance);
+    @include fill_color('fill2');
+    border-radius: 15px;
+
+    .title {
+      font-size: $fontSize12;
+      @include font_color('font1');
+      text-align: center;
+      padding: $modelDistance 0;
+    }
+
+    .label {
+      box-sizing: border-box;
+      padding: $modelDistance 0 $modelDistanceMini 20px;
+      font-size: $fontSize7;
+      @include font_color('font1');
+    }
+
+    .text {
+      box-sizing: border-box;
+      padding: 0 30px;
+      font-size: $fontSize6;
+      @include font_color('font2');
+    }
+
+    .textarea {
+      width: calc(100% - 60px);
+      box-sizing: border-box;
+      margin: 0 30px;
+      padding: 15px;
+      line-height: $fontSize6;
+      font-size: $fontSize6;
+      @include font_color('font1');
+      @include fill_color('fill3');
+      resize: none;
+      border-radius: 12px;
+      overflow: visible;
+    }
+
+    > .ace {
+      margin-top: $modelDistanceLarge;
+      font-size: $fontSize6;
+      height: auto !important;
+      overflow: hidden;
+      border-radius: 8px;
+      outline: 2px solid;
+      @include outline_color('border2');
+      box-sizing: border-box;
+      scrollbar-base-color: #fefefe;
+    }
+  }
+
+  .right {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    width: $problem_rightWidth;
+    top: calc($page_outerPaddingTop + 60px);
+    right: $page_outerPaddingLeft;
+    height: 200px;
+
+    .demand,
+    .function,
+    .contestInfo {
+      margin-bottom: $modelDistance;
+      padding: 10px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      @include fill_color('fill2');
+      border-radius: 15px;
+    }
+
+    .contestInfo .problemBox {
+      padding: 15px;
+      box-sizing: border-box;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 20% 20% 20% 20% 20%;
+      grid-template-rows: 40px;
+
+      > div {
+        width: 100%;
+        text-align: center;
+        line-height: 40px;
+        @include font_color('font1');
+        font-size: $fontSize5;
+        border-radius: 10px;
+
+        &:hover {
+          @include font_color('fill12');
+          @include fill_color('fill16');
+        }
+      }
+
+      .nowProblem {
+        box-sizing: border-box;
+        @include border(2px, dotted, 'fill11');
+        @include fill_color('fill15');
+      }
+    }
+
+    .demand > div {
+      margin: 4px 0;
+      font-size: $fontSize5;
+      @include font_color('font1');
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tags > span {
+      margin: 0 1px;
+    }
+
+    .tags {
+      margin-bottom: $modelDistance;
+      @include fill_color('fill2');
+      border-radius: 15px;
+      padding: 10px 15px;
+    }
+
+    .function > div {
+      position: relative;
+      overflow: hidden;
+      margin: 8px 0;
+      width: 220px;
+      height: 40px;
+      border-radius: 15px;
+      font-size: $fontSize8;
+      @include font_color('font1');
+      letter-spacing: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      @include box_shadow(0, 0, 2px, 1px, 'border2');
+      transition-duration: 200ms;
+
+      &:hover {
+        @include box_shadow(0, 0, 2px, 1px, 'fill12');
+        @include fill_color('fill16');
+      }
+    }
+  }
 }
-
-.problem .right .function > div:hover {
-  box-shadow: 0 0 2px 1px var(--border_color31);
-  background-color: var(--bcg_color35);
-}
-
-/* #endregion  */
-
 .notFound {
   width: 100%;
   height: 400px;

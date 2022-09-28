@@ -185,7 +185,7 @@ onMounted(() => {
 })
 </script>
 
-<style  scoped>
+<style  scoped lang="scss">
 .notFound {
   width: 100%;
   height: 300px;
@@ -197,49 +197,58 @@ onMounted(() => {
 .status {
   width: 100%;
   box-sizing: border-box;
-  padding: var(--status_outerPaddingTop) var(--status_outerPaddingLeft);
-}
+  padding: $status_outerPaddingTop $status_outerPaddingLeft;
 
-.status .list {
-  background-color: var(--bcg_color4);
-  border-radius: 10px;
-  box-sizing: border-box;
-  padding: var(--status_listPadding);
-}
+  .list {
+    @include fill_color('fill2');
+    border-radius: 10px;
+    box-sizing: border-box;
+    padding: $status_listPadding;
 
-.status .list .header {
-  display: flex;
-  align-items: center;
-  font-size: var(--FontSize7);
-  color: var(--font_color1);
-  border-bottom: 2px solid #fefefe;
-  padding: 10px 0;
-  justify-content: space-between;
-}
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: $fontSize7;
+      @include font_color('font1');
+      border-bottom: 2px solid;
+      @include border_color('border2');
+      padding: 10px 0;
+    }
 
-.status .list .item {
-  display: flex;
-  align-items: center;
-  font-size: var(--FontSize5);
-  color: var(--font_color2);
-  background-color: var(--bcg_color3);
-  justify-content: space-between;
-  border-bottom: 2px solid #fefefe;
-  box-sizing: border-box;
-}
+    .item {
+      display: flex;
+      align-items: center;
+      font-size: $fontSize5;
+      @include font_color('font2');
+      @include fill_color('fill3');
+      justify-content: space-between;
+      border-bottom: 2px solid;
+      box-sizing: border-box;
+      @include border_color('border2');
 
-.status .list .item .res {
-  text-align: center;
-  padding: 10px 0;
-  border-radius: 6px;
-}
+      .res {
+        text-align: center;
+        padding: 10px 0;
+        border-radius: 6px;
+      }
 
-.pagination {
-  margin: 25px 0;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  justify-items: center;
+      div {
+        //PID 突出显示
+        &:nth-child(1) {
+          @include font_color('fill12');
+        }
+      }
+    }
+
+    .pagination {
+      margin: 25px 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      justify-items: center;
+    }
+  }
 }
 </style>
