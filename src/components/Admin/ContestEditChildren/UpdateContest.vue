@@ -344,7 +344,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .UpdateContest {
   width: 100%;
   display: flex;
@@ -365,6 +365,6 @@ export default {
 .content > div > span {
   font-size: 22px;
   width: 150px;
-  color: #f2f2f2;
+  @include font_color('font1');
 }
 </style>
