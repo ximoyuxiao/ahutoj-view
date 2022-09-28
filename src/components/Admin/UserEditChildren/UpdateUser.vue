@@ -126,20 +126,66 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .UpdateUser {
   display: flex;
   flex-direction: column;
-}
 
-.UpdateUser > div {
-  font-size: var(--FontSize8);
-  box-sizing: border-box;
-  margin: 5px 0;
-}
+  > div {
+    font-size: $fontSize8;
+    box-sizing: border-box;
+    margin: 5px 0;
 
-.UpdateUser > div > input {
-  font-size: var(--FontSize8);
+    > input {
+      font-size: $fontSize8;
+    }
+  }
+
+  .changeInfo {
+    margin-top: $modelDistance;
+    padding: 10px 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-radius: 20px;
+    @include box_shadow(0, 0, 8px, 1px, 'fill53');
+
+    > div {
+      @include font_color('font1');
+      font-size: $fontSize6;
+      letter-spacing: 1px;
+      display: flex;
+      min-width: 100%;
+      margin: 5px 0;
+
+      > span {
+        width: 60px;
+      }
+    }
+
+    > .btn {
+      position: relative;
+      overflow: hidden;
+      margin: 8px 0;
+      width: 220px;
+      height: 40px;
+      border-radius: 15px;
+      font-size: $fontSize8;
+      @include font_color('font1');
+      letter-spacing: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      @include box_shadow(0, 0, 2px, 1px, 'fill52');
+      transition-duration: 200ms;
+
+      &:hover {
+        @include box_shadow(0, 0, 2px, 1px, 'fill11');
+        @include fill_color('fill16');
+      }
+    }
+  }
 }
 
 .confirm {
@@ -149,49 +195,5 @@ export default {
   padding: 5px 10px;
   background-color: #ededed;
   border-radius: 10px;
-}
-
-.userCenter .changeInfo {
-  margin-top: var(--modelDistance);
-  padding: 10px 80px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  border-radius: 20px;
-  box-shadow: 0 0 8px 1px var(--bcg_color5);
-}
-
-.userCenter .changeInfo > div {
-  color: var(--font_color2);
-  font-size: var(--FontSize6);
-  letter-spacing: 1px;
-  display: flex;
-  min-width: 100%;
-  margin: 5px 0;
-}
-
-.changeInfo > .btn {
-  position: relative;
-  overflow: hidden;
-  margin: 8px 0;
-  width: 220px;
-  height: 40px;
-  border-radius: 15px;
-  font-size: var(--FontSize8);
-  color: var(--font_color1);
-  letter-spacing: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 2px 1px var(--border_color2);
-  transition-duration: 200ms;
-}
-.changeInfo > .btn:hover {
-  box-shadow: 0 0 2px 1px var(--border_color31);
-  background-color: var(--bcg_color35);
-}
-.changeInfo > div > span {
-  width: 60px;
 }
 </style>

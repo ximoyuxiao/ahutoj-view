@@ -165,7 +165,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .BatchAddUser {
   background-color: #ffffff;
 }
@@ -178,51 +178,51 @@ export default {
   padding: 10px;
   font-weight: 600;
   color: #a8abb2;
-}
 
-.example .exampleText {
-  margin: 10px;
-  box-sizing: border-box;
-  padding: 20px 40px;
-  border-radius: 10px;
-  border: 1px dotted #ff8c00;
-  color: #ff8c00;
+  .exampleText {
+    margin: 10px;
+    box-sizing: border-box;
+    padding: 20px 40px;
+    border-radius: 10px;
+    border: 1px dotted #ff8c00;
+    color: #ff8c00;
+  }
 }
 
 .userList {
   border-radius: 10px;
   border: 2px solid #ababab;
-}
 
-.userList .header {
-  height: 40px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background-color: #ababab;
-  width: 100%;
-}
+  .header {
+    height: 40px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #ababab;
+    width: 100%;
 
-.userList .header > div {
-  font-size: var(--FontSize5);
-}
+    > div {
+      font-size: $fontSize5;
+    }
+  }
 
-.userList .item {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  height: 40px;
-  width: 100%;
-  margin: 5px 0;
-  border-bottom: 2px dotted #cdcdcd;
-}
+  .item {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 40px;
+    width: 100%;
+    margin: 5px 0;
+    border-bottom: 2px dotted #cdcdcd;
 
-.userList .item > div {
-  font-size: var(--FontSize5);
-}
+    > div {
+      font-size: $fontSize5;
+    }
+  }
 
-.userList .btn {
-  margin: 20px;
+  .btn {
+    margin: 20px;
+  }
 }
 </style>
 

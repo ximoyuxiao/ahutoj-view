@@ -120,20 +120,21 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .AddUser {
   display: flex;
   flex-direction: column;
-}
 
-.AddUser > div {
-  font-size: var(--FontSize8);
-  box-sizing: border-box;
-  margin: 5px 0;
-}
+  div {
+    font-size: $fontSize8;
+    box-sizing: border-box;
+    margin: 5px 0;
 
-.AddUser > div > input {
-  font-size: var(--FontSize8);
+    input {
+      font-size: $fontSize8;
+      border-radius: 5px;
+    }
+  }
 }
 
 .confirm {
@@ -141,8 +142,13 @@ export default {
   text-align: center;
   box-sizing: border-box;
   padding: 5px 10px;
-  background-color: #ededed;
+  background-color: #e1e1e1;
   border-radius: 10px;
+
+  &:hover {
+    background-color: #3299ff;
+    color: #ffffff;
+  }
 }
 </style>
  
