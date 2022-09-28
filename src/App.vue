@@ -19,7 +19,7 @@ import Bottom from './components/Bottom.vue'
 }
 </style>
   
-<style>
+<style lang="scss">
 * {
   margin: 0;
   padding: 0;
@@ -28,7 +28,7 @@ a:link,
 a:visited,
 a:active {
   text-decoration: none;
-  color: var(--font_color1);
+  @include font_color('fill1');
 }
 html {
   height: 100%;
@@ -40,7 +40,7 @@ html {
 body {
   position: relative;
   min-height: calc(100% - 70px);
-  background-color: var(--bcg_color3);
+  @include fill_color('base_page');
   width: 100%;
 }
 pre {
@@ -51,10 +51,13 @@ pre {
   *word-wrap: break-word;
   *white-space: normal;
 }
-/* #endregion */
+:root {
+  --animate-duration: 300ms !important;
+}
 </style>
   
-<!-- 颜色池 -->
+
+<!-- 
 <style lang="scss">
 :root {
   /* 颜色 */
@@ -109,8 +112,7 @@ pre {
   --admin_font41: #5ebd00;
 }
 </style>
-  
-  <!-- 常量池 -->
+
 <style>
 :root {
   /* css常量池 */
@@ -150,7 +152,9 @@ pre {
   --animate-duration: 300ms !important;
 }
 </style>
-  
+   -->
+
+
 <!-- 便捷通用样式 -->
 <style>
 /* 鼠标指针效果 */

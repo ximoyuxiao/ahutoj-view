@@ -46,9 +46,15 @@
 	}
 }
 
+@mixin border($weight, $style, $color) {
+	@include themeify {
+		border: $weight $style themed($color) !important;
+	}
+}
+
 //阴影
 @mixin box_shadow($offsetX, $offsetY, $weight, $spread, $color) {
 	@include themeify {
-		box-shadow: $offsetX  $offsetY  $weight  $spread  themed($color) !important;
+		box-shadow: $offsetX $offsetY $weight $spread themed($color) !important;
 	}
 }

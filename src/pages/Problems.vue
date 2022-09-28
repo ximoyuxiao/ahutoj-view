@@ -243,141 +243,141 @@ onMounted(() => {
 })
 </script>
 
-<style  scoped>
+<style  scoped lang="scss">
 .problems {
   width: 100%;
   box-sizing: border-box;
-  padding: var(--page_outerPaddingTop) var(--page_outerPaddingLeft);
+  padding: $page_outerPaddingTop $page_outerPaddingLeft;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-}
 
-/* #region left */
+  .left {
+    width: $problems_leftWidth;
 
-.problems .left {
-  width: var(--problems_leftWidth);
-}
+    .search {
+      width: 100%;
+      @include fill_color('fill2');
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
 
-.problems .left .search {
-  width: 100%;
-  background-color: var(--bcg_color2);
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
+      div {
+        input {
+          box-sizing: border-box;
+          height: 30px;
+          width: calc(100% - 32px);
+          padding: 2px 10px;
+          border-radius: 8px;
+          font-size: $fontSize5;
+          @include font_color('font1');
+          @include fill_color('fill4');
 
-.problems .left .search .searchById,
-.problems .left .search .searchByTitle {
-  width: 94%;
-  padding: 10px 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+          &:focus,
+          &:hover + div,
+          &:focus + div {
+            outline: none;
+            border: 2px solid;
+            @include border_color('fill12');
+            @include font_color('fill12');
+          }
+        }
+      }
+    }
 
-.problems .left .search .searchById > div,
-.problems .left .search .searchByTitle > div {
-  height: 30px;
-  width: 30px;
-  background-color: var(--bcg_color3);
-  box-sizing: border-box;
-  border: 2px solid var(--border_color1);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    .searchById,
+    .searchByTitle {
+      width: 94%;
+      padding: 10px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
 
-.problems .left .search > div > input {
-  box-sizing: border-box;
-  height: 30px;
-  width: calc(100% - 32px);
-  padding: 2px 10px;
-  font-size: var(--FontSize5);
-  color: var(--font_color1);
-  background-color: var(--bcg_color3);
-  border-radius: 8px;
-}
-.problems .left .search > div > input:hover,
-.problems .left .search > div > input:focus,
-.problems .left .search > div > input:hover + div,
-.problems .left .search > div > input:focus + div {
-  outline: none;
-  border: 2px solid var(--dec_color31);
-}
+      div {
+        height: 30px;
+        width: 30px;
+        @include fill_color('fill4');
+        box-sizing: border-box;
+        border: 2px solid;
+        @include border_color('border1');
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
 
-/* #endregion */
+  .right {
+    width: calc(
+      100% - $problems_leftWidth - $modelDistanceMini - $modelDistanceMini
+    );
+    @include fill_color('fill2');
+    border-radius: 10px;
 
-/* #region right */
+    .notFound {
+      width: 100%;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-.problems .right {
-  width: calc(
-    100% - var(--problems_leftWidth) - var(--modelDistanceMini) -
-      var(--modelDistanceMini)
-  );
-  background-color: var(--bcg_color2);
-  border-radius: 10px;
-}
+    .list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      box-sizing: border-box;
+      padding: 5px;
 
-.problems .right .notFound {
-  width: 100%;
-  height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.problems .right .list {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  box-sizing: border-box;
-  padding: 5px;
-}
+      .item {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 3px 10px;
+        margin: 5px 0;
+        border-radius: 8px;
+        @include border(2px, solid, 'border3');
+        display: flex;
+        flex-direction: column;
+        transition-duration: 300ms;
 
-.problems .right .list .item {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 3px 10px;
-  margin: 5px 0;
-  border-radius: 8px;
-  border: 2px solid var(--border_color1);
-  display: flex;
-  flex-direction: column;
-  transition-duration: 300ms;
-}
-.problems .right .list .item:hover {
-  background-color: var(--bcg_color34);
-  border: 2px solid var(--bcg_color32);
-}
+        &:hover {
+          @include fill_color('fill15');
+          @include border(2px, solid, 'fill12');
+        }
 
-.problems .right .list .item .title {
-  width: fit-content;
-  font-size: var(--FontSize7);
-  color: var(--font_color1);
-}
-.problems .right .list .item .tag {
-  margin: 5px 0;
-}
-.problems .right .list .item .tag > span {
-  margin: 0 1px;
-}
-.problems .right .list .item .acCount {
-  font-size: var(--FontSize5);
-  color: var(--font_color3);
-}
+        .title {
+          width: fit-content;
+          font-size: $fontSize7;
+          @include font_color('font1');
+        }
 
-.problems .right .pagination {
-  margin: 25px 0;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  justify-items: center;
-}
+        .tag {
+          margin: 5px 0;
 
-/* #endregion  */
+          > span {
+            margin: 0 1px;
+          }
+        }
+
+        .acCount {
+          font-size: $fontSize5;
+          @include font_color('font2');
+        }
+      }
+    }
+
+    .pagination {
+      margin: 25px 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      justify-items: center;
+    }
+  }
+}
 </style>
