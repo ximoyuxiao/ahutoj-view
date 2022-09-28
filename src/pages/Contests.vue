@@ -245,139 +245,130 @@ onMounted(() => {
 })
 </script>
 
-<style  scoped>
+<style  scoped lang="scss">
 .contest {
   width: 100%;
   box-sizing: border-box;
-  padding: var(--page_outerPaddingTop) var(--page_outerPaddingLeft);
+  padding: $page_outerPaddingTop $page_outerPaddingLeft;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-}
 
-.top {
-  width: 100%;
-  background-color: var(--bcg_color2);
-  border-radius: 10px;
-}
+  .top {
+    width: 100%;
+    @include fill_color(fill2);
+    border-radius: 10px;
 
-.top .notFound {
-  width: 100%;
-  height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    .list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      box-sizing: border-box;
+      padding: 8px;
 
-.top .list {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  box-sizing: border-box;
-  padding: 5px;
-}
+      .item {
+        width: 100%;
+        height: 70px;
+        box-sizing: border-box;
+        padding: 3px 10px;
+        margin: 5px 0;
+        border-radius: 8px;
+        @include border(1px, solid, 'border3');
+        display: flex;
+        align-items: center;
+        transition-duration: 300ms;
 
-.top .list .item {
-  width: 100%;
-  height: 70px;
-  box-sizing: border-box;
-  padding: 3px 10px;
-  margin: 5px 0;
-  border-radius: 8px;
-  border: 1px solid var(--border_color1);
-  display: flex;
-  align-items: center;
-  transition-duration: 300ms;
-}
+        &:hover {
+          @include fill_color('fill15');
+          @include border(1px, solid, 'fill12');
+        }
 
-.top .list .item:hover {
-  background-color: var(--bcg_color34);
-  border: 1px solid var(--bcg_color32);
-}
+        &:hover > .goingFlag {
+          width: 22px;
+        }
 
-.top .list .item:hover > .goingFlag {
-  width: 22px;
-}
+        &:hover > .publicFlag {
+          width: 80px;
+          opacity: 1;
+        }
 
-.top .list .item:hover > .publicFlag {
-  width: 80px;
-  opacity: 1;
-}
+        &:hover > .cidFlag {
+          width: 100px;
+          font-size: $fontSize8;
+          @include font_color('font3');
+          opacity: 1;
+        }
 
-.top .list .item:hover > .cidFlag {
-  width: 100px;
-  font-size: var(--FontSize8);
-  color: var(--font_color3);
-  opacity: 1;
-}
+        .content {
+          width: fit-content;
+          font-size: $fontSize7;
+          @include font_color('font1');
 
-.top .list .item .content {
-  width: fit-content;
-  font-size: var(--FontSize7);
-  color: var(--font_color1);
-}
+          .contestInfo {
+            width: fit-content;
+            font-size: $fontSize3;
+            @include font_color('font2');
+          }
 
-.top .list .item .content .contestInfo {
-  width: fit-content;
-  font-size: var(--FontSize3);
-  color: var(--font_color2);
-}
+          .timeInfo {
+            width: fit-content;
+            font-size: $fontSize2;
+            @include font_color('font3');
+          }
+        }
 
-.top .list .item .content .timeInfo {
-  width: fit-content;
-  font-size: var(--FontSize2);
-  color: var(--font_color3);
-}
+        .goingFlag {
+          height: 100%;
+          width: 15px;
+          transition-duration: 300ms;
 
-.top .list .item .goingFlag {
-  height: 100%;
-  width: 15px;
-  transition-duration: 300ms;
-}
+          .going,
+          .finish {
+            height: 100%;
+            width: 100%;
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+          }
+        }
 
-.top .list .item .goingFlag .going,
-.top .list .item .goingFlag .finish {
-  height: 100%;
-  width: 100%;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-}
+        .publicFlag,
+        .cidFlag {
+          width: 15px;
+          opacity: 0;
+          transition-duration: 300ms;
+          overflow: hidden;
+          text-align: center;
+          font-size: $fontSize8;
 
-.top .list .item .publicFlag,
-.top .list .item .cidFlag {
-  width: 15px;
-  opacity: 0;
-  transition-duration: 300ms;
-  overflow: hidden;
-  text-align: center;
-  font-size: 18px;
-}
+          > div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
+      }
+    }
 
-.top .list .item .publicFlag > div,
-.top .list .item .cidFlag > div {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+    .pagination {
+      margin: 25px 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      justify-items: center;
+    }
+  }
 
-.pagination {
-  margin: 25px 0;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  justify-items: center;
-}
-
-.notFound {
-  width: 100%;
-  height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  .notFound {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 </style>
