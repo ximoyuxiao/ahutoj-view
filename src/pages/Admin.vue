@@ -190,7 +190,7 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .admin {
   width: 100%;
   position: relative;
@@ -198,36 +198,36 @@ onMounted(() => {
   align-items: flex-start;
   box-sizing: border-box;
   z-index: 1;
-}
 
-.nav {
-  width: 260px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background-color: var(--admin_bcg1);
-  padding: 20px 0;
-}
+  .nav {
+    width: 260px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    @include fill_color('fill51');
+    padding: 20px 0;
 
-.nav a {
-  width: 100%;
-  color: var(--admin_font4);
-  font-size: 28px;
-  text-align: center;
-  margin: 5px 0;
-}
+    a {
+      width: 100%;
+      @include font_color('font6');
+      font-size: 28px;
+      text-align: center;
+      margin: 5px 0;
 
-.nav a:hover {
-  background-color: #676d72;
-  color: #e1e1e1;
-}
+      &:hover {
+        @include fill_color('fill52');
+        color: #cdcdcd;
+      }
+    }
 
-.nav .selected {
-  background-color: var(--admin_bcg2);
-  color: var(--admin_font5);
-}
+    .selected {
+      @include fill_color('fill53');
+      color: #cdcdcd;
+    }
+  }
 
-.content {
-  width: calc(100% - 260px);
+  .content {
+    width: calc(100% - 260px);
+  }
 }
 </style>

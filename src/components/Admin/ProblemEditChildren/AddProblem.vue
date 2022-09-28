@@ -149,7 +149,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .addProblem {
   width: 100%;
 }
@@ -164,6 +164,6 @@ export default {
 .addProblem > div > span {
   font-size: 22px;
   width: 150px;
-  color: #f2f2f2;
+  @include font_color('font1');
 }
 </style>

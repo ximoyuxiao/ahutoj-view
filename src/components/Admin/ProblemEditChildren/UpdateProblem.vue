@@ -339,7 +339,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .search {
   display: flex;
   justify-items: center;
@@ -349,13 +349,13 @@ export default {
 
 .table {
   width: 100%;
-}
 
-.table > div {
-  display: flex;
-  align-content: center;
-  box-sizing: border-box;
-  margin: 5px 0;
+  > div {
+    display: flex;
+    align-content: center;
+    box-sizing: border-box;
+    margin: 5px 0;
+  }
 }
 
 span {
@@ -371,28 +371,31 @@ span {
   align-items: flex-start;
   box-sizing: border-box;
   padding: 5px;
-}
 
-.list .item {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 3px 10px;
-  margin: 5px 0;
-  border-radius: 8px;
-  border: 2px solid var(--border_color1);
-  display: flex;
-  flex-direction: column;
-  transition-duration: 300ms;
-}
-.list .item:hover {
-  background-color: var(--bcg_color34);
-  border: 2px solid var(--bcg_color33);
-}
+  .item {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 3px 10px;
+    margin: 5px 0;
+    border-radius: 8px;
+    border: 2px solid;
+    @include border_color('border2');
+    display: flex;
+    flex-direction: column;
+    transition-duration: 260ms;
 
-.list .item .title {
-  width: fit-content;
-  font-size: var(--FontSize7);
-  color: var(--font_color1);
+    &:hover {
+      @include fill_color('fill15');
+      border: 2px solid;
+      @include border_color('fill12');
+    }
+
+    .title {
+      width: fit-content;
+      font-size: $fontSize7;
+      @include font_color('font1');
+    }
+  }
 }
 
 .pagination {
