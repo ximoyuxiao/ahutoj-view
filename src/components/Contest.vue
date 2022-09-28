@@ -345,148 +345,152 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .contest {
   width: 100%;
   box-sizing: border-box;
-  padding: var(--contest_outerPaddingTop) var(--contest_outerPaddingLeft);
+  padding: $contest_outerPaddingTop $contest_outerPaddingLeft;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
 
-.infoBox {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-sizing: border-box;
-  padding: 30px;
-  border-radius: 10px;
-  background-color: var(--bcg_color2);
-}
+  .infoBox {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 30px;
+    border-radius: 10px;
+    @include fill_color('fill2');
 
-.infoBox .title {
-  font-size: var(--FontSize9);
-  color: var(--font_color1);
-  margin: 20px 0;
-}
+    .title {
+      font-size: $fontSize9;
+      @include font_color('font1');
+      margin: 20px 0;
+    }
 
-.infoBox .text {
-  font-size: var(--FontSize4);
-  color: var(--font_color2);
-}
+    .text {
+      font-size: $fontSize4;
+      @include font_color('font2');
+    }
 
-.infoBox .status {
-  margin-top: 20px;
-  font-size: var(--FontSize4);
-  color: var(--font_color2);
-  display: flex;
-  align-items: center;
-}
+    .status {
+      margin-top: 20px;
+      font-size: var(--FontSize4);
+      color: var(--font_color2);
+      display: flex;
+      align-items: center;
 
-.infoBox .status .point {
-  border-radius: 50%;
-  width: 8px;
-  height: 8px;
-  margin-right: 8px;
-}
+      .point {
+        border-radius: 50%;
+        width: 8px;
+        height: 8px;
+        margin-right: 8px;
+      }
+    }
 
-.infoBox .time {
-  margin: 30px 0 15px 0;
-  width: 100%;
-  font-size: var(--FontSize4);
-  color: var(--font_color2);
-  display: flex;
-  justify-content: space-between;
-}
+    .time {
+      margin: 30px 0 15px 0;
+      width: 100%;
+      font-size: $fontSize4;
+      @include font_color('font1');
+      display: flex;
+      justify-content: space-between;
 
-.infoBox .time .left_time {
-  font-size: var(--FontSize7);
-  color: var(--font_color2);
-}
+      .left_time {
+        font-size: $fontSize7;
+        @include font_color('font1');
+      }
+    }
 
-.infoBox .process {
-  width: 100%;
-  border-radius: 50%;
-}
+    .process {
+      width: 100%;
+      border-radius: 50%;
+    }
+  }
 
-.problemList {
-  margin-top: var(--modelDistance);
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-sizing: border-box;
-  padding: 30px;
-  border-radius: 10px;
-  background-color: var(--bcg_color2);
-}
+  .problemList {
+    margin-top: $modelDistance;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 30px;
+    border-radius: 10px;
+    @include fill_color('fill2');
 
-.problemList .contestRank {
-  width: 200px;
-  line-height: 40px;
-  color: var(--font_color2);
-  font-size: var(--FontSize9);
-  background-color: var(--bcg_color3);
-  border-radius: 20px;
-  text-align: center;
-}
+    .contestRank {
+      width: 200px;
+      line-height: 40px;
+      @include font_color('font2');
+      font-size: $fontSize9;
+      @include fill_color('fill4');
+      border-radius: 16px;
+      text-align: center;
 
-.problemList .contestRank:hover {
-  background-color: var(--bcg_color4);
-}
+      &:hover {
+        @include fill_color('fill3');
+      }
+    }
 
-.problemList .nav {
-  width: 100%;
-  display: flex;
-}
+    .nav {
+      width: 100%;
+      display: flex;
+      margin-bottom: 15px;
 
-.problemList .nav > div {
-  font-size: var(--FontSize5);
-  color: var(--font_color1);
-}
+      > div {
+        font-size: $fontSize6;
+        @include font_color('font1');
+      }
+    }
 
-.problemList .item {
-  box-sizing: border-box;
-  padding: 15px 10px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid black;
-  box-sizing: border-box;
-  transition-duration: 300ms;
-}
+    .item {
+      box-sizing: border-box;
+      padding: 15px 10px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid;
+      @include border_color('border1');
+      @include fill_color('fill4');
+      box-sizing: border-box;
+      transition: all 300ms;
 
-.problemList .item:hover {
-  border-left: 8px solid var(--bcg_color7);
-  border-right: 8px solid var(--bcg_color7);
-}
+      &:hover {
+        border-left: 8px solid;
+        border-right: 8px solid;
+        @include border_color('fill51');
+      }
 
-.problemList .item:last-child {
-  border-bottom: none;
-}
+      &:last-child {
+        border-bottom: none;
+      }
 
-.problemList .flag {
-  width: 80px;
-  font-size: var(--FontSize6);
-  color: var(--font_color31);
-}
+      .flag {
+        width: 80px;
+        font-size: $fontSize6;
+        @include font_color('fill11');
+      }
 
-.problemList .title {
-  width: calc(100% - 170px);
-  font-size: var(--FontSize6);
-  color: var(--font_color31);
-}
+      .title {
+        width: calc(100% - 170px);
+        font-size: $fontSize7;
+        @include font_color('fill11');
+      }
 
-.problemList .status {
-  width: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: var(--FontSize4);
-  color: var(--font_color3);
+      .status {
+        width: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: $fontSize4;
+        @include font_color('font3');
+      }
+    }
+  }
 }
 
 .notFound {
