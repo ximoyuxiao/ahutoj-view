@@ -83,69 +83,58 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import { getCurrentInstance, reactive } from 'vue'
-export default {
-  name: 'AddProblem',
-  setup() {
-    const { proxy } = getCurrentInstance()
+const { proxy } = getCurrentInstance() as any
 
-    var problem = reactive({
-      PID: 0,
-      Title: '',
-      Description: '',
-      Input: '',
-      Output: '',
-      SampleInput: '',
-      SampleOutput: '',
-      LimitTime: 0,
-      LimitMemory: 0,
-      Hit: '',
-      Label: '',
-      init() {
-        this.PID = 0
-        this.Title = ''
-        this.Description = ''
-        this.Input = ''
-        this.Output = ''
-        this.SampleInput = ''
-        this.SampleOutput = ''
-        this.LimitTime = 0
-        this.LimitMemory = 0
-        this.Hit = ''
-        this.Label = ''
-      },
-    })
-
-    function complete() {
-      proxy.$axios
-        .post('api/problem/add/', {
-          Title: problem.Title,
-          Description: problem.Description,
-          Input: problem.Input,
-          Output: problem.Output,
-          SampleInput: problem.SampleInput,
-          SampleOutput: problem.SampleOutput,
-          LimitTime: problem.LimitTime,
-          LimitMemory: problem.LimitMemory,
-          Hit: problem.Hit,
-          Label: problem.Label,
-        })
-        .then((res) => {
-          let data = res.data
-          if (data.code == 0) {
-            proxy.elMessage({ message: '添加成功!', type: 'success' })
-          } else {
-            proxy.codeProcessor(data.code)
-          }
-        })
-    }
-
-    return {
-      problem,
-      complete,
-    }
+var problem = reactive({
+  PID: 0,
+  Title: '',
+  Description: '',
+  Input: '',
+  Output: '',
+  SampleInput: '',
+  SampleOutput: '',
+  LimitTime: 0,
+  LimitMemory: 0,
+  Hit: '',
+  Label: '',
+  init() {
+    problem.PID = 0
+    problem.Title = ''
+    problem.Description = ''
+    problem.Input = ''
+    problem.Output = ''
+    problem.SampleInput = ''
+    problem.SampleOutput = ''
+    problem.LimitTime = 0
+    problem.LimitMemory = 0
+    problem.Hit = ''
+    problem.Label = ''
   },
+})
+
+function complete() {
+  proxy.$axios
+    .post('api/problem/add/', {
+      Title: problem.Title,
+      Description: problem.Description,
+      Input: problem.Input,
+      Output: problem.Output,
+      SampleInput: problem.SampleInput,
+      SampleOutput: problem.SampleOutput,
+      LimitTime: problem.LimitTime,
+      LimitMemory: problem.LimitMemory,
+      Hit: problem.Hit,
+      Label: problem.Label,
+    })
+    .then((res: any) => {
+      let data = res.data
+      if (data.code == 0) {
+        proxy.elMessage({ message: '添加成功!', type: 'success' })
+      }
+      proxy.codeProcessor(data.code)
+    })
 }
 </script>
 

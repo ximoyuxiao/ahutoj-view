@@ -9,7 +9,7 @@
       />
       <el-button
         plain
-        v-on:click="search.getProblem()"
+        v-on:click="search.getProblem(null)"
       >搜索</el-button>
     </div>
     <el-divider></el-divider>
@@ -112,6 +112,14 @@
       >
         {{searchList.isShowed ? "关闭列表" : "显示列表" }}
       </el-button>
+      <el-button
+        plain
+        v-show="searchList.isShowed"
+        type="warning"
+        v-on:click="searchList.batchDelete()"
+      >
+        批量删除
+      </el-button>
     </div>
     <div
       v-show="searchList.isShowed"
@@ -122,7 +130,15 @@
         v-for="(item, index) in searchList.Data"
         :key="index"
       >
-        <div class="title cursor_pointer">
+        <input
+          type="checkbox"
+          :checked="item.selected"
+          @change="searchList.selectProblem(index)"
+        >
+        <div
+          class="title cursor_pointer"
+          @click="search.getProblem(item.PID)"
+        >
           {{ item.PID }}&nbsp;-&nbsp;{{ item.Title }}
         </div>
 
@@ -144,198 +160,236 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import { getCurrentInstance, reactive } from 'vue'
 import { ElMessageBox } from 'element-plus'
 
-export default {
-  name: 'UpdateProblem',
-  setup() {
-    const { proxy } = getCurrentInstance()
-    //题目题号搜索功能
-    var search = reactive({
-      PID: 0,
-      isSearched: false,
-      onFocus() {
-        this.isSearched = false
-      },
-      getProblem() {
-        proxy.$axios.get('api/problem/' + search.PID).then((res) => {
-          let data = res.data
-          if (data.code == 0) {
-            // console.log(data);
-            problem.copy(data)
-            this.isSearched = true
-          } else {
-            proxy.codeProcessor(data.code)
-            this.isSearched = false
-          }
-        })
-      },
-    })
-    //题目数据
-    var problem = reactive({
-      PID: 0,
-      Title: '',
-      Description: '',
-      Input: '',
-      Output: '',
-      SampleInput: '',
-      SampleOutput: '',
-      LimitTime: 0,
-      LimitMemory: 0,
-      Hit: '',
-      Label: '',
-      init() {
+const { proxy } = getCurrentInstance() as any
+//题目题号搜索功能
+var search = reactive({
+  PID: 0,
+  isSearched: false,
+  onFocus() {
+    search.isSearched = false
+  },
+  getProblem(PID: number) {
+    if (PID) {
+      search.PID = PID
+    }
+    proxy.$axios.get('api/problem/' + search.PID).then((res: any) => {
+      let data = res.data
+      if (data.code == 0) {
+        problem.copy(data)
+        search.isSearched = true
+      } else {
         search.isSearched = false
-        this.PID = 0
-        this.Title = ''
-        this.Description = ''
-        this.Input = ''
-        this.Output = ''
-        this.SampleInput = ''
-        this.SampleOutput = ''
-        this.LimitTime = 0
-        this.LimitMemory = 0
-        this.Hit = ''
-        this.Label = ''
-      },
-      copy(data) {
-        this.PID = data.PID
-        this.Description = data.Description
-        this.Hit = data.Hit
-        this.Input = data.Input
-        this.LimitMemory = data.LimitMemory
-        this.LimitTime = data.LimitTime
-        this.Output = data.Output
-        this.SampleInput = data.SampleInput
-        this.SampleOutput = data.SampleOutput
-        this.Title = data.Title
-        this.Label = data.Label
-      },
+      }
+      proxy.codeProcessor(data.code)
     })
-    //列表分页的配置项
-    var configList = reactive({
-      Count: 0, //当前数据量
-      currentPage: 1,
-      limit: 20,
-      //初始化页面配置数据
-      init() {
-        this.Count = 0
-        this.currentPage = 1
-        this.limit = 20
-      },
-    })
-    //列表的搜索结果
-    var searchList = reactive({
-      Data: [],
-      isShowed: false,
-      //初始化当前列表
-      init() {
-        this.Data = []
-      },
-      //搜索当前列表
-      showList: () => {
-        if (searchList.isShowed) searchList.isShowed = false
-        else {
-          searchList.isShowed = true
-          searchList.search()
-        }
-      },
-      search: () => {
-        proxy.$axios
-          .get(
-            'api/problem/list?Page=' +
-              (configList.currentPage - 1) +
-              '&Limit=' +
-              configList.limit
-          )
-          .then((res) => {
-            let data = res.data
-            if (data.code == 0) {
-              // console.log(data)
-              configList.Count = data.Count
-              searchList.Data = data.Data
-              searchList.isShowed = true
-            } else {
-              proxy.codeProcessor(data.code)
-            }
-          })
-      },
-      //页面切换
-      changePage: (page) => {
-        configList.currentPage = page
-        //切换页面后开始显示数据
-        searchList.search()
-      },
-    })
+  },
+})
 
-    //删除题目
-    function deleteProblem() {
-      ElMessageBox.confirm(
-        '确定要删除题号为 ' + search.PID + ' 的题目吗？',
-        '注意',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-        }
-      ).then(() => {
-        proxy.$axios
-          .post('api/problem/delete/', {
-            Pids: [search.PID],
-          })
-          .then((res) => {
-            let data = res.data
-            if (data.code == 0) {
-              problem.init()
-              proxy.elMessage({
-                message: '删除成功!',
-                type: 'success',
-              })
-            } else {
-              proxy.codeProcessor(data.code)
-            }
-          })
-      })
-    }
+//题目数据
+var problem = reactive({
+  PID: 0,
+  Title: '',
+  Description: '',
+  Input: '',
+  Output: '',
+  SampleInput: '',
+  SampleOutput: '',
+  LimitTime: 0,
+  LimitMemory: 0,
+  Hit: '',
+  Label: '',
+  init() {
+    search.isSearched = false
+    this.PID = 0
+    this.Title = ''
+    this.Description = ''
+    this.Input = ''
+    this.Output = ''
+    this.SampleInput = ''
+    this.SampleOutput = ''
+    this.LimitTime = 0
+    this.LimitMemory = 0
+    this.Hit = ''
+    this.Label = ''
+  },
+  copy(data: any) {
+    problem.PID = data.PID
+    problem.Description = data.Description
+    problem.Hit = data.Hit
+    problem.Input = data.Input
+    problem.LimitMemory = data.LimitMemory
+    problem.LimitTime = data.LimitTime
+    problem.Output = data.Output
+    problem.SampleInput = data.SampleInput
+    problem.SampleOutput = data.SampleOutput
+    problem.Title = data.Title
+    problem.Label = data.Label
+  },
+})
 
-    //完成修改
-    function complete() {
-      proxy.$axios
-        .post('api/problem/edit/', {
-          Pid: problem.PID,
-          Title: problem.Title,
-          Description: problem.Description,
-          Input: problem.Input,
-          Output: problem.Output,
-          Sample_input: problem.SampleInput,
-          Sample_output: problem.SampleOutput,
-          LimitTime: problem.LimitTime,
-          LimitMemory: problem.LimitMemory,
-          Hit: problem.Hit,
-          Label: problem.Label,
-        })
-        .then((res) => {
-          let data = res.data
-          if (data.code == 0) {
-            console.log(data)
-            proxy.elMessage({ message: '修改成功!', type: 'success' })
-          } else {
-            proxy.codeProcessor(data.code)
-          }
-        })
-    }
+//列表分页的配置项
+var configList = reactive({
+  Count: 0, //当前数据量
+  currentPage: 1,
+  limit: 20,
+  //初始化页面配置数据
+  init() {
+    configList.Count = 0
+    configList.currentPage = 1
+    configList.limit = 20
+  },
+})
 
-    return {
-      search,
-      problem,
-      configList,
-      searchList,
-      complete,
-      deleteProblem,
+//列表的搜索结果
+var searchList = reactive({
+  Data: [],
+  isShowed: false,
+  //初始化当前列表
+  init() {
+    this.Data = []
+  },
+  //搜索当前列表
+  showList: () => {
+    if (searchList.isShowed) searchList.isShowed = false
+    else {
+      searchList.isShowed = true
+      searchList.search()
     }
   },
+  search: () => {
+    proxy
+      .$get(
+        'api/problem/list?Page=' +
+          (configList.currentPage - 1) +
+          '&Limit=' +
+          configList.limit
+      )
+      .then((res: any) => {
+        let data = res.data
+        if (data.code == 0) {
+          // console.log(data)
+          configList.Count = data.Count
+          searchList.Data = data.Data
+          searchList.Data.forEach((item) => {
+            item.selected = false
+          })
+          searchList.isShowed = true
+        }
+        proxy.codeProcessor(data.code)
+      })
+  },
+  //页面切换
+  changePage: (page: any) => {
+    configList.currentPage = page
+    //切换页面后开始显示数据
+    searchList.search()
+  },
+  //选择
+  selectProblem: (index: any) => {
+    searchList.Data[index].selected = !searchList.Data[index].selected
+  },
+  //批量删除
+  batchDelete: () => {
+    let tempSelected = []
+    let tempString = ''
+    searchList.Data.forEach((item) => {
+      if (item.selected) {
+        tempSelected.push(item.PID)
+        tempString += item.PID + ' '
+      }
+    })
+    if (tempSelected.length <= 0) {
+      proxy.elMessage({ message: '未选择任何题目！', type: 'warning' })
+      return
+    }
+    ElMessageBox.confirm(
+      '确定要批量删除题号 ' + tempString + ' 题目吗？',
+      '注意',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+    ).then(() => {
+      proxy.$axios
+        .post('api/problem/delete/', {
+          Pids: tempSelected,
+        })
+        .then((res: any) => {
+          let data = res.data
+          if (data.code == 0) {
+            problem.init()
+            proxy.elMessage({
+              message: '批量删除成功!',
+              type: 'success',
+            })
+          }
+          proxy.codeProcessor(data.code)
+        })
+      searchList.isShowed = false
+    })
+  },
+})
+
+//删除题目
+function deleteProblem() {
+  ElMessageBox.confirm(
+    '确定要删除题号为 ' + search.PID + ' 的题目吗？',
+    '注意',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  ).then(() => {
+    proxy.$axios
+      .post('api/problem/delete/', {
+        Pids: [search.PID],
+      })
+      .then((res) => {
+        let data = res.data
+        if (data.code == 0) {
+          problem.init()
+          proxy.elMessage({
+            message: '删除成功!',
+            type: 'success',
+          })
+        } else {
+          proxy.codeProcessor(data.code)
+        }
+      })
+  })
+}
+
+//完成修改
+function complete() {
+  proxy.$axios
+    .post('api/problem/edit/', {
+      Pid: problem.PID,
+      Title: problem.Title,
+      Description: problem.Description,
+      Input: problem.Input,
+      Output: problem.Output,
+      Sample_input: problem.SampleInput,
+      Sample_output: problem.SampleOutput,
+      LimitTime: problem.LimitTime,
+      LimitMemory: problem.LimitMemory,
+      Hit: problem.Hit,
+      Label: problem.Label,
+    })
+    .then((res) => {
+      let data = res.data
+      if (data.code == 0) {
+        console.log(data)
+        proxy.elMessage({ message: '修改成功!', type: 'success' })
+      } else {
+        proxy.codeProcessor(data.code)
+      }
+    })
 }
 </script>
 
@@ -361,7 +415,7 @@ export default {
 span {
   font-size: 22px;
   width: 150px;
-  color: #f2f2f2;
+  @include font_color('font1');
 }
 
 .list {
@@ -381,13 +435,19 @@ span {
     border: 2px solid;
     @include border_color('border2');
     display: flex;
-    flex-direction: column;
+    align-items: center;
     transition-duration: 260ms;
 
     &:hover {
       @include fill_color('fill15');
       border: 2px solid;
       @include border_color('fill12');
+    }
+
+    input {
+      height: 20px;
+      width: 20px;
+      margin: 0 10px;
     }
 
     .title {
