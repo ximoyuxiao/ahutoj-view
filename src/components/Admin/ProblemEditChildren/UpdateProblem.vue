@@ -126,18 +126,18 @@
       class="list"
     >
       <div
-        class="item"
         v-for="(item, index) in searchList.Data"
+        :class="item.selected ? 'item itemSelected' : 'item'"
         :key="index"
       >
         <input
           type="checkbox"
           :checked="item.selected"
-          @change="searchList.selectProblem(index)"
+          @change.stop="searchList.selectProblem(index)"
         >
         <div
           class="title cursor_pointer"
-          @click="search.getProblem(item.PID)"
+          @click.stop="search.getProblem(item.PID)"
         >
           {{ item.PID }}&nbsp;-&nbsp;{{ item.Title }}
         </div>
@@ -290,7 +290,9 @@ var searchList = reactive({
   },
   //选择
   selectProblem: (index: any) => {
-    searchList.Data[index].selected = !searchList.Data[index].selected
+    searchList.Data[index].selected = searchList.Data[index].selected
+      ? false
+      : true
   },
   //批量删除
   batchDelete: () => {
@@ -455,6 +457,10 @@ span {
       font-size: $fontSize7;
       @include font_color('font1');
     }
+  }
+
+  .itemSelected {
+    @include fill_color('fill45');
   }
 }
 
