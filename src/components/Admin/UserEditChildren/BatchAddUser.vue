@@ -151,13 +151,8 @@ export default {
           UserName: userList.list[i].UserName,
           Pass: userList.list[i].Pass,
         })
-      console.log(JSON.stringify(tempArray))
 
-      proxy
-        .$post('api/admin/users/', JSON.stringify(tempArray), 1)
-        .then((res) => {
-          // console.log(res)
-        })
+      proxy.$post('api/admin/users', tempArray, 1).then((res) => {})
     }
 
     return { init, uploadParser, overflowLimit, userList, complete }

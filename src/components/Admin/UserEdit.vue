@@ -72,7 +72,7 @@ export default {
   }
 
   .content {
-    @include fill_color('fill6');
+    background-color: #ffffff;
     box-sizing: border-box;
     padding: $adminCenter_contentPadding;
     width: 100%;

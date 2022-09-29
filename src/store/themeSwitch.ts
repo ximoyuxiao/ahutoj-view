@@ -4,7 +4,7 @@ export default {
 		theme: 1,
 	},
 	mutations: {
-		//主体切换
+		//主题切换
 		switch(state: any, theme: number) {
 			state.theme = theme;
 			if (theme == 2) {
@@ -22,6 +22,7 @@ export default {
 			}
 		},
 
+		//赛博朋克风格
 		switchCyberpunkTheme(state: any) {
 			state.theme = 2;
 			document.documentElement.setAttribute(
