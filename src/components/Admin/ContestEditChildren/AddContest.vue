@@ -93,13 +93,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useStore } from 'vuex'
 export default {
   name: 'AddContest',
   setup() {
-    const { proxy } = getCurrentInstance()
+    const { proxy } = getCurrentInstance() as any
     const store = useStore()
 
     //比赛题单数据
@@ -112,7 +112,7 @@ export default {
       Type: 'ACM',
       IsPublic: '公开',
       Pass: '',
-      Problems: [],
+      Problems: "",
       init() {
         this.UID = 0
         this.Title = ''

@@ -118,14 +118,14 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useStore } from 'vuex'
 import { ElMessageBox } from 'element-plus'
 export default {
   name: 'UpdateContest',
   setup() {
-    const { proxy } = getCurrentInstance()
+    const { proxy } = getCurrentInstance() as any
     const store = useStore()
 
     //比赛题单数据
@@ -139,7 +139,7 @@ export default {
       Type: 'ACM',
       IsPublic: '公开',
       Pass: '',
-      Problems: [],
+      Problems: "",
       searchCid: 1,
       isFound: false,
       init() {
@@ -244,7 +244,7 @@ export default {
     })
 
     //竞赛时间
-    var contestTime = ref([0, 0])
+    var contestTime: any = ref([0, 0])
 
     //删除竞赛
     function deleteContest() {

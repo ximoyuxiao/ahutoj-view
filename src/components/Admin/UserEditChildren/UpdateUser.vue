@@ -63,12 +63,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { getCurrentInstance, reactive } from 'vue'
 export default {
   name: 'UpdateUser',
   setup() {
-    const { proxy } = getCurrentInstance()
+    const { proxy } = getCurrentInstance() as any
 
     var userInfo = reactive({
       UID: '',

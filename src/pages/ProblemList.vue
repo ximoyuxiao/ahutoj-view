@@ -2,7 +2,7 @@
   <div>题单</div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
 };
 </script>

@@ -47,12 +47,6 @@ function init() {
 //列表数据处理
 function recentContestsProcessor() {
   //在获取到数据后
-  for (let i in d.recentContests) {
-    if (d.recentContests[i].status == 0) d.recentContests[i].status = '已结束'
-    else if (d.recentContests[i].status == 1)
-      d.recentContests[i].status = '正在进行'
-    else d.recentContests[i].status = '未开始'
-  }
 }
 
 onMounted(() => {

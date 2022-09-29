@@ -74,12 +74,12 @@
   </div>
 </template>  
 
-<script>
+<script lang="ts">
 import { getCurrentInstance, reactive } from 'vue'
 export default {
   name: 'BatchAddUser',
   setup() {
-    const { proxy } = getCurrentInstance()
+    const { proxy } = getCurrentInstance() as any
 
     const userList = reactive({
       list: [],
@@ -89,20 +89,18 @@ export default {
           if (index == i) this.list.splice(i, 1)
         }
       },
+      init: () => {
+        userList.list = []
+        userList.showList = false
+      },
     })
-
-    //初始化数据
-    function init() {
-      userList.list = []
-      userList.showList = false
-    }
 
     //上传文件解析器
     function uploadParser(event, fileList) {
       let file = fileList[0]
       let reader = new FileReader()
       reader.readAsText(file.raw)
-      reader.onload = (e) => {
+      reader.onload = (e: any) => {
         // 处理文件内容
         var userArray = JSON.parse(e.target.result)
         if (!(userArray instanceof Array)) {
@@ -155,7 +153,7 @@ export default {
       proxy.$post('api/admin/users', tempArray, 1).then((res) => {})
     }
 
-    return { init, uploadParser, overflowLimit, userList, complete }
+    return { uploadParser, overflowLimit, userList, complete }
   },
 }
 </script>

@@ -2,7 +2,7 @@
   <div class="AddList"></div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "AddList",
 };
