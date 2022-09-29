@@ -28,7 +28,6 @@
           :style="
         'width: 120px; color: #ffffff; background-color:' +
         proxy.Utils.getStatusColor(submit.Result)"
-          @click="goToProblem(submit.PID)"
         >
           {{ submit.Result }}
 
@@ -134,7 +133,7 @@ function getSubmit() {
   proxy.$get('api/submit/' + config.SID).then((res: any) => {
     let data = res.data
     if (data.code == 0) {
-      // console.log(data);
+      console.log(data)
       submit.copy(data)
       notFound.value = false
     }
@@ -160,7 +159,7 @@ onMounted(() => {
 })
 </script>
 
-<style  scoped>
+<style  scoped lang="scss">
 .notFound {
   width: 100%;
   height: 300px;
@@ -170,42 +169,49 @@ onMounted(() => {
 }
 
 .submit {
-  background-color: var(--bcg_color4);
   border-radius: 10px;
   box-sizing: border-box;
-  padding: var(--status_listPadding);
-}
+  padding: $status_listPadding;
 
-.submit .header {
-  display: flex;
-  align-items: center;
-  font-size: var(--FontSize7);
-  color: var(--font_color1);
-  border-bottom: 2px solid #fefefe;
-  padding: 10px 0;
-  justify-content: space-between;
-}
+  .header {
+    display: flex;
+    align-items: center;
+    font-size: $fontSize8;
+    @include font_color('font1');
+    border-bottom: 2px solid #fefefe;
+    padding: 10px 0;
+    justify-content: space-between;
+  }
 
-.submit .title {
-  margin: 10px 0;
-  font-size: var(--FontSize7);
-  color: var(--font_color1);
-}
+  .item {
+    display: flex;
+    align-items: center;
+    font-size: $fontSize6;
+    @include font_color('font2');
+    @include fill_color('fill2');
+    justify-content: space-between;
+    border-bottom: 2px solid #fefefe;
+    box-sizing: border-box;
 
-.submit .item {
-  display: flex;
-  align-items: center;
-  font-size: var(--FontSize5);
-  color: var(--font_color2);
-  background-color: var(--bcg_color3);
-  justify-content: space-between;
-  border-bottom: 2px solid #fefefe;
-  box-sizing: border-box;
-}
+    .PID {
+      @include font_color('fill11');
 
-.submit .item .res {
-  text-align: center;
-  padding: 10px 0;
-  border-radius: 6px;
+      &:hover {
+        @include font_color('fill13');
+      }
+    }
+
+    .res {
+      text-align: center;
+      padding: 10px 0;
+      border-radius: 6px;
+    }
+  }
+
+  .title {
+    margin: 30px 0 5px 0;
+    font-size: $fontSize8;
+    @include font_color('font1');
+  }
 }
 </style>

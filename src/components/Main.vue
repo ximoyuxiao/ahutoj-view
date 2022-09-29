@@ -96,19 +96,8 @@
       class="login"
       v-if="config.showLoginDialog == 1"
     >
-      <div
-        class="close"
-        style="padding: 15px 0"
-      >
-        <div style="
-            padding: 5px 20px;
-            width: 180px;
-            border-top-right-radius: 10px;
-            border-bottom-right-radius: 10px;
-            font-size: var(--FontSize6);
-            color: var(--font_color5);
-            background-color: var(--dec_color31);
-          ">
+      <div class="close">
+        <div class="ahutFlag">
           AHUT OJ&nbsp;&nbsp;登录
         </div>
         <img
@@ -158,12 +147,8 @@
           type="checkbox"
           name="save"
           v-model="loginInfo.save"
-          style="height: 20px; width: 20px"
         />
-        <label
-          for="save"
-          style="margin: 0 5px; color: var(--font_color1)"
-        >3天内自动登录</label>
+        <label for="save">3天内自动登录</label>
       </div>
       <div class="redirect">
         您是否<span
@@ -184,19 +169,8 @@
       class="signin"
       v-if="config.showLoginDialog == 2"
     >
-      <div
-        class="close"
-        style="padding: 15px 0;"
-      >
-        <div style="
-            padding: 5px 20px;
-            width: 180px;
-            border-top-right-radius: 10px;
-            border-bottom-right-radius: 10px;
-            font-size: var(--FontSize6);
-            color: var(--font_color5);
-            background-color: var(--dec_color31);
-          ">
+      <div class="close">
+        <div class="ahutFlag">
           AHUT OJ&nbsp;&nbsp;注册
         </div>
         <img
@@ -225,7 +199,9 @@
         <label
           class="loginLabel"
           for="username"
-        >账号</label>
+        >
+          账号
+        </label>
       </div>
       <div class="nickname">
         <input
@@ -240,7 +216,9 @@
         <label
           class="loginLabel"
           for="nickname"
-        >昵称</label>
+        >
+          昵称
+        </label>
       </div>
       <div class="password">
         <input
@@ -254,7 +232,9 @@
         <label
           class="loginLabel"
           for="password"
-        >密码</label>
+        >
+          密码
+        </label>
       </div>
       <div class="password">
         <input
@@ -268,7 +248,9 @@
         <label
           class="loginLabel"
           for="password"
-        >密码</label>
+        >
+          密码
+        </label>
       </div>
       <div class="email">
         <input
@@ -285,18 +267,14 @@
       </div>
       <div
         class="save"
-        style="display: flex; justify-items: center; margin: 0 40px"
+        name="save"
       >
         <input
           type="checkbox"
           name="save"
           v-model="signinInfo.save"
-          style="height: 20px; width: 20px"
         />
-        <label
-          for="save"
-          style="margin: 0 5px; color: var(--font_color1)"
-        >3天内自动登录</label>
+        <label for="save">3天内自动登录</label>
       </div>
       <div class="redirect">
         已经有账号了？前往<span
@@ -773,7 +751,7 @@ onMounted(() => {
           flex-direction: column;
           align-items: center;
           justify-content: space-around;
-          @include fill_color('fill2');
+          @include fill_color('fill1');
 
           div {
             display: flex;
@@ -782,10 +760,10 @@ onMounted(() => {
             height: min-content;
             border-radius: 12px;
             align-items: center;
-            @include fill_color('fill5');
+            @include fill_color('fill3');
 
             &:hover {
-              @include fill_color('fill3');
+              @include fill_color('fill2');
             }
           }
         }
@@ -858,68 +836,98 @@ onMounted(() => {
   }
 }
 
-.loginLabel {
-  position: absolute;
-  font-size: $fontSize8;
-  @include font_color('font3');
-  transition-duration: 400ms;
-  top: 9px;
-  left: 50px;
-  border-radius: 10px;
+.signin,
+.login {
+  .close {
+    padding: 15px 0;
 
-  &:focus {
-    @include border_color('fill12');
-    @include outline_color('fill12');
+    .ahutFlag {
+      padding: 5px 20px;
+      width: 180px;
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+      font-size: $fontSize6;
+      @include font_color('font1');
+      @include fill_color('fill12');
+    }
   }
-}
 
-.loginInput {
-  width: 100%;
-  padding: 5px 55px;
-  box-sizing: border-box;
-  border-radius: 10px;
-  font-size: $fontSize8;
-  @include font_color('font1');
-  @include fill_color('fill4');
-  transition-duration: 300ms;
+  .loginLabel {
+    position: absolute;
+    font-size: $fontSize8;
+    @include font_color('font3');
+    transition-duration: 400ms;
+    top: 9px;
+    left: 50px;
+    border-radius: 10px;
 
-  &:focus + .loginLabel {
-    transform: translateY(-18px);
+    &:focus {
+      @include border_color('fill12');
+      @include outline_color('fill12');
+    }
+  }
+
+  .loginInput {
+    width: 100%;
+    padding: 5px 55px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    font-size: $fontSize8;
+    @include font_color('font1');
+    @include fill_color('fill4');
+    transition-duration: 300ms;
+
+    &:focus + .loginLabel {
+      transform: translateY(-18px);
+      @include font_color('fill11');
+      @include fill_color('fill3');
+      font-size: $fontSize6;
+    }
+  }
+
+  .save {
+    display: flex;
+    justify-items: center;
+    margin: 0 40px;
+    @include font_color('font1');
+
+    input {
+      margin: 0 5px;
+      height: 20px;
+      width: 20px;
+    }
+  }
+
+  .redirect {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 5px 40px;
+    @include font_color('font1');
+  }
+
+  .lostPassword,
+  .toSignin,
+  .toLogin {
     @include font_color('fill11');
-    @include fill_color('fill3');
-    font-size: $fontSize6;
   }
-}
 
-.redirect {
-  box-sizing: border-box;
-  width: 100%;
-  padding: 5px 40px;
-  @include font_color('font1');
-}
+  .confirm {
+    width: 100px;
+    font-size: $fontSize9;
+    text-align: center;
+    box-sizing: border-box;
+    padding: 5px 0;
+    margin: 0 0 20px 40px;
+    border-radius: 10px;
+    @include font_color('font6');
+    @include fill_color('fill12');
+    transition-duration: 100ms;
 
-.confirm {
-  width: 100px;
-  font-size: $fontSize9;
-  text-align: center;
-  box-sizing: border-box;
-  padding: 5px 0;
-  margin: 0 0 20px 40px;
-  border-radius: 10px;
-  @include font_color('font6');
-  @include fill_color('fill12');
-  transition-duration: 100ms;
-
-  &:hover {
-    @include fill_color('fill13');
-    @include box_shadow(0, 0, 2px, 2px, 'fill12');
+    &:hover {
+      @include fill_color('fill13');
+      @include box_shadow(0, 0, 2px, 2px, 'fill12');
+    }
   }
-}
-
-.lostPassword,
-.toSignin,
-.toLogin {
-  @include font_color('fill11');
 }
 
 .contentBox {
