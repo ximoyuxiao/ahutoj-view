@@ -111,6 +111,7 @@ const router = createRouter({
 				{
 					path: "ListEdit",
 					component: ListEdit,
+					redirect: "Admin/ListEdit/AddList",
 					children: [
 						{
 							path: "AddList",
@@ -144,6 +145,7 @@ const router = createRouter({
 				{
 					path: "AdminEdit",
 					component: AdminEdit,
+					redirect: "/Admin/AdminEdit/AddAdmin",
 					children: [
 						{
 							path: "AddAdmin",

@@ -1,5 +1,6 @@
 <template>
   <div class="main">
+    <!-- 导航栏 -->
     <transition
       data-flag="nav"
       enter-active-class="animate__animated animate__fadeInDown"
@@ -11,7 +12,7 @@
         :login="loginDialog"
       />
     </transition>
-
+    <!-- 登录窗口背景遮罩 -->
     <transition
       v-show="!config.showNav"
       data-flag="cover"
@@ -23,7 +24,7 @@
       </div>
 
     </transition>
-
+    <!-- 登录窗口 -->
     <transition
       data-flag="loginDialog"
       enter-active-class="animate__animated animate__backInDown"
@@ -36,7 +37,7 @@
         :signin="signinDialog"
       />
     </transition>
-
+    <!-- 注册窗口 -->
     <transition
       data-flag="signinDialog"
       enter-active-class="animate__animated animate__backInDown"
@@ -49,7 +50,6 @@
         :login="loginDialog"
       />
     </transition>
-
     <!-- 页面内容 -->
     <div
       class="contentBox"
@@ -64,8 +64,6 @@
         </transition>
       </router-view>
     </div>
-
-    <div style="height: 50px"></div>
   </div>
 </template>
 
@@ -139,8 +137,8 @@ async function autoLogin() {
   //自动登录
   if (save == 'true' && Token != null) {
     proxy.$axios.get('api/user/info').then((res: any) => {
-      // console.log(res)
-      let data: { code: number; [item: string]: any } = res.data
+      //获取用户信息
+      let data: any = res.data
       if (data.code == 0) {
         //获取权限信息
         getUserPermission(data.UID)
