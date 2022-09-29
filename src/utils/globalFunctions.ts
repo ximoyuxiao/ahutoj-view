@@ -92,26 +92,23 @@ export function numberToAlpha(n: number): string {
 	let alpha = "";
 	let ascll = 65;
 	while (n > 0) {
-		ascll = n % 27;
-		n = Math.floor(n / 27);
-		if (ascll == 0) alpha = "0" + alpha;
-		else alpha = String.fromCharCode(ascll + 64) + alpha;
+		ascll = (n - 1) % 26;
+		n = Math.floor((n - 1) / 26);
+		alpha = String.fromCharCode(ascll + 65) + alpha;
 	}
 	return alpha;
 }
 
 //大写字母转数字
 export function alphaToNumber(a: string): number {
-	if (a == "0") return 0;
+	if (a == "A") return 0;
 	let ascall = 65;
 	let num = 0;
-	for (let b in a.split("")) {
-		b = a[b];
-		num *= 27;
-		if (b == "0") continue;
-		ascall = b.charCodeAt(0);
+	a.split("").forEach((char) => {
+		num *= 26;
+		ascall = char.charCodeAt(0);
 		num += ascall - 64;
-	}
+	});
 	return num;
 }
 
