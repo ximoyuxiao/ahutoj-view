@@ -41,18 +41,18 @@
 
       <div class="time">
         <div class="begin_time">
-          {{ proxy.Utils.timestampToTime(contest.BeginTime) }}
+          {{ proxy.Utils.TimeTools.timestampToTime(contest.BeginTime) }}
         </div>
         <div class="left_time">
           {{
-          proxy.Utils.timestampToInterval(
+          proxy.Utils.TimeTools.timestampToInterval(
           timePercent.allTime - timePercent.lostTime,
           2
           )
           }}
         </div>
         <div class="end_time">
-          {{ proxy.Utils.timestampToTime(contest.EndTime) }}
+          {{ proxy.Utils.TimeTools.timestampToTime(contest.EndTime) }}
         </div>
       </div>
       <div class="process">
@@ -89,7 +89,7 @@
           class="flag cursor_pointer"
           v-on:click="goToProblem(item.PID)"
         >
-          {{ proxy.Utils.numberToAlpha(index + 1) }}
+          {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
         </div>
         <div
           class="title cursor_pointer"

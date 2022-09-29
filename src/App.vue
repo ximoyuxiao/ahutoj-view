@@ -1,24 +1,14 @@
 <template>
   <Main></Main>
-  <div class="bottom">
-    <Bottom>
-    </Bottom>
-  </div>
+  <Bottom>
+  </Bottom>
 </template>
 
 <script lang="ts" setup>
 import Main from './components/Main.vue'
-import Bottom from './components/Bottom.vue'
+import Bottom from './components/Base/Bottom.vue'
 </script>
-
-<style scoped>
-.bottom {
-  width: 100%;
-  position: absolute;
-  bottom: 0;
-}
-</style>
-  
+ 
 <style lang="scss">
 * {
   margin: 0;
@@ -33,16 +23,17 @@ a:active {
 html {
   height: 100%;
   width: 100%;
-  min-height: 800px;
+  min-height: 100vh;
   min-width: 800px;
   overflow-y: scroll;
+  position: relative;
   @include fill_color('base_page');
 }
 body {
   position: relative;
-  min-height: calc(100% - 70px);
-  @include fill_color('base_page');
   width: 100%;
+  height: 100%;
+  @include fill_color('base_page');
 }
 pre {
   white-space: pre-wrap;
@@ -56,9 +47,7 @@ pre {
   --animate-duration: 300ms !important;
 }
 </style>
- 
-
-<!-- 便捷通用样式 -->
+  
 <style>
 /* 鼠标指针效果 */
 .cursor_pointer {

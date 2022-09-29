@@ -28,14 +28,14 @@
           class="res cursor_pointer"
           :style="
           'width: 100px; color: #ffffff; background-color:' +
-          proxy.Utils.getStatusColor(item.Result)
+          proxy.Utils.StatusConstValManager.getStatusColor(item.Result)
         "
           @click="goToSeeCode(item.SID)"
         >
           {{ item.Result }}
         </div>
         <div style="width: 140px">
-          {{ proxy.Utils.getLangString(item.Lang) }}
+          {{ proxy.Utils.StatusConstValManager.getLangString(item.Lang) }}
         </div>
         <div
           class="useTime"
@@ -53,7 +53,7 @@
           class="submitTime"
           style="width: 180px"
         >
-          {{ proxy.Utils.timestampToTime(item.SubmitTime) }}
+          {{ proxy.Utils.TimeTools.timestampToTime(item.SubmitTime) }}
         </div>
       </div>
       <div class="pagination">

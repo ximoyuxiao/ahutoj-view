@@ -61,12 +61,12 @@
               类型：{{ item.Type == 1 ? "ACM" : "OI" }}
             </div>
             <div class="timeInfo">
-              开始时间：{{ proxy.Utils.timestampToTime(item.BeginTime) }}
+              开始时间：{{ proxy.Utils.TimeTools.timestampToTime(item.BeginTime) }}
               <el-divider direction="vertical" />
-              结束时间：{{ proxy.Utils.timestampToTime(item.EndTime) }}
+              结束时间：{{ proxy.Utils.TimeTools.timestampToTime(item.EndTime) }}
               <el-divider direction="vertical" />
               时长：
-              {{ proxy.Utils.timeIntervalToTime(item.EndTime, item.BeginTime) }}
+              {{ proxy.Utils.TimeTools.timeIntervalToTime(item.EndTime, item.BeginTime) }}
             </div>
           </div>
           <div class=""></div>

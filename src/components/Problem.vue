@@ -112,7 +112,7 @@
             :key="index"
             v-on:click="goToProblem(item.PID)"
           >
-            {{ proxy.Utils.numberToAlpha(index + 1) }}
+            {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
           </div>
         </div>
       </div>
@@ -818,7 +818,7 @@ onMounted(() => {
     }
     .function {
       @include font_color('font1');
-      
+
       > div {
         position: relative;
         overflow: hidden;

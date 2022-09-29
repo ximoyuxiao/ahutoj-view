@@ -27,13 +27,13 @@
           class="res"
           :style="
         'width: 120px; color: #ffffff; background-color:' +
-        proxy.Utils.getStatusColor(submit.Result)"
+        proxy.Utils.StatusConstValManager.getStatusColor(submit.Result)"
         >
           {{ submit.Result }}
 
         </div>
         <div style="width: 140px">
-          {{ proxy.Utils.getLangString(submit.Lang) }}
+          {{ proxy.Utils.StatusConstValManager.getLangString(submit.Lang) }}
         </div>
         <div
           class="useTime"
@@ -51,7 +51,7 @@
           class="submitTime"
           style="width: 180px"
         >
-          {{ proxy.Utils.timestampToTime(submit.SubmitTime) }}
+          {{ proxy.Utils.TimeTools.timestampToTime(submit.SubmitTime) }}
         </div>
       </div>
       <div class="title">代码</div>

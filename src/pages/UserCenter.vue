@@ -33,6 +33,7 @@
           <el-tag
             v-for="Adept in userInfo.AdeptArray"
             :key="Adept"
+            :effect="store.state.themeSwitch.theme == 1 ? 'light' : 'dark'"
           >
             {{ Adept }}
           </el-tag>
@@ -81,6 +82,7 @@
             style="min-width: fit-content; margin: 0 1px"
             closable
             :disable-transitions="false"
+            :effect="store.state.themeSwitch.theme == 1 ? 'light' : 'dark'"
             @close="setAdept.handleClose(Adept)"
           >
             {{ Adept }}
@@ -245,10 +247,10 @@ var activityCalendarConfig = reactive<activityCalendarConfigType>({
   clickEvent: function clickEvent(item: object) {},
   //初始化数据
   init(data: { date: string; count: number; SubmitTime: number }[]) {
-    this.endDate = proxy.Utils.timestampToDate(Date.now(), 2)
+    this.endDate = proxy.Utils.TimeTools.timestampToDate(Date.now(), 2)
     let tempMap = new Map()
     for (let item in data) {
-      let t = proxy.Utils.timestampToDate(data[item].SubmitTime, 2)
+      let t = proxy.Utils.TimeTools.timestampToDate(data[item].SubmitTime, 2)
       if (tempMap.has(t)) {
         tempMap.set(t, tempMap.get(t) + 1)
       } else {
@@ -273,12 +275,12 @@ watch(
     if (newVal == 1) {
       activityCalendarConfig.fontColor = '#707070'
       activityCalendarConfig.colors = [
-        '#f5f5f5',
-        '#ebfaff',
-        '#e5f9ff',
-        '#c7f3ff',
-        '#86e0fe',
-        '#3ecefe',
+        '#dde0e4',
+        '#c5f6fa',
+        '#99e9f2',
+        '#66d9e8',
+        '#3bc9db',
+        '#22b8cf',
       ]
     } else {
       activityCalendarConfig.fontColor = '#cdcdcd'
