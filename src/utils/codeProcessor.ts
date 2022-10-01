@@ -2,7 +2,7 @@ import { ElMessage } from "element-plus";
 
 type codeType = "success" | "warning" | "info" | "error";
 export default function codeProcessor(code: number, type: codeType) {
-	if (code == 0) return;
+	if (code == 0 || code == 200) return;
 	switch (code) {
 		case 101:
 			ElMessage({

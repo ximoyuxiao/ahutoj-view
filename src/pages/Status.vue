@@ -86,103 +86,103 @@
 </template>
 
 <script lang="ts" setup name="Status" >
-import { getCurrentInstance, onMounted, reactive } from 'vue'
-import { useStore } from 'vuex'
-const { proxy } = getCurrentInstance() as any
-const store = useStore()
+import { getCurrentInstance, onMounted, reactive } from "vue";
+import { useStore } from "vuex";
+const { proxy } = getCurrentInstance() as any;
+const store = useStore();
 
 //页面配置
 type configType = {
-  Count: number
-  currentPage: number
-  limit: number
-  loading: any
-  [item: string]: any
-}
+  Count: number;
+  currentPage: number;
+  limit: number;
+  loading: any;
+  [item: string]: any;
+};
 var config = reactive<configType>({
   Count: 0,
   currentPage: 1,
   limit: 20,
   loading: null,
   init() {
-    this.Count = 0
-    this.currentPage = 1
-    this.limit = 20
-    this.loading = null
+    this.Count = 0;
+    this.currentPage = 1;
+    this.limit = 20;
+    this.loading = null;
   },
   //切换页面
   changePage: (page: number) => {
-    config.currentPage = page
-    SyncUrl()
-    getStatus()
+    config.currentPage = page;
+    SyncUrl();
+    getStatus();
   },
-})
+});
 
 //页面数据
 type statusType = {
   list: {
-    Lang: number
-    PID: number
-    Result: string
-    SID: number
-    SubmitTime: number
-    UseMemory: number
-    UseTime: number
-  }[]
-}
-var status = reactive<statusType>({ list: [] })
+    Lang: number;
+    PID: number;
+    Result: string;
+    SID: number;
+    SubmitTime: number;
+    UseMemory: number;
+    UseTime: number;
+  }[];
+};
+var status = reactive<statusType>({ list: [] });
 
 //获取数据
 function getStatus() {
-  proxy.$get('api/submit/status').then((res: any) => {
-    let data = res.data
+  proxy.$get("api/submit/status").then((res: any) => {
+    let data = res.data;
     if (data.code == 0) {
       // console.log(data)
-      status.list = data.Data
+      status.list = data.Data;
     }
-    proxy.codeProcessor(data.code)
-  })
+    proxy.codeProcessor(data.code);
+  });
 }
 
 //用于同步浏览器url
 function SyncUrl() {
   //仅用于展示实时url，可用于复制跳转
   proxy.$router.replace({
-    path: '/Status',
+    path: "/Status",
     query: {
       Page: config.currentPage,
       Limit: config.limit,
     },
-  })
+  });
 }
 
 //跳转到题目
 
 function goToProblem(PID) {
   proxy.$router.push({
-    path: '/Problem',
+    path: "/Problem",
     query: {
       PID,
     },
-  })
+  });
 }
 
 //跳转到自己提交的代码
 function goToSeeCode(SID) {
   proxy.$router.push({
-    path: '/Code',
+    path: "/Code",
     query: {
       SID,
     },
-  })
+  });
 }
 
 onMounted(() => {
   //同步url参数
-  if (proxy.$route.query.Page) config.currentPage = proxy.$route.query.Page - 0
-  if (proxy.$route.query.Limit) config.limit = proxy.$route.query.Limit - 0
-  getStatus()
-})
+  if (proxy.$route.query.Page) config.currentPage = proxy.$route.query.Page - 0;
+  if (proxy.$route.query.Limit) config.limit = proxy.$route.query.Limit - 0;
+  getStatus();
+});
 </script>
 
 <style  scoped lang="scss">
@@ -200,7 +200,7 @@ onMounted(() => {
   padding: $status_outerPaddingTop $status_outerPaddingLeft;
 
   .list {
-    @include fill_color('fill2');
+    @include fill_color("fill2");
     border-radius: 10px;
     box-sizing: border-box;
     padding: $status_listPadding;
@@ -210,9 +210,9 @@ onMounted(() => {
       align-items: center;
       justify-content: space-between;
       font-size: $fontSize7;
-      @include font_color('font1');
+      @include font_color("font1");
       border-bottom: 2px solid;
-      @include border_color('border2');
+      @include border_color("border2");
       padding: 10px 0;
     }
 
@@ -220,12 +220,12 @@ onMounted(() => {
       display: flex;
       align-items: center;
       font-size: $fontSize5;
-      @include font_color('font2');
-      @include fill_color('fill3');
+      @include font_color("font2");
+      @include fill_color("fill3");
       justify-content: space-between;
       border-bottom: 2px solid;
       box-sizing: border-box;
-      @include border_color('border2');
+      @include border_color("border2");
 
       .res {
         text-align: center;
@@ -236,7 +236,7 @@ onMounted(() => {
       div {
         //PID 突出显示
         &:nth-child(1) {
-          @include font_color('fill12');
+          @include font_color("fill12");
         }
       }
     }

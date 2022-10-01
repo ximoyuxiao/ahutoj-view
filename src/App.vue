@@ -1,12 +1,11 @@
 <template>
   <Main></Main>
-  <Bottom>
-  </Bottom>
+  <!-- <Bottom></Bottom> -->
 </template>
 
 <script lang="ts" setup>
-import Main from './components/Main.vue'
-import Bottom from './components/Base/Bottom.vue'
+import Main from "./components/Main.vue";
+import Bottom from "./components/Base/Bottom.vue";
 </script>
  
 <style lang="scss">
@@ -18,7 +17,7 @@ a:link,
 a:visited,
 a:active {
   text-decoration: none;
-  @include font_color('fill1');
+  @include font_color("fill1");
 }
 html {
   height: 100%;
@@ -27,13 +26,13 @@ html {
   min-width: 800px;
   overflow-y: scroll;
   position: relative;
-  @include fill_color('base_page');
+  @include fill_color("base_page");
 }
 body {
   position: relative;
   width: 100%;
   height: 100%;
-  @include fill_color('base_page');
+  @include fill_color("base_page");
 }
 pre {
   white-space: pre-wrap;

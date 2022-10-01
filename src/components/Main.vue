@@ -68,118 +68,124 @@
 </template>
 
 <script lang="ts" setup name="Main">
-import { reactive, onMounted, getCurrentInstance } from 'vue'
-import { useStore } from 'vuex'
-import NavBar from './Base/NavBar.vue'
-import Login from './Base/Login.vue'
-import Signin from './Base/Signin.vue'
-const { proxy } = getCurrentInstance() as any
-const store = useStore()
+import { reactive, onMounted, getCurrentInstance } from "vue";
+import { useStore } from "vuex";
+import NavBar from "./Base/NavBar.vue";
+import Login from "./Base/Login.vue";
+import Signin from "./Base/Signin.vue";
+const { proxy } = getCurrentInstance() as any;
+const store = useStore();
 
-var config = reactive({
+//页面配置项
+type configType = {
+  showNav: boolean;
+  showLogin: boolean;
+  showSignin: boolean;
+};
+var config = reactive<configType>({
   showNav: true,
   showLogin: false,
   showSignin: false,
-})
+});
 
 //显示导航栏
 function showNav() {
-  config.showNav = true
-  config.showSignin = false
-  config.showLogin = false
+  config.showNav = true;
+  config.showSignin = false;
+  config.showLogin = false;
 }
 
 //登录窗口
 function loginDialog() {
-  config.showNav = false
-  config.showSignin = false
-  config.showLogin = true
+  config.showNav = false;
+  config.showSignin = false;
+  config.showLogin = true;
 }
 
 //显示注册
 function signinDialog() {
-  config.showNav = false
-  config.showSignin = true
-  config.showLogin = false
+  config.showNav = false;
+  config.showSignin = true;
+  config.showLogin = false;
 }
 
-//自动登录
+//session登录状态恢复与自动登录
 async function autoLogin() {
-  let Token = localStorage.getItem('ahutOjToken')
-  let save = localStorage.getItem('ahutOjSaveLoginStatus')
-  let UID = localStorage.getItem('ahutOjUserUid')
-  let userInfo: any = sessionStorage.getItem('ahutOjUserInfo')
-  let data = { UID: '', UserName: '', PermissionMap: 0 }
+  let Token = localStorage.getItem("ahutOjToken");
+  let save = localStorage.getItem("ahutOjSaveLoginStatus");
+  let UID = localStorage.getItem("ahutOjUserUid");
+  let userInfo: any = sessionStorage.getItem("ahutOjUserInfo");
+  let data = { UID: "", UserName: "", PermissionMap: 0 };
   //从session中恢复登录状态
-  if (Token && userInfo && userInfo != '') {
+  if (Token && userInfo && userInfo != "") {
     //重新转换为js对象
-    userInfo = JSON.parse(userInfo)
+    userInfo = JSON.parse(userInfo);
     if (userInfo && userInfo.UID && userInfo.UID == UID) {
-      data.UID = userInfo.UID
+      data.UID = userInfo.UID;
       if (userInfo.UserName) {
-        data.UserName = userInfo.UserName
+        data.UserName = userInfo.UserName;
       } else {
         //数据不同步
-        initLoginCredentials()
-        return
+        initLoginCredentials();
+        return;
       }
-      data.PermissionMap = userInfo.PermissionMap
-      store.commit('userData/login', data)
-      store.commit('userData/synchronizePermission', data.PermissionMap)
+      data.PermissionMap = userInfo.PermissionMap;
+      store.commit("userData/login", data);
+      store.commit("userData/synchronizePermission", data.PermissionMap);
     } else {
       //数据不同步
-      initLoginCredentials()
-      return
+      initLoginCredentials();
+      return;
     }
-    showNav()
-    return
+    showNav();
+    return;
   }
   //自动登录
-  if (save == 'true' && Token != null) {
-    proxy.$axios.get('api/user/info').then((res: any) => {
+  if (save == "true" && Token != null) {
+    proxy.$axios.get("api/user/info").then((res: any) => {
       //获取用户信息
-      let data: any = res.data
+      let data: any = res.data;
       if (data.code == 0) {
         //获取权限信息
-        getUserPermission(data.UID)
+        getUserPermission(data.UID);
 
         //vuex同步登录信息
-        store.commit('userData/login', data)
-        store.commit('userData/sessionUserInfo')
-        showNav()
-        console.log('自动登录成功')
+        store.commit("userData/login", data);
+        store.commit("userData/sessionUserInfo");
+        showNav();
+        console.log("自动登录成功");
       }
-      proxy.codeProcessor(data.code)
-    })
+      proxy.codeProcessor(data.code);
+    });
   }
 }
 
 //获取用户权限信息
 async function getUserPermission(UID: string) {
-  proxy.$get('api/admin/permission/' + UID).then((res: any) => {
-    let data = { PermissionMap: 0 }
+  proxy.$get("api/admin/permission/" + UID).then((res: any) => {
+    let data = { PermissionMap: 0 };
     if (res.data.code == 0) {
-      data.PermissionMap = res.data.PermissionMap
-      store.commit('userData/synchronizePermission', data.PermissionMap)
-      store.commit('userData/sessionUserInfo')
-      console.log('permission 同步完成')
-      return 1
+      data.PermissionMap = res.data.PermissionMap;
+      store.commit("userData/synchronizePermission", data.PermissionMap);
+      store.commit("userData/sessionUserInfo");
+      console.log("permission 同步完成");
+      return 1;
     }
-    proxy.codeProcessor(res.data.code)
-  })
+    proxy.codeProcessor(res.data.code);
+  });
 }
 
 //初始化登录凭证
 function initLoginCredentials() {
-  sessionStorage.clear()
-  localStorage.clear()
-  store.commit('userData/logout')
-  proxy.$router.replace({ path: '/' })
+  sessionStorage.clear();
+  localStorage.clear();
+  store.commit("userData/logout");
+  proxy.$router.replace({ path: "/" });
 }
 
 onMounted(() => {
-  autoLogin()
-})
+  autoLogin();
+});
 </script>
 
 <style  scoped lang="scss">
@@ -190,27 +196,28 @@ onMounted(() => {
   .contentBox {
     width: 100%;
     min-width: 800px;
-    margin: 55px 0;
+    box-sizing: border-box;
+    padding-top: $navBarHeight;
     display: flex;
     flex-direction: column;
     z-index: 1;
-    @include fill_color('base_page');
+    @include fill_color("base_page");
   }
 }
 
-.animate__animated[data-flag='nav'] {
+.animate__animated[data-flag="nav"] {
   animation-duration: 600ms;
 }
 
-.animate__animated[data-flag='cover'] {
-  animation-duration: 600ms;
+.animate__animated[data-flag="cover"] {
+  animation-duration: 900ms;
 }
 
-.animate__animated[data-flag='loginDialog'] {
+.animate__animated[data-flag="loginDialog"] {
   animation-duration: 800ms;
 }
 
-.animate__animated[data-flag='signinDialog'] {
+.animate__animated[data-flag="signinDialog"] {
   animation-duration: 800ms;
 }
 
@@ -221,6 +228,7 @@ onMounted(() => {
   width: 100%;
   height: 100vh;
   overflow: hidden;
+  filter: blur(35px);
 
   .cover {
     position: absolute;

@@ -160,220 +160,239 @@ import {
   nextTick,
   watch,
   computed,
-} from 'vue'
-import { useStore } from 'vuex'
-import ActivityCalendar from '../components/MyComponents/ActivityCalendar.vue'
-const { proxy } = getCurrentInstance() as any
-const store = useStore()
+} from "vue";
+import { useStore } from "vuex";
+import ActivityCalendar from "../components/MyComponents/ActivityCalendar.vue";
+const { proxy } = getCurrentInstance() as any;
+const store = useStore();
 
 //用户资料
 type userInfoType = {
-  UID: string
-  School: string
-  Classes: string
-  Major: string
-  Adept: string
-  Email: string
-  Vjid: string
-  AdeptArray: Array<string>
-}
+  UID: string;
+  School: string;
+  Classes: string;
+  Major: string;
+  Adept: string;
+  Email: string;
+  Vjid: string;
+  AdeptArray: Array<string>;
+};
 var userInfo = reactive<userInfoType>({
-  UID: '',
-  School: '',
-  Classes: '',
-  Major: '',
-  Adept: '',
-  Email: '',
-  Vjid: '',
+  UID: "",
+  School: "",
+  Classes: "",
+  Major: "",
+  Adept: "",
+  Email: "",
+  Vjid: "",
   AdeptArray: [],
-})
+});
 
 //获取用户资料
 function getUserInfo() {
   proxy
-    .$get('api/user/info?uid=' + store.state.userData.UID)
+    .$get("api/user/info?uid=" + store.state.userData.UID)
     .then((res: any) => {
       // console.log(res)
-      let data = res.data
+      let data = res.data;
       if (data.code == 0) {
-        userInfo.UID = data.UID
-        userInfo.School = data.School
-        userInfo.Classes = data.Classes
-        userInfo.Major = data.Major
-        userInfo.Adept = data.Adept
-        userInfo.Email = data.Email
-        userInfo.Vjid = data.Vjid
+        userInfo.UID = data.UID;
+        userInfo.School = data.School;
+        userInfo.Classes = data.Classes;
+        userInfo.Major = data.Major;
+        userInfo.Adept = data.Adept;
+        userInfo.Email = data.Email;
+        userInfo.Vjid = data.Vjid;
         userInfo.AdeptArray =
-          userInfo.Adept == '' ? [] : userInfo.Adept.split(';')
+          userInfo.Adept == "" ? [] : userInfo.Adept.split(";");
       }
-      proxy.codeProcessor(data.code)
-    })
+      proxy.codeProcessor(data.code);
+    });
 }
 
 //活跃度日历配置数据
 type activityCalendarConfigType = {
-  data: { date: string; count: number }[]
-  [item: string]: any
-}
+  data: { date: string; count: number }[];
+  [item: string]: any;
+};
 var activityCalendarConfig = reactive<activityCalendarConfigType>({
   data: [],
-  endDate: '',
+  endDate: "",
   width: 35,
   height: 7,
   cellLength: 16,
   cellInterval: 6,
   cellBorderRadius: 3,
   showHeader: true,
-  colors: ['#f5f5f5', '#ebfaff', '#e5f9ff', '#c7f3ff', '#86e0fe', '#3ecefe'],
+  colors: ["#f5f5f5", "#ebfaff", "#e5f9ff", "#c7f3ff", "#86e0fe", "#3ecefe"],
   levelMapper: (count: number): number => {
     if (count == 0) {
-      return 0
+      return 0;
     } else if (count <= 1) {
-      return 1
+      return 1;
     } else if (count <= 3) {
-      return 2
+      return 2;
     } else if (count <= 6) {
-      return 3
+      return 3;
     } else if (count <= 9) {
-      return 4
+      return 4;
     } else {
-      return 5
+      return 5;
     }
   },
   showLevelFlag: true,
-  levelFlagText: ['少', '多'],
+  levelFlagText: ["少", "多"],
   fontSize: 14,
-  fontColor: '#707070',
+  fontColor: "#707070",
   clickEvent: function clickEvent(item: object) {},
   //初始化数据
   init(data: { date: string; count: number; SubmitTime: number }[]) {
-    this.endDate = proxy.Utils.TimeTools.timestampToDate(Date.now(), 2)
-    let tempMap = new Map()
+    this.endDate = proxy.Utils.TimeTools.timestampToDate(Date.now(), 2);
+    let tempMap = new Map();
     for (let item in data) {
-      let t = proxy.Utils.TimeTools.timestampToDate(data[item].SubmitTime, 2)
+      let t = proxy.Utils.TimeTools.timestampToDate(data[item].SubmitTime, 2);
       if (tempMap.has(t)) {
-        tempMap.set(t, tempMap.get(t) + 1)
+        tempMap.set(t, tempMap.get(t) + 1);
       } else {
-        tempMap.set(t, 1)
+        tempMap.set(t, 1);
       }
     }
     tempMap.forEach((count: number, date: string) => {
-      let item = { date, count }
-      this.data.push(item)
-    })
+      let item = { date, count };
+      this.data.push(item);
+    });
   },
-})
+});
 
 //观察theme改变
 var theme = computed(() => {
-  return store.state.themeSwitch.theme
-})
+  return store.state.themeSwitch.theme;
+});
 
 watch(
   theme,
   (newVal, oldVal) => {
     if (newVal == 1) {
-      activityCalendarConfig.fontColor = '#707070'
+      activityCalendarConfig.fontColor = "#707070";
       activityCalendarConfig.colors = [
-        '#dde0e4',
-        '#c5f6fa',
-        '#99e9f2',
-        '#66d9e8',
-        '#3bc9db',
-        '#22b8cf',
-      ]
+        "#dde0e4",
+        "#c5f6fa",
+        "#99e9f2",
+        "#66d9e8",
+        "#3bc9db",
+        "#22b8cf",
+      ];
     } else {
-      activityCalendarConfig.fontColor = '#cdcdcd'
+      activityCalendarConfig.fontColor = "#cdcdcd";
       activityCalendarConfig.colors = [
-        '#d6d6d6',
-        '#e599f7',
-        '#da77f2',
-        '#be4bdb',
-        '#ae3ec9',
-        '#862e9c',
-      ]
+        "#d6d6d6",
+        "#e599f7",
+        "#da77f2",
+        "#be4bdb",
+        "#ae3ec9",
+        "#862e9c",
+      ];
     }
   },
   { deep: true, immediate: true }
-)
+);
 
 //获取用户提交记录
 function getUserSubmit() {
+  let storageData = sessionStorage.getItem("userSubmitData");
+  if (storageData) {
+    let data = JSON.parse(storageData);
+    //10分钟内session周期内刷新直接取缓存
+    if (
+      data.UID == store.state.userData.UID &&
+      Date.now() - data.saveTime < 600000
+    ) {
+      activityCalendarConfig.init(data.data);
+      return;
+    }
+  }
   proxy
-    .$get('api/submit/status', { UID: store.state.userData.UID })
+    .$get("api/submit/status", { UID: store.state.userData.UID })
     .then((res: any) => {
-      // console.log(res)
-      let data = res.data
+      // console.log(res);
+      let data = res.data;
       if (data.code == 0) {
-        activityCalendarConfig.init(data.Data)
-      } else {
-        proxy.codeProcessor(data.code)
+        sessionStorage.setItem(
+          "userSubmitData",
+          JSON.stringify({
+            data: data.Data,
+            UID: store.state.userData.UID,
+            saveTime: Date.now(),
+          })
+        );
+        activityCalendarConfig.init(data.Data);
       }
-    })
+      proxy.codeProcessor(data.code);
+    });
 }
 
 //进入修改资料模式
 type changeInfoType = {
-  UID: string
-  UserName: string
-  School: string
-  Classes: string
-  Major: string
-  Adept: string
-  Email: string
-  isInChangeMode: boolean
-  [item: string]: any
-}
+  UID: string;
+  UserName: string;
+  School: string;
+  Classes: string;
+  Major: string;
+  Adept: string;
+  Email: string;
+  isInChangeMode: boolean;
+  [item: string]: any;
+};
 var changeInfo = reactive<changeInfoType>({
-  UID: '',
-  UserName: '',
-  School: '',
-  Classes: '',
-  Major: '',
-  Adept: '',
-  Email: '',
+  UID: "",
+  UserName: "",
+  School: "",
+  Classes: "",
+  Major: "",
+  Adept: "",
+  Email: "",
   isInChangeMode: false,
   init() {
-    this.UserName = store.state.userData.UserName
-    this.School = userInfo.School
-    this.Classes = userInfo.Classes
-    this.Major = userInfo.Major
-    this.Adept = userInfo.Adept
-    this.Email = userInfo.Email
+    this.UserName = store.state.userData.UserName;
+    this.School = userInfo.School;
+    this.Classes = userInfo.Classes;
+    this.Major = userInfo.Major;
+    this.Adept = userInfo.Adept;
+    this.Email = userInfo.Email;
   },
   change() {
     if (this.isInChangeMode) {
-      this.isInChangeMode = false
-      setAdept.AdeptArray = []
+      this.isInChangeMode = false;
+      setAdept.AdeptArray = [];
     } else {
-      this.init()
+      this.init();
       setAdept.AdeptArray =
-        userInfo.Adept == '' ? [] : userInfo.Adept.split(';')
-      this.isInChangeMode = true
+        userInfo.Adept == "" ? [] : userInfo.Adept.split(";");
+      this.isInChangeMode = true;
     }
   },
   sendForm() {
     this.Adept =
-      setAdept.AdeptArray.length == 0 ? '' : setAdept.AdeptArray.join(';')
+      setAdept.AdeptArray.length == 0 ? "" : setAdept.AdeptArray.join(";");
     // console.log(this);
-    if (this.UserName == '') {
+    if (this.UserName == "") {
       proxy.elMessage({
-        message: '昵称不可为空',
-        type: 'warning',
-      })
-      return
+        message: "昵称不可为空",
+        type: "warning",
+      });
+      return;
     }
     if (
-      !this.Email.match('^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(.[a-zA-Z0-9_-]+)+$')
+      !this.Email.match("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(.[a-zA-Z0-9_-]+)+$")
     ) {
       proxy.elMessage({
-        message: '请输入正确的邮箱',
-        type: 'warning',
-      })
-      return
+        message: "请输入正确的邮箱",
+        type: "warning",
+      });
+      return;
     }
     proxy.$axios
-      .post('api/user/edit/', {
+      .post("api/user/edit/", {
         UserName: this.UserName,
         School: this.School,
         Classes: this.Classes,
@@ -382,77 +401,77 @@ var changeInfo = reactive<changeInfoType>({
         Email: this.Email,
       })
       .then((res: any) => {
-        let data = res.data
+        let data = res.data;
         if (data.code == 0) {
           //更新数据成功
-          userInfo.School = this.School
-          userInfo.Classes = this.Classes
-          userInfo.Major = this.Major
-          userInfo.Adept = this.Adept
-          userInfo.Email = this.Email
-          userInfo.Vjid = this.Vjid
+          userInfo.School = this.School;
+          userInfo.Classes = this.Classes;
+          userInfo.Major = this.Major;
+          userInfo.Adept = this.Adept;
+          userInfo.Email = this.Email;
+          userInfo.Vjid = this.Vjid;
           userInfo.AdeptArray =
-            userInfo.Adept == '' ? [] : userInfo.Adept.split(';')
-          changeInfo.isInChangeMode = false
-          proxy.elMessage({ message: '修改成功', type: 'success' })
+            userInfo.Adept == "" ? [] : userInfo.Adept.split(";");
+          changeInfo.isInChangeMode = false;
+          proxy.elMessage({ message: "修改成功", type: "success" });
         } else {
-          proxy.codeProcessor(data.code)
+          proxy.codeProcessor(data.code);
         }
-      })
+      });
   },
-})
+});
 
 //添加Adept标签
 type setAdapt = {
-  inputValue: string
-  AdeptArray: string[]
-  inputVisible: boolean
-  [item: string]: any
-}
+  inputValue: string;
+  AdeptArray: string[];
+  inputVisible: boolean;
+  [item: string]: any;
+};
 var setAdept = reactive<setAdapt>({
-  inputValue: '',
+  inputValue: "",
   AdeptArray: [],
   inputVisible: false,
   handleClose(tag: string): void {
-    this.AdeptArray.splice(this.AdeptArray.indexOf(tag), 1)
+    this.AdeptArray.splice(this.AdeptArray.indexOf(tag), 1);
   },
   showInput(): void {
-    this.inputVisible = true
+    this.inputVisible = true;
     nextTick(() => {
-      proxy.$refs.InputRef.focus()
-    })
+      proxy.$refs.InputRef.focus();
+    });
   },
   //输入确认
   handleInputConfirm(): void {
-    if (!this.inputVisible) return
+    if (!this.inputVisible) return;
     if (
-      this.inputValue == '' ||
+      this.inputValue == "" ||
       this.AdeptArray.indexOf(this.inputValue) != -1
     ) {
-      this.inputVisible = false
-      this.inputValue = ''
-      proxy.elMessage({ message: '请输入正确的名称并且不得重复' })
-      return
+      this.inputVisible = false;
+      this.inputValue = "";
+      proxy.elMessage({ message: "请输入正确的名称并且不得重复" });
+      return;
     }
-    this.AdeptArray.push(this.inputValue)
-    this.inputVisible = false
-    this.inputValue = ''
+    this.AdeptArray.push(this.inputValue);
+    this.inputVisible = false;
+    this.inputValue = "";
   },
   //输入关闭
   handleInputCancel(): void {
-    this.inputVisible = false
-    this.inputValue = ''
+    this.inputVisible = false;
+    this.inputValue = "";
   },
-})
+});
 
 onMounted(() => {
   if (!store.state.userData.isLogin) {
-    proxy.$router.replace({ path: '/' })
-    return
+    proxy.$router.replace({ path: "/" });
+    return;
   }
-  getUserInfo()
-  getUserSubmit()
-})
+  getUserInfo();
+  getUserSubmit();
+});
 </script>
 
 <style  scoped lang="scss">
@@ -474,11 +493,11 @@ onMounted(() => {
     height: 280px;
     border-radius: 20px;
     overflow: hidden;
-    @include box_shadow(0, 0, 8px, 1px, 'fill52');
+    @include box_shadow(0, 0, 8px, 1px, "fill52");
 
     &:hover {
-      @include fill_color('fill2');
-      @include box_shadow(0, 0, 8px, 1px, 'fill51');
+      @include fill_color("fill2");
+      @include box_shadow(0, 0, 8px, 1px, "fill51");
     }
 
     .filter {
@@ -539,7 +558,7 @@ onMounted(() => {
       justify-content: space-around;
 
       > div {
-        @include font_color('font1');
+        @include font_color("font1");
         font-size: $fontSize6;
         letter-spacing: 1px;
         display: flex;
@@ -573,10 +592,10 @@ onMounted(() => {
     align-items: flex-start;
     justify-content: space-between;
     border-radius: 20px;
-    @include box_shadow(0, 0, 8px, 1px, 'fill52');
+    @include box_shadow(0, 0, 8px, 1px, "fill52");
 
     > div {
-      @include font_color('font1');
+      @include font_color("font1");
       font-size: $fontSize6;
       letter-spacing: 1px;
       display: flex;
@@ -596,17 +615,17 @@ onMounted(() => {
       height: 40px;
       border-radius: 15px;
       font-size: $fontSize5;
-      @include font_color('font1');
+      @include font_color("font1");
       letter-spacing: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
-      @include box_shadow(0, 0, 2px, 1px, 'border2');
+      @include box_shadow(0, 0, 2px, 1px, "border2");
       transition-duration: 200ms;
 
       &:hover {
-        @include box_shadow(0, 0, 2px, 1px, 'fill12');
-        @include fill_color('fill15');
+        @include box_shadow(0, 0, 2px, 1px, "fill12");
+        @include fill_color("fill15");
       }
     }
   }
@@ -627,7 +646,7 @@ onMounted(() => {
       box-sizing: border-box;
       overflow: hidden;
       border-radius: 20px;
-      @include box_shadow(0, 0, 8px, 1px, 'fill52');
+      @include box_shadow(0, 0, 8px, 1px, "fill52");
 
       > div {
         margin: 5px 0;
@@ -645,8 +664,8 @@ onMounted(() => {
       box-sizing: border-box;
       overflow: hidden;
       border-radius: 20px;
-      @include box_shadow(0, 0, 8px, 1px, 'fill52');
-      @include fill_color('fill3');
+      @include box_shadow(0, 0, 8px, 1px, "fill52");
+      @include fill_color("fill3");
 
       .activityCalendar {
         width: fit-content;

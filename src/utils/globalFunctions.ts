@@ -124,6 +124,21 @@ export class TimeTools {
 		return y + "/" + m + "/" + d + " " + h + ":" + mi + ":" + s;
 	}
 
+	//时间戳获取 时分秒
+	public static timestampGetHMS(
+		time: number,
+		mode: number = 1
+	): string {
+		let d = new Date(time);
+		let h = d.getHours();
+		let m =
+			d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes();
+		let s =
+			d.getSeconds() < 10 ? "0" + d.getSeconds() : d.getSeconds();
+		if (mode == 1) return h + ":" + m + ":" + s;
+		else return h + ":" + m;
+	}
+
 	//时间戳间隔计算1 (计算两个时间戳间隔了多少天)
 	public static timeIntervalToDay(
 		time1: number,

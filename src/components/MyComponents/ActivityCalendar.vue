@@ -57,35 +57,35 @@ import {
   getCurrentInstance,
   withDefaults,
   defineProps,
-} from 'vue'
+} from "vue";
 
-const { proxy } = getCurrentInstance() as any
+const { proxy } = getCurrentInstance() as any;
 
 type propsType = {
-  data?: { date: string; count: number }[] | null
-  beginDate?: string | null
-  endDate?: string | null
-  width?: number
-  height?: number
-  cellLength?: number
-  cellInterval?: number
-  cellBorderRadius?: number
-  header?: string[] | null
-  headerLength?: { length: number; text: string }[] | null
-  showHeader?: boolean
-  backgroundColor?: string
-  colors?: string[] | null
-  levels?: number
-  levelMapper?: any
-  showLevelFlag?: boolean
-  levelFlagText?: string[]
-  fontSize?: number
-  fontColor?: string
-  clickEvent?: any
-}
+  data?: { date: string; count: number }[] | null;
+  beginDate?: string | null;
+  endDate?: string | null;
+  width?: number;
+  height?: number;
+  cellLength?: number;
+  cellInterval?: number;
+  cellBorderRadius?: number;
+  header?: string[] | null;
+  headerLength?: { length: number; text: string }[] | null;
+  showHeader?: boolean;
+  backgroundColor?: string;
+  colors?: string[] | null;
+  levels?: number;
+  levelMapper?: any;
+  showLevelFlag?: boolean;
+  levelFlagText?: string[];
+  fontSize?: number;
+  fontColor?: string;
+  clickEvent?: any;
+};
 const props = withDefaults(defineProps<propsType>(), {
   data: null,
-  endDate: '',
+  endDate: "",
   width: 35,
   height: 7,
   cellLength: 16,
@@ -93,25 +93,25 @@ const props = withDefaults(defineProps<propsType>(), {
   cellBorderRadius: 3,
   header: null,
   showHeader: true,
-  backgroundColor: '',
+  backgroundColor: "",
   colors: null,
   levelMapper: null,
   showLevelFlag: true,
   levelFlagText: null,
   fontSize: 0,
-  fontColor: '',
+  fontColor: "",
   clickEvent: null,
-})
+});
 
 //接收的数据
-var data = []
+var data = [];
 
 const config = reactive<propsType>({
   data: [],
   //开始日期，不接受指定
-  beginDate: '',
+  beginDate: "",
   //结束日期，结合宽高可确认开始日期
-  endDate: '',
+  endDate: "",
   //calendar 宽度 n*单元格
   width: 35,
   //calendar 高度 n*单元格
@@ -124,225 +124,225 @@ const config = reactive<propsType>({
   cellBorderRadius: 3,
   //header 12个内容的数组，用于指定表头十二个月份显示的内容
   header: [
-    '一月',
-    '二月',
-    '三月',
-    '四月',
-    '五月',
-    '六月',
-    '七月',
-    '八月',
-    '九月',
-    '十月',
-    '十一月',
-    '十二月',
+    "一月",
+    "二月",
+    "三月",
+    "四月",
+    "五月",
+    "六月",
+    "七月",
+    "八月",
+    "九月",
+    "十月",
+    "十一月",
+    "十二月",
   ],
   //header占位长度，不可指定
   headerLength: [],
   //设置是否显示header
   showHeader: true,
   //calendar背景颜色
-  backgroundColor: '#ffffff',
+  backgroundColor: "#ffffff",
   //颜色数组，用于指定不同活跃level的颜色
-  colors: ['#f5f5f5', '#ebfaff', '#e5f9ff', '#c7f1ff', '#86e0fe', '#3ecefe'],
+  colors: ["#f5f5f5", "#ebfaff", "#e5f9ff", "#c7f1ff", "#86e0fe", "#3ecefe"],
   //与颜色数组同步，代表颜色数组长度
   levels: 5,
   //颜色映射表，可自定义颜色与count的关系
   levelMapper: function levelMapper(count) {
     if (count < 2) {
-      return 0
+      return 0;
     } else if (count < 4) {
-      return 1
+      return 1;
     } else if (count < 6) {
-      return 2
+      return 2;
     } else if (count < 9) {
-      return 3
+      return 3;
     } else {
-      return 4
+      return 4;
     }
   },
   showLevelFlag: true,
-  levelFlagText: ['少', '多'],
+  levelFlagText: ["少", "多"],
   fontSize: 12,
-  fontColor: '#080808',
+  fontColor: "#080808",
   //响应点击事件
   clickEvent: function clickEvent(item: { date: string; count: number }) {},
-})
+});
 
 const style = reactive({
   header(month: { length: number; text: string }): string {
     return (
-      'left:' +
+      "left:" +
       month.length +
-      'px;' +
-      'font-size: ' +
+      "px;" +
+      "font-size: " +
       config.fontSize +
-      'px;' +
-      'color: ' +
+      "px;" +
+      "color: " +
       config.fontColor
-    )
+    );
   },
   content(): string {
     return (
-      'grid-template-columns: repeat(' +
+      "grid-template-columns: repeat(" +
       config.width +
-      ',' +
+      "," +
       (config.cellLength + config.cellInterval / 2) +
-      'px);' +
-      'grid-template-rows: repeat(' +
+      "px);" +
+      "grid-template-rows: repeat(" +
       config.height +
-      ',' +
+      "," +
       (config.cellLength + config.cellInterval / 2) +
-      'px);' +
-      'background-color:' +
+      "px);" +
+      "background-color:" +
       config.backgroundColor
-    )
+    );
   },
   item(i: number): string {
     return (
-      'width:' +
+      "width:" +
       config.cellLength +
-      'px; background-color:' +
+      "px; background-color:" +
       config.colors[config.levelMapper(i)] +
-      ';' +
-      'border-radius:' +
+      ";" +
+      "border-radius:" +
       config.cellBorderRadius +
-      'px;'
-    )
+      "px;"
+    );
   },
   levelFlag(): string {
     return (
-      'grid-template-columns: repeat(' +
+      "grid-template-columns: repeat(" +
       config.colors.length +
-      ',' +
+      "," +
       (config.cellLength + config.cellInterval / 2) +
-      'px);' +
-      'grid-template-rows: repeat(1,' +
+      "px);" +
+      "grid-template-rows: repeat(1," +
       (config.cellLength + config.cellInterval / 2) +
-      'px);' +
-      'background-color:' +
+      "px);" +
+      "background-color:" +
       config.backgroundColor
-    )
+    );
   },
   levelFlagItem(i: number): string {
     return (
-      'width:' +
+      "width:" +
       config.cellLength +
-      'px; background-color:' +
+      "px; background-color:" +
       config.colors[i] +
-      ';' +
-      'border-radius:' +
+      ";" +
+      "border-radius:" +
       config.cellBorderRadius +
-      'px;' +
-      'font-size: ' +
+      "px;" +
+      "font-size: " +
       config.fontSize +
-      'px;'
-    )
+      "px;"
+    );
   },
-})
+});
 
 //计算开始日期
 function calculateBeginDate() {
-  let tempMonthDay = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-  let tempAll = config.width * config.height
-  let tempYMD = config.endDate.split('-')
+  let tempMonthDay = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  let tempAll = config.width * config.height;
+  let tempYMD = config.endDate.split("-");
   let endY = Number(tempYMD[0]) - 0,
     endM = Number(tempYMD[1]) - 0,
-    endD = Number(tempYMD[2]) - 0
+    endD = Number(tempYMD[2]) - 0;
   let begY = endY,
     begM = endM,
-    begD = endD
+    begD = endD;
   if (tempAll <= endD) {
-    begD = 1
+    begD = 1;
   } else {
-    tempAll -= endD
-    begM = ((begM - 1 + 11) % 12) + 1
-    begD = 1
+    tempAll -= endD;
+    begM = ((begM - 1 + 11) % 12) + 1;
+    begD = 1;
     while (tempAll > 0) {
       if ((begY % 4 == 0 && begY % 100 != 0) || begY % 400 == 0)
-        tempMonthDay[2] = 29
-      else tempMonthDay[2] = 28
+        tempMonthDay[2] = 29;
+      else tempMonthDay[2] = 28;
       for (let i = begM; i > 0; i--) {
         if (tempMonthDay[i] <= tempAll) {
-          tempAll -= tempMonthDay[i]
-          begM = ((begM - 1 + 11) % 12) + 1
+          tempAll -= tempMonthDay[i];
+          begM = ((begM - 1 + 11) % 12) + 1;
         } else {
-          begD = tempMonthDay[i] - tempAll
-          tempAll = 0
-          break
+          begD = tempMonthDay[i] - tempAll;
+          tempAll = 0;
+          break;
         }
       }
-      if (tempAll > 0) begY -= 1
+      if (tempAll > 0) begY -= 1;
     }
   }
   config.beginDate =
     begY +
-    '-' +
-    (begM < 10 ? '0' + begM : begM) +
-    '-' +
-    (begD < 10 ? '0' + begD : begD)
+    "-" +
+    (begM < 10 ? "0" + begM : begM) +
+    "-" +
+    (begD < 10 ? "0" + begD : begD);
 }
 
 //处理数据
 function dataProcessor() {
   data.sort((a, b) => {
-    if (a.date > b.date) return 1
-    else if (a.date < b.date) return -1
-    else return 0
-  })
-  let tempMonthDay = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-  let tempAll = config.width * config.height
-  let tempCount = 0
-  let tempYMD = config.beginDate.split('-')
+    if (a.date > b.date) return 1;
+    else if (a.date < b.date) return -1;
+    else return 0;
+  });
+  let tempMonthDay = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  let tempAll = config.width * config.height;
+  let tempCount = 0;
+  let tempYMD = config.beginDate.split("-");
   let nowY = Number(tempYMD[0]) - 0,
     nowM = Number(tempYMD[1]) - 0,
-    nowD = Number(tempYMD[2]) - 0
+    nowD = Number(tempYMD[2]) - 0;
   if ((nowY % 4 == 0 && nowY % 100 != 0) || nowY % 400 == 0)
-    tempMonthDay[2] = 29
+    tempMonthDay[2] = 29;
   //开始日期不算，向后推一天
-  nowD++
-  tempCount++
+  nowD++;
+  tempCount++;
   if (nowD > tempMonthDay[nowM]) {
-    nowD = 1
-    nowM++
+    nowD = 1;
+    nowM++;
   }
   if (nowM > 12) {
-    nowM = 1
-    nowY++
+    nowM = 1;
+    nowY++;
     if ((nowY % 4 == 0 && nowY % 100 != 0) || nowY % 400 == 0)
-      tempMonthDay[2] = 29
-    else tempMonthDay[2] = 28
+      tempMonthDay[2] = 29;
+    else tempMonthDay[2] = 28;
   }
   //开始逐个填写
-  let tempArray = []
-  let j = 0
+  let tempArray = [];
+  let j = 0;
   for (let i = 0; i < tempAll; i++) {
     let tempNowDate =
       nowY +
-      '-' +
-      (nowM < 10 ? '0' + nowM : nowM) +
-      '-' +
-      (nowD < 10 ? '0' + nowD : nowD)
-    let tempItem = { index: i, count: 0, date: tempNowDate }
+      "-" +
+      (nowM < 10 ? "0" + nowM : nowM) +
+      "-" +
+      (nowD < 10 ? "0" + nowD : nowD);
+    let tempItem = { index: i, count: 0, date: tempNowDate };
     if (j < data.length) {
-      while (j < data.length && data[j].date < tempNowDate) j++
+      while (j < data.length && data[j].date < tempNowDate) j++;
       if (j < data.length && data[j].date == tempNowDate) {
-        tempItem.count = data[j].count
-        j++
+        tempItem.count = data[j].count;
+        j++;
       }
     }
-    tempArray.push(tempItem)
-    nowD += 1
-    tempCount++
+    tempArray.push(tempItem);
+    nowD += 1;
+    tempCount++;
     if (nowD > tempMonthDay[nowM]) {
-      nowD = 1
-      nowM += 1
+      nowD = 1;
+      nowM += 1;
       if (nowM > 12) {
-        nowM = 1
-        nowY += 1
+        nowM = 1;
+        nowY += 1;
         if ((nowY % 4 == 0 && nowY % 100 != 0) || nowY % 400 == 0)
-          tempMonthDay[2] = 29
-        else tempMonthDay[2] = 28
+          tempMonthDay[2] = 29;
+        else tempMonthDay[2] = 28;
       }
       //跟随月份，header也增加相应的表头
       config.headerLength.push({
@@ -350,67 +350,66 @@ function dataProcessor() {
           (config.cellLength + config.cellInterval / 2) *
           (tempCount / config.height),
         text: config.header[nowM - 1],
-      })
+      });
     }
   }
-  config.data = tempArray
+  config.data = tempArray;
 }
 
 //数据初始化
 function init() {
-  if (props.endDate) config.endDate = props.endDate
+  if (props.endDate) config.endDate = props.endDate;
   else {
-    let t = new Date()
+    let t = new Date();
     config.endDate =
       t.getFullYear() +
-      '-' +
-      (t.getMonth() + 1 < 10 ? '0' + (t.getMonth() + 1) : t.getMonth() + 1) +
-      '-' +
-      (t.getDate() + 1 < 10 ? '0' + t.getDate() : t.getDate())
+      "-" +
+      (t.getMonth() + 1 < 10 ? "0" + (t.getMonth() + 1) : t.getMonth() + 1) +
+      "-" +
+      (t.getDate() + 1 < 10 ? "0" + t.getDate() : t.getDate());
   }
-  if (props.data) data = props.data
-  if (props.height) config.height = props.height
-  if (props.width) config.width = props.width
-  if (props.cellLength) config.cellLength = props.cellLength
-  if (props.cellInterval) config.cellInterval = props.cellInterval
-  if (props.cellBorderRadius) config.cellBorderRadius = props.cellBorderRadius
-  if (props.header) config.header = props.header
-  if (typeof props.showHeader != 'undefined')
-    config.showHeader = props.showHeader
-  if (props.backgroundColor) config.backgroundColor = props.backgroundColor
-  if (props.colors) config.colors = props.colors
-  if (props.levelMapper) config.levelMapper = props.levelMapper
-  if (typeof props.showLevelFlag != 'undefined')
-    config.showLevelFlag = props.showLevelFlag
-  if (props.levelFlagText) config.levelFlagText = props.levelFlagText
-  if (props.fontSize) config.fontSize = props.fontSize
-  if (props.fontColor) config.fontColor = props.fontColor
-  if (props.clickEvent) config.clickEvent = props.clickEvent
-  calculateBeginDate()
-  dataProcessor()
+  if (props.data) data = props.data;
+  if (props.height) config.height = props.height;
+  if (props.width) config.width = props.width;
+  if (props.cellLength) config.cellLength = props.cellLength;
+  if (props.cellInterval) config.cellInterval = props.cellInterval;
+  if (props.cellBorderRadius) config.cellBorderRadius = props.cellBorderRadius;
+  if (props.header) config.header = props.header;
+  if (typeof props.showHeader != "undefined")
+    config.showHeader = props.showHeader;
+  if (props.backgroundColor) config.backgroundColor = props.backgroundColor;
+  if (props.colors) config.colors = props.colors;
+  if (props.levelMapper) config.levelMapper = props.levelMapper;
+  if (typeof props.showLevelFlag != "undefined")
+    config.showLevelFlag = props.showLevelFlag;
+  if (props.levelFlagText) config.levelFlagText = props.levelFlagText;
+  if (props.fontSize) config.fontSize = props.fontSize;
+  if (props.fontColor) config.fontColor = props.fontColor;
+  if (props.clickEvent) config.clickEvent = props.clickEvent;
+  calculateBeginDate();
+  dataProcessor();
 }
 
 //为了解决props异步响应式丢失的问题
 var propsChange = computed(() => {
-  return props
-})
+  return props;
+});
 
 watch(
   propsChange,
   (nv, ov) => {
-    init()
+    init();
   },
   {
     deep: true,
   }
-)
+);
 
 onMounted(() => {
   nextTick(() => {
-    console.log(proxy.$props)
-    init()
-  })
-})
+    init();
+  });
+});
 </script>
 
 <style scoped lang="scss">
