@@ -1,11 +1,10 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import Home from "../pages/Home.vue";
-import Problems from "../pages/Problems.vue";
-import Problem from "../components/Problem.vue";
-import Code from "../components/Code.vue";
-import Contests from "../pages/Contests.vue";
-import Contest from "../components/Contest.vue";
-import ContestRank from "../components/ContestRank.vue";
+// import Home from "../pages/Home.vue";
+// import Problem from "../components/Problem.vue";
+// import Code from "../components/Code.vue";
+// import Contests from "../pages/Contests.vue";
+// import Contest from "../components/Contest.vue";
+// import ContestRank from "../components/ContestRank.vue";
 import ProblemList from "../pages/ProblemList.vue";
 import Status from "../pages/Status.vue";
 import UserCenter from "../pages/UserCenter.vue";
@@ -37,128 +36,167 @@ const router = createRouter({
 		},
 		{
 			path: "/Home",
-			component: Home,
+			component: () => import("../pages/Home.vue"),
 		},
 		{
 			path: "/Problems",
-			component: Problems,
+			component: () => import("../pages/Problems.vue"),
 		},
 		{
 			path: "/Problem",
-			component: Problem,
+			component: () => import("../components/Problem.vue"),
 		},
 		{
 			path: "/Code",
-			component: Code,
+			component: () => import("../components/Code.vue"),
 		},
 		{
 			path: "/Contests",
-			component: Contests,
+			component: () => import("../pages/Contests.vue"),
 		},
 		{
 			path: "/Contest",
-			component: Contest,
+			component: () => import("../components/Contest.vue"),
 		},
 		{
 			path: "/ContestRank",
-			component: ContestRank,
+			component: () => import("../components/ContestRank.vue"),
 		},
 		{
 			path: "/ProblemList",
-			component: ProblemList,
+			component: () => import("../pages/ProblemList.vue"),
 		},
 		{
 			path: "/Status",
-			component: Status,
+			component: () => import("../pages/Status.vue"),
 		},
 		{
 			path: "/UserCenter",
-			component: UserCenter,
+			component: () => import("../pages/UserCenter.vue"),
 		},
 		{
 			path: "/Admin",
-			component: Admin,
+			component: () => import("../pages/Admin.vue"),
 			children: [
 				{
 					path: "ProblemEdit",
-					component: ProblemEdit,
+					component: () =>
+						import("../components/Admin/ProblemEdit.vue"),
 					redirect: "/Admin/ProblemEdit/AddProblem",
 					children: [
 						{
 							path: "AddProblem",
-							component: AddProblem,
+							component: () =>
+								import(
+									"../components/Admin/ProblemEditChildren/AddProblem.vue"
+								),
 						},
 						{
 							path: "UpdateProblem",
-							component: UpdateProblem,
+							component: () =>
+								import(
+									"../components/Admin/ProblemEditChildren/UpdateProblem.vue"
+								),
 						},
 						{
 							path: "EditProblemJudgeFile",
-							component: EditProblemJudgeFile,
+							component: () =>
+								import(
+									"../components/Admin/ProblemEditChildren/EditProblemJudgeFile.vue"
+								),
 						},
 					],
 				},
 				{
 					path: "ContestEdit",
-					component: ContestEdit,
+					component: () =>
+						import("../components/Admin/ContestEdit.vue"),
 					redirect: "/Admin/ContestEdit/AddContest",
 					children: [
 						{
 							path: "AddContest",
-							component: AddContest,
+							component: () =>
+								import(
+									"../components/Admin/ContestEditChildren/AddContest.vue"
+								),
 						},
 						{
 							path: "UpdateContest",
-							component: UpdateContest,
+							component: () =>
+								import(
+									"../components/Admin/ContestEditChildren/UpdateContest.vue"
+								),
 						},
 					],
 				},
 				{
 					path: "ListEdit",
-					component: ListEdit,
+					component: () => import("../components/Admin/ListEdit.vue"),
 					redirect: "Admin/ListEdit/AddList",
 					children: [
 						{
 							path: "AddList",
-							component: AddList,
+							component: () =>
+								import(
+									"../components/Admin/ListEditChildren/AddList.vue"
+								),
 						},
 						{
 							path: "UpdateList",
-							component: UpdateList,
+							component: () =>
+								import(
+									"../components/Admin/ListEditChildren/UpdateList.vue"
+								),
 						},
 					],
 				},
 				{
 					path: "UserEdit",
-					component: UserEdit,
+					component: () => import("../components/Admin/UserEdit.vue"),
 					redirect: "/Admin/UserEdit/AddUser",
 					children: [
 						{
 							path: "AddUser",
-							component: AddUser,
+							component: () =>
+								import(
+									"../components/Admin/UserEditChildren/AddUser.vue"
+								),
 						},
 						{
 							path: "BatchAddUser",
-							component: BatchAddUser,
+							component: () =>
+								import(
+									"../components/Admin/UserEditChildren/BatchAddUser.vue"
+								),
 						},
 						{
 							path: "UpdateUser",
-							component: UpdateUser,
+							component: () =>
+								import(
+									"../components/Admin/UserEditChildren/UpdateUser.vue"
+								),
 						},
 					],
 				},
 				{
 					path: "AdminEdit",
-					component: AdminEdit,
+					component: () =>
+						import("../components/Admin/AdminEdit.vue"),
 					redirect: "/Admin/AdminEdit/AddAdmin",
 					children: [
 						{
 							path: "AddAdmin",
-							component: AddAdmin,
+							component: () =>
+								import(
+									"../components/Admin/AdminEditChildren/AddAdmin.vue"
+								),
 						},
 						{
 							path: "UpdateAdmin",
-							component: UpdateAdmin,
+							component: () =>
+								import(
+									"../components/Admin/AdminEditChildren/UpdateAdmin.vue"
+								),
 						},
 					],
 				},

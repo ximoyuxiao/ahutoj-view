@@ -12,11 +12,7 @@ import "ace-builds/src-noconflict/mode-rust.js";
 import "ace-builds/src-noconflict/theme-eclipse.js";
 import "ace-builds/src-noconflict/theme-one_dark.js";
 
-export default function getAceBuilds({
-	node,
-}: {
-	node: string | Element;
-}) {
+export default function getAceBuilds({ node }: { node: any }) {
 	let aceEditor = ace.edit(node, {
 		value: "", //保存内容
 		maxLines: 30, // 最大行数

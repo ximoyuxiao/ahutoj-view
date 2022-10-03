@@ -1,163 +1,160 @@
 <template>
   <div class="problem">
     <div
+      class="content"
       v-show="!notFound"
-      class="left"
-      ref="left"
     >
-      <div class="title">{{ problem.Title }}</div>
-      <div class="description">
-        <div class="label">描述</div>
-        <pre class="text">{{ problem.Description }}</pre>
-      </div>
-      <div class="input">
-        <div class="label">输入</div>
-        <pre class="text">{{ problem.Input }}</pre>
-      </div>
-      <div class="output">
-        <div class="label">输出</div>
-        <pre class="text">{{ problem.Output }}</pre>
-      </div>
-      <div class="sampleInput">
-        <div class="label">输入样例</div>
-        <el-popover
-          ref="popover"
-          placement="top-start"
-          content="复制成功"
-          :width="50"
-          trigger="focus"
-        >
-          <template #reference>
-            <textarea
-              ref="sampleInput"
-              class="textarea"
-              v-model="problem.SampleInput"
-              :readonly="true"
-              @click="copyText($event, 1)"
-            />
-          </template>
-        </el-popover>
-      </div>
-      <div class="sampleOutput">
-        <div class="label">输出样例</div>
-        <el-popover
-          ref="popover"
-          placement="top-start"
-          content="复制成功"
-          :width="50"
-          trigger="focus"
-        >
-          <template #reference>
-            <textarea
-              ref="sampleOutput"
-              class="textarea"
-              v-model="problem.SampleOutput"
-              :readonly="true"
-              @click="copyText($event, 2)"
-            />
-          </template>
-        </el-popover>
-      </div>
       <div
-        class="hit"
-        v-if="problem.Hit.length > 0"
+        class="left"
+        ref="left"
       >
-        <div class="label">提示</div>
-        <pre class="text">{{ problem.Hit }}</pre>
-      </div>
-      <div class="ace">
-        <div>
-          <el-select
-            style="margin: 15px 5px"
-            v-model="aceConfig.modeNow"
-            class="m-2"
-            placeholder="Select"
-            @change="changeMode(aceConfig.modeNow)"
+        <div class="title">{{ problem.Title }}</div>
+        <div class="description">
+          <div class="label">描述</div>
+          <pre class="text">{{ problem.Description }}</pre>
+        </div>
+        <div class="input">
+          <div class="label">输入</div>
+          <pre class="text">{{ problem.Input }}</pre>
+        </div>
+        <div class="output">
+          <div class="label">输出</div>
+          <pre class="text">{{ problem.Output }}</pre>
+        </div>
+        <div class="sampleInput">
+          <div class="label">输入样例</div>
+          <el-popover
+            placement="top-start"
+            content="复制成功"
+            :width="50"
+            trigger="focus"
           >
-            <el-option
-              v-for="item in aceConfig.modeSelect"
-              :key="item.name"
-              :label="item.name"
-              :value="item.name"
-              :disabled="item.disabled"
-            />
-          </el-select>
-          <el-button
-            plain
-            v-on:click="aceConfig.save()"
-          >暂存</el-button>
+            <template #reference>
+              <textarea
+                class="textarea"
+                v-model="problem.SampleInput"
+                :rows="problem.SampleInputRows"
+                :readonly="true"
+                @click="copyText($event, 1)"
+              />
+            </template>
+          </el-popover>
         </div>
-
-        <div ref="ace"></div>
+        <div class="sampleOutput">
+          <div class="label">输出样例</div>
+          <el-popover
+            placement="top-start"
+            content="复制成功"
+            :width="50"
+            trigger="focus"
+          >
+            <template #reference>
+              <textarea
+                class="textarea"
+                v-model="problem.SampleOutput"
+                :rows="problem.SampleOutputRows"
+                :readonly="true"
+                @click="copyText($event, 2)"
+              />
+            </template>
+          </el-popover>
+        </div>
+        <div
+          class="hit"
+          v-if="problem.Hit.length > 0"
+        >
+          <div class="label">提示</div>
+          <pre class="text">{{ problem.Hit }}</pre>
+        </div>
+        <div class="ace">
+          <div>
+            <el-select
+              style="margin: 15px 5px"
+              v-model="aceConfig.modeNow"
+              class="m-2"
+              placeholder="Select"
+              @change="changeMode(aceConfig.modeNow)"
+            >
+              <el-option
+                v-for="item in aceConfig.modeSelect"
+                :key="item.name"
+                :label="item.name"
+                :value="item.name"
+                :disabled="item.disabled"
+              />
+            </el-select>
+            <el-button
+              plain
+              v-on:click="aceConfig.save()"
+            >暂存</el-button>
+          </div>
+          <div id="aceEditor" />
+        </div>
       </div>
-    </div>
-    <div
-      v-show="!notFound"
-      class="right"
-    >
-      <div
-        class="contestInfo"
-        v-if="contest.isContestProblem"
-        ref="contestInfo"
-      >
-        <div style="color: var(--font_color1); font-size: var(--fontSize12)">
-          {{ contest.info.Title }}
-        </div>
-        <div class="problemBox">
-          <div
-            :class="
+      <div class="right">
+        <div
+          class="contestInfo"
+          v-if="contest.isContestProblem"
+          ref="contestInfo"
+        >
+          <div style="color: var(--font_color1); font-size: var(--fontSize12)">
+            {{ contest.info.Title }}
+          </div>
+          <div class="problemBox">
+            <div
+              :class="
             'cursor_pointer ' + (item.PID == problem.PID ? 'nowProblem' : '')
           "
-            v-for="(item, index) in contest.info.Data"
-            :key="index"
-            v-on:click="goToProblem(item.PID)"
-          >
-            {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
+              v-for="(item, index) in contest.info.Data"
+              :key="index"
+              v-on:click="goToProblem(item.PID)"
+            >
+              {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        class="demand"
-        ref="demand"
-      >
-        <div>时间限制: {{ problem.LimitTime }} ms</div>
-        <div>内存限制: {{ problem.LimitMemory }} MB</div>
-        <div style="color: var(--font_color41)">通过数:</div>
-      </div>
-      <div
-        class="tags"
-        v-if="problem.Label.length != 0"
-      >
-        <el-tag
-          v-for="tag in problem.Label.split(';')"
-          :key="tag"
-          :effect="store.state.themeSwitch.theme == 1 ? 'light' : 'dark'"
+        <div
+          class="demand"
+          ref="demand"
         >
-          {{ tag }}
-        </el-tag>
-      </div>
-      <div class="function">
-        <span style="
+          <div>时间限制: {{ problem.LimitTime }} ms</div>
+          <div>内存限制: {{ problem.LimitMemory }} MB</div>
+          <div style="color: var(--font_color41)">通过数:</div>
+        </div>
+        <div
+          class="tags"
+          v-if="problem.Label.length != 0"
+        >
+          <el-tag
+            v-for="tag in problem.Label.split(';')"
+            :key="tag"
+            :effect="store.state.themeSwitch.theme == 1 ? 'light' : 'dark'"
+          >
+            {{ tag }}
+          </el-tag>
+        </div>
+        <div class="function">
+          <span style="
             height: 40px;
             line-height: 40px;
             font-size: var(--fontSize6);
             color: var(--font_color1);
           ">
-          当前模式：{{ aceConfig.modeNow }}
-        </span>
-        <div
-          class="submit cursor_pointer cursor_noFocus"
-          @mousedown="submit.submitTouchStart"
-          @mouseup="submit.submitTouchEnd"
-          @mouseleave="submit.submitTouchEnd"
-        >
-          <el-icon size="26px">
-            <Check />
-          </el-icon>
-          &nbsp;提交
+            当前模式：{{ aceConfig.modeNow }}
+          </span>
           <div
-            ref="submitCover"
-            style="
+            class="submit cursor_pointer cursor_noFocus"
+            @mousedown="submit.submitTouchStart"
+            @mouseup="submit.submitTouchEnd"
+            @mouseleave="submit.submitTouchEnd"
+          >
+            <el-icon size="26px">
+              <Check />
+            </el-icon>
+            &nbsp;提交
+            <div
+              ref="submitCover"
+              style="
               background-color: rgba(130, 220, 250, 0.65);
               height: 100%;
               position: absolute;
@@ -165,13 +162,14 @@
               top: 0;
               left: 0;
             "
-          />
-        </div>
-        <div class="solutions cursor_pointer">
-          <el-icon size="26px">
-            <Document />
-          </el-icon>
-          &nbsp;题解
+            />
+          </div>
+          <div class="solutions cursor_pointer">
+            <el-icon size="26px">
+              <Document />
+            </el-icon>
+            &nbsp;题解
+          </div>
         </div>
       </div>
     </div>
@@ -193,6 +191,7 @@ import {
   watch,
   computed,
   ref,
+  onBeforeMount,
 } from "vue";
 import { useStore } from "vuex";
 import getAceBuilds from "../utils/aceBuildsFactory";
@@ -311,7 +310,9 @@ type problemType = {
   LimitTime: number;
   Output: string;
   SampleInput: string;
+  SampleInputRows: number;
   SampleOutput: string;
+  SampleOutputRows: number;
   Title: string;
   Label: string;
   Origin: number;
@@ -327,7 +328,9 @@ var problem = reactive<problemType>({
   LimitTime: 0,
   Output: "",
   SampleInput: "",
+  SampleInputRows: 5,
   SampleOutput: "",
+  SampleOutputRows: 5,
   Title: "",
   Label: "",
   Origin: 0,
@@ -436,8 +439,8 @@ async function getProblemInfo() {
         problem.SampleOutput.split("\n").length < 12
           ? problem.SampleOutput.split("\n").length
           : 12;
-      proxy.$refs.sampleInput.setAttribute("rows", inputLength);
-      proxy.$refs.sampleOutput.setAttribute("rows", outputLength);
+      problem.SampleInputRows = inputLength;
+      problem.SampleOutputRows = outputLength;
       notFound.value = false;
     }
     proxy.codeProcessor(data.code);
@@ -643,18 +646,16 @@ var submit = reactive<submitType>({
         Source: ace.aceEditor.getValue(),
         Lang: aceConfig.lang,
       })
-      .then((res) => {
+      .then((res: any) => {
         let data = res.data;
         // console.log(res);
         if (data.code == 0) {
-          // console.log(data);
           proxy.elMessage({
             message: "提交成功",
             type: "success",
           });
-        } else {
-          proxy.codeProcessor(data.code);
         }
+        proxy.codeProcessor(data.code);
       });
     proxy.elNotification({
       message: "提交成功",
@@ -664,11 +665,12 @@ var submit = reactive<submitType>({
 });
 
 onMounted(() => {
-  //获取题目
-  getProblemInfo();
   nextTick(() => {
+    //获取题目
+    getProblemInfo();
     //初始化代码编辑器
-    ace.aceEditor = getAceBuilds({ node: proxy.$refs.ace });
+    let aceEditor = document.getElementById("aceEditor");
+    ace.aceEditor = getAceBuilds({ node: aceEditor });
     if (store.state.themeSwitch.theme == 2)
       ace.aceEditor.setTheme("ace/theme/one_dark");
     //获取缓存的题目数据
@@ -699,153 +701,157 @@ onMounted(() => {
   align-items: center;
   justify-content: space-between;
 
-  .left {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: calc(100% - $problem_rightWidth - $modelDistance);
-    @include fill_color("fill2");
-    border-radius: 15px;
+  .content {
+    width: 100%;
 
-    .title {
-      font-size: $fontSize12;
-      @include font_color("font1");
-      text-align: center;
-      padding: $modelDistance 0;
-    }
-
-    .label {
-      box-sizing: border-box;
-      padding: $modelDistance 0 $modelDistanceMini 20px;
-      font-size: $fontSize7;
-      @include font_color("font1");
-    }
-
-    .text {
-      box-sizing: border-box;
-      padding: 0 30px;
-      font-size: $fontSize6;
-      @include font_color("font2");
-    }
-
-    .textarea {
-      width: calc(100% - 60px);
-      box-sizing: border-box;
-      margin: 0 30px;
-      padding: 15px;
-      line-height: $fontSize6;
-      font-size: $fontSize6;
-      @include font_color("font1");
-      @include fill_color("fill3");
-      resize: none;
-      border-radius: 12px;
-      overflow: visible;
-    }
-
-    > .ace {
-      margin-top: $modelDistanceLarge;
-      font-size: $fontSize6;
-      height: auto !important;
-      overflow: hidden;
-      border-radius: 8px;
-      outline: 2px solid;
-      @include outline_color("border2");
-      box-sizing: border-box;
-      scrollbar-base-color: #fefefe;
-    }
-  }
-
-  .right {
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    width: $problem_rightWidth;
-    top: calc($page_outerPaddingTop + 60px);
-    right: $page_outerPaddingLeft;
-    height: 200px;
-
-    .demand,
-    .function,
-    .contestInfo {
-      margin-bottom: $modelDistance;
-      padding: 10px 0;
+    .left {
+      position: relative;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      width: calc(100% - $problem_rightWidth - $modelDistance);
       @include fill_color("fill2");
       border-radius: 15px;
+
+      .title {
+        font-size: $fontSize12;
+        @include font_color("font1");
+        text-align: center;
+        padding: $modelDistance 0;
+      }
+
+      .label {
+        box-sizing: border-box;
+        padding: $modelDistance 0 $modelDistanceMini 20px;
+        font-size: $fontSize7;
+        @include font_color("font1");
+      }
+
+      .text {
+        box-sizing: border-box;
+        padding: 0 30px;
+        font-size: $fontSize6;
+        @include font_color("font2");
+      }
+
+      .textarea {
+        width: calc(100% - 60px);
+        box-sizing: border-box;
+        margin: 0 30px;
+        padding: 15px;
+        line-height: $fontSize6;
+        font-size: $fontSize6;
+        @include font_color("font1");
+        @include fill_color("fill3");
+        resize: none;
+        border-radius: 12px;
+        overflow: visible;
+      }
+
+      > .ace {
+        margin-top: $modelDistanceLarge;
+        font-size: $fontSize6;
+        height: auto !important;
+        overflow: hidden;
+        border-radius: 8px;
+        outline: 2px solid;
+        @include outline_color("border2");
+        box-sizing: border-box;
+        scrollbar-base-color: #fefefe;
+      }
     }
 
-    .contestInfo .problemBox {
-      padding: 15px;
-      box-sizing: border-box;
-      width: 100%;
-      display: grid;
-      grid-template-columns: 20% 20% 20% 20% 20%;
-      grid-template-rows: 40px;
+    .right {
+      position: fixed;
+      display: flex;
+      flex-direction: column;
+      width: $problem_rightWidth;
+      top: calc($page_outerPaddingTop + 60px);
+      right: $page_outerPaddingLeft;
+      height: 200px;
 
-      > div {
+      .demand,
+      .function,
+      .contestInfo {
+        margin-bottom: $modelDistance;
+        padding: 10px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        @include fill_color("fill2");
+        border-radius: 15px;
+      }
+
+      .contestInfo .problemBox {
+        padding: 15px;
+        box-sizing: border-box;
         width: 100%;
-        text-align: center;
-        line-height: 40px;
-        @include font_color("font1");
-        font-size: $fontSize5;
-        border-radius: 10px;
+        display: grid;
+        grid-template-columns: 20% 20% 20% 20% 20%;
+        grid-template-rows: 40px;
 
-        &:hover {
-          @include font_color("fill12");
-          @include fill_color("fill16");
+        > div {
+          width: 100%;
+          text-align: center;
+          line-height: 40px;
+          @include font_color("font1");
+          font-size: $fontSize5;
+          border-radius: 10px;
+
+          &:hover {
+            @include font_color("fill12");
+            @include fill_color("fill16");
+          }
+        }
+
+        .nowProblem {
+          box-sizing: border-box;
+          @include border(2px, dotted, "fill11");
+          @include fill_color("fill15");
         }
       }
 
-      .nowProblem {
-        box-sizing: border-box;
-        @include border(2px, dotted, "fill11");
-        @include fill_color("fill15");
-      }
-    }
-
-    .demand > div {
-      margin: 4px 0;
-      font-size: $fontSize5;
-      @include font_color("font1");
-      letter-spacing: 1px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .tags > span {
-      margin: 0 1px;
-    }
-
-    .tags {
-      margin-bottom: $modelDistance;
-      @include fill_color("fill2");
-      border-radius: 15px;
-      padding: 10px 15px;
-    }
-    .function {
-      @include font_color("font1");
-
-      > div {
-        position: relative;
-        overflow: hidden;
-        margin: 8px 0;
-        width: 220px;
-        height: 40px;
-        border-radius: 15px;
-        font-size: $fontSize8;
-        letter-spacing: 4px;
+      .demand > div {
+        margin: 4px 0;
+        font-size: $fontSize5;
+        @include font_color("font1");
+        letter-spacing: 1px;
         display: flex;
         align-items: center;
         justify-content: center;
-        @include box_shadow(0, 0, 2px, 1px, "border2");
-        transition-duration: 200ms;
+      }
 
-        &:hover {
-          @include box_shadow(0, 0, 2px, 1px, "fill12");
-          @include fill_color("fill16");
+      .tags > span {
+        margin: 0 1px;
+      }
+
+      .tags {
+        margin-bottom: $modelDistance;
+        @include fill_color("fill2");
+        border-radius: 15px;
+        padding: 10px 15px;
+      }
+      .function {
+        @include font_color("font1");
+
+        > div {
+          position: relative;
+          overflow: hidden;
+          margin: 8px 0;
+          width: 220px;
+          height: 40px;
+          border-radius: 15px;
+          font-size: $fontSize8;
+          letter-spacing: 4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          @include box_shadow(0, 0, 2px, 1px, "border2");
+          transition-duration: 200ms;
+
+          &:hover {
+            @include box_shadow(0, 0, 2px, 1px, "fill12");
+            @include fill_color("fill16");
+          }
         }
       }
     }
