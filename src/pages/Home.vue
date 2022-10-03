@@ -11,10 +11,22 @@
       v-show="!config.isError"
     >
       <div class="liveContests">
-        <div></div>
+        <div
+          class="liveItem"
+          v-for="(item,index) in contests.liveList"
+          :key="index"
+        >
+          {{ item }}
+        </div>
       </div>
       <div class="overContests">
-        <div></div>
+        <div
+          class="overItem"
+          v-for="(item,index) in  contests.overList"
+          :key="index"
+        >
+          {{item}}
+        </div>
       </div>
     </div>
     <div
@@ -31,6 +43,7 @@
 </template>
 
 <script lang="ts" setup>
+import { templateSettings } from "lodash";
 import { onMounted, reactive, getCurrentInstance } from "vue";
 import { useStore } from "vuex";
 const { proxy } = getCurrentInstance() as any;
@@ -57,10 +70,15 @@ var config = reactive({
 type contestsType = {
   liveList: any[] | null;
   overList: any[] | null;
+  [item: string]: any;
 };
 var contests = reactive<contestsType>({
   liveList: [],
   overList: [],
+  init() {
+    contests.liveList = [];
+    contests.overList = [];
+  },
 });
 
 //初始化
@@ -100,8 +118,16 @@ function getContestsInfo() {
   proxy.$get("api/contest/list", { Limit: 20, Page: 1 }).then((res: any) => {
     let data = res.data;
     if (data.code == 0) {
-      //处理当前正在进行的比赛
-      let tempLive = [];
+      let tempTime = config.time;
+      //初始化并且循环遍历
+      contests.init();
+      data.Data.forEach((con) => {
+        if (con.EndTime > tempTime) {
+          contests.liveList.push(con);
+        } else {
+          contests.overList.push(con);
+        }
+      });
     }
     proxy.codeProcessor(data.code);
   });

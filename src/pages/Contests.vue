@@ -102,37 +102,37 @@
 </template>
 
 <script lang="ts" setup name="Contests">
-import { getCurrentInstance, onMounted, reactive } from 'vue'
-import { useStore } from 'vuex'
-import { ElMessageBox } from 'element-plus'
-const { proxy } = getCurrentInstance() as any
-const store = useStore()
+import { getCurrentInstance, onMounted, reactive } from "vue";
+import { useStore } from "vuex";
+import { ElMessageBox } from "element-plus";
+const { proxy } = getCurrentInstance() as any;
+const store = useStore();
 
 //页面数据
 type contestsType = {
   list: {
-    BeginTime: number
-    CID: number
-    EndTime: number
-    IsPublic: number
-    Title: string
-    Type: number
-    UID: string
-  }[]
-}
+    BeginTime: number;
+    CID: number;
+    EndTime: number;
+    IsPublic: number;
+    Title: string;
+    Type: number;
+    UID: string;
+  }[];
+};
 var contests = reactive<contestsType>({
   list: [],
-})
+});
 
 //页面配置数据
 type configType = {
-  Count: number
-  currentPage: number
-  limit: number
-  loading: any
-  serverTime: number
-  [item: string]: any
-}
+  Count: number;
+  currentPage: number;
+  limit: number;
+  loading: any;
+  serverTime: number;
+  [item: string]: any;
+};
 var config = reactive<configType>({
   Count: 0,
   currentPage: 1,
@@ -140,51 +140,51 @@ var config = reactive<configType>({
   loading: null,
   serverTime: Date.now(),
   init() {
-    this.Count = 0
-    this.currentPage = 1
-    this.limit = 20
-    this.loading = null
-    this.serverTime = Date.now()
+    this.Count = 0;
+    this.currentPage = 1;
+    this.limit = 20;
+    this.loading = null;
+    this.serverTime = Date.now();
   },
   //切换页面
   changePage: (page: number): void => {
-    config.currentPage = page
-    SyncUrl()
-    getContests()
+    config.currentPage = page;
+    SyncUrl();
+    getContests();
   },
-})
+});
 
 //获取竞赛列表
 function getContests() {
   config.loading = proxy.elLoading({
     node: proxy.$refs.searchResult,
-  })
+  });
   proxy
     .$get(
-      'api/contest/list?Page=' +
+      "api/contest/list?Page=" +
         (config.currentPage - 1) +
-        '&Limit=' +
+        "&Limit=" +
         config.limit
     )
-    .then((res) => {
-      let data = res.data
+    .then((res: any) => {
+      let data = res.data;
       if (data.code == 0) {
         // console.log(data)
-        config.Count = data.Size
-        contests.list = data.Data
+        config.Count = data.Size;
+        contests.list = data.Data;
       }
-      config.loading.close()
-      proxy.codeProcessor(data.code)
-    })
+      config.loading.close();
+      proxy.codeProcessor(data.code);
+    });
 
   //同步服务器时间
   proxy.getServerTime().then((res) => {
-    let now = Date.now()
+    let now = Date.now();
     if (res.time == null || Math.abs(res.time * 1000 - now) < 1500) {
-      return
+      return;
     }
-    config.serverTime = res.time
-  })
+    config.serverTime = res.time * 1000;
+  });
 }
 
 //跳转题目
@@ -192,36 +192,36 @@ function getContestById(contest) {
   //验证策略
   if (contest.IsPublic == 1) {
     proxy.$router.push({
-      path: '/Contest',
+      path: "/Contest",
       query: {
         CID: contest.CID,
       },
-    })
+    });
   } else {
-    ElMessageBox.prompt('请输入竞赛“' + contest.Title + '”的密码：', '验证', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
+    ElMessageBox.prompt("请输入竞赛“" + contest.Title + "”的密码：", "验证", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
       inputValidator: function f(s) {
-        if (s == '') return '请输入密码'
+        if (s == "") return "请输入密码";
       },
-      inputErrorMessage: '',
+      inputErrorMessage: "",
     }).then((res) => {
-      let pass: string = res.value
+      let pass: string = res.value;
       if (!pass) {
         proxy.elMessage({
-          message: '密码不能为空!',
-          type: 'warning',
-        })
-        return
+          message: "密码不能为空!",
+          type: "warning",
+        });
+        return;
       }
       proxy.$router.push({
-        path: '/Contest',
+        path: "/Contest",
         query: {
           CID: contest.CID,
           Pass: pass,
         },
-      })
-    })
+      });
+    });
   }
 }
 
@@ -229,20 +229,20 @@ function getContestById(contest) {
 function SyncUrl() {
   //仅用于展示实时url，可用于复制跳转
   proxy.$router.replace({
-    path: '/Contests',
+    path: "/Contests",
     query: {
       Page: config.currentPage,
       Limit: config.limit,
     },
-  })
+  });
 }
 
 onMounted(() => {
   //同步url参数
-  if (proxy.$route.query.Page) config.currentPage = proxy.$route.query.Page - 0
-  if (proxy.$route.query.Limit) config.limit = proxy.$route.query.Limit - 0
-  getContests()
-})
+  if (proxy.$route.query.Page) config.currentPage = proxy.$route.query.Page - 0;
+  if (proxy.$route.query.Limit) config.limit = proxy.$route.query.Limit - 0;
+  getContests();
+});
 </script>
 
 <style  scoped lang="scss">
@@ -274,14 +274,14 @@ onMounted(() => {
         padding: 3px 10px;
         margin: 5px 0;
         border-radius: 8px;
-        @include border(1px, solid, 'border3');
+        @include border(1px, solid, "border3");
         display: flex;
         align-items: center;
         transition-duration: 300ms;
 
         &:hover {
-          @include fill_color('fill15');
-          @include border(1px, solid, 'fill12');
+          @include fill_color("fill15");
+          @include border(1px, solid, "fill12");
         }
 
         &:hover > .goingFlag {
@@ -296,25 +296,25 @@ onMounted(() => {
         &:hover > .cidFlag {
           width: 100px;
           font-size: $fontSize8;
-          @include font_color('font3');
+          @include font_color("font3");
           opacity: 1;
         }
 
         .content {
           width: fit-content;
           font-size: $fontSize7;
-          @include font_color('font1');
+          @include font_color("font1");
 
           .contestInfo {
             width: fit-content;
             font-size: $fontSize3;
-            @include font_color('font2');
+            @include font_color("font2");
           }
 
           .timeInfo {
             width: fit-content;
             font-size: $fontSize2;
-            @include font_color('font3');
+            @include font_color("font3");
           }
         }
 

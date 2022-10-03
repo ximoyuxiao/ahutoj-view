@@ -123,14 +123,98 @@
 
     <div class="contentBox">
       <div class="leftBox">
-        <div>绑定VJudge</div>
+        <div
+          class="functionBtn"
+          @click="bindingVJ.show"
+        >
+          绑定VJudge
+        </div>
         <el-divider style="margin: 2px; background-color: var(--font_color4)" />
-        <div>修改邮箱</div>
-        <el-divider style="margin: 2px; background-color: var(--font_color4)" />
-        <div>修改密码</div>
+        <div
+          class="functionBtn"
+          @click="changePassword.show"
+        >
+          修改密码
+        </div>
       </div>
       <div class="rightBox">
-        <div class="activityCalendar">
+        <transition
+          enter-active-class="animate__animated animate__zoomIn"
+          leave-active-class="animate__animated animate__zoomOut"
+        >
+          <div
+            v-if="bindingVJ.isInChangeMode"
+            class="bindingVJ"
+            data-type="form"
+          >
+            <div style="height: 30px">绑定VJ账号</div>
+            <div>
+              <span>VJ ID:&nbsp;</span>
+              <el-input v-model="bindingVJ.Vjid" />
+            </div>
+            <div>
+              <span>VJ 密码:&nbsp;</span>
+              <el-input
+                v-model="bindingVJ.Vjpwd"
+                placeholder="输入新密码"
+              />
+            </div>
+            <div
+              class="btn cursor_noFocus cursor_pointer"
+              v-on:click="bindingVJ.sendForm()"
+            >
+              <el-icon>
+                <Check />
+              </el-icon>&nbsp;绑定
+            </div>
+          </div>
+        </transition>
+        <transition
+          enter-active-class="animate__animated animate__zoomIn"
+          leave-active-class="animate__animated animate__zoomOut"
+        >
+          <div
+            v-if="changePassword.isInChangeMode"
+            class="changePassword"
+            data-type="form"
+          >
+            <div style="height: 30px">修改密码</div>
+            <div>
+              <span>旧密码:&nbsp;</span>
+              <el-input
+                v-model="changePassword.OldPwd"
+                placeholder="输入旧密码"
+              />
+            </div>
+            <div>
+              <span>新密码:&nbsp;</span>
+              <el-input
+                v-model="changePassword.Pwd"
+                placeholder="输入新密码"
+                type="password"
+                show-password
+              />
+            </div>
+            <div>
+              <span>新密码:&nbsp;</span>
+              <el-input
+                v-model="changePassword.PwdAgain"
+                placeholder="重复一次新密码"
+                type="password"
+                show-password
+              />
+            </div>
+            <div
+              class="btn cursor_noFocus cursor_pointer"
+              v-on:click="changePassword.sendForm()"
+            >
+              <el-icon>
+                <Check />
+              </el-icon>&nbsp;修改
+            </div>
+          </div>
+        </transition>
+        <div class="activityCalendarBox">
           <ActivityCalendar
             :data="activityCalendarConfig.data"
             backgroundColor="#ffffff00"
@@ -176,6 +260,7 @@ type userInfoType = {
   Email: string;
   Vjid: string;
   AdeptArray: Array<string>;
+  copy: Function;
 };
 var userInfo = reactive<userInfoType>({
   UID: "",
@@ -186,6 +271,16 @@ var userInfo = reactive<userInfoType>({
   Email: "",
   Vjid: "",
   AdeptArray: [],
+  copy: (data: any) => {
+    userInfo.UID = data.UID;
+    userInfo.School = data.School;
+    userInfo.Classes = data.Classes;
+    userInfo.Major = data.Major;
+    userInfo.Adept = data.Adept;
+    userInfo.Email = data.Email;
+    userInfo.Vjid = data.Vjid;
+    userInfo.AdeptArray = userInfo.Adept == "" ? [] : userInfo.Adept.split(";");
+  },
 });
 
 //获取用户资料
@@ -193,18 +288,10 @@ function getUserInfo() {
   proxy
     .$get("api/user/info?uid=" + store.state.userData.UID)
     .then((res: any) => {
-      // console.log(res)
+      // console.log(res);
       let data = res.data;
       if (data.code == 0) {
-        userInfo.UID = data.UID;
-        userInfo.School = data.School;
-        userInfo.Classes = data.Classes;
-        userInfo.Major = data.Major;
-        userInfo.Adept = data.Adept;
-        userInfo.Email = data.Email;
-        userInfo.Vjid = data.Vjid;
-        userInfo.AdeptArray =
-          userInfo.Adept == "" ? [] : userInfo.Adept.split(";");
+        userInfo.copy(data);
       }
       proxy.codeProcessor(data.code);
     });
@@ -464,6 +551,111 @@ var setAdept = reactive<setAdapt>({
   },
 });
 
+//绑定vj
+var bindingVJ = reactive({
+  Vjid: "",
+  Vjpwd: "",
+  isInChangeMode: false,
+  init() {
+    this.Vjid = "";
+    this.Vjpwd = "";
+    this.isInChangeMode = false;
+  },
+  show() {
+    this.isInChangeMode = !this.isInChangeMode;
+    if (this.isInChangeMode) {
+      this.Vjid = userInfo.Vjid;
+      this.Vjpwd = "";
+    }
+  },
+  sendForm() {
+    if (this.Vjid == "") {
+      proxy.elMessage({
+        message: "ID不能为空",
+        type: "warning",
+      });
+      return;
+    }
+    if (this.Vjpwd == "") {
+      proxy.elMessage({
+        message: "密码不能为空",
+        type: "warning",
+      });
+      return;
+    }
+    proxy
+      .$post("api/user/vjudgeBind", {
+        Vjid: bindingVJ.Vjid,
+        Vjpwd: bindingVJ.Vjpwd,
+      })
+      .then((res: any) => {
+        // console.log(res);
+        let data = res.data;
+        if (data.code == 0) {
+          proxy.elMessage({ message: "修改成功", type: "success" });
+        }
+        proxy.codeProcessor(data.code);
+      });
+  },
+});
+
+//修改密码
+var changePassword = reactive({
+  OldPwd: "",
+  Pwd: "",
+  PwdAgain: "",
+  isInChangeMode: false,
+  init() {
+    this.OldPwd = "";
+    this.Pwd = "";
+    this.PwdAgain = "";
+    this.isInChangeMode = false;
+  },
+  show() {
+    this.isInChangeMode = !this.isInChangeMode;
+    if (this.isInChangeMode) {
+      this.OldPwd = "";
+      this.Pwd = "";
+      this.PwdAgain = "";
+    }
+  },
+  sendForm() {
+    if (this.OldPwd == "") {
+      proxy.elMessage({
+        message: "旧密码不能为空",
+        type: "warning",
+      });
+      return;
+    }
+    if (this.Pwd == "" || this.PwdAgain == "") {
+      proxy.elMessage({
+        message: "新密码不能为空",
+        type: "warning",
+      });
+      return;
+    }
+    if (this.Pwd != this.PwdAgain) {
+      proxy.elMessage({
+        message: "两次输入的新密码不同",
+        type: "warning",
+      });
+      return;
+    }
+    proxy
+      .$post("api/user/edit/pass/", {
+        OldPwd: changePassword.OldPwd,
+        Pwd: changePassword.Pwd,
+      })
+      .then((res: any) => {
+        console.log(res);
+        let data = res.data;
+        if (data.code == 0) {
+          proxy.elMessage({ message: "修改成功", type: "success" });
+        }
+        proxy.codeProcessor(data.code);
+      });
+  },
+});
 onMounted(() => {
   if (!store.state.userData.isLogin) {
     proxy.$router.replace({ path: "/" });
@@ -594,6 +786,11 @@ onMounted(() => {
     border-radius: 20px;
     @include box_shadow(0, 0, 8px, 1px, "fill52");
 
+    &:hover {
+      @include fill_color("fill2");
+      @include box_shadow(0, 0, 8px, 1px, "fill51");
+    }
+
     > div {
       @include font_color("font1");
       font-size: $fontSize6;
@@ -642,15 +839,32 @@ onMounted(() => {
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 10px;
+      padding: 10px 15px;
       box-sizing: border-box;
       overflow: hidden;
       border-radius: 20px;
-      @include box_shadow(0, 0, 8px, 1px, "fill52");
+      @include box_shadow(0, 0, 8px, 1px, "fill34");
 
-      > div {
+      &:hover {
+        @include box_shadow(0, 0, 8px, 1px, "fill32");
+      }
+
+      .functionBtn {
         margin: 5px 0;
+        width: 100%;
+        border-radius: 8px;
+        box-sizing: border-box;
+        padding: 5px 0;
+        @include font_color("font1");
         font-size: $fontSize7;
+        line-height: $fontSize8;
+        text-align: center;
+        transition-duration: 260ms;
+
+        &:hover {
+          @include fill_color("fill35");
+          transform: scale(1.04);
+        }
       }
     }
 
@@ -660,15 +874,96 @@ onMounted(() => {
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 10px;
       box-sizing: border-box;
-      overflow: hidden;
       border-radius: 20px;
-      @include box_shadow(0, 0, 8px, 1px, "fill52");
-      @include fill_color("fill3");
 
-      .activityCalendar {
-        width: fit-content;
+      > div {
+        &:hover {
+          @include box_shadow(0, 0, 8px, 1px, "fill12");
+        }
+
+        .btn {
+          position: relative;
+          overflow: hidden;
+          margin: 8px 0;
+          width: 220px;
+          height: 40px;
+          border-radius: 15px;
+          font-size: $fontSize5;
+          @include font_color("font1");
+          letter-spacing: 4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          @include box_shadow(0, 0, 2px, 1px, "border2");
+          transition-duration: 200ms;
+
+          &:hover {
+            @include box_shadow(0, 0, 2px, 1px, "fill13");
+            @include fill_color("fill15");
+          }
+        }
+      }
+
+      > div[data-type="form"] {
+        margin-bottom: $modelDistanceMini;
+        width: 100%;
+        padding: 10px 80px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+        border-radius: 20px;
+        @include box_shadow(0, 0, 8px, 1px, "fill14");
+        @include fill_color("fill3");
+
+        &:hover {
+          @include box_shadow(0, 0, 8px, 1px, "fill12");
+        }
+      }
+
+      .bindingVJ {
+        > div {
+          @include font_color("font1");
+          font-size: $fontSize6;
+          letter-spacing: 1px;
+          display: flex;
+          min-width: 100%;
+          margin: 5px 0;
+
+          span {
+            width: 100px;
+          }
+        }
+      }
+
+      .changePassword {
+        > div {
+          @include font_color("font1");
+          font-size: $fontSize6;
+          letter-spacing: 1px;
+          display: flex;
+          min-width: 100%;
+          margin: 5px 0;
+
+          span {
+            width: 100px;
+          }
+        }
+      }
+
+      .activityCalendarBox {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        @include box_shadow(0, 0, 8px, 1px, "fill14");
+        @include fill_color("fill3");
+        border-radius: 20px;
+        overflow: hidden;
       }
     }
   }

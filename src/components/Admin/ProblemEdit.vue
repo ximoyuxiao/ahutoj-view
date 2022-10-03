@@ -12,7 +12,14 @@
         active-class="selected"
         to="/Admin/ProblemEdit/UpdateProblem"
       >
-        修改题目
+        编辑题目
+      </router-link>
+      <el-divider direction="vertical" />
+      <router-link
+        active-class="selected"
+        to="/Admin/ProblemEdit/EditProblemJudgeFile"
+      >
+        判题数据
       </router-link>
     </div>
 
@@ -28,8 +35,8 @@
 
 <script lang="ts">
 export default {
-  name: 'ProblemEdit',
-}
+  name: "ProblemEdit",
+};
 </script>
 
 <style scoped lang="scss">
@@ -43,29 +50,29 @@ export default {
     padding: 10px 10px;
     align-items: center;
     justify-content: centers;
-    @include fill_color('fill3');
+    @include fill_color("fill3");
 
     > a {
       box-sizing: border-box;
       padding: 5px 15px;
       font-size: $fontSize7;
       border-bottom: 2px solid;
-      @include border_color('base_trans');
-      @include font_color('font2');
+      @include border_color("base_trans");
+      @include font_color("font2");
 
       &:hover {
-        @include fill_color('fill1');
+        @include fill_color("fill1");
       }
     }
 
     > .selected {
       border-bottom: 2px solid;
-      @include border_color('fill21');
+      @include border_color("fill21");
     }
   }
 
   .content {
-    @include fill_color('fill1');
+    @include fill_color("fill1");
     box-sizing: border-box;
     padding: $adminCenter_contentPadding;
     width: 100%;

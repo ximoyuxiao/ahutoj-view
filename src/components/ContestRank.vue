@@ -5,33 +5,35 @@
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance, onMounted } from 'vue'
-import { useStore } from 'vuex'
-const { proxy } = getCurrentInstance() as any
-const store = useStore()
+import { getCurrentInstance, onMounted } from "vue";
+import { useStore } from "vuex";
+const { proxy } = getCurrentInstance() as any;
+const store = useStore();
 
 function getRankList() {
-  let CID = null
-  let Pass = null
+  let CID = null;
+  let Pass = null;
   if (!proxy.$route.query.CID) {
     proxy.elMessage({
-      message: '跳转地址错误，请重试',
-      type: 'warning',
-    })
-    return
+      message: "跳转地址错误，请重试",
+      type: "warning",
+    });
+    return;
   }
-  CID = proxy.$route.query.CID
+  CID = proxy.$route.query.CID;
   if (!proxy.$route.query.Pass) {
-    Pass = proxy.$route.query.Pass
+    Pass = proxy.$route.query.Pass;
   }
-  proxy.$get('api/contest/' + CID + '/rank' + '?Pass=' + Pass).then((res) => {
-    console.log(res)
-  })
+  proxy
+    .$get("api/contest/" + CID + "/rank" + "?CID=" + CID + "&Pass=" + Pass)
+    .then((res: any) => {
+      console.log(res);
+    });
 }
 
 onMounted(() => {
-  getRankList()
-})
+  getRankList();
+});
 </script>
 
 <style lang="less" scoped>

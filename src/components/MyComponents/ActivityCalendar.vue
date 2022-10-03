@@ -47,45 +47,42 @@
   </div>
 </template>
 
-<script lang="ts" setup name="ActivityCalendar">
+<script lang="ts" setup name="vue-activity-calendar">
 import {
   nextTick,
   onMounted,
   reactive,
   watch,
   computed,
-  getCurrentInstance,
   withDefaults,
   defineProps,
 } from "vue";
-
-const { proxy } = getCurrentInstance() as any;
-
 type propsType = {
-  data?: { date: string; count: number }[] | null;
-  beginDate?: string | null;
-  endDate?: string | null;
+  data?: { date: string; count: number }[] | null | undefined;
+  endDate?: string | null | undefined;
   width?: number;
   height?: number;
   cellLength?: number;
   cellInterval?: number;
   cellBorderRadius?: number;
   header?: string[] | null;
-  headerLength?: { length: number; text: string }[] | null;
   showHeader?: boolean;
-  backgroundColor?: string;
+  backgroundColor?: string | null | undefined;
   colors?: string[] | null;
-  levels?: number;
-  levelMapper?: any;
+  levelMapper?: Function | null | undefined;
   showLevelFlag?: boolean;
-  levelFlagText?: string[];
+  levelFlagText?: string[] | null;
   fontSize?: number;
-  fontColor?: string;
-  clickEvent?: any;
+  fontColor?: string | null;
+  clickEvent?: Function | null | undefined;
+  //不接受指定
+  beginDate?: string | null | undefined;
+  levels?: number | null | undefined;
+  headerLength?: { length: number; text: string }[] | null;
 };
 const props = withDefaults(defineProps<propsType>(), {
   data: null,
-  endDate: "",
+  endDate: null,
   width: 35,
   height: 7,
   cellLength: 16,
@@ -93,13 +90,12 @@ const props = withDefaults(defineProps<propsType>(), {
   cellBorderRadius: 3,
   header: null,
   showHeader: true,
-  backgroundColor: "",
+  backgroundColor: null,
   colors: null,
   levelMapper: null,
   showLevelFlag: true,
-  levelFlagText: null,
-  fontSize: 0,
-  fontColor: "",
+  fontSize: 12,
+  fontColor: null,
   clickEvent: null,
 });
 
@@ -146,19 +142,21 @@ const config = reactive<propsType>({
   //颜色数组，用于指定不同活跃level的颜色
   colors: ["#f5f5f5", "#ebfaff", "#e5f9ff", "#c7f1ff", "#86e0fe", "#3ecefe"],
   //与颜色数组同步，代表颜色数组长度
-  levels: 5,
+  levels: 6,
   //颜色映射表，可自定义颜色与count的关系
   levelMapper: function levelMapper(count) {
-    if (count < 2) {
+    if (count == 0) {
       return 0;
-    } else if (count < 4) {
+    } else if (count <= 1) {
       return 1;
-    } else if (count < 6) {
+    } else if (count <= 3) {
       return 2;
-    } else if (count < 9) {
+    } else if (count <= 6) {
       return 3;
-    } else {
+    } else if (count <= 9) {
       return 4;
+    } else {
+      return 5;
     }
   },
   showLevelFlag: true,
@@ -166,7 +164,7 @@ const config = reactive<propsType>({
   fontSize: 12,
   fontColor: "#080808",
   //响应点击事件
-  clickEvent: function clickEvent(item: { date: string; count: number }) {},
+  clickEvent: function clickEvent(item: any) {},
 });
 
 const style = reactive({

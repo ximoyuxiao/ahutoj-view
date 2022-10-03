@@ -8,7 +8,7 @@
       :limit="1"
       :on-change="uploadParser"
       :on-exceed="overflowLimit"
-      :on-remove="init"
+      :on-remove="userList.init"
     >
       <el-icon class="el-icon--upload">
         <upload-filled />
@@ -74,87 +74,80 @@
   </div>
 </template>  
 
-<script lang="ts">
-import { getCurrentInstance, reactive } from 'vue'
-export default {
-  name: 'BatchAddUser',
-  setup() {
-    const { proxy } = getCurrentInstance() as any
+<script lang="ts" setup>
+import { getCurrentInstance, reactive } from "vue";
+const { proxy } = getCurrentInstance() as any;
 
-    const userList = reactive({
-      list: [],
-      showList: false,
-      remove(index) {
-        for (let i in this.list) {
-          if (index == i) this.list.splice(i, 1)
-        }
-      },
-      init: () => {
-        userList.list = []
-        userList.showList = false
-      },
-    })
-
-    //上传文件解析器
-    function uploadParser(event, fileList) {
-      let file = fileList[0]
-      let reader = new FileReader()
-      reader.readAsText(file.raw)
-      reader.onload = (e: any) => {
-        // 处理文件内容
-        var userArray = JSON.parse(e.target.result)
-        if (!(userArray instanceof Array)) {
-          proxy.elMessage({
-            message: '该文件数据格式不规范，它并不能被解析为Json对象',
-            type: 'error',
-          })
-          return
-        }
-        for (let user in userArray) {
-          // console.log(userArray[user]);
-          if (
-            !userArray[user].UID ||
-            !userArray[user].UserName ||
-            !userArray[user].Pass
-          ) {
-            proxy.elMessage({
-              message:
-                '该文件数据格式不规范，请对照示例检查，包括中括号、大括号、大小写、双引号等',
-              type: 'error',
-            })
-            userList.init()
-            return
-          }
-          userList.list.push(userArray[user])
-        }
-
-        userList.showList = true
-      }
+const userList = reactive({
+  list: [],
+  showList: false,
+  remove(index) {
+    for (let i in this.list) {
+      if (index == i) this.list.splice(i, 1);
     }
-
-    //超出限制
-    function overflowLimit() {
-      proxy.elMessage({
-        message: '最多解析一个文件哦',
-        type: 'warning',
-      })
-    }
-
-    //完成提交
-    function complete() {
-      let tempArray = []
-      for (let i in userList.list)
-        tempArray.push({
-          UID: userList.list[i].UID,
-          UserName: userList.list[i].UserName,
-          Pass: userList.list[i].Pass,
-        })
-
-      proxy.$post('api/admin/users', tempArray, 1).then((res) => {})
-    }
-
-    return { uploadParser, overflowLimit, userList, complete }
   },
+  init: () => {
+    userList.list = [];
+    userList.showList = false;
+  },
+});
+
+//上传文件解析器
+function uploadParser(event, fileList) {
+  let file = fileList[0];
+  let reader = new FileReader();
+  reader.readAsText(file.raw);
+  reader.onload = (e: any) => {
+    // 处理文件内容
+    var userArray = JSON.parse(e.target.result);
+    if (!(userArray instanceof Array)) {
+      proxy.elMessage({
+        message: "该文件数据格式不规范，它并不能被解析为Json对象",
+        type: "error",
+      });
+      return;
+    }
+    for (let user in userArray) {
+      // console.log(userArray[user]);
+      if (
+        !userArray[user].UID ||
+        !userArray[user].UserName ||
+        !userArray[user].Pass
+      ) {
+        proxy.elMessage({
+          message:
+            "该文件数据格式不规范，请对照示例检查，包括中括号、大括号、大小写、双引号等",
+          type: "error",
+        });
+        userList.init();
+        return;
+      }
+      userList.list.push(userArray[user]);
+    }
+
+    userList.showList = true;
+  };
+}
+
+//超出限制
+function overflowLimit() {
+  proxy.elMessage({
+    message: "最多解析一个文件哦",
+    type: "warning",
+  });
+}
+
+//完成提交
+function complete() {
+  let tempArray = [];
+  for (let i in userList.list)
+    tempArray.push({
+      UID: userList.list[i].UID,
+      UserName: userList.list[i].UserName,
+      Pass: userList.list[i].Pass,
+    });
+
+  proxy.$post("api/admin/users", tempArray, 1).then((res: any) => {});
 }
 </script>
 

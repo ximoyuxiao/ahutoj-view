@@ -74,6 +74,26 @@
         placeholder="请输入的每个标签之间用';'隔开"
       />
     </div>
+    <div>
+      <span>来源：</span>
+      <el-select
+        v-model="problem.Origin"
+        class="m-2"
+        placeholder="Select"
+      >
+        <el-option
+          v-for="item in problem.Origins"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+      <el-input
+        v-show="problem.Origin != 0"
+        v-model="problem.OriginPID"
+        placeholder="输入题目来源OJ的PID"
+      />
+    </div>
     <div style="display: flex; justify-content: flex-end; padding: 10px 0">
       <el-button
         plain
@@ -84,39 +104,51 @@
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance, reactive } from 'vue'
-const { proxy } = getCurrentInstance() as any
+import { getCurrentInstance, reactive } from "vue";
+const { proxy } = getCurrentInstance() as any;
 
+//题目数据
 var problem = reactive({
   PID: 0,
-  Title: '',
-  Description: '',
-  Input: '',
-  Output: '',
-  SampleInput: '',
-  SampleOutput: '',
+  Title: "",
+  Description: "",
+  Input: "",
+  Output: "",
+  SampleInput: "",
+  SampleOutput: "",
   LimitTime: 0,
   LimitMemory: 0,
-  Hit: '',
-  Label: '',
+  Hit: "",
+  Label: "",
+  Origin: 0,
+  OriginPID: "",
+  //选项列表 const
+  Origins: [
+    { label: "本地", value: 0 },
+    { label: "CodeForce", value: 1 },
+    { label: "洛谷", value: 2 },
+  ],
   init() {
-    problem.PID = 0
-    problem.Title = ''
-    problem.Description = ''
-    problem.Input = ''
-    problem.Output = ''
-    problem.SampleInput = ''
-    problem.SampleOutput = ''
-    problem.LimitTime = 0
-    problem.LimitMemory = 0
-    problem.Hit = ''
-    problem.Label = ''
+    problem.PID = 0;
+    problem.Title = "";
+    problem.Description = "";
+    problem.Input = "";
+    problem.Output = "";
+    problem.SampleInput = "";
+    problem.SampleOutput = "";
+    problem.LimitTime = 0;
+    problem.LimitMemory = 0;
+    problem.Hit = "";
+    problem.Label = "";
+    problem.Origin = 0;
+    problem.OriginPID = "";
   },
-})
+});
 
+//完成提交题目
 function complete() {
   proxy.$axios
-    .post('api/problem/add/', {
+    .post("api/problem/add/", {
       Title: problem.Title,
       Description: problem.Description,
       Input: problem.Input,
@@ -127,32 +159,36 @@ function complete() {
       LimitMemory: problem.LimitMemory,
       Hit: problem.Hit,
       Label: problem.Label,
+      Origin: problem.Origin,
+      OriginPID: problem.OriginPID,
     })
     .then((res: any) => {
-      let data = res.data
+      let data = res.data;
       if (data.code == 0) {
-        proxy.elMessage({ message: '添加成功!', type: 'success' })
+        proxy.elMessage({ message: "添加成功!", type: "success" });
       }
-      proxy.codeProcessor(data.code)
-    })
+      proxy.codeProcessor(data.code);
+    });
 }
 </script>
 
 <style scoped lang="scss">
 .addProblem {
   width: 100%;
-}
 
-.addProblem > div {
-  display: flex;
-  align-content: center;
-  box-sizing: border-box;
-  margin: 5px 0;
-}
+  > div {
+    display: flex;
+    align-content: center;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    margin: 5px 0;
 
-.addProblem > div > span {
-  font-size: 22px;
-  width: 150px;
-  @include font_color('font1');
+    > span {
+      display: block;
+      font-size: 22px;
+      width: 150px;
+      @include font_color("font1");
+    }
+  }
 }
 </style>

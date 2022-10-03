@@ -142,7 +142,9 @@
             line-height: 40px;
             font-size: var(--fontSize6);
             color: var(--font_color1);
-          ">当前模式：{{ aceConfig.modeNow }}</span>
+          ">
+          当前模式：{{ aceConfig.modeNow }}
+        </span>
         <div
           class="submit cursor_pointer cursor_noFocus"
           @mousedown="submit.submitTouchStart"
@@ -191,14 +193,14 @@ import {
   watch,
   computed,
   ref,
-} from 'vue'
-import { useStore } from 'vuex'
-import getAceBuilds from '../utils/aceBuildsFactory'
+} from "vue";
+import { useStore } from "vuex";
+import getAceBuilds from "../utils/aceBuildsFactory";
 
-const { proxy } = getCurrentInstance() as any
-const store = useStore()
+const { proxy } = getCurrentInstance() as any;
+const store = useStore();
 
-var notFound = ref(true)
+var notFound = ref(false);
 
 //页面加载效果维护
 var loading = reactive({
@@ -207,40 +209,40 @@ var loading = reactive({
   contestProblemBox: null,
   init() {
     if (this.content) {
-      this.content.close()
+      this.content.close();
     }
     if (this.performanceInfo) {
-      this.performanceInfo.close()
+      this.performanceInfo.close();
     }
     if (this.contestProblemBox) {
-      this.contestProblemBox.close()
+      this.contestProblemBox.close();
     }
-    this.content = null
-    this.performanceInfo = null
-    this.contestProblemBox = null
+    this.content = null;
+    this.performanceInfo = null;
+    this.contestProblemBox = null;
   },
-})
+});
 
 //页面数据
 type contestType = {
-  CID: number
-  Pass: string
-  isContestProblem: boolean //是否是竞赛题目
+  CID: number;
+  Pass: string;
+  isContestProblem: boolean; //是否是竞赛题目
   info: {
-    Data: { PID: number; Title: string; ACNum: number; SubmitNum: number }[]
-    BeginTime: number
-    CID: number
-    Type: number
-    Description: string
-    EndTime: number
-    IsPublic: number
-    Pass: string
-    Size: number
-    Title: string
-    UID: string
-  }
-  [item: string]: any
-}
+    Data: { PID: number; Title: string; ACNum: number; SubmitNum: number }[];
+    BeginTime: number;
+    CID: number;
+    Type: number;
+    Description: string;
+    EndTime: number;
+    IsPublic: number;
+    Pass: string;
+    Size: number;
+    Title: string;
+    UID: string;
+  };
+  [item: string]: any;
+};
 var contest = reactive<contestType>({
   CID: null,
   Pass: null,
@@ -250,384 +252,391 @@ var contest = reactive<contestType>({
     BeginTime: 0,
     CID: 0,
     Type: 1,
-    Description: '',
+    Description: "",
     EndTime: 0,
     IsPublic: 1,
-    Pass: '',
+    Pass: "",
     Size: 0,
-    Title: '',
-    UID: '',
+    Title: "",
+    UID: "",
   },
   copy(data: {
-    Problems: string
-    Data: { PID: number; Title: string; ACNum: number; SubmitNum: number }[]
-    UID: string
-    Title: string
-    CID: number
-    Type: number
-    Description: string
-    BeginTime: number
-    EndTime: number
-    IsPublic: number
-    Pass: string
-    Size: number
+    Problems: string;
+    Data: { PID: number; Title: string; ACNum: number; SubmitNum: number }[];
+    UID: string;
+    Title: string;
+    CID: number;
+    Type: number;
+    Description: string;
+    BeginTime: number;
+    EndTime: number;
+    IsPublic: number;
+    Pass: string;
+    Size: number;
   }): void {
-    let tempProblemSequence = data.Problems.split(',')
+    let tempProblemSequence = data.Problems.split(",");
     for (let temp in tempProblemSequence) {
       for (let p in data.Data) {
-        if (tempProblemSequence[temp] === data.Data[p].PID + '') {
+        if (tempProblemSequence[temp] === data.Data[p].PID + "") {
           let item = {
             PID: data.Data[p].PID,
             Title: data.Data[p].Title,
             ACNum: data.Data[p].ACNum,
             SubmitNum: data.Data[p].SubmitNum,
-          }
-          contest.info.Data.push(item)
-          break
+          };
+          contest.info.Data.push(item);
+          break;
         }
       }
     }
-    contest.info.BeginTime = data.BeginTime
-    contest.info.CID = data.CID
-    contest.info.Type = data.Type
-    contest.info.Description = data.Description
-    contest.info.EndTime = data.EndTime
-    contest.info.IsPublic = data.IsPublic
-    contest.info.Pass = data.Pass
-    contest.info.Size = data.Size
-    contest.info.Title = data.Title
-    contest.info.UID = data.UID
+    contest.info.BeginTime = data.BeginTime;
+    contest.info.CID = data.CID;
+    contest.info.Type = data.Type;
+    contest.info.Description = data.Description;
+    contest.info.EndTime = data.EndTime;
+    contest.info.IsPublic = data.IsPublic;
+    contest.info.Pass = data.Pass;
+    contest.info.Size = data.Size;
+    contest.info.Title = data.Title;
+    contest.info.UID = data.UID;
   },
-})
+});
 
 type problemType = {
-  PID?: number
-  Description: string
-  Hit: string
-  Input: string
-  LimitMemory: number
-  LimitTime: number
-  Output: string
-  SampleInput: string
-  SampleOutput: string
-  Title: string
-  Label: string
-  [item: string]: any
-}
+  PID?: number;
+  Description: string;
+  Hit: string;
+  Input: string;
+  LimitMemory: number;
+  LimitTime: number;
+  Output: string;
+  SampleInput: string;
+  SampleOutput: string;
+  Title: string;
+  Label: string;
+  Origin: number;
+  OriginPID: string;
+  [item: string]: any;
+};
 var problem = reactive<problemType>({
   PID: null,
-  Description: '',
-  Hit: '',
-  Input: '',
+  Description: "",
+  Hit: "",
+  Input: "",
   LimitMemory: 0,
   LimitTime: 0,
-  Output: '',
-  SampleInput: '',
-  SampleOutput: '',
-  Title: '',
-  Label: '',
+  Output: "",
+  SampleInput: "",
+  SampleOutput: "",
+  Title: "",
+  Label: "",
+  Origin: 0,
+  OriginPID: "",
   copy(data: problemType) {
     // this.Pid = data.Pid;
-    this.Description = data.Description
-    this.Hit = data.Hit
-    this.Input = data.Input
-    this.LimitMemory = data.LimitMemory
-    this.LimitTime = data.LimitTime
-    this.Output = data.Output
-    this.SampleInput = data.SampleInput
-    this.SampleOutput = data.SampleOutput
-    this.Title = data.Title
-    this.Label = data.Label
+    this.Description = data.Description;
+    this.Hit = data.Hit;
+    this.Input = data.Input;
+    this.LimitMemory = data.LimitMemory;
+    this.LimitTime = data.LimitTime;
+    this.Output = data.Output;
+    this.SampleInput = data.SampleInput;
+    this.SampleOutput = data.SampleOutput;
+    this.Title = data.Title;
+    this.Label = data.Label;
+    //题目来源不显示
+    // this.Origin = data.Origin;
+    // this.OriginPID = data.OriginPID;
   },
-})
+});
 
 var ace = reactive({
   aceEditor: null,
-})
+});
 
 var aceConfig = reactive({
-  modeNow: 'C',
+  modeNow: "C",
   lang: 1,
   modeSelect: [
-    { name: 'C', disabled: false },
-    { name: 'CPP', disabled: false },
-    { name: 'CPP11', disabled: false },
-    { name: 'CPP17', disabled: false },
-    { name: 'JAVA', disabled: false },
-    { name: 'PYTHON3', disabled: false },
-    { name: 'JavaScript', disabled: true },
-    { name: 'C#', disabled: true },
-    { name: 'Ruby', disabled: true },
-    { name: 'Rust', disabled: true },
+    { name: "C", disabled: false },
+    { name: "CPP", disabled: false },
+    { name: "CPP11", disabled: false },
+    { name: "CPP17", disabled: false },
+    { name: "JAVA", disabled: false },
+    { name: "PYTHON3", disabled: false },
+    { name: "JavaScript", disabled: true },
+    { name: "C#", disabled: true },
+    { name: "Ruby", disabled: true },
+    { name: "Rust", disabled: true },
   ],
-  themeNow: 'eclipse',
-  theme: ['eclipse', 'one_dark'],
+  themeNow: "eclipse",
+  theme: ["eclipse", "one_dark"],
   save() {
-    let text = ace.aceEditor.getValue()
-    if (text == '') {
+    let text = ace.aceEditor.getValue();
+    if (text == "") {
       proxy.elMessage({
-        message: '你的编辑器没有输入任何内容！',
-        type: 'warning',
-      })
-      return
+        message: "你的编辑器没有输入任何内容！",
+        type: "warning",
+      });
+      return;
     }
     //判断是否是竞赛题目，与普通题目分别存储
     if (!proxy.$route.query.CID) {
-      sessionStorage.setItem('pid' + problem.PID, text)
+      sessionStorage.setItem("pid" + problem.PID, text);
     } else {
-      sessionStorage.setItem('cpid' + problem.PID, text)
+      sessionStorage.setItem("cpid" + problem.PID, text);
     }
     proxy.elNotification({
-      message: '暂存成功，关闭浏览器后失效',
-      type: 'success',
+      message: "暂存成功，关闭浏览器后失效",
+      type: "success",
       offset: 100,
-    })
+    });
   },
-})
+});
 
 //获取题目信息
 async function getProblemInfo() {
-  loading.init()
-  loading.content = proxy.elLoading({ node: proxy.$refs.left })
+  loading.init();
+  loading.content = proxy.elLoading({ node: proxy.$refs.left });
   loading.performanceInfo = proxy.elLoading({
     node: proxy.$refs.demand,
-  })
+  });
 
   //检查题目url:id是否存在
   if (!proxy.$route.query.PID) {
-    loading.init()
-    return
+    loading.init();
+    return;
   }
-  problem.PID = proxy.$route.query.PID
+  problem.PID = proxy.$route.query.PID;
 
   //检查从竞赛跳转过来的题目是否存在cid 以及 pass
-  if (proxy.$route.query.CID) contest.CID = proxy.$route.query.CID
-  if (proxy.$route.query.Pass) contest.Pass = proxy.$route.query.Pass
+  if (proxy.$route.query.CID) contest.CID = proxy.$route.query.CID;
+  if (proxy.$route.query.Pass) contest.Pass = proxy.$route.query.Pass;
 
   //cid存在说明是从竞赛跳转来的题目,检查合理性
   if (contest.CID != null) {
     //说明不合理
     if ((await checkContest()) != 0) {
-      loading.init()
-      return
+      loading.init();
+      return;
     }
   }
 
   //获取题目
-  await proxy.$get('api/problem/' + problem.PID).then((res) => {
-    let data = res.data
+  await proxy.$get("api/problem/" + problem.PID).then((res) => {
+    let data = res.data;
     if (data.code == 0) {
-      // console.log(data);
-      problem.copy(data)
+      console.log(data);
+      problem.copy(data);
       let inputLength =
-        problem.SampleInput.split('\n').length < 12
-          ? problem.SampleInput.split('\n').length
-          : 12
+        problem.SampleInput.split("\n").length < 12
+          ? problem.SampleInput.split("\n").length
+          : 12;
       let outputLength =
-        problem.SampleOutput.split('\n').length < 12
-          ? problem.SampleOutput.split('\n').length
-          : 12
-      proxy.$refs.sampleInput.setAttribute('rows', inputLength)
-      proxy.$refs.sampleOutput.setAttribute('rows', outputLength)
-      notFound.value = false
+        problem.SampleOutput.split("\n").length < 12
+          ? problem.SampleOutput.split("\n").length
+          : 12;
+      proxy.$refs.sampleInput.setAttribute("rows", inputLength);
+      proxy.$refs.sampleOutput.setAttribute("rows", outputLength);
+      notFound.value = false;
     }
-    proxy.codeProcessor(data.code)
-  })
+    proxy.codeProcessor(data.code);
+  });
 
-  loading.init()
+  loading.init();
 }
 
 //检查竞赛跳转是否合理
 async function checkContest() {
-  let ret = -1
+  let ret = -1;
   await proxy
-    .$get('api/contest/' + contest.CID + '?Pass=' + contest.Pass)
+    .$get("api/contest/" + contest.CID + "?Pass=" + contest.Pass)
     .then((res) => {
-      let data = res.data
+      let data = res.data;
       if (data.code == 0) {
-        ret = 0
-        console.log(data)
+        ret = 0;
+        console.log(data);
 
         //判断题目在不在该竞赛中
-        let flag = false
-        let tempProblemSequence = data.Problems.split(',')
+        let flag = false;
+        let tempProblemSequence = data.Problems.split(",");
         for (let i in tempProblemSequence) {
           if (tempProblemSequence[i] == problem.PID) {
-            flag = true
-            break
+            flag = true;
+            break;
           }
         }
         if (!flag) {
-          ret = -1
+          ret = -1;
           proxy.elMessage({
-            message: '该题不在竞赛中！',
-            type: 'warning',
-          })
+            message: "该题不在竞赛中！",
+            type: "warning",
+          });
         }
-        contest.copy(data)
-        contest.isContestProblem = true
+        contest.copy(data);
+        contest.isContestProblem = true;
       } else {
         if (contest.Pass != null) {
           proxy.elMessage({
-            message: '竞赛不存在或者密码错误！',
-            type: 'warning',
-          })
+            message: "竞赛不存在或者密码错误！",
+            type: "warning",
+          });
         } else {
-          proxy.codeProcessor(data.code)
+          proxy.codeProcessor(data.code);
         }
       }
-    })
+    });
 
-  return ret
+  return ret;
 }
 
 //竞赛模式跳转题目
-function goToProblem(PID) {
-  let Pass = null
-  if (proxy.$route.query.Pass) Pass = proxy.$route.query.Pass
+function goToProblem(PID: number) {
+  let Pass = null;
+  if (proxy.$route.query.Pass) Pass = proxy.$route.query.Pass;
 
   proxy.$router.replace({
-    path: '/Problem',
+    path: "/Problem",
     query: {
       PID,
       CID: contest.CID,
       Pass,
     },
-  })
+  });
 
   loading.contestProblemBox = proxy.elLoading({
     node: proxy.$refs.contestInfo,
-  })
+  });
 
   setTimeout(() => {
-    loading.init()
-    store.commit('config/reload')
-  }, 500)
+    loading.init();
+    store.commit("config/reload");
+  }, 500);
 }
 
 //改变语言模式
-function changeMode(val) {
+function changeMode(val: string) {
   switch (val) {
-    case 'C':
-      ace.aceEditor.session.setMode('ace/mode/c_cpp')
-      aceConfig.lang = store.state.constVal.SUBMIT_LANG_C
-      break
-    case 'CPP':
-      ace.aceEditor.session.setMode('ace/mode/c_cpp')
-      aceConfig.lang = store.state.constVal.SUBMIT_LANG_CPP
-      break
-    case 'CPP11':
-      ace.aceEditor.session.setMode('ace/mode/c_cpp')
-      aceConfig.lang = store.state.constVal.SUBMIT_LANG_CPP11
-      break
-    case 'CPP17':
-      ace.aceEditor.session.setMode('ace/mode/c_cpp')
-      aceConfig.lang = store.state.constVal.SUBMIT_LANG_CPP17
-      break
-    case 'JAVA':
-      ace.aceEditor.session.setMode('ace/mode/java')
-      aceConfig.lang = store.state.constVal.SUBMIT_LANG_JAVA
-      break
-    case 'PYTHON3':
-      ace.aceEditor.session.setMode('ace/mode/python')
-      aceConfig.lang = store.state.constVal.SUBMIT_LANG_PYTHON3
-      break
+    case "C":
+      ace.aceEditor.session.setMode("ace/mode/c_cpp");
+      aceConfig.lang = store.state.constVal.SUBMIT_LANG_C;
+      break;
+    case "CPP":
+      ace.aceEditor.session.setMode("ace/mode/c_cpp");
+      aceConfig.lang = store.state.constVal.SUBMIT_LANG_CPP;
+      break;
+    case "CPP11":
+      ace.aceEditor.session.setMode("ace/mode/c_cpp");
+      aceConfig.lang = store.state.constVal.SUBMIT_LANG_CPP11;
+      break;
+    case "CPP17":
+      ace.aceEditor.session.setMode("ace/mode/c_cpp");
+      aceConfig.lang = store.state.constVal.SUBMIT_LANG_CPP17;
+      break;
+    case "JAVA":
+      ace.aceEditor.session.setMode("ace/mode/java");
+      aceConfig.lang = store.state.constVal.SUBMIT_LANG_JAVA;
+      break;
+    case "PYTHON3":
+      ace.aceEditor.session.setMode("ace/mode/python");
+      aceConfig.lang = store.state.constVal.SUBMIT_LANG_PYTHON3;
+      break;
     default:
-      ace.aceEditor.session.setMode('ace/mode/c_cpp')
-      aceConfig.lang = store.state.constVal.SUBMIT_LANG_C
-      break
+      ace.aceEditor.session.setMode("ace/mode/c_cpp");
+      aceConfig.lang = store.state.constVal.SUBMIT_LANG_C;
+      break;
   }
 }
 
 var theme = computed(() => {
-  return store.state.themeSwitch.theme
-})
+  return store.state.themeSwitch.theme;
+});
 
 watch(
   theme,
   (newVal, oldVal) => {
     if (newVal == 1) {
-      ace.aceEditor.setTheme('ace/theme/eclipse')
+      ace.aceEditor.setTheme("ace/theme/eclipse");
     } else {
-      ace.aceEditor.setTheme('ace/theme/one_dark')
+      ace.aceEditor.setTheme("ace/theme/one_dark");
     }
   },
   { deep: true }
-)
+);
 
 //复制到剪切板
 function copyText(e: any, i: number): void {
   if (i == 1) {
-    navigator.clipboard.writeText(problem.sample_input).then(() => {})
+    navigator.clipboard.writeText(problem.sample_input).then(() => {});
   } else {
-    navigator.clipboard.writeText(problem.sample_output).then(() => {})
+    navigator.clipboard.writeText(problem.sample_output).then(() => {});
   }
 }
 
 type submitType = {
-  time: any
-  isInLongTouch: boolean
-  process: number
-  [item: string]: any
-}
+  time: any;
+  isInLongTouch: boolean;
+  process: number;
+  [item: string]: any;
+};
 var submit = reactive<submitType>({
   time: null, //定时器任务
   isInLongTouch: false,
   process: 0, //进度条进度
   middleware() {
     if (!this.isInLongTouch) {
-      this.submitTouchEnd()
-      return
+      this.submitTouchEnd();
+      return;
     } else {
-      clearTimeout(this.time)
+      clearTimeout(this.time);
       //进度条结束
       if (this.process >= 100) {
-        this.submitTouchEnd()
-        this.submit()
+        this.submitTouchEnd();
+        this.submit();
       }
       this.time = setTimeout(() => {
-        this.process += 3
-        proxy.$refs.submitCover.style.width = this.process + '%'
-        this.middleware()
-      }, 15)
+        this.process += 3;
+        proxy.$refs.submitCover.style.width = this.process + "%";
+        this.middleware();
+      }, 15);
     }
   },
   submitTouchStart() {
-    this.isInLongTouch = true
-    this.process = 0
+    this.isInLongTouch = true;
+    this.process = 0;
     //设置点击事件计时器
     this.time = setTimeout(() => {
-      this.middleware()
-    }, 15)
+      this.middleware();
+    }, 15);
   },
   submitTouchEnd() {
-    proxy.$refs.submitCover.style.width = 0 + '%'
-    this.isInLongTouch = false
-    clearTimeout(this.time)
-    this.process = 0
+    proxy.$refs.submitCover.style.width = 0 + "%";
+    this.isInLongTouch = false;
+    clearTimeout(this.time);
+    this.process = 0;
   },
   submit() {
     if (!store.state.userData.isLogin) {
-      proxy.elMessage({ message: '请先登录!', type: 'warning' })
-      return
+      proxy.elMessage({ message: "请先登录!", type: "warning" });
+      return;
     }
-    let UID = store.state.userData.UID
-    if (UID == '') {
+    let UID = store.state.userData.UID;
+    if (UID == "") {
       proxy.elMessage({
-        message: '你的登录状态不正常!请刷新或重启浏览器',
-        type: 'error',
-      })
-      return
+        message: "你的登录状态不正常!请刷新或重启浏览器",
+        type: "error",
+      });
+      return;
     }
-    if (ace.aceEditor.getValue() == '') {
+    if (ace.aceEditor.getValue() == "") {
       proxy.elMessage({
-        message: '你的编辑器没有输入任何内容！',
-        type: 'warning',
-      })
-      return
+        message: "你的编辑器没有输入任何内容！",
+        type: "warning",
+      });
+      return;
     }
     proxy.$axios
-      .post('api/submit/commit/', {
+      .post("api/submit/commit/", {
         PID: problem.PID - 0,
         UID: UID,
         CID: -1,
@@ -635,45 +644,45 @@ var submit = reactive<submitType>({
         Lang: aceConfig.lang,
       })
       .then((res) => {
-        let data = res.data
+        let data = res.data;
         // console.log(res);
         if (data.code == 0) {
           // console.log(data);
           proxy.elMessage({
-            message: '提交成功',
-            type: 'success',
-          })
+            message: "提交成功",
+            type: "success",
+          });
         } else {
-          proxy.codeProcessor(data.code)
+          proxy.codeProcessor(data.code);
         }
-      })
+      });
     proxy.elNotification({
-      message: '提交成功',
-      type: 'success',
-    })
+      message: "提交成功",
+      type: "success",
+    });
   },
-})
+});
 
 onMounted(() => {
   //获取题目
-  getProblemInfo()
+  getProblemInfo();
   nextTick(() => {
     //初始化代码编辑器
-    ace.aceEditor = getAceBuilds({ node: proxy.$refs.ace })
+    ace.aceEditor = getAceBuilds({ node: proxy.$refs.ace });
     if (store.state.themeSwitch.theme == 2)
-      ace.aceEditor.setTheme('ace/theme/one_dark')
+      ace.aceEditor.setTheme("ace/theme/one_dark");
     //获取缓存的题目数据
     if (!proxy.$route.query.CID && proxy.$route.query.PID) {
-      let text = sessionStorage.getItem('pid' + proxy.$route.query.PID)
-      if (text != null) ace.aceEditor.setValue(text)
+      let text = sessionStorage.getItem("pid" + proxy.$route.query.PID);
+      if (text != null) ace.aceEditor.setValue(text);
     }
     //如果是竞赛跳转
     else if (proxy.$route.query.CID && proxy.$route.query.PID) {
-      let text = sessionStorage.getItem('cpid' + proxy.$route.query.PID)
-      if (text != null) ace.aceEditor.setValue(text)
+      let text = sessionStorage.getItem("cpid" + proxy.$route.query.PID);
+      if (text != null) ace.aceEditor.setValue(text);
     }
-  })
-})
+  });
+});
 </script>
 
 <style scoped lang="scss">
@@ -695,12 +704,12 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     width: calc(100% - $problem_rightWidth - $modelDistance);
-    @include fill_color('fill2');
+    @include fill_color("fill2");
     border-radius: 15px;
 
     .title {
       font-size: $fontSize12;
-      @include font_color('font1');
+      @include font_color("font1");
       text-align: center;
       padding: $modelDistance 0;
     }
@@ -709,14 +718,14 @@ onMounted(() => {
       box-sizing: border-box;
       padding: $modelDistance 0 $modelDistanceMini 20px;
       font-size: $fontSize7;
-      @include font_color('font1');
+      @include font_color("font1");
     }
 
     .text {
       box-sizing: border-box;
       padding: 0 30px;
       font-size: $fontSize6;
-      @include font_color('font2');
+      @include font_color("font2");
     }
 
     .textarea {
@@ -726,8 +735,8 @@ onMounted(() => {
       padding: 15px;
       line-height: $fontSize6;
       font-size: $fontSize6;
-      @include font_color('font1');
-      @include fill_color('fill3');
+      @include font_color("font1");
+      @include fill_color("fill3");
       resize: none;
       border-radius: 12px;
       overflow: visible;
@@ -740,7 +749,7 @@ onMounted(() => {
       overflow: hidden;
       border-radius: 8px;
       outline: 2px solid;
-      @include outline_color('border2');
+      @include outline_color("border2");
       box-sizing: border-box;
       scrollbar-base-color: #fefefe;
     }
@@ -763,7 +772,7 @@ onMounted(() => {
       display: flex;
       flex-direction: column;
       align-items: center;
-      @include fill_color('fill2');
+      @include fill_color("fill2");
       border-radius: 15px;
     }
 
@@ -779,27 +788,27 @@ onMounted(() => {
         width: 100%;
         text-align: center;
         line-height: 40px;
-        @include font_color('font1');
+        @include font_color("font1");
         font-size: $fontSize5;
         border-radius: 10px;
 
         &:hover {
-          @include font_color('fill12');
-          @include fill_color('fill16');
+          @include font_color("fill12");
+          @include fill_color("fill16");
         }
       }
 
       .nowProblem {
         box-sizing: border-box;
-        @include border(2px, dotted, 'fill11');
-        @include fill_color('fill15');
+        @include border(2px, dotted, "fill11");
+        @include fill_color("fill15");
       }
     }
 
     .demand > div {
       margin: 4px 0;
       font-size: $fontSize5;
-      @include font_color('font1');
+      @include font_color("font1");
       letter-spacing: 1px;
       display: flex;
       align-items: center;
@@ -812,12 +821,12 @@ onMounted(() => {
 
     .tags {
       margin-bottom: $modelDistance;
-      @include fill_color('fill2');
+      @include fill_color("fill2");
       border-radius: 15px;
       padding: 10px 15px;
     }
     .function {
-      @include font_color('font1');
+      @include font_color("font1");
 
       > div {
         position: relative;
@@ -831,12 +840,12 @@ onMounted(() => {
         display: flex;
         align-items: center;
         justify-content: center;
-        @include box_shadow(0, 0, 2px, 1px, 'border2');
+        @include box_shadow(0, 0, 2px, 1px, "border2");
         transition-duration: 200ms;
 
         &:hover {
-          @include box_shadow(0, 0, 2px, 1px, 'fill12');
-          @include fill_color('fill16');
+          @include box_shadow(0, 0, 2px, 1px, "fill12");
+          @include fill_color("fill16");
         }
       }
     }

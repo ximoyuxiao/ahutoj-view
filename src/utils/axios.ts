@@ -1,8 +1,10 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { App } from "vue";
+import { useStore } from "vuex";
 
 //默认请求地址
 axios.defaults.baseURL = "http://127.0.0.1:4212/";
+// axios.defaults.baseURL = "http://www.channelcz.top:1234/";
 
 // http request拦截器
 axios.interceptors.request.use(
@@ -17,23 +19,28 @@ axios.interceptors.request.use(
 		return Promise.reject(error);
 	}
 );
+
 // http respense拦截器
 axios.interceptors.response.use(
 	(res) => {
 		return res;
 	},
 	(err) => {
-		console.log(err);
+		// console.log(err);
+		let store = useStore();
+
 		return err.response;
 	}
 );
 
+//请求头
 const contentType = [
 	"application/json; charset=UTF-8",
 	"application/json; charset=UTF-8",
 	"multipart/form-data",
 ];
 
+//自定义封装get post
 export default {
 	install: (app: App<Element>) => {
 		app.config.globalProperties.$axios = axios;
@@ -45,7 +52,7 @@ export default {
 		) {
 			return axios.get(url, {
 				params,
-				headers: { "content-type": contentType[content] },
+				headers: { "Content-Type": contentType[content] },
 			});
 		};
 		//封装post请求
@@ -55,7 +62,7 @@ export default {
 			content: number = 0
 		) {
 			return axios.post(url, data, {
-				headers: { "content-type": contentType[content] },
+				headers: { "Content-Type": contentType[content] },
 			});
 		};
 	},

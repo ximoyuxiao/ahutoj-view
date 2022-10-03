@@ -4,6 +4,7 @@ export default {
 	namespaced: true,
 	state: {
 		reload: false,
+		shouldPing: false,
 	},
 	mutations: {
 		reload(state: any) {
@@ -11,6 +12,14 @@ export default {
 			nextTick(() => {
 				state.reload = false;
 			});
+		},
+
+		needPing(state: any) {
+			state.shouldPing = true;
+		},
+
+		hasPing(state: any) {
+			state.shouldPing = false;
 		},
 	},
 };

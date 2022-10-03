@@ -13,6 +13,7 @@ import Admin from "../pages/Admin.vue";
 import ProblemEdit from "../components/Admin/ProblemEdit.vue";
 import AddProblem from "../components/Admin/ProblemEditChildren/AddProblem.vue";
 import UpdateProblem from "../components/Admin/ProblemEditChildren/UpdateProblem.vue";
+import EditProblemJudgeFile from "../components/Admin/ProblemEditChildren/EditProblemJudgeFile.vue";
 import ContestEdit from "../components/Admin/ContestEdit.vue";
 import AddContest from "../components/Admin/ContestEditChildren/AddContest.vue";
 import UpdateContest from "../components/Admin/ContestEditChildren/UpdateContest.vue";
@@ -90,6 +91,10 @@ const router = createRouter({
 						{
 							path: "UpdateProblem",
 							component: UpdateProblem,
+						},
+						{
+							path: "EditProblemJudgeFile",
+							component: EditProblemJudgeFile,
 						},
 					],
 				},
