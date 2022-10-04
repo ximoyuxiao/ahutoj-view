@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <form class="login">
     <div class="close">
       <div class="ahutFlag">
         AHUT OJ&nbsp;&nbsp;登录
@@ -20,28 +20,23 @@
     <div class="username">
       <input
         class="loginInput"
-        name="username"
         type="text"
         autocomplete="off"
         v-model="loginInfo.UID"
       />
-      <label
-        class="loginLabel"
-        for="username"
-      >账号</label>
+      <label class="loginLabel">
+        账号
+      </label>
     </div>
     <div class="password">
       <input
         class="loginInput"
-        name="password"
         type="password"
         v-model="loginInfo.Pass"
+        autocomplete="off"
         @keyup.enter="login"
       />
-      <label
-        class="loginLabel"
-        for="password"
-      >密码</label>
+      <label class="loginLabel">密码</label>
     </div>
     <div
       class="save"
@@ -66,8 +61,10 @@
     <div
       class="confirm cursor_pointer"
       @click="login"
-    >确 认</div>
-  </div>
+    >
+      确 认
+    </div>
+  </form>
 </template>
 
 <script lang="ts" setup>
@@ -185,10 +182,10 @@ watch(propsChange, (nv, ov) => {}, {
     position: absolute;
     font-size: $fontSize8;
     @include font_color("font3");
-    transition-duration: 400ms;
+    transition-duration: 600ms;
     top: 9px;
     left: 50px;
-    border-radius: 10px;
+    border-radius: 4px;
 
     &:focus {
       @include border_color("fill12");
@@ -207,10 +204,11 @@ watch(propsChange, (nv, ov) => {}, {
     transition-duration: 300ms;
 
     &:focus + .loginLabel {
-      transform: translateY(-18px);
       @include font_color("fill11");
-      @include fill_color("fill3");
-      font-size: $fontSize6;
+    }
+
+    &:focus {
+      @include outline_color("fill13");
     }
   }
 

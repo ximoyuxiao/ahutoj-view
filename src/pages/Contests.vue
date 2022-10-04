@@ -180,10 +180,10 @@ function getContests() {
   //同步服务器时间
   proxy.getServerTime().then((res) => {
     let now = Date.now();
-    if (res.time == null || Math.abs(res.time * 1000 - now) < 1500) {
+    if (res.time == null || Math.abs(res.time - now) < 1500) {
       return;
     }
-    config.serverTime = res.time * 1000;
+    config.serverTime = res.time;
   });
 }
 

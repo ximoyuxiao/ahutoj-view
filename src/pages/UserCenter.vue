@@ -184,6 +184,7 @@
               <el-input
                 v-model="changePassword.OldPwd"
                 placeholder="输入旧密码"
+                autocomplete="off"
               />
             </div>
             <div>
@@ -191,6 +192,7 @@
               <el-input
                 v-model="changePassword.Pwd"
                 placeholder="输入新密码"
+                autocomplete="off"
                 type="password"
                 show-password
               />
@@ -200,6 +202,7 @@
               <el-input
                 v-model="changePassword.PwdAgain"
                 placeholder="重复一次新密码"
+                autocomplete="off"
                 type="password"
                 show-password
               />

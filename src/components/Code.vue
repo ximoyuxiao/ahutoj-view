@@ -14,11 +14,12 @@
         <div style="width: 120px">用时</div>
         <div style="width: 120px">内存</div>
         <div style="width: 180px">提交时间</div>
+        <div style="width: 140px">提交ID</div>
       </div>
       <div class="item">
         <div
           class="PID cursor_pointer"
-          style="width: 120px; color: var(--font_color32)"
+          style="width: 120px;  "
           @click="goToProblem(submit.PID)"
         >
           {{ submit.PID }}
@@ -52,6 +53,12 @@
           style="width: 180px"
         >
           {{ proxy.Utils.TimeTools.timestampToTime(submit.SubmitTime) }}
+        </div>
+        <div
+          class="SID"
+          style="width: 140px"
+        >
+          {{ submit.SID }}
         </div>
       </div>
       <div class="title">代码</div>

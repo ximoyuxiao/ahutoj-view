@@ -11,6 +11,7 @@
         <div style="width: 100px">用时</div>
         <div style="width: 100px">内存</div>
         <div style="width: 180px">提交时间</div>
+        <div style="width: 140px">提交ID</div>
       </div>
       <div
         class="item"
@@ -19,7 +20,7 @@
       >
         <div
           class="PID cursor_pointer"
-          style="width: 120px; color: var(--font_color32); margin-left: 10px"
+          style="width: 120px"
           @click="goToProblem(item.PID)"
         >
           {{ item.PID }}
@@ -54,6 +55,12 @@
           style="width: 180px"
         >
           {{ proxy.Utils.TimeTools.timestampToTime(item.SubmitTime) }}
+        </div>
+        <div
+          class="SID"
+          style="width: 140px"
+        >
+          {{ item.SID }}
         </div>
       </div>
       <div class="pagination">
@@ -233,11 +240,8 @@ onMounted(() => {
         border-radius: 6px;
       }
 
-      div {
-        //PID 突出显示
-        &:nth-child(1) {
-          @include font_color("fill12");
-        }
+      .PID {
+        @include font_color("fill12");
       }
     }
 

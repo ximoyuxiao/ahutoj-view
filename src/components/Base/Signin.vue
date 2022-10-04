@@ -1,5 +1,5 @@
 <template>
-  <div class="signin">
+  <form class="signin">
     <div class="close">
       <div class="ahutFlag">
         AHUT OJ&nbsp;&nbsp;注册
@@ -20,7 +20,7 @@
     <div class="username">
       <input
         class="loginInput"
-        name="username"
+        name="UID"
         type="text"
         autocomplete="off"
         :onkeyup="signinInfo.UIDChecker"
@@ -29,7 +29,7 @@
       />
       <label
         class="loginLabel"
-        for="username"
+        for="UID"
       >
         账号
       </label>
@@ -58,6 +58,7 @@
         type="password"
         :onkeyup="signinInfo.PassChecker"
         maxlength="30"
+        autocomplete="off"
         v-model="signinInfo.Pass"
       />
       <label
@@ -73,6 +74,7 @@
         name="password"
         type="password"
         :onkeyup="signinInfo.PassChecker"
+        autocomplete="off"
         maxlength="30"
         v-model="signinInfo.PassAgain"
       />
@@ -116,134 +118,139 @@
     <div
       class="confirm cursor_pointer"
       @click="signin"
-    >确 认</div>
-  </div>
+    >
+      确 认
+    </div>
+  </form>
 </template>
 
 <script lang="ts" setup>
-import { reactive, getCurrentInstance, computed, watch } from 'vue'
-import { useStore } from 'vuex'
-const { proxy } = getCurrentInstance() as any
-const store = useStore()
+import { reactive, getCurrentInstance, computed, watch, onMounted } from "vue";
+import { useStore } from "vuex";
+const { proxy } = getCurrentInstance() as any;
+const store = useStore();
 type propsType = {
-  close?: Function
-  login?: Function
-}
+  close?: Function;
+  login?: Function;
+};
 var props = withDefaults(defineProps<propsType>(), {
   close: () => {},
   login: () => {},
-})
+});
 
 //注册表单
 type signinInfoType = {
-  UID: string
-  UserName: string
-  Pass: string
-  PassAgain: string
-  Email: string
-  save: false
-  [item: string]: any
-}
+  UID: string;
+  UserName: string;
+  Pass: string;
+  PassAgain: string;
+  Email: string;
+  save: false;
+  [item: string]: any;
+};
 var signinInfo = reactive<signinInfoType>({
-  UID: '',
-  UserName: '',
-  Pass: '',
-  PassAgain: '',
-  Email: '',
+  UID: "",
+  UserName: "",
+  Pass: "",
+  PassAgain: "",
+  Email: "",
   save: false,
   init(): void {
-    this.UID = ''
-    this.UserName = ''
-    this.Pass = ''
-    this.PassAgain = ''
-    this.Email = ''
-    this.save = false
+    this.UID = "";
+    this.UserName = "";
+    this.Pass = "";
+    this.PassAgain = "";
+    this.Email = "";
+    this.save = false;
   },
   UIDChecker(): void {
-    signinInfo.UID = signinInfo.UID.replace(/[^\w_]/g, '')
+    signinInfo.UID = signinInfo.UID.replace(/[^\w_]/g, "");
   },
   UserNameChecker(): void {
-    signinInfo.UserName = signinInfo.UserName.replace(/[^\w\u4E00-\u9FA5]/g, '')
+    signinInfo.UserName = signinInfo.UserName.replace(
+      /[^\w\u4E00-\u9FA5]/g,
+      ""
+    );
   },
   PassChecker(): void {
-    signinInfo.Pass = signinInfo.Pass.replace(/[\u4E00-\u9FA5]/g, '')
-    signinInfo.PassAgain = signinInfo.PassAgain.replace(/[\u4E00-\u9FA5]/g, '')
+    signinInfo.Pass = signinInfo.Pass.replace(/[\u4E00-\u9FA5]/g, "");
+    signinInfo.PassAgain = signinInfo.PassAgain.replace(/[\u4E00-\u9FA5]/g, "");
   },
   EmailChecker(): boolean {
     if (
       signinInfo.Email.match(
-        '^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(.[a-zA-Z0-9_-]+)+$'
+        "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(.[a-zA-Z0-9_-]+)+$"
       )
     )
-      return true
-    else return false
+      return true;
+    else return false;
   },
-})
+});
 
 //注册
 function signin() {
   if (
-    signinInfo.UID == '' ||
-    signinInfo.UserName == '' ||
-    signinInfo.Pass == '' ||
-    signinInfo.PassAgain == '' ||
-    signinInfo.Email == ''
+    signinInfo.UID == "" ||
+    signinInfo.UserName == "" ||
+    signinInfo.Pass == "" ||
+    signinInfo.PassAgain == "" ||
+    signinInfo.Email == ""
   ) {
-    proxy.codeProcessor('请填写完整', 'warning')
-    return
+    proxy.codeProcessor("请填写完整", "warning");
+    return;
   }
   if (signinInfo.Pass != signinInfo.PassAgain) {
-    proxy.codeProcessor('两次密码不一致', 'warning')
-    return
+    proxy.codeProcessor("两次密码不一致", "warning");
+    return;
   }
   if (signinInfo.UID.length < 5) {
-    proxy.codeProcessor('账号至少由5位数字、字母或下划线构成', 'warning')
-    return
+    proxy.codeProcessor("账号至少由5位数字、字母或下划线构成", "warning");
+    return;
   }
   if (signinInfo.Pass.length < 6) {
-    proxy.codeProcessor('密码至少由6位数字、字母或符号构成', 'warning')
-    return
+    proxy.codeProcessor("密码至少由6位数字、字母或符号构成", "warning");
+    return;
   }
   if (!signinInfo.EmailChecker()) {
-    proxy.codeProcessor('邮箱格式有误', 'warning')
-    return
+    proxy.codeProcessor("邮箱格式有误", "warning");
+    return;
   }
-  localStorage.clear()
-  sessionStorage.clear()
+  localStorage.clear();
+  sessionStorage.clear();
   proxy.$axios
-    .post('api/auth/register/', {
+    .post("api/auth/register/", {
       UID: signinInfo.UID,
       UserName: signinInfo.UserName,
       Pass: signinInfo.Pass,
       Email: signinInfo.Email,
     })
     .then((res: any) => {
-      let data = res.data
+      let data = res.data;
       if (data.code == 0) {
-        console.log(data)
+        console.log(data);
         //token更新
-        localStorage.setItem('ahutOjToken', data.Token)
-        localStorage.setItem('ahutOjSaveLoginStatus', signinInfo.save + '')
-        localStorage.setItem('ahutOjUserUid', signinInfo.UID)
+        localStorage.setItem("ahutOjToken", data.Token);
+        localStorage.setItem("ahutOjSaveLoginStatus", signinInfo.save + "");
+        localStorage.setItem("ahutOjUserUid", signinInfo.UID);
         //vuex数据同步
-        data.UID = signinInfo.UID
-        data.UserName = signinInfo.UserName
-        store.commit('userData/login', data)
-        store.commit('userData/synchronizePermission', 3)
-        store.commit('userData/sessionUserInfo')
-        props.close()
+        data.UID = signinInfo.UID;
+        data.UserName = signinInfo.UserName;
+        store.commit("userData/login", data);
+        store.commit("userData/synchronizePermission", 3);
+        store.commit("userData/sessionUserInfo");
+        props.close();
       }
-      proxy.codeProcessor(data.code)
-    })
+      proxy.codeProcessor(data.code);
+    });
 }
 
 var propsChange = computed(() => {
-  return props
-})
+  return props;
+});
 
 watch(propsChange, (nv, ov) => {}, {
   deep: true,
-})
+});
 </script>
 
 <style lang="scss">
@@ -253,7 +260,7 @@ watch(propsChange, (nv, ov) => {}, {
   left: calc(50vw - 250px);
   height: 500px;
   width: 500px;
-  @include fill_color('fill2');
+  @include fill_color("fill2");
   border-radius: 25px;
   display: flex;
   flex-direction: column;
@@ -280,23 +287,23 @@ watch(propsChange, (nv, ov) => {}, {
       border-top-right-radius: 10px;
       border-bottom-right-radius: 10px;
       font-size: $fontSize6;
-      @include font_color('font1');
-      @include fill_color('fill12');
+      @include font_color("font1");
+      @include fill_color("fill12");
     }
   }
 
   .loginLabel {
     position: absolute;
     font-size: $fontSize8;
-    @include font_color('font3');
+    @include font_color("font3");
     transition-duration: 400ms;
     top: 9px;
     left: 50px;
     border-radius: 10px;
 
     &:focus {
-      @include border_color('fill12');
-      @include outline_color('fill12');
+      @include border_color("fill12");
+      @include outline_color("fill12");
     }
   }
 
@@ -306,15 +313,16 @@ watch(propsChange, (nv, ov) => {}, {
     box-sizing: border-box;
     border-radius: 10px;
     font-size: $fontSize8;
-    @include font_color('font1');
-    @include fill_color('fill4');
+    @include font_color("font1");
+    @include fill_color("fill4");
     transition-duration: 300ms;
 
     &:focus + .loginLabel {
-      transform: translateY(-18px);
-      @include font_color('fill11');
-      @include fill_color('fill3');
-      font-size: $fontSize6;
+      @include font_color("fill11");
+    }
+
+    &:focus {
+      @include outline_color("fill13");
     }
   }
 
@@ -322,7 +330,7 @@ watch(propsChange, (nv, ov) => {}, {
     display: flex;
     justify-items: center;
     margin: 0 40px;
-    @include font_color('font1');
+    @include font_color("font1");
 
     input {
       margin: 0 5px;
@@ -335,13 +343,13 @@ watch(propsChange, (nv, ov) => {}, {
     box-sizing: border-box;
     width: 100%;
     padding: 5px 40px;
-    @include font_color('font1');
+    @include font_color("font1");
   }
 
   .lostPassword,
   .toSignin,
   .toLogin {
-    @include font_color('fill11');
+    @include font_color("fill11");
   }
 
   .confirm {
@@ -352,13 +360,13 @@ watch(propsChange, (nv, ov) => {}, {
     padding: 5px 0;
     margin: 0 0 20px 40px;
     border-radius: 10px;
-    @include font_color('font6');
-    @include fill_color('fill12');
+    @include font_color("font6");
+    @include fill_color("fill12");
     transition-duration: 100ms;
 
     &:hover {
-      @include fill_color('fill13');
-      @include box_shadow(0, 0, 2px, 2px, 'fill12');
+      @include fill_color("fill13");
+      @include box_shadow(0, 0, 2px, 2px, "fill12");
     }
   }
 }

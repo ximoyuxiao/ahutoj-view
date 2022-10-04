@@ -429,7 +429,7 @@ async function getProblemInfo() {
   await proxy.$get("api/problem/" + problem.PID).then((res) => {
     let data = res.data;
     if (data.code == 0) {
-      proxy.$log(data);
+      // proxy.$log(data);
       problem.copy(data);
       let inputLength =
         problem.SampleInput.split("\n").length < 12
@@ -458,7 +458,7 @@ async function checkContest() {
       let data = res.data;
       if (data.code == 0) {
         ret = 0;
-        proxy.$log(data);
+        // proxy.$log(data);
 
         //判断题目在不在该竞赛中
         let flag = false;
@@ -638,11 +638,11 @@ var submit = reactive<submitType>({
       });
       return;
     }
-    proxy.$axios
-      .post("api/submit/commit/", {
-        PID: problem.PID - 0,
+    proxy
+      .$post("api/submit/commit/", {
+        PID: Number(problem.PID),
         UID: UID,
-        CID: -1,
+        CID: contest.CID ? Number(contest.CID) : -1,
         Source: ace.aceEditor.getValue(),
         Lang: aceConfig.lang,
       })
@@ -650,17 +650,13 @@ var submit = reactive<submitType>({
         let data = res.data;
         // proxy.$log(res);
         if (data.code == 0) {
-          proxy.elMessage({
+          proxy.elNotification({
             message: "提交成功",
             type: "success",
           });
         }
         proxy.codeProcessor(data.code);
       });
-    proxy.elNotification({
-      message: "提交成功",
-      type: "success",
-    });
   },
 });
 

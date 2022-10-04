@@ -273,43 +273,42 @@ async function getContestById() {
     loading.init();
     return;
   }
-  contest.CID = proxy.$route.query.CID;
-  if (
-    proxy.$route.query.Pass != null ||
-    typeof proxy.$route.query.Pass == "undefined"
-  )
-    contest.Pass = proxy.$route.query.Pass;
 
-  await proxy.$axios
-    .get("api/contest/" + contest.CID + "?Pass=" + contest.Pass)
-    .then((res) => {
-      let data = res.data;
-      if (data.code == 0) {
-        // proxy.$log(data);
-        contest.copy(data);
-        notFound.value = false;
-      }
-      if (data.code == 2000) {
-        proxy.$router.push({
-          path: "/Contests",
-        });
-        proxy.elMessage({
-          message: "竞赛密码错误！",
-          type: "warning",
-        });
-      } else {
-        proxy.codeProcessor(data.code);
-      }
-    });
+  let params: { [item: string]: any } = {};
+  contest.CID = proxy.$route.query.CID;
+  if (proxy.$route.query.Pass) {
+    contest.Pass = proxy.$route.query.Pass;
+    params.Pass = proxy.$route.query.Pass;
+  }
+
+  await proxy.$get("api/contest/" + contest.CID, params).then((res) => {
+    let data = res.data;
+    if (data.code == 0) {
+      // proxy.$log(data);
+      contest.copy(data);
+      notFound.value = false;
+    }
+    if (data.code == 2000) {
+      proxy.$router.push({
+        path: "/Contests",
+      });
+      proxy.elMessage({
+        message: "竞赛密码错误！",
+        type: "warning",
+      });
+    } else {
+      proxy.codeProcessor(data.code);
+    }
+  });
 
   loading.init();
   await proxy.getServerTime().then((res: any) => {
     let now = Date.now();
-    if (res.time == null || Math.abs(res.time * 1000 - now) < 1500) {
+    if (res.time == null || Math.abs(res.time - now) < 1500) {
       timePercent.begin();
       return;
     }
-    timePercent.timeDistance = now - res.time * 1000;
+    timePercent.timeDistance = now - res.time;
     timePercent.begin();
   });
 }
@@ -386,8 +385,8 @@ onUnmounted(() => {
 
     .status {
       margin-top: 20px;
-      font-size: var(--FontSize4);
-      color: var(--font_color2);
+      font-size: $fontSize4;
+      @include font_color("font2");
       display: flex;
       align-items: center;
 
