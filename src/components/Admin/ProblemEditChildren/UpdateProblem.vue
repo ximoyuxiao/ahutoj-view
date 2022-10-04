@@ -165,6 +165,7 @@ import { getCurrentInstance, reactive } from "vue";
 import { ElMessageBox } from "element-plus";
 
 const { proxy } = getCurrentInstance() as any;
+
 //题目题号搜索功能
 var search = reactive({
   PID: 0,

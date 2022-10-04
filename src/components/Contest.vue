@@ -121,8 +121,10 @@ import { useStore } from "vuex";
 const { proxy } = getCurrentInstance() as any;
 const store = useStore();
 
+//未找到
 var notFound = ref(true);
 
+//加载
 var loading = reactive({
   contestInfo: null,
   problemList: null,
@@ -138,6 +140,7 @@ var loading = reactive({
   },
 });
 
+//比赛信息
 type contestType = {
   Data: { PID: number; Title: string; ACNum: number; SubmitNum: number }[];
   BeginTime: number;
@@ -194,6 +197,7 @@ var contest = reactive<contestType>({
   },
 });
 
+//时间进度条
 type timePercentType = {
   status: number;
   percent: number;
@@ -256,6 +260,7 @@ var timePercent = reactive<timePercentType>({
   },
 });
 
+//获取竞赛信息
 async function getContestById() {
   loading.init();
   loading.contestInfo = proxy.elLoading({
@@ -285,6 +290,9 @@ async function getContestById() {
         notFound.value = false;
       }
       if (data.code == 2000) {
+        proxy.$router.push({
+          path: "/Contests",
+        });
         proxy.elMessage({
           message: "竞赛密码错误！",
           type: "warning",
