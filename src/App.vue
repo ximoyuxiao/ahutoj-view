@@ -66,7 +66,7 @@ var shouldPing = computed(() => {
 });
 
 watch(shouldPing, (newVal, oldVal) => {
-  console.log(newVal, oldVal);
+  proxy.$log(newVal, oldVal);
 });
 
 onMounted(() => {

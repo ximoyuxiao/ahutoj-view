@@ -1,7 +1,11 @@
 import { ElMessage } from "element-plus";
+import { stringify } from "querystring";
 
 type codeType = "success" | "warning" | "info" | "error";
-export default function codeProcessor(code: number, type: codeType) {
+export default function codeProcessor(
+	code: number | null | undefined,
+	type: codeType
+) {
 	if (code == 0 || code == 200) return;
 	switch (code) {
 		case 101:
@@ -96,7 +100,7 @@ export default function codeProcessor(code: number, type: codeType) {
 			break;
 		default:
 			ElMessage({
-				message: code.toString(),
+				message: String(code),
 				type: "info",
 			});
 	}

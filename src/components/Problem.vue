@@ -429,7 +429,7 @@ async function getProblemInfo() {
   await proxy.$get("api/problem/" + problem.PID).then((res) => {
     let data = res.data;
     if (data.code == 0) {
-      console.log(data);
+      proxy.$log(data);
       problem.copy(data);
       let inputLength =
         problem.SampleInput.split("\n").length < 12
@@ -458,7 +458,7 @@ async function checkContest() {
       let data = res.data;
       if (data.code == 0) {
         ret = 0;
-        console.log(data);
+        proxy.$log(data);
 
         //判断题目在不在该竞赛中
         let flag = false;
@@ -648,7 +648,7 @@ var submit = reactive<submitType>({
       })
       .then((res: any) => {
         let data = res.data;
-        // console.log(res);
+        // proxy.$log(res);
         if (data.code == 0) {
           proxy.elMessage({
             message: "提交成功",

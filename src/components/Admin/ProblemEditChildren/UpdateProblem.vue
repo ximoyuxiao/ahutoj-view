@@ -161,75 +161,75 @@
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance, reactive } from 'vue'
-import { ElMessageBox } from 'element-plus'
+import { getCurrentInstance, reactive } from "vue";
+import { ElMessageBox } from "element-plus";
 
-const { proxy } = getCurrentInstance() as any
+const { proxy } = getCurrentInstance() as any;
 //题目题号搜索功能
 var search = reactive({
   PID: 0,
   isSearched: false,
   onFocus() {
-    search.isSearched = false
+    search.isSearched = false;
   },
   getProblem(PID: number) {
     if (PID) {
-      search.PID = PID
+      search.PID = PID;
     }
-    proxy.$axios.get('api/problem/' + search.PID).then((res: any) => {
-      let data = res.data
+    proxy.$axios.get("api/problem/" + search.PID).then((res: any) => {
+      let data = res.data;
       if (data.code == 0) {
-        problem.copy(data)
-        search.isSearched = true
+        problem.copy(data);
+        search.isSearched = true;
       } else {
-        search.isSearched = false
+        search.isSearched = false;
       }
-      proxy.codeProcessor(data.code)
-    })
+      proxy.codeProcessor(data.code);
+    });
   },
-})
+});
 
 //题目数据
 var problem = reactive({
   PID: 0,
-  Title: '',
-  Description: '',
-  Input: '',
-  Output: '',
-  SampleInput: '',
-  SampleOutput: '',
+  Title: "",
+  Description: "",
+  Input: "",
+  Output: "",
+  SampleInput: "",
+  SampleOutput: "",
   LimitTime: 0,
   LimitMemory: 0,
-  Hit: '',
-  Label: '',
+  Hit: "",
+  Label: "",
   init() {
-    search.isSearched = false
-    this.PID = 0
-    this.Title = ''
-    this.Description = ''
-    this.Input = ''
-    this.Output = ''
-    this.SampleInput = ''
-    this.SampleOutput = ''
-    this.LimitTime = 0
-    this.LimitMemory = 0
-    this.Hit = ''
-    this.Label = ''
+    search.isSearched = false;
+    this.PID = 0;
+    this.Title = "";
+    this.Description = "";
+    this.Input = "";
+    this.Output = "";
+    this.SampleInput = "";
+    this.SampleOutput = "";
+    this.LimitTime = 0;
+    this.LimitMemory = 0;
+    this.Hit = "";
+    this.Label = "";
   },
   copy(data: any) {
-    problem.PID = data.PID
-    problem.Description = data.Description
-    problem.Hit = data.Hit
-    problem.Input = data.Input
-    problem.LimitMemory = data.LimitMemory
-    problem.LimitTime = data.LimitTime
-    problem.Output = data.Output
-    problem.SampleInput = data.SampleInput
-    problem.SampleOutput = data.SampleOutput
-    problem.Title = data.Title
-    problem.Label = data.Label
+    problem.PID = data.PID;
+    problem.Description = data.Description;
+    problem.Hit = data.Hit;
+    problem.Input = data.Input;
+    problem.LimitMemory = data.LimitMemory;
+    problem.LimitTime = data.LimitTime;
+    problem.Output = data.Output;
+    problem.SampleInput = data.SampleInput;
+    problem.SampleOutput = data.SampleOutput;
+    problem.Title = data.Title;
+    problem.Label = data.Label;
   },
-})
+});
 
 //列表分页的配置项
 var configList = reactive({
@@ -238,11 +238,11 @@ var configList = reactive({
   limit: 20,
   //初始化页面配置数据
   init() {
-    configList.Count = 0
-    configList.currentPage = 1
-    configList.limit = 20
+    configList.Count = 0;
+    configList.currentPage = 1;
+    configList.limit = 20;
   },
-})
+});
 
 //列表的搜索结果
 var searchList = reactive({
@@ -250,127 +250,127 @@ var searchList = reactive({
   isShowed: false,
   //初始化当前列表
   init() {
-    this.Data = []
+    this.Data = [];
   },
   //搜索当前列表
   showList: () => {
-    if (searchList.isShowed) searchList.isShowed = false
+    if (searchList.isShowed) searchList.isShowed = false;
     else {
-      searchList.isShowed = true
-      searchList.search()
+      searchList.isShowed = true;
+      searchList.search();
     }
   },
   search: () => {
     proxy
       .$get(
-        'api/problem/list?Page=' +
+        "api/problem/list?Page=" +
           (configList.currentPage - 1) +
-          '&Limit=' +
+          "&Limit=" +
           configList.limit
       )
       .then((res: any) => {
-        let data = res.data
+        let data = res.data;
         if (data.code == 0) {
-          // console.log(data)
-          configList.Count = data.Count
-          searchList.Data = data.Data
+          // proxy.$log(data)
+          configList.Count = data.Count;
+          searchList.Data = data.Data;
           searchList.Data.forEach((item) => {
-            item.selected = false
-          })
-          searchList.isShowed = true
+            item.selected = false;
+          });
+          searchList.isShowed = true;
         }
-        proxy.codeProcessor(data.code)
-      })
+        proxy.codeProcessor(data.code);
+      });
   },
   //页面切换
   changePage: (page: any) => {
-    configList.currentPage = page
+    configList.currentPage = page;
     //切换页面后开始显示数据
-    searchList.search()
+    searchList.search();
   },
   //选择
   selectProblem: (index: any) => {
     searchList.Data[index].selected = searchList.Data[index].selected
       ? false
-      : true
+      : true;
   },
   //批量删除
   batchDelete: () => {
-    let tempSelected = []
-    let tempString = ''
+    let tempSelected = [];
+    let tempString = "";
     searchList.Data.forEach((item) => {
       if (item.selected) {
-        tempSelected.push(item.PID)
-        tempString += item.PID + ' '
+        tempSelected.push(item.PID);
+        tempString += item.PID + " ";
       }
-    })
+    });
     if (tempSelected.length <= 0) {
-      proxy.elMessage({ message: '未选择任何题目！', type: 'warning' })
-      return
+      proxy.elMessage({ message: "未选择任何题目！", type: "warning" });
+      return;
     }
     ElMessageBox.confirm(
-      '确定要批量删除题号 ' + tempString + ' 题目吗？',
-      '注意',
+      "确定要批量删除题号 " + tempString + " 题目吗？",
+      "注意",
       {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
       }
     ).then(() => {
       proxy.$axios
-        .post('api/problem/delete/', {
+        .post("api/problem/delete/", {
           Pids: tempSelected,
         })
         .then((res: any) => {
-          let data = res.data
+          let data = res.data;
           if (data.code == 0) {
-            problem.init()
+            problem.init();
             proxy.elMessage({
-              message: '批量删除成功!',
-              type: 'success',
-            })
+              message: "批量删除成功!",
+              type: "success",
+            });
           }
-          proxy.codeProcessor(data.code)
-        })
-      searchList.isShowed = false
-    })
+          proxy.codeProcessor(data.code);
+        });
+      searchList.isShowed = false;
+    });
   },
-})
+});
 
 //删除题目
 function deleteProblem() {
   ElMessageBox.confirm(
-    '确定要删除题号为 ' + search.PID + ' 的题目吗？',
-    '注意',
+    "确定要删除题号为 " + search.PID + " 的题目吗？",
+    "注意",
     {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      type: "warning",
     }
   ).then(() => {
     proxy.$axios
-      .post('api/problem/delete/', {
+      .post("api/problem/delete/", {
         Pids: [search.PID],
       })
       .then((res) => {
-        let data = res.data
+        let data = res.data;
         if (data.code == 0) {
-          problem.init()
+          problem.init();
           proxy.elMessage({
-            message: '删除成功!',
-            type: 'success',
-          })
+            message: "删除成功!",
+            type: "success",
+          });
         } else {
-          proxy.codeProcessor(data.code)
+          proxy.codeProcessor(data.code);
         }
-      })
-  })
+      });
+  });
 }
 
 //完成修改
 function complete() {
   proxy.$axios
-    .post('api/problem/edit/', {
+    .post("api/problem/edit/", {
       Pid: problem.PID,
       Title: problem.Title,
       Description: problem.Description,
@@ -384,14 +384,14 @@ function complete() {
       Label: problem.Label,
     })
     .then((res) => {
-      let data = res.data
+      let data = res.data;
       if (data.code == 0) {
-        console.log(data)
-        proxy.elMessage({ message: '修改成功!', type: 'success' })
+        proxy.$log(data);
+        proxy.elMessage({ message: "修改成功!", type: "success" });
       } else {
-        proxy.codeProcessor(data.code)
+        proxy.codeProcessor(data.code);
       }
-    })
+    });
 }
 </script>
 
@@ -417,7 +417,7 @@ function complete() {
 span {
   font-size: 22px;
   width: 150px;
-  @include font_color('font1');
+  @include font_color("font1");
 }
 
 .list {
@@ -435,15 +435,15 @@ span {
     margin: 5px 0;
     border-radius: 8px;
     border: 2px solid;
-    @include border_color('border2');
+    @include border_color("border2");
     display: flex;
     align-items: center;
     transition-duration: 260ms;
 
     &:hover {
-      @include fill_color('fill15');
+      @include fill_color("fill15");
       border: 2px solid;
-      @include border_color('fill12');
+      @include border_color("fill12");
     }
 
     input {
@@ -455,12 +455,12 @@ span {
     .title {
       width: fit-content;
       font-size: $fontSize7;
-      @include font_color('font1');
+      @include font_color("font1");
     }
   }
 
   .itemSelected {
-    @include fill_color('fill45');
+    @include fill_color("fill45");
   }
 }
 

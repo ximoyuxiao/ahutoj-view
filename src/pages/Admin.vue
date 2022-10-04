@@ -57,20 +57,20 @@
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance, onMounted, reactive } from 'vue'
-import { useStore } from 'vuex'
-const { proxy } = getCurrentInstance() as any
-const store = useStore()
+import { getCurrentInstance, onMounted, reactive } from "vue";
+import { useStore } from "vuex";
+const { proxy } = getCurrentInstance() as any;
+const store = useStore();
 
 //页面配置
 type configType = {
-  Administrator: boolean
-  ProblemAdmin: boolean
-  ContestAdmin: boolean
-  SourceBorwser: boolean
-  ListAdmin: boolean
-  SuperAdmin: boolean
-}
+  Administrator: boolean;
+  ProblemAdmin: boolean;
+  ContestAdmin: boolean;
+  SourceBorwser: boolean;
+  ListAdmin: boolean;
+  SuperAdmin: boolean;
+};
 var config = reactive<configType>({
   Administrator: false,
   ProblemAdmin: false,
@@ -78,116 +78,116 @@ var config = reactive<configType>({
   SourceBorwser: false,
   ListAdmin: false,
   SuperAdmin: false,
-})
+});
 
 //身份验证
 function checkPermission() {
-  let Token = localStorage.getItem('ahutOjToken')
-  let UID = localStorage.getItem('ahutOjUserUid')
+  let Token = localStorage.getItem("ahutOjToken");
+  let UID = localStorage.getItem("ahutOjUserUid");
   if (!store.state.userData.isLogin) {
-    proxy.elMessage({ message: '登录状态无效!', type: 'warning' })
-    exit()
-    return
+    proxy.elMessage({ message: "登录状态无效!", type: "warning" });
+    exit();
+    return;
   }
   if (store.state.userData.UID != UID || !Token) {
     proxy.elMessage({
-      message: '登录身份验证不通过!',
-      type: 'warning',
-    })
-    exit()
-    return
+      message: "登录身份验证不通过!",
+      type: "warning",
+    });
+    exit();
+    return;
   }
 
   //服务器权限验证
-  proxy.$axios.get('api/admin/permission/' + UID).then((res) => {
-    let data = res.data
+  proxy.$axios.get("api/admin/permission/" + UID).then((res) => {
+    let data = res.data;
     if (data.code == 0) {
-      // console.log(data);
-      permissionParser(data.PermissionMap)
+      // proxy.$log(data);
+      permissionParser(data.PermissionMap);
     }
-    proxy.codeProcessor(data.code)
-  })
+    proxy.codeProcessor(data.code);
+  });
 }
 
 //权限解析器
 function permissionParser(PermissionMap) {
-  // console.log(permission);
+  // proxy.$log(permission);
   if (PermissionMap <= 3) {
     proxy.elMessage({
-      message: '权限验证未通过，你无权访问',
-      type: 'error',
-    })
-    exit()
-    return
+      message: "权限验证未通过，你无权访问",
+      type: "error",
+    });
+    exit();
+    return;
   }
   //管理员身份验证通过
-  config.Administrator = true
+  config.Administrator = true;
   let permissionTabel =
     "<span>你的权限表:</span><br/>\
-        <span style='color: #00ccff'>管理员</span>"
+        <span style='color: #00ccff'>管理员</span>";
 
   //超管
   if ((PermissionMap & store.state.constVal.SuperAdminBit) != 0) {
-    config.SuperAdmin = true
-    config.ProblemAdmin = true
-    config.ContestAdmin = true
-    config.ListAdmin = true
-    config.SourceBorwser = true
+    config.SuperAdmin = true;
+    config.ProblemAdmin = true;
+    config.ContestAdmin = true;
+    config.ListAdmin = true;
+    config.SourceBorwser = true;
   }
   permissionTabel += config.SuperAdmin
     ? "<br /><span style='color: #6741d9'>超级管理员</span>"
-    : "<br /><span style='color: #ff3300'>超级管理员</span>"
+    : "<br /><span style='color: #ff3300'>超级管理员</span>";
 
   //题目编辑
   if ((PermissionMap & store.state.constVal.ProblemAdminBit) != 0) {
-    config.ProblemAdmin = true
+    config.ProblemAdmin = true;
   }
   permissionTabel += config.ProblemAdmin
     ? "<br /><span style='color: #5ebd00'>题目编辑</span>"
-    : "<br /><span style='color: #ff3300'>题目编辑</span>"
+    : "<br /><span style='color: #ff3300'>题目编辑</span>";
 
   //竞赛编辑
   if ((PermissionMap & store.state.constVal.ContestAdminBit) != 0) {
-    config.ContestAdmin = true
+    config.ContestAdmin = true;
   }
   permissionTabel += config.ContestAdmin
     ? "<br /><span style='color: #5ebd00'>竞赛编辑</span>"
-    : "<br /><span style='color: #ff3300'>竞赛编辑</span>"
+    : "<br /><span style='color: #ff3300'>竞赛编辑</span>";
 
   //资源管理
   if ((PermissionMap & store.state.constVal.SourceBorwserBit) != 0) {
-    config.SourceBorwser = true
+    config.SourceBorwser = true;
   }
   permissionTabel += config.SourceBorwser
     ? "<br /><span style='color: #5ebd00'>资源管理</span>"
-    : "<br /><span style='color: #ff3300'>资源管理</span>"
+    : "<br /><span style='color: #ff3300'>资源管理</span>";
 
   //题单编辑
   if ((PermissionMap & store.state.constVal.ListAdminBit) != 0) {
-    config.ListAdmin = true
+    config.ListAdmin = true;
   }
   permissionTabel += config.ListAdmin
     ? "<br /><span style='color: #5ebd00'>题单编辑</span>"
-    : "<br /><span style='color: #ff3300'>题单编辑</span>"
+    : "<br /><span style='color: #ff3300'>题单编辑</span>";
 
   proxy.elNotification({
-    title: '欢迎来到管理界面',
+    title: "欢迎来到管理界面",
     message: permissionTabel,
-    type: 'success',
+    type: "success",
     duration: 4000,
     dangerouslyUseHTMLString: true,
     offset: 100,
-  })
+  });
 }
 
 //退出
 function exit() {
-  proxy.$router.replace({ path: 'Home' })
+  proxy.$router.replace({ path: "Home" });
 }
 
 onMounted(() => {
-  checkPermission()
-})
+  checkPermission();
+});
 </script>
 
 <style scoped lang="scss">
@@ -204,24 +204,24 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    @include fill_color('fill51');
+    @include fill_color("fill51");
     padding: 20px 0;
 
     a {
       width: 100%;
-      @include font_color('font6');
+      @include font_color("font6");
       font-size: 28px;
       text-align: center;
       margin: 5px 0;
 
       &:hover {
-        @include fill_color('fill52');
+        @include fill_color("fill52");
         color: #cdcdcd;
       }
     }
 
     .selected {
-      @include fill_color('fill53');
+      @include fill_color("fill53");
       color: #cdcdcd;
     }
   }

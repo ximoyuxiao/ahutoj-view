@@ -108,7 +108,7 @@ function uploadParser(event, fileList) {
       return;
     }
     for (let user in userArray) {
-      // console.log(userArray[user]);
+      // proxy.$log(userArray[user]);
       if (
         !userArray[user].UID ||
         !userArray[user].UserName ||

@@ -169,7 +169,7 @@ function getContests() {
     .then((res: any) => {
       let data = res.data;
       if (data.code == 0) {
-        // console.log(data)
+        // proxy.$log(data)
         config.Count = data.Size;
         contests.list = data.Data;
       }

@@ -71,77 +71,77 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, getCurrentInstance, computed, watch } from 'vue'
-import { useStore } from 'vuex'
-const { proxy } = getCurrentInstance() as any
-const store = useStore()
+import { reactive, getCurrentInstance, computed, watch } from "vue";
+import { useStore } from "vuex";
+const { proxy } = getCurrentInstance() as any;
+const store = useStore();
 type propsType = {
-  close?: Function
-  signin?: Function
-}
+  close?: Function;
+  signin?: Function;
+};
 var props = withDefaults(defineProps<propsType>(), {
   close: () => {},
   signin: () => {},
-})
+});
 
 //登录表单
 type loginInfoType = {
-  UID: string
-  Pass: string
-  save: boolean
-  [item: string]: any
-}
+  UID: string;
+  Pass: string;
+  save: boolean;
+  [item: string]: any;
+};
 var loginInfo = reactive<loginInfoType>({
-  UID: '',
-  Pass: '',
+  UID: "",
+  Pass: "",
   save: false,
   init(): void {
-    loginInfo.UID = ''
-    loginInfo.Pass = ''
-    loginInfo.save = false
+    loginInfo.UID = "";
+    loginInfo.Pass = "";
+    loginInfo.save = false;
   },
-})
+});
 
 //登录
 function login() {
-  if (loginInfo.UID == '' || loginInfo.Pass == '') {
-    proxy.codeProcessor('请输入完整', 'warning')
-    return
+  if (loginInfo.UID == "" || loginInfo.Pass == "") {
+    proxy.codeProcessor("请输入完整", "warning");
+    return;
   }
-  localStorage.clear()
-  sessionStorage.clear()
+  localStorage.clear();
+  sessionStorage.clear();
   proxy.$axios
-    .post('api/auth/login/', {
+    .post("api/auth/login/", {
       UID: loginInfo.UID,
       Pass: loginInfo.Pass,
     })
     .then((res: any) => {
-      let data = res.data
+      let data = res.data;
       if (data.code == 0) {
-        // console.log(data);
+        // proxy.$log(data);
         //localStorage更新
-        localStorage.setItem('ahutOjToken', data.Token)
-        localStorage.setItem('ahutOjSaveLoginStatus', loginInfo.save + '')
-        localStorage.setItem('ahutOjUserUid', loginInfo.UID)
+        localStorage.setItem("ahutOjToken", data.Token);
+        localStorage.setItem("ahutOjSaveLoginStatus", loginInfo.save + "");
+        localStorage.setItem("ahutOjUserUid", loginInfo.UID);
         //vuex数据同步
-        data.UID = loginInfo.UID
-        store.commit('userData/login', data)
-        store.commit('userData/synchronizePermission', data.PermissionMap)
-        store.commit('userData/sessionUserInfo')
-        console.log('permission 同步完成')
-        props.close()
+        data.UID = loginInfo.UID;
+        store.commit("userData/login", data);
+        store.commit("userData/synchronizePermission", data.PermissionMap);
+        store.commit("userData/sessionUserInfo");
+        proxy.$log("permission 同步完成");
+        props.close();
       }
-      proxy.codeProcessor(data.code)
-    })
+      proxy.codeProcessor(data.code);
+    });
 }
 
 var propsChange = computed(() => {
-  return props
-})
+  return props;
+});
 
 watch(propsChange, (nv, ov) => {}, {
   deep: true,
-})
+});
 </script>
 
 <style lang="scss">
@@ -151,7 +151,7 @@ watch(propsChange, (nv, ov) => {}, {
   left: calc(50vw - 250px);
   height: 400px;
   width: 500px;
-  @include fill_color('fill2');
+  @include fill_color("fill2");
   border-radius: 25px;
   display: flex;
   flex-direction: column;
@@ -176,23 +176,23 @@ watch(propsChange, (nv, ov) => {}, {
       border-top-right-radius: 10px;
       border-bottom-right-radius: 10px;
       font-size: $fontSize6;
-      @include font_color('font1');
-      @include fill_color('fill12');
+      @include font_color("font1");
+      @include fill_color("fill12");
     }
   }
 
   .loginLabel {
     position: absolute;
     font-size: $fontSize8;
-    @include font_color('font3');
+    @include font_color("font3");
     transition-duration: 400ms;
     top: 9px;
     left: 50px;
     border-radius: 10px;
 
     &:focus {
-      @include border_color('fill12');
-      @include outline_color('fill12');
+      @include border_color("fill12");
+      @include outline_color("fill12");
     }
   }
 
@@ -202,14 +202,14 @@ watch(propsChange, (nv, ov) => {}, {
     box-sizing: border-box;
     border-radius: 10px;
     font-size: $fontSize8;
-    @include font_color('font1');
-    @include fill_color('fill4');
+    @include font_color("font1");
+    @include fill_color("fill4");
     transition-duration: 300ms;
 
     &:focus + .loginLabel {
       transform: translateY(-18px);
-      @include font_color('fill11');
-      @include fill_color('fill3');
+      @include font_color("fill11");
+      @include fill_color("fill3");
       font-size: $fontSize6;
     }
   }
@@ -218,7 +218,7 @@ watch(propsChange, (nv, ov) => {}, {
     display: flex;
     justify-items: center;
     margin: 0 40px;
-    @include font_color('font1');
+    @include font_color("font1");
 
     input {
       margin: 0 5px;
@@ -231,13 +231,13 @@ watch(propsChange, (nv, ov) => {}, {
     box-sizing: border-box;
     width: 100%;
     padding: 5px 40px;
-    @include font_color('font1');
+    @include font_color("font1");
   }
 
   .lostPassword,
   .toSignin,
   .toLogin {
-    @include font_color('fill11');
+    @include font_color("fill11");
   }
 
   .confirm {
@@ -248,13 +248,13 @@ watch(propsChange, (nv, ov) => {}, {
     padding: 5px 0;
     margin: 0 0 20px 40px;
     border-radius: 10px;
-    @include font_color('font6');
-    @include fill_color('fill12');
+    @include font_color("font6");
+    @include fill_color("fill12");
     transition-duration: 100ms;
 
     &:hover {
-      @include fill_color('fill13');
-      @include box_shadow(0, 0, 2px, 2px, 'fill12');
+      @include fill_color("fill13");
+      @include box_shadow(0, 0, 2px, 2px, "fill12");
     }
   }
 }

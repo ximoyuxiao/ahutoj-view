@@ -108,70 +108,70 @@
 </template>
 
 <script lang="ts" setup name = "Problems">
-import { onMounted, getCurrentInstance, reactive } from 'vue'
-import { useStore } from 'vuex'
+import { onMounted, getCurrentInstance, reactive } from "vue";
+import { useStore } from "vuex";
 
-const { proxy } = getCurrentInstance() as any
-const store = useStore()
+const { proxy } = getCurrentInstance() as any;
+const store = useStore();
 
 //页面配置
 type configType = {
-  Count: number
-  currentPage: number
-  limit: number
-  loading: any
-  [item: string]: any
-}
+  Count: number;
+  currentPage: number;
+  limit: number;
+  loading: any;
+  [item: string]: any;
+};
 var config = reactive<configType>({
   Count: 0,
   currentPage: 1,
   limit: 20,
   loading: null,
   init() {
-    config.Count = 0
-    config.currentPage = 1
-    config.limit = 20
-    config.loading = null
+    config.Count = 0;
+    config.currentPage = 1;
+    config.limit = 20;
+    config.loading = null;
   },
   //切换页面
   changePage: (page: number) => {
-    config.currentPage = page
-    SyncUrl()
-    getProblems()
+    config.currentPage = page;
+    SyncUrl();
+    getProblems();
   },
-})
+});
 
 //页面数据 页面搜索数据配置项
 type searchType = {
-  PID: number
-  Title: string
-  Label: string
-  Data: { PID: number; Title: string; Label: string }[]
-  [item: string]: any
-}
+  PID: number;
+  Title: string;
+  Label: string;
+  Data: { PID: number; Title: string; Label: string }[];
+  [item: string]: any;
+};
 var search = reactive<searchType>({
   PID: null,
   Title: null,
   Label: null,
   Data: [],
   init() {
-    search.PID = null
-    search.Title = null
-    search.Data = []
+    search.PID = null;
+    search.Title = null;
+    search.Data = [];
   },
-})
+});
 
 //初始化
 function init() {
-  config.init()
-  search.init()
+  config.init();
+  search.init();
   //获取url参数
-  if (proxy.$route.query.Page) config.currentPage = proxy.$route.query.Page - 0
-  if (proxy.$route.query.Limit) config.limit = proxy.$route.query.Limit - 0
-  if (proxy.$route.query.Title) search.Title = proxy.$route.query.Title
-  if (proxy.$route.query.Label) search.Label = proxy.$route.query.Label
+  if (proxy.$route.query.Page) config.currentPage = proxy.$route.query.Page - 0;
+  if (proxy.$route.query.Limit) config.limit = proxy.$route.query.Limit - 0;
+  if (proxy.$route.query.Title) search.Title = proxy.$route.query.Title;
+  if (proxy.$route.query.Label) search.Label = proxy.$route.query.Label;
   //获取题目列表
-  getProblems()
+  getProblems();
 }
 
 //获取题目列表
@@ -179,45 +179,45 @@ function getProblems(PID: number = null, Title: string = null) {
   //显示加载效果
   config.loading = proxy.elLoading({
     node: proxy.$refs.searchResult,
-  })
+  });
   //开始获取数据
   proxy
     .$get(
-      'api/problem/list?Page=' +
+      "api/problem/list?Page=" +
         (config.currentPage - 1) +
-        '&Limit=' +
+        "&Limit=" +
         config.limit
     )
     .then((res: any) => {
-      let data = res.data
+      let data = res.data;
       if (data.code == 0) {
-        // console.log(data);
-        config.Count = data.Count
-        search.Data = data.Data
+        // proxy.$log(data);
+        config.Count = data.Count;
+        search.Data = data.Data;
       } else {
-        proxy.codeProcessor(data.code)
+        proxy.codeProcessor(data.code);
       }
       //关闭加载效果
-      config.loading.close()
-    })
+      config.loading.close();
+    });
 }
 
 //id搜索
 function getProblemsById(PID: number = null) {
-  if (PID != null) search.PID = PID
+  if (PID != null) search.PID = PID;
   if (search.PID == null || search.PID <= 0) {
     proxy.elMessage({
-      message: '请输入有效的题目ID！',
-      type: 'warning',
-    })
-    return
+      message: "请输入有效的题目ID！",
+      type: "warning",
+    });
+    return;
   }
   proxy.$router.push({
-    path: '/Problem',
+    path: "/Problem",
     query: {
       PID: search.PID,
     },
-  })
+  });
 }
 
 //title搜索
@@ -227,20 +227,20 @@ function getProblemByTitle() {}
 function SyncUrl() {
   //仅用于展示实时url，可用于复制跳转
   proxy.$router.replace({
-    path: '/Problems',
+    path: "/Problems",
     query: {
       Page: config.currentPage,
       Limit: config.limit,
       Title: search.Title,
       Label: search.Label,
     },
-  })
+  });
 }
 
 onMounted(() => {
   //初始化页面
-  init()
-})
+  init();
+});
 </script>
 
 <style  scoped lang="scss">
@@ -257,7 +257,7 @@ onMounted(() => {
 
     .search {
       width: 100%;
-      @include fill_color('fill2');
+      @include fill_color("fill2");
       border-radius: 10px;
       display: flex;
       flex-direction: column;
@@ -272,20 +272,20 @@ onMounted(() => {
           padding: 2px 10px;
           border-radius: 8px;
           font-size: $fontSize5;
-          @include font_color('font1');
-          @include fill_color('fill4');
+          @include font_color("font1");
+          @include fill_color("fill4");
 
           &:focus,
           &:hover + div,
           &:focus + div {
             outline: none;
             border: 2px solid;
-            @include border_color('fill12');
-            @include font_color('fill12');
+            @include border_color("fill12");
+            @include font_color("fill12");
           }
 
           &::placeholder {
-            @include font_color('font3');
+            @include font_color("font3");
           }
         }
       }
@@ -302,19 +302,19 @@ onMounted(() => {
       div {
         height: 30px;
         width: 30px;
-        @include fill_color('fill4');
+        @include fill_color("fill4");
         box-sizing: border-box;
         border: 2px solid;
-        @include border_color('border1');
+        @include border_color("border1");
         border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
       }
-      
+
       &:hover > div {
-        @include border_color('fill12');
-        @include font_color('fill12');
+        @include border_color("fill12");
+        @include font_color("fill12");
       }
     }
   }
@@ -323,7 +323,7 @@ onMounted(() => {
     width: calc(
       100% - $problems_leftWidth - $modelDistanceMini - $modelDistanceMini
     );
-    @include fill_color('fill2');
+    @include fill_color("fill2");
     border-radius: 10px;
 
     .notFound {
@@ -348,20 +348,20 @@ onMounted(() => {
         padding: 3px 10px;
         margin: 5px 0;
         border-radius: 8px;
-        @include border(2px, solid, 'border3');
+        @include border(2px, solid, "border3");
         display: flex;
         flex-direction: column;
         transition-duration: 300ms;
 
         &:hover {
-          @include fill_color('fill15');
-          @include border(2px, solid, 'fill12');
+          @include fill_color("fill15");
+          @include border(2px, solid, "fill12");
         }
 
         .title {
           width: fit-content;
           font-size: $fontSize7;
-          @include font_color('font1');
+          @include font_color("font1");
         }
 
         .tag {
@@ -374,7 +374,7 @@ onMounted(() => {
 
         .acCount {
           font-size: $fontSize5;
-          @include font_color('font2');
+          @include font_color("font2");
         }
       }
     }

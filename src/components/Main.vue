@@ -153,7 +153,7 @@ async function autoLogin() {
         store.commit("userData/login", data);
         store.commit("userData/sessionUserInfo");
         showNav();
-        console.log("自动登录成功");
+        proxy.$log("自动登录成功");
       }
       proxy.codeProcessor(data.code);
     });
@@ -168,7 +168,7 @@ async function getUserPermission(UID: string) {
       data.PermissionMap = res.data.PermissionMap;
       store.commit("userData/synchronizePermission", data.PermissionMap);
       store.commit("userData/sessionUserInfo");
-      console.log("permission 同步完成");
+      proxy.$log("permission 同步完成");
       return 1;
     }
     proxy.codeProcessor(res.data.code);

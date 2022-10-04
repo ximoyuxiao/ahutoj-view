@@ -288,7 +288,7 @@ function getUserInfo() {
   proxy
     .$get("api/user/info?uid=" + store.state.userData.UID)
     .then((res: any) => {
-      // console.log(res);
+      // proxy.$log(res);
       let data = res.data;
       if (data.code == 0) {
         userInfo.copy(data);
@@ -401,7 +401,7 @@ function getUserSubmit() {
   proxy
     .$get("api/submit/status", { UID: store.state.userData.UID })
     .then((res: any) => {
-      // console.log(res);
+      // proxy.$log(res);
       let data = res.data;
       if (data.code == 0) {
         sessionStorage.setItem(
@@ -461,7 +461,7 @@ var changeInfo = reactive<changeInfoType>({
   sendForm() {
     this.Adept =
       setAdept.AdeptArray.length == 0 ? "" : setAdept.AdeptArray.join(";");
-    // console.log(this);
+    // proxy.$log(this);
     if (this.UserName == "") {
       proxy.elMessage({
         message: "昵称不可为空",
@@ -589,7 +589,7 @@ var bindingVJ = reactive({
         Vjpwd: bindingVJ.Vjpwd,
       })
       .then((res: any) => {
-        // console.log(res);
+        // proxy.$log(res);
         let data = res.data;
         if (data.code == 0) {
           proxy.elMessage({ message: "修改成功", type: "success" });
@@ -647,7 +647,7 @@ var changePassword = reactive({
         Pwd: changePassword.Pwd,
       })
       .then((res: any) => {
-        console.log(res);
+        proxy.$log(res);
         let data = res.data;
         if (data.code == 0) {
           proxy.elMessage({ message: "修改成功", type: "success" });

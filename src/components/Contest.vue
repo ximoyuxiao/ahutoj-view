@@ -116,57 +116,57 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, getCurrentInstance, reactive, ref, onUnmounted } from 'vue'
-import { useStore } from 'vuex'
-const { proxy } = getCurrentInstance() as any
-const store = useStore()
+import { onMounted, getCurrentInstance, reactive, ref, onUnmounted } from "vue";
+import { useStore } from "vuex";
+const { proxy } = getCurrentInstance() as any;
+const store = useStore();
 
-var notFound = ref(true)
+var notFound = ref(true);
 
 var loading = reactive({
   contestInfo: null,
   problemList: null,
   init() {
     if (this.contestInfo) {
-      this.contestInfo.close()
+      this.contestInfo.close();
     }
     if (this.problemList) {
-      this.problemList.close()
+      this.problemList.close();
     }
-    this.contestInfo = null
-    this.problemList = null
+    this.contestInfo = null;
+    this.problemList = null;
   },
-})
+});
 
 type contestType = {
-  Data: { PID: number; Title: string; ACNum: number; SubmitNum: number }[]
-  BeginTime: number
-  CID: number
-  Type: number
-  Description: string
-  EndTime: number
-  IsPublic: number
-  Pass: string
-  Size: number
-  Title: string
-  UID: string
-  [item: string]: any
-}
+  Data: { PID: number; Title: string; ACNum: number; SubmitNum: number }[];
+  BeginTime: number;
+  CID: number;
+  Type: number;
+  Description: string;
+  EndTime: number;
+  IsPublic: number;
+  Pass: string;
+  Size: number;
+  Title: string;
+  UID: string;
+  [item: string]: any;
+};
 var contest = reactive<contestType>({
   Data: [],
   length: 0,
   BeginTime: 0,
   CID: null,
   Type: 1,
-  Description: '',
+  Description: "",
   EndTime: 0,
   IsPublic: 1,
   Pass: null,
   Size: 0,
-  Title: '',
-  UID: '',
+  Title: "",
+  UID: "",
   copy(data: any) {
-    let tempProblemSequence = data.Problems.split(',')
+    let tempProblemSequence = data.Problems.split(",");
     for (let temp in tempProblemSequence) {
       for (let p in data.Data) {
         if (tempProblemSequence[temp] == data.Data[p].PID) {
@@ -175,174 +175,174 @@ var contest = reactive<contestType>({
             Title: data.Data[p].Title,
             ACNum: data.Data[p].ACNum,
             SubmitNum: data.Data[p].SubmitNum,
-          })
-          break
+          });
+          break;
         }
       }
     }
-    contest.length = data.length
-    contest.BeginTime = data.BeginTime
-    contest.CID = data.CID
-    contest.Type = data.Type
-    contest.Description = data.Description
-    contest.EndTime = data.EndTime
-    contest.IsPublic = data.IsPublic
-    contest.Pass = data.Pass
-    contest.Size = data.Size
-    contest.Title = data.Title
-    contest.UID = data.UID
+    contest.length = data.length;
+    contest.BeginTime = data.BeginTime;
+    contest.CID = data.CID;
+    contest.Type = data.Type;
+    contest.Description = data.Description;
+    contest.EndTime = data.EndTime;
+    contest.IsPublic = data.IsPublic;
+    contest.Pass = data.Pass;
+    contest.Size = data.Size;
+    contest.Title = data.Title;
+    contest.UID = data.UID;
   },
-})
+});
 
 type timePercentType = {
-  status: number
-  percent: number
-  color: string
-  timmer: any
-  lostTime: number
-  allTime: number
-  timeDistance: number
-  [item: string]: any
-}
+  status: number;
+  percent: number;
+  color: string;
+  timmer: any;
+  lostTime: number;
+  allTime: number;
+  timeDistance: number;
+  [item: string]: any;
+};
 var timePercent = reactive<timePercentType>({
   status: 1,
   percent: 0,
-  color: '#2cbbfe',
+  color: "#2cbbfe",
   timmer: null,
   lostTime: 0, //已流失时间
   allTime: 0, //比赛时间跨度
   timeDistance: 0, //本地时间与服务器时间间隔
   init() {
-    timePercent.status = 1
-    timePercent.percent = 0
-    timePercent.color = '#2cbbfe'
-    timePercent.timmer = null
-    timePercent.lostTime = 0
-    timePercent.allTime = 0
-    timePercent.timeDistance = 0
-    clearInterval(timePercent.timmer)
+    timePercent.status = 1;
+    timePercent.percent = 0;
+    timePercent.color = "#2cbbfe";
+    timePercent.timmer = null;
+    timePercent.lostTime = 0;
+    timePercent.allTime = 0;
+    timePercent.timeDistance = 0;
+    clearInterval(timePercent.timmer);
   },
   begin() {
-    this.init()
-    let now = Date.now() - this.timeDistance
+    this.init();
+    let now = Date.now() - this.timeDistance;
     if (now >= contest.EndTime) {
-      this.percent = 100
-      this.color = '#9e9e9e'
-      this.status = 0
-      return
+      this.percent = 100;
+      this.color = "#9e9e9e";
+      this.status = 0;
+      return;
     }
     //已流失时间
-    this.lostTime = now - contest.BeginTime
-    this.allTime = Math.abs(contest.EndTime - contest.BeginTime)
+    this.lostTime = now - contest.BeginTime;
+    this.allTime = Math.abs(contest.EndTime - contest.BeginTime);
     this.timmer = setInterval(() => {
-      this.lostTime += 1000
-      this.percent = Math.floor((this.lostTime / this.allTime) * 100)
+      this.lostTime += 1000;
+      this.percent = Math.floor((this.lostTime / this.allTime) * 100);
       if (this.percent >= 100) {
-        this.percent = 100
-        this.color = '#9e9e9e'
-        this.status = 0
-        clearInterval(timePercent.timmer)
-        return
+        this.percent = 100;
+        this.color = "#9e9e9e";
+        this.status = 0;
+        clearInterval(timePercent.timmer);
+        return;
       } else if (this.percent >= 90) {
-        this.color = '#f03e3e'
+        this.color = "#f03e3e";
       } else if (this.percent >= 60) {
-        this.color = '#ff8c00'
+        this.color = "#ff8c00";
       } else if (this.percent >= 40) {
-        this.color = '#bcee68'
+        this.color = "#bcee68";
       } else {
-        this.color = '#66cd00'
+        this.color = "#66cd00";
       }
-    }, 1000)
+    }, 1000);
   },
-})
+});
 
 async function getContestById() {
-  loading.init()
+  loading.init();
   loading.contestInfo = proxy.elLoading({
     node: proxy.$refs.infoBox,
-  })
+  });
   loading.problemList = proxy.elLoading({
     node: proxy.$refs.problemList,
-  })
+  });
   if (!proxy.$route.query.CID) {
-    loading.init()
-    return
+    loading.init();
+    return;
   }
-  contest.CID = proxy.$route.query.CID
+  contest.CID = proxy.$route.query.CID;
   if (
     proxy.$route.query.Pass != null ||
-    typeof proxy.$route.query.Pass == 'undefined'
+    typeof proxy.$route.query.Pass == "undefined"
   )
-    contest.Pass = proxy.$route.query.Pass
+    contest.Pass = proxy.$route.query.Pass;
 
   await proxy.$axios
-    .get('api/contest/' + contest.CID + '?Pass=' + contest.Pass)
+    .get("api/contest/" + contest.CID + "?Pass=" + contest.Pass)
     .then((res) => {
-      let data = res.data
+      let data = res.data;
       if (data.code == 0) {
-        // console.log(data);
-        contest.copy(data)
-        notFound.value = false
+        // proxy.$log(data);
+        contest.copy(data);
+        notFound.value = false;
       }
       if (data.code == 2000) {
         proxy.elMessage({
-          message: '竞赛密码错误！',
-          type: 'warning',
-        })
+          message: "竞赛密码错误！",
+          type: "warning",
+        });
       } else {
-        proxy.codeProcessor(data.code)
+        proxy.codeProcessor(data.code);
       }
-    })
+    });
 
-  loading.init()
+  loading.init();
   await proxy.getServerTime().then((res: any) => {
-    let now = Date.now()
+    let now = Date.now();
     if (res.time == null || Math.abs(res.time * 1000 - now) < 1500) {
-      timePercent.begin()
-      return
+      timePercent.begin();
+      return;
     }
-    timePercent.timeDistance = now - res.time * 1000
-    timePercent.begin()
-  })
+    timePercent.timeDistance = now - res.time * 1000;
+    timePercent.begin();
+  });
 }
 
 //跳转到题目
 function goToProblem(PID: number): void {
-  let CID = contest.CID
-  let Pass: string
-  if (proxy.$route.query.Pass) Pass = proxy.$route.query.Pass
+  let CID = contest.CID;
+  let Pass: string;
+  if (proxy.$route.query.Pass) Pass = proxy.$route.query.Pass;
   proxy.$router.push({
-    path: '/Problem',
+    path: "/Problem",
     query: {
       PID,
       CID,
       Pass,
     },
-  })
+  });
 }
 
 //跳转到当前比赛排名列表
 function goToRank(): void {
-  let CID = contest.CID
-  let Pass: string
-  if (proxy.$route.query.Pass) Pass = proxy.$route.query.Pass
+  let CID = contest.CID;
+  let Pass: string;
+  if (proxy.$route.query.Pass) Pass = proxy.$route.query.Pass;
   proxy.$router.push({
-    path: '/ContestRank',
+    path: "/ContestRank",
     query: {
       CID,
       Pass,
     },
-  })
+  });
 }
 
 onMounted(() => {
-  getContestById()
-})
+  getContestById();
+});
 
 onUnmounted(() => {
   //回收定时器
-  clearInterval(timePercent.timmer)
-})
+  clearInterval(timePercent.timmer);
+});
 </script>
 
 <style scoped lang="scss">
@@ -363,17 +363,17 @@ onUnmounted(() => {
     box-sizing: border-box;
     padding: 30px;
     border-radius: 10px;
-    @include fill_color('fill2');
+    @include fill_color("fill2");
 
     .title {
       font-size: $fontSize9;
-      @include font_color('font1');
+      @include font_color("font1");
       margin: 20px 0;
     }
 
     .text {
       font-size: $fontSize4;
-      @include font_color('font2');
+      @include font_color("font2");
     }
 
     .status {
@@ -395,13 +395,13 @@ onUnmounted(() => {
       margin: 30px 0 15px 0;
       width: 100%;
       font-size: $fontSize4;
-      @include font_color('font1');
+      @include font_color("font1");
       display: flex;
       justify-content: space-between;
 
       .left_time {
         font-size: $fontSize7;
-        @include font_color('font1');
+        @include font_color("font1");
       }
     }
 
@@ -420,19 +420,19 @@ onUnmounted(() => {
     box-sizing: border-box;
     padding: 30px;
     border-radius: 10px;
-    @include fill_color('fill2');
+    @include fill_color("fill2");
 
     .contestRank {
       width: 200px;
       line-height: 40px;
-      @include font_color('font2');
+      @include font_color("font2");
       font-size: $fontSize9;
-      @include fill_color('fill4');
+      @include fill_color("fill4");
       border-radius: 16px;
       text-align: center;
 
       &:hover {
-        @include fill_color('fill3');
+        @include fill_color("fill3");
       }
     }
 
@@ -443,7 +443,7 @@ onUnmounted(() => {
 
       > div {
         font-size: $fontSize6;
-        @include font_color('font1');
+        @include font_color("font1");
       }
     }
 
@@ -454,15 +454,15 @@ onUnmounted(() => {
       display: flex;
       align-items: center;
       border-bottom: 1px solid;
-      @include border_color('border1');
-      @include fill_color('fill4');
+      @include border_color("border1");
+      @include fill_color("fill4");
       box-sizing: border-box;
       transition: all 300ms;
 
       &:hover {
         border-left: 8px solid;
         border-right: 8px solid;
-        @include border_color('fill51');
+        @include border_color("fill51");
       }
 
       &:last-child {
@@ -472,13 +472,13 @@ onUnmounted(() => {
       .flag {
         width: 80px;
         font-size: $fontSize6;
-        @include font_color('fill11');
+        @include font_color("fill11");
       }
 
       .title {
         width: calc(100% - 170px);
         font-size: $fontSize7;
-        @include font_color('fill11');
+        @include font_color("fill11");
       }
 
       .status {
@@ -487,7 +487,7 @@ onUnmounted(() => {
         align-items: center;
         justify-content: center;
         font-size: $fontSize4;
-        @include font_color('font3');
+        @include font_color("font3");
       }
     }
   }

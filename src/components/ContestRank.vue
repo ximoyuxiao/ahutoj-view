@@ -27,7 +27,7 @@ function getRankList() {
   proxy
     .$get("api/contest/" + CID + "/rank" + "?CID=" + CID + "&Pass=" + Pass)
     .then((res: any) => {
-      console.log(res);
+      proxy.$log(res);
     });
 }
 

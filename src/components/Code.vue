@@ -73,90 +73,90 @@
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance, onMounted, reactive, ref } from 'vue'
-import { useStore } from 'vuex'
-const { proxy } = getCurrentInstance() as any
-const store = useStore()
+import { getCurrentInstance, onMounted, reactive, ref } from "vue";
+import { useStore } from "vuex";
+const { proxy } = getCurrentInstance() as any;
+const store = useStore();
 
-var notFound = ref(true)
+var notFound = ref(true);
 
 type configType = {
-  SID: number
-  loading: any
-  [i: string]: any
-}
+  SID: number;
+  loading: any;
+  [i: string]: any;
+};
 var config = reactive<configType>({
   SID: -1,
   loading: null,
   init() {
-    config.SID = -1
-    config.loading = null
+    config.SID = -1;
+    config.loading = null;
   },
-})
+});
 
 type submitType = {
-  Lang: number
-  PID: number
-  Result: string
-  SID: number
-  Source: string
-  SubmitTime: number
-  UseMemory: number
-  UseTime: number
-  [i: string]: any
-}
+  Lang: number;
+  PID: number;
+  Result: string;
+  SID: number;
+  Source: string;
+  SubmitTime: number;
+  UseMemory: number;
+  UseTime: number;
+  [i: string]: any;
+};
 var submit = reactive<submitType>({
   Lang: 1,
   PID: 0,
-  Result: '',
+  Result: "",
   SID: 1,
-  Source: '',
+  Source: "",
   SubmitTime: 0,
   UseMemory: 0,
   UseTime: 0,
   copy(data: any) {
-    submit.Lang = data.Lang
-    submit.PID = data.PID
-    submit.Result = data.Result
-    submit.SID = data.SID
-    submit.Source = data.Source
-    submit.SubmitTime = data.SubmitTime
-    submit.UseMemory = data.UseMemory
-    submit.UseTime = data.UseTime
+    submit.Lang = data.Lang;
+    submit.PID = data.PID;
+    submit.Result = data.Result;
+    submit.SID = data.SID;
+    submit.Source = data.Source;
+    submit.SubmitTime = data.SubmitTime;
+    submit.UseMemory = data.UseMemory;
+    submit.UseTime = data.UseTime;
   },
-})
+});
 
 //获取数据
 function getSubmit() {
-  config.loading = proxy.elLoading({ node: proxy.$refs.code })
-  if (config.SID == -1) return
-  proxy.$get('api/submit/' + config.SID).then((res: any) => {
-    let data = res.data
+  config.loading = proxy.elLoading({ node: proxy.$refs.code });
+  if (config.SID == -1) return;
+  proxy.$get("api/submit/" + config.SID).then((res: any) => {
+    let data = res.data;
     if (data.code == 0) {
-      console.log(data)
-      submit.copy(data)
-      notFound.value = false
+      proxy.$log(data);
+      submit.copy(data);
+      notFound.value = false;
     }
-    config.loading.close()
-    proxy.codeProcessor(data.code)
-  })
+    config.loading.close();
+    proxy.codeProcessor(data.code);
+  });
 }
 
 //跳转到题目
 function goToProblem(PID: number | string) {
   proxy.$router.push({
-    path: '/Problem',
+    path: "/Problem",
     query: {
       PID,
     },
-  })
+  });
 }
 
 onMounted(() => {
   //同步url参数
-  if (proxy.$route.query.SID) config.SID = proxy.$route.query.SID - 0
-  getSubmit()
-})
+  if (proxy.$route.query.SID) config.SID = proxy.$route.query.SID - 0;
+  getSubmit();
+});
 </script>
 
 <style  scoped lang="scss">
@@ -177,7 +177,7 @@ onMounted(() => {
     display: flex;
     align-items: center;
     font-size: $fontSize8;
-    @include font_color('font1');
+    @include font_color("font1");
     border-bottom: 2px solid #fefefe;
     padding: 10px 0;
     justify-content: space-between;
@@ -187,17 +187,17 @@ onMounted(() => {
     display: flex;
     align-items: center;
     font-size: $fontSize6;
-    @include font_color('font2');
-    @include fill_color('fill2');
+    @include font_color("font2");
+    @include fill_color("fill2");
     justify-content: space-between;
     border-bottom: 2px solid #fefefe;
     box-sizing: border-box;
 
     .PID {
-      @include font_color('fill11');
+      @include font_color("fill11");
 
       &:hover {
-        @include font_color('fill13');
+        @include font_color("fill13");
       }
     }
 
@@ -211,7 +211,7 @@ onMounted(() => {
   .title {
     margin: 30px 0 5px 0;
     font-size: $fontSize8;
-    @include font_color('font1');
+    @include font_color("font1");
   }
 }
 </style>

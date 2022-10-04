@@ -3,8 +3,8 @@ import { App } from "vue";
 import { useStore } from "vuex";
 
 //默认请求地址
-// axios.defaults.baseURL = "http://127.0.0.1:4212/";
-axios.defaults.baseURL = "http://www.channelcz.top:1234/";
+axios.defaults.baseURL = "http://127.0.0.1:4212/";
+// axios.defaults.baseURL = "http://www.channelcz.top:1234/";
 
 // http request拦截器
 axios.interceptors.request.use(
@@ -63,6 +63,15 @@ export default {
 		) {
 			return axios.post(url, data, {
 				headers: { "Content-Type": contentType[content] },
+			});
+		};
+		//封装delete请求
+		app.config.globalProperties.$delete = function Delete(
+			url: string,
+			data: object | null
+		) {
+			return axios.delete(url, {
+				data,
 			});
 		};
 	},

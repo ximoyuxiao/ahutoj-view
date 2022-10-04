@@ -57,67 +57,67 @@
 </template>
 
 <script lang="ts">
-import { getCurrentInstance, reactive } from 'vue'
+import { getCurrentInstance, reactive } from "vue";
 export default {
-  name: 'AddUser',
+  name: "AddUser",
   setup() {
-    const { proxy } = getCurrentInstance() as any
+    const { proxy } = getCurrentInstance() as any;
 
     var userInfo = reactive({
-      UID: '',
-      UserName: '',
-      Pass: '',
-    })
+      UID: "",
+      UserName: "",
+      Pass: "",
+    });
 
     function signin() {
-      if (userInfo.UID == '') {
+      if (userInfo.UID == "") {
         proxy.elMessage({
-          message: '账号不能为空！',
-          type: 'warning',
-        })
-        return
+          message: "账号不能为空！",
+          type: "warning",
+        });
+        return;
       }
-      if (userInfo.UserName == '') {
+      if (userInfo.UserName == "") {
         proxy.elMessage({
-          message: '昵称不能为空！',
-          type: 'warning',
-        })
-        return
+          message: "昵称不能为空！",
+          type: "warning",
+        });
+        return;
       }
-      if (userInfo.Pass == '') {
+      if (userInfo.Pass == "") {
         proxy.elMessage({
-          message: '密码不能为空！',
-          type: 'warning',
-        })
-        return
+          message: "密码不能为空！",
+          type: "warning",
+        });
+        return;
       }
       proxy.$axios
-        .post('api/auth/register/', {
+        .post("api/auth/register/", {
           UID: userInfo.UID,
           UserName: userInfo.UserName,
           Pass: userInfo.Pass,
         })
         .then((res) => {
-          let data = res.data
+          let data = res.data;
           if (data.code == 0) {
-            // console.log(data);
+            // proxy.$log(data);
             proxy.elMessage({
-              message: '添加成功!',
-              type: 'success',
-            })
+              message: "添加成功!",
+              type: "success",
+            });
           } else {
-            proxy.codeProcessor(data.code)
+            proxy.codeProcessor(data.code);
           }
-        })
+        });
     }
 
     return {
       proxy,
       userInfo,
       signin,
-    }
+    };
   },
-}
+};
 </script>
 
 <style scoped lang="scss">

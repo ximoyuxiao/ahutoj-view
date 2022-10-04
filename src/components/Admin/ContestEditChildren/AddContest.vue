@@ -94,37 +94,37 @@
 </template>
 
 <script lang="ts">
-import { getCurrentInstance, reactive, ref } from 'vue'
-import { useStore } from 'vuex'
+import { getCurrentInstance, reactive, ref } from "vue";
+import { useStore } from "vuex";
 export default {
-  name: 'AddContest',
+  name: "AddContest",
   setup() {
-    const { proxy } = getCurrentInstance() as any
-    const store = useStore()
+    const { proxy } = getCurrentInstance() as any;
+    const store = useStore();
 
     //比赛题单数据
     var contest = reactive({
       UID: 0,
-      Title: '',
-      Description: '',
+      Title: "",
+      Description: "",
       BeginTime: 0,
       EndTime: 0,
-      Type: 'ACM',
-      IsPublic: '公开',
-      Pass: '',
+      Type: "ACM",
+      IsPublic: "公开",
+      Pass: "",
       Problems: "",
       init() {
-        this.UID = 0
-        this.Title = ''
-        this.Description = ''
-        this.BeginTime = 0
-        this.EndTime = 0
-        this.Type = 1
-        this.IsPublic = 1
-        this.Pass = ''
-        this.Problems = []
+        this.UID = 0;
+        this.Title = "";
+        this.Description = "";
+        this.BeginTime = 0;
+        this.EndTime = 0;
+        this.Type = 1;
+        this.IsPublic = 1;
+        this.Pass = "";
+        this.Problems = [];
       },
-    })
+    });
 
     //竞赛的题单
     var problemList = reactive({
@@ -136,82 +136,82 @@ export default {
         for (let p in this.data)
           if (this.data[p].PID == this.searchPid) {
             proxy.elMessage({
-              message: '添加失败，该题目已经存在！',
-              type: 'warning',
-            })
-            return
+              message: "添加失败，该题目已经存在！",
+              type: "warning",
+            });
+            return;
           }
         //开始从后台中搜索题目
-        proxy.$axios.get('api/problem/' + this.searchPid).then((res) => {
-          let data = res.data
+        proxy.$axios.get("api/problem/" + this.searchPid).then((res) => {
+          let data = res.data;
           if (data.code == 0) {
-            // console.log(data);
-            let problem = { PID: data.PID, Title: data.Title }
-            this.data.push(problem)
-            proxy.elMessage({ message: '添加成功!', type: 'success' })
+            // proxy.$log(data);
+            let problem = { PID: data.PID, Title: data.Title };
+            this.data.push(problem);
+            proxy.elMessage({ message: "添加成功!", type: "success" });
           } else {
-            proxy.codeProcessor(data.code)
+            proxy.codeProcessor(data.code);
           }
-        })
+        });
       },
       //删除当前行的题目
       delete(index, row) {
         for (let i in this.data) {
-          if (index == i) this.data.splice(i, 1)
+          if (index == i) this.data.splice(i, 1);
         }
         proxy.elMessage({
-          message: '删除题号<' + row.PID + '>成功!',
-          type: 'success',
-        })
+          message: "删除题号<" + row.PID + ">成功!",
+          type: "success",
+        });
       },
-    })
+    });
 
     //竞赛时间
-    var contestTime = ref(null)
+    var contestTime = ref(null);
 
     //提交竞赛信息
     function complete() {
       //比赛没有设置题目
-      if (store.state.userData.UID == '') {
+      if (store.state.userData.UID == "") {
         proxy.elMessage({
-          message: '登录数据异常，请重新登录！',
-          type: 'warning',
-        })
-        return
+          message: "登录数据异常，请重新登录！",
+          type: "warning",
+        });
+        return;
       }
 
       if (problemList.data.length == 0) {
         proxy.elMessage({
-          message: '该比赛没有设置题目！添加失败',
-          type: 'warning',
-        })
-        return
+          message: "该比赛没有设置题目！添加失败",
+          type: "warning",
+        });
+        return;
       }
 
       if (contestTime.value == null) {
         proxy.elMessage({
-          message: '该比赛没有设置时间！添加失败',
-          type: 'warning',
-        })
-        return
+          message: "该比赛没有设置时间！添加失败",
+          type: "warning",
+        });
+        return;
       }
 
-      // console.log(contestTime.value);
-      contest.BeginTime = contestTime.value[0].getTime()
-      contest.EndTime = contestTime.value[1].getTime()
+      // proxy.$log(contestTime.value);
+      contest.BeginTime = contestTime.value[0].getTime();
+      contest.EndTime = contestTime.value[1].getTime();
       contest.Type =
-        contest.Type == 'ACM'
+        contest.Type == "ACM"
           ? store.state.constVal.CONTEST_TYPE_ACM
-          : store.state.constVal.CONTEST_TYPE_OI
+          : store.state.constVal.CONTEST_TYPE_OI;
       contest.IsPublic =
-        contest.IsPublic == '公开'
+        contest.IsPublic == "公开"
           ? store.state.constVal.CONTEST_PUBLIC
-          : store.state.constVal.CONTEST_NOTPUBLIC
-      let tempArray = []
-      for (let p in problemList.data) tempArray.push(problemList.data[p].PID)
-      contest.Problems = tempArray.join(',')
+          : store.state.constVal.CONTEST_NOTPUBLIC;
+      let tempArray = [];
+      for (let p in problemList.data) tempArray.push(problemList.data[p].PID);
+      contest.Problems = tempArray.join(",");
       proxy.$axios
-        .post('api/contest/add/', {
+        .post("api/contest/add/", {
           UID: store.state.userData.UID,
           Title: contest.Title,
           Description: contest.Description,
@@ -223,13 +223,13 @@ export default {
           Problems: contest.Problems,
         })
         .then((res) => {
-          let data = res.data
+          let data = res.data;
           if (data.code == 0) {
-            proxy.elMessage({ message: '添加成功!', type: 'success' })
+            proxy.elMessage({ message: "添加成功!", type: "success" });
           } else {
-            proxy.codeProcessor(data.code)
+            proxy.codeProcessor(data.code);
           }
-        })
+        });
     }
 
     return {
@@ -237,9 +237,9 @@ export default {
       complete,
       problemList,
       contestTime,
-    }
+    };
   },
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -257,6 +257,6 @@ export default {
 .AddContest > div > span {
   font-size: 22px;
   width: 150px;
-  @include font_color('font1');
+  @include font_color("font1");
 }
 </style>

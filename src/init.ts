@@ -10,6 +10,7 @@ import "animate.css";
 import ElementPlus from "element-plus";
 
 import * as Utils from "./utils/globalFunctions";
+import log from "./utils/consoleLog";
 
 import { App, Component } from "vue";
 
@@ -30,6 +31,8 @@ function mountUtils(app: App<Element>) {
 	app.config.globalProperties.$qs = qs;
 	//装载全局工具函数
 	app.config.globalProperties.Utils = Utils;
+	//装载封装Log
+	app.config.globalProperties.$log = log;
 	console.log("Utils mounted");
 }
 

@@ -1,39 +1,247 @@
 <template>
   <div class="EditProblemJudgeFile">
-    <el-upload
-      class="uploadJson"
-      drag
-      accept=".zip,.in,.out"
-      :auto-upload="false"
-      :on-change="selectFile"
-      :on-remove="removeFile"
+    <div class="search">
+      <span style="width: 70px">题号：</span>
+      <el-input-number
+        v-model="search.PID"
+        :min="1"
+        v-on:focus="search.onFocus()"
+      />
+      <el-button
+        plain
+        v-on:click="search.getProblem(null)"
+      >
+        搜索
+      </el-button>
+    </div>
+    <div
+      class="preview"
+      v-show="search.isSearched"
     >
-      <el-icon class="el-icon--upload">
-        <upload-filled />
-      </el-icon>
-      <div class="el-upload__text">
-        以zip、in、out格式文件上传 <em>点击</em>或者<em>拖拽</em>
+      <div class="fileList">
+        <div class="header">
+          <div>文件名</div>
+          <div>类型</div>
+          <div>大小</div>
+          <div>操作</div>
+        </div>
+        <div
+          id="notFound"
+          v-show="fileList.length == 0"
+        >
+          暂无文件
+        </div>
+        <div
+          class="fileItem"
+          v-for="(item,index) in fileList"
+          :key="index"
+        >
+          <div>{{item.Filename}}</div>
+          <div>{{item.Filename.split('.')[1]}}</div>
+          <div>{{ (item.FileSize / 1024).toFixed(2)}}KB</div>
+          <div>
+            <el-button
+              type="danger"
+              plain
+              size="small"
+              @click="deleteFile(index)"
+            >
+              删除
+            </el-button>
+            <el-button
+              v-if="item.Filename.split('.')[1] == 'zip'"
+              type="warning"
+              plain
+              size="small"
+              @click="unzipFile(index)"
+            >
+              解压
+            </el-button>
+          </div>
+        </div>
       </div>
-    </el-upload>
+      <el-upload
+        ref="upload"
+        class="uploadJson"
+        drag
+        accept=".zip,.in,.out"
+        :auto-upload="false"
+        :on-change="selectFile"
+        :on-remove="removeFile"
+      >
+        <el-icon class="el-icon--upload">
+          <upload-filled />
+        </el-icon>
+        <div class="el-upload__text">
+          以zip、in、out格式文件上传 <em>点击</em>或者<em>拖拽</em>
+        </div>
+      </el-upload>
+      <el-button
+        plain
+        @click="uploadFileList"
+        type="primary"
+      >
+        上传
+      </el-button>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import qs from "qs";
-import { getCurrentInstance, onMounted, reactive } from "vue";
+import { ElMessageBox } from "element-plus";
+import { getCurrentInstance, onMounted, reactive, ref } from "vue";
 const { proxy } = getCurrentInstance() as any;
 
-function selectFile(e: any, fileList: any) {
-  // console.log(fileList[0]);
-  let file = new FormData();
-  file.append("file", fileList[0].raw);
+//文件列表
+var uploadList = ref<File[]>([]);
+var fileList = ref<{ Filename: string; FileType: string; FileSize: number }[]>(
+  []
+);
 
-  proxy.$post("api/file/1000", file, 2).then((res: any) => {
-    console.log(res);
+var search = reactive({
+  PID: 0,
+  isSearched: false,
+  onFocus() {
+    search.isSearched = false;
+  },
+  getProblem(PID: number | null) {
+    if (PID) {
+      search.PID = PID;
+    }
+    fileList.value = [];
+    uploadList.value = [];
+    proxy.$get("api/file/" + search.PID).then((res: any) => {
+      // proxy.$log(res);
+      let data = res.data;
+      if (data.code == 0) {
+        fileList.value = data.Data;
+      }
+      if (!data.Data) {
+        proxy.elMessage({ message: "暂无文件", type: "info" });
+      }
+      search.isSearched = true;
+      // proxy.codeProcessor(data.code);
+    });
+  },
+});
+
+//选择上传文件
+function selectFile(e: any, fList: any) {
+  uploadList.value = [];
+  fList.forEach((file) => {
+    uploadList.value.push(file);
+  });
+  let tempName = fList[fList.length - 1].name;
+  fileList.value.forEach((f: any) => {
+    if (tempName == f.Filename) {
+      proxy.elMessage({
+        message: f.Filename + " 已存在，将会覆盖原文件!",
+        type: "warning",
+      });
+      return;
+    }
+  });
+  // proxy.$log(uploadList.value);
+}
+
+//移除将上传的文件
+function removeFile(deletedF: any, fList: any) {
+  uploadList.value = [];
+  fList.forEach((file) => {
+    uploadList.value.push(file);
+  });
+  proxy.elMessage({
+    message: "取消上传 " + deletedF.name,
+    type: "success",
   });
 }
 
-function removeFile() {}
+//上传全部
+function uploadFileList() {
+  if (uploadList.value.length == 0) {
+    proxy.elMessage({
+      message: "上传列表为空！",
+      type: "warning",
+    });
+    return;
+  }
+  ElMessageBox.confirm("确定上传吗？", "注意", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  }).then(() => {
+    uploadList.value.forEach((f: any) => {
+      uploadF(f);
+    });
+    proxy.$refs.upload.clearFiles();
+  });
+}
+
+//上传文件
+function uploadF(f: any) {
+  let file = new FormData();
+  file.append("file", f.raw);
+  proxy.$post("api/file/" + search.PID, file, 2).then((res: any) => {
+    let data = res.data;
+    if (data.code == 0) {
+      for (let existFile in fileList.value) {
+        if (fileList.value[existFile].Filename == f.name) {
+          fileList.value.splice(Number(existFile), 1);
+          break;
+        }
+      }
+      fileList.value.push({
+        Filename: f.name,
+        FileType: f.name.split(".")[1],
+        FileSize: f.size,
+      });
+      proxy.elMessage({ message: f.name + " 上传成功!", type: "success" });
+    }
+    proxy.codeProcessor(data.code);
+  });
+}
+
+//解压已有文件
+function unzipFile(index: number) {
+  let fileName = fileList.value[index].Filename;
+  ElMessageBox.confirm("确定解压 " + fileName + " 吗？", "注意", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  }).then(() => {
+    let form = new FormData();
+    form.append("file", fileName);
+    proxy.$post("api/file/unzip/" + search.PID, form, 2).then((res: any) => {
+      console.log(res);
+      let data = res.data;
+      if (data.code == 0) {
+        proxy.elMessage({ message: "解压成功", type: "succes" });
+      }
+      proxy.codeProcessor(data.code);
+    });
+  });
+}
+
+//删除已有文件
+function deleteFile(index: number) {
+  let fileName = fileList.value[index].Filename;
+  ElMessageBox.confirm("确定删除 " + fileName + " 吗？", "注意", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  }).then(() => {
+    let form = new FormData();
+    form.append("file", fileName);
+    proxy.$delete("api/file/" + search.PID, form).then((res: any) => {
+      let data = res.data;
+      if (data.code == 0) {
+        fileList.value.splice(index, 1);
+        proxy.elMessage({ message: "删除成功", type: "succes" });
+      }
+      proxy.codeProcessor(data.code);
+    });
+  });
+}
 
 onMounted(() => {});
 </script>
@@ -46,64 +254,56 @@ onMounted(() => {});
   margin-bottom: 40px;
 }
 
-.table {
-  width: 100%;
-
-  > div {
-    display: flex;
-    align-content: center;
-    box-sizing: border-box;
-    margin: 5px 0;
-  }
-}
-
 span {
   font-size: 22px;
   width: 150px;
   @include font_color("font1");
 }
 
-.list {
-  width: 100%;
+.preview {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  box-sizing: border-box;
-  padding: 5px;
 
-  .item {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 3px 10px;
-    margin: 5px 0;
-    border-radius: 8px;
-    border: 2px solid;
-    @include border_color("border2");
+  .fileList {
     display: flex;
-    align-items: center;
-    transition-duration: 260ms;
+    flex-direction: column;
 
-    &:hover {
-      @include fill_color("fill15");
-      border: 2px solid;
-      @include border_color("fill12");
-    }
-
-    input {
-      height: 20px;
-      width: 20px;
-      margin: 0 10px;
-    }
-
-    .title {
-      width: fit-content;
+    .header {
+      display: grid;
+      grid-template-columns: repeat(4, calc(100% / 4));
+      @include fill_color("fill34");
       font-size: $fontSize7;
-      @include font_color("font1");
-    }
-  }
 
-  .itemSelected {
-    @include fill_color("fill45");
+      > div {
+        box-sizing: border-box;
+        padding: 0 5px;
+        @include font_color("font1");
+      }
+    }
+
+    #notFound {
+      text-align: center;
+      @include fill_color("fill4");
+      font-size: $fontSize7;
+      @include font_color("font2");
+      padding: 20px 0;
+    }
+
+    .fileItem {
+      display: grid;
+      grid-template-columns: repeat(4, calc(100% / 4));
+      align-items: center;
+      box-sizing: border-box;
+      padding: 3px 0;
+      @include fill_color("fill4");
+      font-size: $fontSize5;
+
+      > div {
+        box-sizing: border-box;
+        padding: 0 5px;
+        @include font_color("font2");
+      }
+    }
   }
 }
 </style>
