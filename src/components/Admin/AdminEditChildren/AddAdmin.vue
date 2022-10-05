@@ -39,134 +39,152 @@
           />
         </div>
       </div>
-      <el-button @click="confirm" >确认</el-button>
+      <el-button @click="confirm">确认</el-button>
     </div>
   </div>
 
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance, onMounted, reactive } from 'vue'
-import { useStore } from 'vuex'
-const { proxy } = getCurrentInstance() as any
-const store = useStore()
+import { getCurrentInstance, onMounted, reactive } from "vue";
+import { useStore } from "vuex";
+const { proxy } = getCurrentInstance() as any;
+const store = useStore();
 
 type searchType = {
-  UID: string
-  Adept: string
-  Classes: string
-  Email: string
-  Major: string
-  School: string
-  UserName: string
-  Vjid: string
-  getInfo: Function
-  [item: string]: any
-}
+  UID: string;
+  Adept: string;
+  Classes: string;
+  Email: string;
+  Major: string;
+  School: string;
+  UserName: string;
+  Vjid: string;
+  getInfo: Function;
+  [item: string]: any;
+};
 var search = reactive<searchType>({
-  UID: '',
-  Adept: '',
-  Classes: '',
-  Email: '',
-  Major: '',
-  School: '',
-  UserName: '',
-  Vjid: '',
+  UID: "",
+  Adept: "",
+  Classes: "",
+  Email: "",
+  Major: "",
+  School: "",
+  UserName: "",
+  Vjid: "",
   PermissionMap: 0,
+  //超管、资源、竞赛、题单、题目、管理员
   permissionTabel: [false, false, false, false, false, false],
   isSearched: false,
   copy: (data: any): void => {
-    search.UID = data.UID
-    search.Adept = data.Adept
-    search.Classes = data.Classes
-    search.Email = data.Email
-    search.Major = data.Major
-    search.School = data.School
-    search.UserName = data.UserName
-    search.Vjid = data.Vjid
+    search.UID = data.UID;
+    search.Adept = data.Adept;
+    search.Classes = data.Classes;
+    search.Email = data.Email;
+    search.Major = data.Major;
+    search.School = data.School;
+    search.UserName = data.UserName;
+    search.Vjid = data.Vjid;
   },
   getInfo: async (): Promise<void> => {
     if (!search.UID) {
-      proxy.elMessage({ message: '输入的UID不能为空!', type: 'warning' })
-      return
+      proxy.elMessage({ message: "输入的UID不能为空!", type: "warning" });
+      return;
     }
-    proxy.$get('api/user/info?UID=' + search.UID).then((res: any) => {
-      let data = res.data
+    proxy.$get("api/user/info?UID=" + search.UID).then((res: any) => {
+      let data = res.data;
       if (data.code == 0) {
-        search.copy(data)
-        proxy.$get('api/admin/permission/' + search.UID).then((res: any) => {
-          let data = res.data
+        search.copy(data);
+        proxy.$get("api/admin/permission/" + search.UID).then((res: any) => {
+          let data = res.data;
           if (data.code == 0) {
-            search.PermissionMap = Number(data.PermissionMap)
-            search.isSearched = true
+            search.PermissionMap = Number(data.PermissionMap);
+            search.isSearched = true;
             if (
               (search.PermissionMap & store.state.constVal.AdministratorBit) >
               0
             )
-              search.permissionTabel[5] = true
-            else search.permissionTabel[5] = false
+              search.permissionTabel[5] = true;
+            else search.permissionTabel[5] = false;
             if (
               (search.PermissionMap & store.state.constVal.ProblemAdminBit) >
               0
             )
-              search.permissionTabel[5] = search.permissionTabel[4] = true
-            else search.permissionTabel[4] = false
+              search.permissionTabel[5] = search.permissionTabel[4] = true;
+            else search.permissionTabel[4] = false;
             if ((search.PermissionMap & store.state.constVal.ListAdminBit) > 0)
-              search.permissionTabel[5] = search.permissionTabel[3] = true
-            else search.permissionTabel[3] = false
+              search.permissionTabel[5] = search.permissionTabel[3] = true;
+            else search.permissionTabel[3] = false;
             if (
               (search.PermissionMap & store.state.constVal.ContestAdminBit) >
               0
             )
-              search.permissionTabel[5] = search.permissionTabel[2] = true
-            else search.permissionTabel[2] = false
+              search.permissionTabel[5] = search.permissionTabel[2] = true;
+            else search.permissionTabel[2] = false;
             if (
               (search.PermissionMap & store.state.constVal.SourceBorwserBit) >
               0
             )
-              search.permissionTabel[5] = search.permissionTabel[1] = true
-            else search.permissionTabel[1] = false
+              search.permissionTabel[5] = search.permissionTabel[1] = true;
+            else search.permissionTabel[1] = false;
             if ((search.PermissionMap & store.state.constVal.SuperAdminBit) > 0)
               for (let i in search.permissionTabel) {
-                search.permissionTabel[i] = true
+                search.permissionTabel[i] = true;
               }
-            else search.permissionTabel[0] = false
+            else search.permissionTabel[0] = false;
           }
-        })
+        });
       } else {
-        proxy.codeProcessor(data.code)
-        return
+        proxy.codeProcessor(data.code);
+        return;
       }
-    })
+    });
   },
   select: (index: number) => {
-    let result = search.permissionTabel[index]
+    let result = search.permissionTabel[index];
     if (index == 0 && result) {
       for (let i in search.permissionTabel) {
-        search.permissionTabel[i] = true
+        search.permissionTabel[i] = true;
       }
       proxy.elMessage({
-        message: '注意，你将赋予 超级管理员 权限！',
-        type: 'warning',
-      })
+        message: "注意，你将赋予 超级管理员 权限！",
+        type: "warning",
+      });
     }
     if (index == 0 && !result && store.state.userData.UID == search.UID) {
       proxy.elMessage({
-        message: '注意，你将取消自己的 超级管理员 权限！',
-        type: 'warning',
-      })
+        message: "注意，你将取消自己的 超级管理员 权限！",
+        type: "warning",
+      });
     }
     if (index != 0 && !result && search.permissionTabel[0]) {
       proxy.elMessage({
-        message: '注意，你将取消 超级管理员 的次级权限，这可能是无效的！',
-        type: 'warning',
-      })
+        message: "注意，你将取消 超级管理员 的次级权限，这可能是无效的！",
+        type: "warning",
+      });
     }
   },
-})
+});
 
 function confirm() {
-  proxy.$post("api/admin/")
+  proxy
+    .$post("api/admin/permission/edit/", {
+      UID: search.UID,
+      SuperAdmin: search.permissionTabel[0],
+      SourceAdmin: search.permissionTabel[1],
+      ContestAdmin: search.permissionTabel[2],
+      ProbelmAdmin: search.permissionTabel[4],
+    })
+    .then((res: any) => {
+      let data = res.data;
+      if (data.code == 0) {
+        proxy.elMessage({
+          message: "修改成功",
+          type: "success",
+        });
+      }
+      proxy.codeProcessor(data.code);
+    });
 }
 </script>
 
@@ -180,7 +198,7 @@ function confirm() {
     align-items: center;
 
     span {
-      @include font_color('font1');
+      @include font_color("font1");
       font-size: $fontSize6;
     }
   }
@@ -189,12 +207,12 @@ function confirm() {
     display: flex;
     flex-direction: column;
     font-size: $fontSize6;
-    @include font_color('font1');
+    @include font_color("font1");
 
     div {
       &:nth-child(1) {
         font-size: $fontSize8;
-        @include font_color('fill41');
+        @include font_color("fill41");
       }
     }
 
@@ -204,12 +222,12 @@ function confirm() {
       display: grid;
       grid-template-columns: repeat(6, calc(100% / 6));
       grid-template-rows: repeat(2, 40px);
-      @include fill_color('fill4');
+      @include fill_color("fill4");
 
       .header {
         font-size: $fontSize7;
-        @include font_color('font1');
-        @include fill_color('fill34');
+        @include font_color("font1");
+        @include fill_color("fill34");
         line-height: 40px;
         text-align: center;
       }
