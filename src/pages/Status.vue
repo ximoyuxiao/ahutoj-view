@@ -141,14 +141,20 @@ var status = reactive<statusType>({ list: [] });
 
 //获取数据
 function getStatus() {
-  proxy.$get("api/submit/status").then((res: any) => {
-    let data = res.data;
-    if (data.code == 0) {
-      // proxy.$log(data)
-      status.list = data.Data;
-    }
-    proxy.codeProcessor(data.code);
-  });
+  proxy
+    .$get("api/submit/status", {
+      Page: config.currentPage - 1,
+      Limit: config.limit,
+    })
+    .then((res: any) => {
+      let data = res.data;
+      if (data.code == 0) {
+        // proxy.$log(data);
+        config.Count = data.Count;
+        status.list = data.Data;
+      }
+      proxy.codeProcessor(data.code);
+    });
 }
 
 //用于同步浏览器url

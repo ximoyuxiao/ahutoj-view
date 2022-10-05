@@ -6,8 +6,8 @@ import store from "./store/index";
 import mountServerFunctions from "./mountServerFunctions";
 
 const app = createApp(App);
-init(app);
 app.use(store);
 app.use(router);
+init(app);
 app.mount("#app");
 mountServerFunctions(app);

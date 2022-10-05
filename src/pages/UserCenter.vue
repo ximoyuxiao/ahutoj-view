@@ -407,14 +407,8 @@ function getUserSubmit() {
       // proxy.$log(res);
       let data = res.data;
       if (data.code == 0) {
-        sessionStorage.setItem(
-          "userSubmitData",
-          JSON.stringify({
-            data: data.Data,
-            UID: store.state.userData.UID,
-            saveTime: Date.now(),
-          })
-        );
+        //缓存数据
+        proxy.Buffer.UserCenter.submitData(data.Data, store.state.userData.UID);
         activityCalendarConfig.init(data.Data);
       }
       proxy.codeProcessor(data.code);

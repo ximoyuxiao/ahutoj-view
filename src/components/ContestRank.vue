@@ -34,19 +34,19 @@
       <div style="width:70px">{{index + 1}}</div>
       <div style="width:360px;text-align: start;">{{item.Uname}}({{item.UserID}})</div>
       <div style="width:90px">{{item.ACNumber}}</div>
-      <div style="width:140px">{{item.TimePenalty}}</div>
+      <div style="width:140px">{{proxy.Utils.TimeTools.timestampToInterval(item.TimePenalty*1000,2)}}</div>
       <div
         class="problemStatus"
         v-for="(p,index) in contest.Data"
         :key="index"
-        :style="'width:140px;' + getBackgroundColor(item.ProblemsMap.get(p.PID))"
+        :style="'width:140px;' + getBackgroundColor(item.ProblemsMap[p.PID])"
       >
-        <div v-if="item.ProblemsMap.get(p.PID) && item.ProblemsMap.get(p.PID).Status == 'AC'">
-          {{(item.ProblemsMap.get(p.PID).Time/1000).toFixed(0)}}
+        <div v-if="item.ProblemsMap[p.PID] && item.ProblemsMap[p.PID].Status == 'AC'">
+          {{(item.ProblemsMap[p.PID].Time/1000).toFixed(0)}}
         </div>
-        <div v-if="(item.ProblemsMap.get(p.PID) && (item.ProblemsMap.get(p.PID).SubmitNumber > 1)) 
-        ||  (item.ProblemsMap.get(p.PID) && (item.ProblemsMap.get(p.PID).SubmitNumber >= 1) && (item.ProblemsMap.get(p.PID).Status != 'AC'))">
-          (-{{item.ProblemsMap.get(p.PID).Status == 'AC' ? item.ProblemsMap.get(p.PID).SubmitNumber-1 : item.ProblemsMap.get(p.PID).SubmitNumber}})
+        <div v-if="(item.ProblemsMap[p.PID] && (item.ProblemsMap[p.PID].SubmitNumber > 1)) 
+        ||  (item.ProblemsMap[p.PID] && (item.ProblemsMap[p.PID].SubmitNumber >= 1) && (item.ProblemsMap[p.PID].Status != 'AC'))">
+          (-{{item.ProblemsMap[p.PID].Status == 'AC' ? item.ProblemsMap[p.PID].SubmitNumber-1 : item.ProblemsMap[p.PID].SubmitNumber}})
         </div>
       </div>
     </div>
@@ -175,10 +175,10 @@ var rank = reactive<{
     //保存题目PID 最先AC的人
     let tempPioneerFlags = new Map<number, any>();
     for (let i in contest.Data) {
-      tempPioneerFlags.set(contest.Data[i].PID, {
+      tempPioneerFlags[contest.Data[i].PID] = {
         index: -1,
         Time: 0xfffffff,
-      });
+      };
     }
     //遍历并封装数据
     for (let i in data) {
@@ -204,8 +204,11 @@ var rank = reactive<{
           //计算 总ac时间
           tempACTime += Number((problem.Time / 1000).toFixed(0));
           //找出先锋（最先ac者）
-          if (problem.Time < tempPioneerFlags.get(problem.PID).Time) {
-            tempPioneerFlags.set(problem.PID, { index: i, Time: problem.Time });
+          if (problem.Time < tempPioneerFlags[problem.PID].Time) {
+            tempPioneerFlags[problem.PID] = {
+              index: Number(i),
+              Time: problem.Time,
+            };
           }
         }
         let tempProblem: ProblemsMapType = {
@@ -214,7 +217,7 @@ var rank = reactive<{
           Status: problem.Status,
           Pioneer: false,
         };
-        listItem.ProblemsMap.set(problem.PID, tempProblem);
+        listItem.ProblemsMap[problem.PID] = tempProblem;
       }
       //计算罚时
       listItem.TimePenalty =
@@ -223,9 +226,9 @@ var rank = reactive<{
       rank.rankList.push(listItem);
     }
     //设置先锋
-    for (let [key, value] of tempPioneerFlags) {
-      if (value.index != -1) {
-        rank.rankList[value.index].ProblemsMap.get(key).Pioneer = true;
+    for (let i in tempPioneerFlags) {
+      if (tempPioneerFlags[i].index != -1) {
+        rank.rankList[tempPioneerFlags[i].index].ProblemsMap[i].Pioneer = true;
       }
     }
     //排序
@@ -236,8 +239,9 @@ var rank = reactive<{
         else return 0;
       } else return -1;
     });
-
-    console.log(this.rankList);
+    //缓存
+    proxy.Buffer.ContestRank.rankData(rank.rankList, contest.CID);
+    // console.log(this.rankList);
   },
 });
 
@@ -245,7 +249,22 @@ var rank = reactive<{
 async function getRankList() {
   let loading = proxy.elLoading({ node: proxy.$refs.ContestRank });
   await getContest();
-
+  //从缓存拿数据
+  let bufferedData: any = sessionStorage.getItem(
+    "contestRankData" + contest.CID
+  );
+  if (bufferedData) {
+    bufferedData = JSON.parse(bufferedData);
+    //5秒内刷新会拿buffer中的数据
+    if (
+      bufferedData.CID == contest.CID &&
+      Date.now() - bufferedData.saveTime < 10000
+    ) {
+      rank.rankList = bufferedData.data;
+      loading.close();
+      return;
+    }
+  }
   let params: { [item: string]: any } = { Pass: "" };
   let CID = proxy.$route.query.CID;
   if (proxy.$route.query.Pass) {
