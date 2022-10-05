@@ -174,7 +174,7 @@ function permissionParser(PermissionMap) {
     title: "欢迎来到管理界面",
     message: permissionTabel,
     type: "success",
-    duration: 4000,
+    duration: 3000,
     dangerouslyUseHTMLString: true,
     offset: 100,
   });

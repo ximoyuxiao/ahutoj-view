@@ -12,40 +12,71 @@
           :key="index"
         >
           <div class="goingFlag">
-            <div
-              v-if="item.EndTime > config.serverTime"
-              class="going"
-              style="background-color: #5ebd00"
-            ></div>
-            <div
-              v-else
-              class="finish"
-              style="background-color: #969696"
-            ></div>
+            <!-- 未开始 -->
+            <template v-if="item.BeginTime > config.serverTime">
+              <div
+                class="waiting"
+                style="background-color: #009acd"
+              >
+              </div>
+            </template>
+            <!-- 已开始 -->
+            <template v-else>
+              <div
+                v-if="item.EndTime > config.serverTime"
+                class="going"
+                style="background-color: #5ebd00"
+              >
+              </div>
+              <div
+                v-else
+                class="finish"
+                style="background-color: #969696"
+              >
+              </div>
+            </template>
           </div>
           <div class="publicFlag">
-            <div
-              v-if="item.IsPublic == 1"
-              style="color: #5ebd00"
-            >
-              <el-icon
-                color="#5ebd00"
-                size="22px"
+            <!-- 未开始 -->
+            <template v-if="item.BeginTime > config.serverTime">
+              <div
+                v-if="item.IsPublic == 1"
+                style="color: #009acd"
               >
-                <Unlock />
-              </el-icon>公开
-            </div>
-            <div
-              v-else
-              style="color: #ff3300"
-            >
-              <el-icon
-                color="#ff3300"
-                size="22px"
+                <el-icon
+                  color="#009acd"
+                  size="22px"
+                >
+                  <Timer />
+                </el-icon>等待
+              </div>
+            </template>
+            <!-- 已开始 -->
+            <template v-else>
+              <div
+                v-if="item.IsPublic == 1"
+                style="color: #5ebd00"
               >
-                <Lock />
-              </el-icon>私有
-            </div>
+                <el-icon
+                  color="#5ebd00"
+                  size="22px"
+                >
+                  <Unlock />
+                </el-icon>公开
+              </div>
+              <div
+                v-else
+                style="color: #ff3300"
+              >
+                <el-icon
+                  color="#ff3300"
+                  size="22px"
+                >
+                  <Lock />
+                </el-icon>私有
+              </div>
+            </template>
+
           </div>
           <div class="cidFlag">&nbsp;#{{ item.CID }}&nbsp;</div>
           <div
@@ -188,7 +219,16 @@ function getContests() {
 }
 
 //跳转题目
-function getContestById(contest) {
+function getContestById(contest: any) {
+  //竞赛未开始
+  if (contest.BeginTime > config.serverTime) {
+    proxy.elNotification({
+      message: "竞赛还未开始哦",
+      type: "warning",
+      duration: 2500,
+    });
+    return;
+  }
   //验证策略
   if (contest.IsPublic == 1) {
     proxy.$router.push({
@@ -324,7 +364,8 @@ onMounted(() => {
           transition-duration: 300ms;
 
           .going,
-          .finish {
+          .finish,
+          .waiting {
             height: 100%;
             width: 100%;
             border-top-left-radius: 5px;

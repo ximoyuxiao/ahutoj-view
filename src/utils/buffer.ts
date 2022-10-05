@@ -1,4 +1,13 @@
-type rankData = {};
+type rankData = {
+	ACNumber: number;
+	AllSubmit: number;
+	CENumber: number;
+	Problems: [];
+	ProblemsMap: Map<number, any>;
+	TimePenalty: number;
+	Uname: string;
+	UserID: string;
+};
 
 type submitDataType = {
 	Lang: number | null;
@@ -13,7 +22,7 @@ type submitDataType = {
 
 export class ContestRank {
 	//保存竞赛排名数据
-	public static rankData(data: any, CID: number | string): void {
+	public static rankData(data: rankData, CID: number | string): void {
 		if (CID) {
 			sessionStorage.setItem(
 				"contestRankData" + CID,

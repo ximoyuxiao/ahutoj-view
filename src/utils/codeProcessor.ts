@@ -80,6 +80,12 @@ export default function codeProcessor(
 				type: "error",
 			});
 			break;
+		case 2000:
+			ElMessage({
+				message: "竞赛密码错误",
+				type: "error",
+			});
+			break;
 		case 2001:
 			ElMessage({
 				message: "数据库错误",
@@ -89,6 +95,12 @@ export default function codeProcessor(
 		case 2002:
 			ElMessage({
 				message: "缓存数据库错误",
+				type: "error",
+			});
+			break;
+		case 2005:
+			ElMessage({
+				message: "竞赛未开始",
 				type: "error",
 			});
 			break;

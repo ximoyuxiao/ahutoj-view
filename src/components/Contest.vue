@@ -283,22 +283,22 @@ async function getContestById() {
 
   await proxy.$get("api/contest/" + contest.CID, params).then((res) => {
     let data = res.data;
+    proxy.$log(res);
     if (data.code == 0) {
-      // proxy.$log(data);
       contest.copy(data);
       notFound.value = false;
-    }
-    if (data.code == 2000) {
+    } else if (data.code == 2000) {
+      //密码错误
       proxy.$router.push({
         path: "/Contests",
       });
-      proxy.elMessage({
-        message: "竞赛密码错误！",
-        type: "warning",
+    } else if (data.code == 2005) {
+      //未开始
+      proxy.$router.push({
+        path: "/Contests",
       });
-    } else {
-      proxy.codeProcessor(data.code);
     }
+    proxy.codeProcessor(data.code);
   });
 
   loading.init();

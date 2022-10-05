@@ -21,6 +21,13 @@
       >
         判题数据
       </router-link>
+      <el-divider direction="vertical" />
+      <router-link
+        active-class="selected"
+        to="/Admin/ProblemEdit/Rejudge"
+      >
+        重判
+      </router-link>
     </div>
 
     <div class="content">
