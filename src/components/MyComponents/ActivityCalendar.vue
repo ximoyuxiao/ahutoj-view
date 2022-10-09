@@ -21,8 +21,8 @@
         class="item"
         v-for="(item, index) in config.data"
         :key="index"
-        :style="style.item(item.count)"
-        @click="config.clickEvent(item)"
+        :style="style.item(item)"
+        @click="config.clickEvent ? config.clickEvent(item) : null "
       >
       </div>
     </div>
@@ -30,7 +30,9 @@
       class="levelFlagContent"
       v-show="config.showLevelFlag"
     >
-      <div :style="'font-size:'  +config.fontSize+ 'px;'+ 'color: ' + config.fontColor">{{config.levelFlagText[0]}}</div>
+      <div :style="'font-size:'  +config.fontSize+ 'px;'+ 'color: ' + config.fontColor">
+        {{ config.levelFlagText ? config.levelFlagText[0] : ""}}
+      </div>
       <div
         class="levelFlag"
         :style="style.levelFlag()"
@@ -42,7 +44,9 @@
         >
         </div>
       </div>
-      <div :style="'font-size:'  +config.fontSize+ 'px;'+ 'color: ' + config.fontColor">{{config.levelFlagText[1]}}</div>
+      <div :style="'font-size:'  +config.fontSize+ 'px;'+ 'color: ' + config.fontColor">
+        {{config.levelFlagText ? config.levelFlagText[1] : ""}}
+      </div>
     </div>
   </div>
 </template>
@@ -58,7 +62,7 @@ import {
   defineProps,
 } from "vue";
 type propsType = {
-  data?: { date: string; count: number }[] | null | undefined;
+  data?: { date: string; count: number; index?: number }[] | null | undefined;
   endDate?: string | null | undefined;
   width?: number;
   height?: number;
@@ -69,12 +73,12 @@ type propsType = {
   showHeader?: boolean;
   backgroundColor?: string | null | undefined;
   colors?: string[] | null;
-  levelMapper?: Function | null | undefined;
+  levelMapper?: Function;
   showLevelFlag?: boolean;
   levelFlagText?: string[] | null;
   fontSize?: number;
   fontColor?: string | null;
-  clickEvent?: Function | null | undefined;
+  clickEvent?: Function;
   //不接受指定
   beginDate?: string | null | undefined;
   levels?: number | null | undefined;
@@ -92,15 +96,29 @@ const props = withDefaults(defineProps<propsType>(), {
   showHeader: true,
   backgroundColor: null,
   colors: null,
-  levelMapper: null,
+  levelMapper: function levelMapper(count: any) {
+    if (count == 0) {
+      return 0;
+    } else if (count <= 1) {
+      return 1;
+    } else if (count <= 3) {
+      return 2;
+    } else if (count <= 6) {
+      return 3;
+    } else if (count <= 9) {
+      return 4;
+    } else {
+      return 5;
+    }
+  },
   showLevelFlag: true,
   fontSize: 12,
   fontColor: null,
-  clickEvent: null,
+  clickEvent: function clickEvent(item: any) {},
 });
 
 //接收的数据
-var data = [];
+var data: { date: string; count: number }[] | null | undefined = [];
 
 const config = reactive<propsType>({
   data: [],
@@ -144,7 +162,7 @@ const config = reactive<propsType>({
   //与颜色数组同步，代表颜色数组长度
   levels: 6,
   //颜色映射表，可自定义颜色与count的关系
-  levelMapper: function levelMapper(count) {
+  levelMapper: function levelMapper(count: any) {
     if (count == 0) {
       return 0;
     } else if (count <= 1) {
@@ -196,16 +214,17 @@ const style = reactive({
       config.backgroundColor
     );
   },
-  item(i: number): string {
+  item(i: { index?: number; count: number; date: string }): string {
     return (
       "width:" +
       config.cellLength +
       "px; background-color:" +
-      config.colors[config.levelMapper(i)] +
+      config.colors[config.levelMapper(i.count)] +
       ";" +
       "border-radius:" +
       config.cellBorderRadius +
-      "px;"
+      "px;" +
+      (i.index < 0 ? "visibility: hidden;" : "")
     );
   },
   levelFlag(): string {
@@ -283,18 +302,25 @@ function calculateBeginDate() {
 
 //处理数据
 function dataProcessor() {
+  if (!data) return;
+  //根据日期排序
   data.sort((a, b) => {
     if (a.date > b.date) return 1;
     else if (a.date < b.date) return -1;
     else return 0;
   });
+  //保存月份天数
   let tempMonthDay = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  //保存表格最大容纳单元格数
   let tempAll = config.width * config.height;
+  //保存当前处理的单元格数
   let tempCount = 0;
+  //保存起始日期的 年 月 日
   let tempYMD = config.beginDate.split("-");
   let nowY = Number(tempYMD[0]) - 0,
     nowM = Number(tempYMD[1]) - 0,
     nowD = Number(tempYMD[2]) - 0;
+  //更新平年闰年月份天数表
   if ((nowY % 4 == 0 && nowY % 100 != 0) || nowY % 400 == 0)
     tempMonthDay[2] = 29;
   //开始日期不算，向后推一天
@@ -351,6 +377,10 @@ function dataProcessor() {
       });
     }
   }
+  //结束日期的星期 并且空格填充偏移量，为了让endDate在对的日期上
+  let endWeekDay = new Date(nowY + "-" + nowM + "-" + (nowD - 1)).getDay();
+  for (let i = 0; i < endWeekDay; i++)
+    tempArray.unshift({ index: i - endWeekDay, date: "", count: 0 });
   config.data = tempArray;
 }
 
