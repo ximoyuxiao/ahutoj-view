@@ -8,6 +8,12 @@ import elNotification from "./utils/elNotificationFactory";
 
 import "animate.css";
 import ElementPlus from "element-plus";
+import VMdEditor from "@kangc/v-md-editor";
+import "@kangc/v-md-editor/lib/style/base-editor.css";
+import githubTheme from "@kangc/v-md-editor/lib/theme/github.js";
+import "@kangc/v-md-editor/lib/theme/style/github.css";
+import VMdPreview from "@kangc/v-md-editor/lib/preview";
+import "@kangc/v-md-editor/lib/style/preview.css";
 
 import * as Utils from "./utils/globalFunctions";
 import * as Buffer from "./utils/buffer";
@@ -19,7 +25,7 @@ import { App, Component } from "vue";
 export default function programInitialization(app: App<Element>) {
 	console.log("program initialization start...");
 	mountUtils(app);
-	mountElementUI(app);
+	mountComponents(app);
 	mountElFactory(app);
 	mountUserComponents(app);
 	console.log("program initialization end...");
@@ -40,14 +46,18 @@ function mountUtils(app: App<Element>) {
 }
 
 //全局挂载elementUI基础组件
-function mountElementUI(app: App<Element>) {
+function mountComponents(app: App<Element>) {
 	//挂载elementPlus主组件
 	app.use(ElementPlus);
 	//全局配置element-icon
 	for (let iconName in ElIconModules) {
 		app.component(iconName, ElIconModules[iconName]);
 	}
-	console.log("ElementUIPlus mounted");
+	VMdEditor.use(githubTheme);
+	app.use(VMdEditor);
+	VMdPreview.use(githubTheme);
+	app.use(VMdPreview);
+	console.log("Components mounted");
 }
 
 //挂载封装的elementUI

@@ -118,7 +118,6 @@ a:link,
 a:visited,
 a:active {
   text-decoration: none;
-  @include font_color("fill1");
 }
 html {
   height: 100%;

@@ -9,8 +9,12 @@
         ref="left"
       >
         <div class="title">{{ problem.Title }}</div>
+
         <div class="description">
           <div class="label">描述</div>
+          <!-- <div class="markdown">
+            <v-md-preview :text="null" />
+          </div> -->
           <pre class="text">{{ problem.Description }}</pre>
         </div>
         <div class="input">
@@ -191,7 +195,6 @@ import {
   watch,
   computed,
   ref,
-  onBeforeMount,
 } from "vue";
 import { useStore } from "vuex";
 import getAceBuilds from "../utils/aceBuildsFactory";
@@ -720,6 +723,10 @@ onMounted(() => {
         padding: $modelDistance 0 $modelDistanceMini 20px;
         font-size: $fontSize7;
         @include font_color("font1");
+      }
+
+      .markdown {
+        @include fill_color("fill5");
       }
 
       .text {
