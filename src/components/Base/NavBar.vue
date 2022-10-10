@@ -93,83 +93,83 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, getCurrentInstance, onMounted, reactive, watch } from 'vue'
-import { useStore } from 'vuex'
-const { proxy } = getCurrentInstance() as any
-const store = useStore()
+import { computed, getCurrentInstance, onMounted, reactive, watch } from "vue";
+import { useStore } from "vuex";
+const { proxy } = getCurrentInstance() as any;
+const store = useStore();
 
 type propsType = {
-  login?: Function
-}
+  login?: Function;
+};
 var props = withDefaults(defineProps<propsType>(), {
   login: () => {},
-})
+});
 
 var config = reactive({
   //当前主题
   theme: 1,
-})
+});
 
 //处理切换主题事件
 function changeTheme() {
-  if (config.theme == 1) config.theme = 2
-  else config.theme = 1
-  store.commit('themeSwitch/switch', config.theme)
+  if (config.theme == 1) config.theme = 2;
+  else config.theme = 1;
+  store.commit("themeSwitch/switch", config.theme);
 }
 
 //切换为赛博朋克风格
 function cyberpunkTheme() {
-  if (config.theme == 1) config.theme = 2
-  proxy.$refs.themeSwitch.checked = true
-  store.commit('themeSwitch/switchCyberpunkTheme')
+  if (config.theme == 1) config.theme = 2;
+  proxy.$refs.themeSwitch.checked = true;
+  store.commit("themeSwitch/switchCyberpunkTheme");
 }
 
 //点击个人中心
 function intoUserCenter() {
-  proxy.$router.push({ path: '/UserCenter' })
+  proxy.$router.push({ path: "/UserCenter" });
 }
 
 //进入管理员界面
 function intoAdminCenter() {
-  proxy.$router.push({ path: '/Admin' })
+  proxy.$router.push({ path: "/Admin" });
 }
 
 //初始化登录凭证
 function initLoginCredentials() {
-  sessionStorage.clear()
-  localStorage.clear()
-  store.commit('userData/logout')
-  proxy.$router.replace({ path: '/' })
+  sessionStorage.clear();
+  localStorage.clear();
+  store.commit("userData/logout");
+  proxy.$router.replace({ path: "/" });
 }
 
 //刷新页面状态
 function refresh() {
   //维护页面theme
-  let theme: number = Number(localStorage.getItem('theme'))
-  if (theme == 0) theme = 1
+  let theme: number = Number(localStorage.getItem("theme"));
+  if (theme == 0) theme = 1;
   if (theme == 1) {
-    config.theme = theme
-    proxy.$refs.themeSwitch.checked = false
-    store.commit('themeSwitch/switch', theme)
+    config.theme = theme;
+    proxy.$refs.themeSwitch.checked = false;
+    store.commit("themeSwitch/switch", theme);
   } else if (theme == 2) {
-    config.theme = theme
-    proxy.$refs.themeSwitch.checked = true
-    store.commit('themeSwitch/switch', theme)
+    config.theme = theme;
+    proxy.$refs.themeSwitch.checked = true;
+    store.commit("themeSwitch/switch", theme);
   }
 }
 
 //为了解决props异步响应式丢失的问题
 var propsChange = computed(() => {
-  return props
-})
+  return props;
+});
 
 watch(propsChange, (nv, ov) => {}, {
   deep: true,
-})
+});
 
 onMounted(() => {
-  refresh()
-})
+  refresh();
+});
 </script>
 
 <style scoped lang="scss">
@@ -182,6 +182,11 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   z-index: 2001;
+  transition-duration: 200ms;
+
+  &:hover {
+    filter: drop-shadow(0 0 1px #99999999);
+  }
 
   #cover {
     position: absolute;
@@ -189,8 +194,8 @@ onMounted(() => {
     height: 100%;
     top: 0;
     left: 0;
-    @include fill_color('fill1');
-    @include box_shadow(0, -4px, 3px, 5px, 'fill13');
+    @include fill_color("fill1");
+    @include box_shadow(0, -4px, 3px, 5px, "fill13");
     opacity: 0.9;
   }
 
@@ -206,12 +211,12 @@ onMounted(() => {
       transition-duration: 300ms;
       z-index: 100;
       &:hover > a {
-        @include font_color('fill12');
+        @include font_color("fill12");
       }
       a {
         height: 100%;
         display: block;
-        @include font_color('font1');
+        @include font_color("font1");
         box-sizing: border-box;
         padding: 0 18px;
         text-align: center;
@@ -223,7 +228,7 @@ onMounted(() => {
 
     a {
       display: block;
-      @include font_color('font1');
+      @include font_color("font1");
       height: 100%;
       box-sizing: border-box;
       padding: 0 18px;
@@ -232,13 +237,13 @@ onMounted(() => {
       line-height: 55px;
       transition-duration: 400ms;
       &:hover {
-        @include font_color('fill11');
+        @include font_color("fill11");
       }
     }
     .selected {
       border-bottom: 3px solid;
-      @include border_color('fill13');
-      @include fill_color('fill15');
+      @include border_color("fill13");
+      @include fill_color("fill15");
       border-bottom-left-radius: 5px;
       border-bottom-right-radius: 5px;
     }
@@ -253,7 +258,7 @@ onMounted(() => {
     div {
       padding: 0 28px;
       font-size: $fontSize6;
-      @include font_color('font1');
+      @include font_color("font1");
       height: 55px;
       line-height: 55px;
       z-index: 100;
@@ -297,7 +302,7 @@ onMounted(() => {
 
         &:before {
           position: absolute;
-          content: '';
+          content: "";
           height: 1.4em;
           width: 1.4em;
           border-radius: 20px;
@@ -318,7 +323,7 @@ onMounted(() => {
       }
 
       &:hover > span {
-        @include font_color('fill12');
+        @include font_color("fill12");
       }
 
       .infoCard {
@@ -341,7 +346,7 @@ onMounted(() => {
           flex-direction: column;
           align-items: center;
           justify-content: space-around;
-          @include fill_color('fill1');
+          @include fill_color("fill1");
 
           div {
             display: flex;
@@ -350,10 +355,10 @@ onMounted(() => {
             height: min-content;
             border-radius: 12px;
             align-items: center;
-            @include fill_color('fill3');
+            @include fill_color("fill3");
 
             &:hover {
-              @include fill_color('fill2');
+              @include fill_color("fill2");
             }
           }
         }
