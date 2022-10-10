@@ -91,6 +91,26 @@
           placeholder="请输入的每个标签之间用';'隔开"
         />
       </div>
+      <div>
+        <span>来源：</span>
+        <el-select
+          v-model="problem.Origin"
+          class="m-2"
+          placeholder="Select"
+        >
+          <el-option
+            v-for="(item,index) in problem.Origins"
+            :key="item.label"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+        <el-input
+          v-show="problem.Origin != 0"
+          v-model="problem.OriginPID"
+          placeholder="输入题目来源OJ的PID"
+        />
+      </div>
       <div style="display: flex; justify-content: flex-end; padding: 10px 0">
         <el-button
           type="warning"
@@ -163,8 +183,11 @@
 <script lang="ts" setup>
 import { getCurrentInstance, reactive } from "vue";
 import { ElMessageBox } from "element-plus";
+import { useStore } from "vuex";
 
 const { proxy } = getCurrentInstance() as any;
+
+const store = useStore();
 
 //题目题号搜索功能
 var search = reactive({
@@ -203,6 +226,18 @@ var problem = reactive({
   LimitMemory: 0,
   Hit: "",
   Label: "",
+  Origin: -1,
+  OriginPID: "",
+  //选项列表 const
+  Origins: [
+    { label: "本地", value: store.state.constVal.PROBLEM_ORIGIN_LOCAL },
+    { label: "CodeForce", value: store.state.constVal.PROBLEM_ORIGIN_CF },
+    {
+      label: "AtCoder",
+      value: store.state.constVal.PROBLEM_ORIGIN_ATCODER,
+    },
+    { label: "洛谷", value: store.state.constVal.PROBLEM_ORIGIN_LUOGU },
+  ],
   init() {
     search.isSearched = false;
     this.PID = 0;
@@ -229,6 +264,8 @@ var problem = reactive({
     problem.SampleOutput = data.SampleOutput;
     problem.Title = data.Title;
     problem.Label = data.Label;
+    problem.Origin = data.Origin;
+    problem.OriginPID = data.OriginPID;
   },
 });
 
