@@ -31,7 +31,38 @@
       v-for="(item,index) in rank.rankList"
       :key="index"
     >
-      <div style="width:70px">{{index + 1}}</div>
+      <template v-if="item.medal != 0">
+        <div style="width:70px;">
+          <div class="medalIcon">
+            <el-icon
+              size="36px"
+              color="#fabd08"
+              v-if="item.medal == 1"
+            >
+              <Medal />
+            </el-icon>
+            <el-icon
+              size="36px"
+              color="#d6d6d6"
+              v-else-if="item.medal == 2"
+            >
+              <Medal />
+            </el-icon>
+            <el-icon
+              size="36px"
+              color="#c57120"
+              v-else="item.medal == 3"
+            >
+              <Medal />
+            </el-icon>
+          </div>
+          {{index + 1}}
+        </div>
+      </template>
+      <template v-else>
+        <div style="width:70px;">{{index + 1}}</div>
+      </template>
+
       <div style="width:360px;text-align: start;">{{item.Uname}}({{item.UserID}})</div>
       <div style="width:90px">{{item.ACNumber}}</div>
       <div style="width:140px">{{proxy.Utils.TimeTools.timestampToInterval(item.TimePenalty*1000,2)}}</div>
@@ -165,6 +196,7 @@ type listItemType = {
   UserID: string;
   TimePenalty?: number;
   ProblemsMap?: Map<number, ProblemsMapType>;
+  medal?: number;
 };
 var rank = reactive<{
   rankList: listItemType[];
@@ -191,6 +223,7 @@ var rank = reactive<{
         UserID: "",
         TimePenalty: 0,
         ProblemsMap: new Map<number, ProblemsMapType>(),
+        medal: 0,
       };
       listItem.ACNumber = data[i].ACNumber;
       listItem.AllSubmit = data[i].AllSubmit;
@@ -239,6 +272,25 @@ var rank = reactive<{
         else return 0;
       } else return -1;
     });
+    //统计金银铜牌
+    let goldIndex = Number((rank.rankList.length * 0.1).toFixed(0));
+    let silverIndex = Number((rank.rankList.length * 0.2).toFixed(0));
+    let copperIndex = Number((rank.rankList.length * 0.3).toFixed(0));
+    goldIndex = goldIndex < 1 ? 1 : goldIndex;
+    silverIndex = silverIndex < 2 ? 2 : silverIndex;
+    copperIndex = copperIndex < 3 ? 3 : copperIndex;
+    for (let i = 0; i < rank.rankList.length; i++) {
+      if (i < goldIndex) {
+        rank.rankList[i].medal = 1;
+      } else if (i < silverIndex) {
+        rank.rankList[i].medal = 2;
+      } else if (i < copperIndex) {
+        rank.rankList[i].medal = 3;
+      } else {
+        break;
+      }
+    }
+
     //缓存
     proxy.Buffer.ContestRank.rankData(rank.rankList, contest.CID);
     // console.log(this.rankList);
@@ -347,12 +399,14 @@ onMounted(() => {
   .header {
     display: flex;
     align-items: center;
+    height: $contestRank_headerHeight;
     font-size: $fontSize7;
     @include font_color("font1");
 
     > div {
       box-sizing: border-box;
-      padding: 4px 10px;
+      height: 100%;
+      line-height: $contestRank_headerHeight;
       text-align: center;
       border-right: 1px solid;
       border-bottom: 1px solid;
@@ -372,10 +426,11 @@ onMounted(() => {
   }
 
   .item {
-    height: 80px;
+    position: relative;
+    height: $contestRank_itemHeight;
     display: flex;
     align-items: center;
-    font-size: $fontSize7;
+    font-size: $fontSize6;
     @include font_color("font2");
 
     &:last-child {
@@ -389,9 +444,19 @@ onMounted(() => {
       }
     }
 
+    .medalIcon {
+      position: absolute;
+      top: 8px;
+      left: -40px;
+
+      svg {
+        filter: drop-shadow(0 0 1px #96969688);
+      }
+    }
+
     > div {
-      height: 80px;
-      line-height: 80px;
+      height: $contestRank_itemHeight;
+      line-height: $contestRank_itemHeight;
       box-sizing: border-box;
       padding: 0 5px;
       text-align: center;
@@ -417,10 +482,10 @@ onMounted(() => {
         line-height: 20px;
 
         &:first-child {
-          font-size: $fontSize6;
+          font-size: $fontSize5;
         }
         &:last-child {
-          font-size: $fontSize5;
+          font-size: $fontSize4;
         }
       }
     }
