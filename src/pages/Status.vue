@@ -5,19 +5,26 @@
       v-show="status.list.length != 0"
     >
       <div class="header">
+        <div style="width: 100px">提交ID</div>
         <div style="width: 120px">题目ID</div>
-        <div style="width: 100px">状态</div>
+        <div style="width: 120px">状态</div>
         <div style="width: 140px">语言</div>
         <div style="width: 100px">用时</div>
         <div style="width: 100px">内存</div>
         <div style="width: 180px">提交时间</div>
-        <div style="width: 140px">提交ID</div>
       </div>
       <div
         class="item"
         v-for="(item, index) in status.list"
         :key="index"
       >
+
+        <div
+          class="SID"
+          style="width: 100px"
+        >
+          {{ item.SID }}
+        </div>
         <div
           class="PID cursor_pointer"
           style="width: 120px"
@@ -25,16 +32,19 @@
         >
           {{ item.PID }}
         </div>
-        <div
-          class="res cursor_pointer"
-          :style="
-          'width: 100px; color: #ffffff; background-color:' +
+        <div style="width: 120px; display: flex; justify-content: center;">
+          <div
+            class="res cursor_pointer"
+            :style="
+          'color: #ffffff; background-color:' +
           proxy.Utils.StatusConstValManager.getStatusColor(item.Result)
         "
-          @click="goToSeeCode(item.SID)"
-        >
-          {{ item.Result }}
+            @click="goToSeeCode(item.SID)"
+          >
+            {{ item.Result }}
+          </div>
         </div>
+
         <div style="width: 140px">
           {{ proxy.Utils.StatusConstValManager.getLangString(item.Lang) }}
         </div>
@@ -55,12 +65,6 @@
           style="width: 180px"
         >
           {{ proxy.Utils.TimeTools.timestampToTime(item.SubmitTime) }}
-        </div>
-        <div
-          class="SID"
-          style="width: 140px"
-        >
-          {{ item.SID }}
         </div>
       </div>
       <div class="pagination">
@@ -227,6 +231,10 @@ onMounted(() => {
       border-bottom: 2px solid;
       @include border_color("border2");
       padding: 10px 0;
+
+      > div {
+        text-align: center;
+      }
     }
 
     .item {
@@ -240,14 +248,21 @@ onMounted(() => {
       box-sizing: border-box;
       @include border_color("border2");
 
-      .res {
-        text-align: center;
-        padding: 10px 0;
-        border-radius: 6px;
-      }
-
       .PID {
         @include font_color("fill12");
+        box-sizing: border-box;
+      }
+      .res {
+        margin: 8px 0;
+        padding: 4px 10px;
+        box-sizing: border-box;
+        border-radius: 6px;
+        width: fit-content;
+        filter: drop-shadow(0 0 1px #00000088);
+      }
+
+      > div {
+        text-align: center;
       }
     }
 

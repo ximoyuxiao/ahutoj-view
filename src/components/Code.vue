@@ -8,15 +8,21 @@
       v-show="!notFound"
     >
       <div class="header">
+        <div style="width: 100px">提交ID</div>
         <div style="width: 120px">题目ID</div>
         <div style="width: 120px">状态</div>
         <div style="width: 140px">语言</div>
         <div style="width: 120px">用时</div>
         <div style="width: 120px">内存</div>
         <div style="width: 180px">提交时间</div>
-        <div style="width: 140px">提交ID</div>
       </div>
       <div class="item">
+        <div
+          class="SID"
+          style="width: 100px"
+        >
+          {{ submit.SID }}
+        </div>
         <div
           class="PID cursor_pointer"
           style="width: 120px;  "
@@ -24,14 +30,16 @@
         >
           {{ submit.PID }}
         </div>
-        <div
-          class="res"
-          :style="
-        'width: 120px; color: #ffffff; background-color:' +
-        proxy.Utils.StatusConstValManager.getStatusColor(submit.Result)"
-        >
-          {{ submit.Result }}
-
+        <div style="width: 120px; display: flex; justify-content: center;">
+          <div
+            class="res cursor_pointer"
+            :style="
+          'color: #ffffff; background-color:' +
+          proxy.Utils.StatusConstValManager.getStatusColor(submit.Result)
+        "
+          >
+            {{ submit.Result }}
+          </div>
         </div>
         <div style="width: 140px">
           {{ proxy.Utils.StatusConstValManager.getLangString(submit.Lang) }}
@@ -53,12 +61,6 @@
           style="width: 180px"
         >
           {{ proxy.Utils.TimeTools.timestampToTime(submit.SubmitTime) }}
-        </div>
-        <div
-          class="SID"
-          style="width: 140px"
-        >
-          {{ submit.SID }}
         </div>
       </div>
       <div class="title">代码</div>
@@ -188,6 +190,10 @@ onMounted(() => {
     border-bottom: 2px solid #fefefe;
     padding: 10px 0;
     justify-content: space-between;
+
+    > div {
+      text-align: center;
+    }
   }
 
   .item {
@@ -201,17 +207,20 @@ onMounted(() => {
     box-sizing: border-box;
 
     .PID {
-      @include font_color("fill11");
-
-      &:hover {
-        @include font_color("fill13");
-      }
+      @include font_color("fill12");
+      box-sizing: border-box;
+    }
+    .res {
+      margin: 8px 0;
+      padding: 4px 10px;
+      box-sizing: border-box;
+      border-radius: 6px;
+      width: fit-content;
+      filter: drop-shadow(0 0 1px #00000088);
     }
 
-    .res {
+    > div {
       text-align: center;
-      padding: 10px 0;
-      border-radius: 6px;
     }
   }
 
