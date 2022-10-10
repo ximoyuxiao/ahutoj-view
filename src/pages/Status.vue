@@ -173,8 +173,7 @@ function SyncUrl() {
   });
 }
 
-//跳转到题目
-
+//跳转到题目 
 function goToProblem(PID) {
   proxy.$router.push({
     path: "/Problem",

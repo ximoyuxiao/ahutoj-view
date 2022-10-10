@@ -172,6 +172,8 @@ export class StatusConstValManager {
 			return store.state.constVal.SUBMIT_STATUS_REJUDGING_COLOR;
 		if (status == "PENDING")
 			return store.state.constVal.SUBMIT_STATUS_PENDING_COLOR;
+		if (status == "FIALED")
+			return store.state.constVal.SUBMIT_STATUS_FIALED_COLOR;
 		return "#ffffff";
 	}
 
