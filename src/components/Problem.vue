@@ -13,7 +13,7 @@
         <div class="description">
           <div class="label">描述</div>
           <!-- <div class="markdown">
-            <v-md-preview :text="null" />
+            <v-md-preview :text="'### dasd'" />
           </div> -->
           <pre class="text">{{ problem.Description }}</pre>
         </div>

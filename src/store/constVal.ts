@@ -1,5 +1,3 @@
-import { nextTick } from "vue";
-
 export default {
 	namespaced: true,
 	state: {

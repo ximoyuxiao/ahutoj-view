@@ -142,7 +142,7 @@ function getSubmit() {
   proxy.$get("api/submit/" + config.SID).then((res: any) => {
     let data = res.data;
     if (data.code == 0) {
-      proxy.$log(data);
+      // proxy.$log(data);
       submit.copy(data);
       notFound.value = false;
     }
@@ -168,7 +168,7 @@ onMounted(() => {
 });
 </script>
 
-<style  scoped lang="scss">
+<style scoped lang="scss">
 .notFound {
   width: 100%;
   height: 300px;
