@@ -12,10 +12,17 @@
 
         <div class="description">
           <div class="label">描述</div>
-          <!-- <div class="markdown">
-            <v-md-preview :text="'### dasd'" />
-          </div> -->
-          <pre class="text">{{ problem.Description }}</pre>
+          <div
+            class="markdown"
+            v-if="problem.ContentType == 1"
+          >
+            <span>MarkDown</span>
+            <v-md-preview :text="problem.Description" />
+          </div>
+          <pre
+            class="text"
+            v-else
+          >{{ problem.Description }}</pre>
         </div>
         <div class="input">
           <div class="label">输入</div>
@@ -320,6 +327,7 @@ type problemType = {
   Label: string;
   Origin: number;
   OriginPID: string;
+  ContentType: number;
   [item: string]: any;
 };
 var problem = reactive<problemType>({
@@ -338,18 +346,21 @@ var problem = reactive<problemType>({
   Label: "",
   Origin: 0,
   OriginPID: "",
+  ContentType: -1,
   copy(data: problemType) {
     // this.Pid = data.Pid;
-    this.Description = data.Description;
-    this.Hit = data.Hit;
-    this.Input = data.Input;
-    this.LimitMemory = data.LimitMemory;
-    this.LimitTime = data.LimitTime;
-    this.Output = data.Output;
-    this.SampleInput = data.SampleInput;
-    this.SampleOutput = data.SampleOutput;
-    this.Title = data.Title;
-    this.Label = data.Label;
+    console.log(data);
+    problem.Description = data.Description;
+    problem.Hit = data.Hit;
+    problem.Input = data.Input;
+    problem.LimitMemory = data.LimitMemory;
+    problem.LimitTime = data.LimitTime;
+    problem.Output = data.Output;
+    problem.SampleInput = data.SampleInput;
+    problem.SampleOutput = data.SampleOutput;
+    problem.Title = data.Title;
+    problem.Label = data.Label;
+    this.ContentType = data.ContentType;
     //题目来源不显示
     // this.Origin = data.Origin;
     // this.OriginPID = data.OriginPID;
@@ -727,6 +738,16 @@ onMounted(() => {
 
       .markdown {
         @include fill_color("fill5");
+
+        > span {
+          display: inline-block;
+          width: 100%;
+          text-align: right;
+          box-sizing: border-box;
+          padding: 5px;
+          @include font_color("font3");
+          font-size: $fontSize4;
+        }
       }
 
       .text {
