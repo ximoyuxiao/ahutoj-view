@@ -209,12 +209,12 @@ function getContests() {
     });
 
   //同步服务器时间
-  proxy.getServerTime().then((res) => {
+  proxy.getServerTime().then((res: any) => {
     let now = Date.now();
     if (res.time == null || Math.abs(res.time - now) < 1500) {
       return;
     }
-    config.serverTime = res.time;
+    config.serverTime = res.time; 
   });
 }
 

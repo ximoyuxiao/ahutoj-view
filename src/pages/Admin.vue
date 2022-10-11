@@ -204,8 +204,8 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    @include fill_color("fill51");
     padding: 20px 0;
+    @include fill_color("fill51");
 
     a {
       width: 100%;
