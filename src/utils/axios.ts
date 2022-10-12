@@ -3,8 +3,8 @@ import { App } from "vue";
 import { useStore } from "vuex";
 
 //默认请求地址
-// axios.defaults.baseURL = "http://127.0.0.1:4212/";
-axios.defaults.baseURL = "http://www.channelcz.top:1234/";
+axios.defaults.baseURL = "http://127.0.0.1:4212/";
+// axios.defaults.baseURL = "http://www.channelcz.top:1234/";
 
 // http request拦截器
 axios.interceptors.request.use(
