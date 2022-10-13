@@ -173,8 +173,8 @@ var submit = reactive<submitType>({
       submit.hasCeInfo = true;
     }
     if (
-      data.Result == "JUDGEING" ||
-      data.Result == "REJUDGEING" ||
+      data.Result == "JUDGING" ||
+      data.Result == "REJUDGING" ||
       data.Result == "PENDING"
     ) {
       submit.autoUpdate = setTimeout(() => {

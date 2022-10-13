@@ -20,6 +20,21 @@ type submitDataType = {
 	[item: string]: number;
 };
 
+export class Config {
+	public static submitLang(lang: number | string) {
+		localStorage.setItem("submitLang", String(lang));
+	}
+}
+
+export class Problem {
+	public static problemCode(PID: string, content: string) {
+		sessionStorage.setItem("pid" + PID, content);
+	}
+	public static contestProblemCode(PID: string, content: string) {
+		sessionStorage.setItem("cpid" + PID, content);
+	}
+}
+
 export class ContestRank {
 	//保存竞赛排名数据
 	public static rankData(data: rankData, CID: number | string): void {

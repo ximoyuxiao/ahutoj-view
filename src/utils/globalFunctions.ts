@@ -167,9 +167,9 @@ export class StatusConstValManager {
 				return store.state.constVal.SUBMIT_STATUS_OLE_COLOR;
 			case "CE":
 				return store.state.constVal.SUBMIT_STATUS_CE_COLOR;
-			case "JUDGEING":
+			case "JUDGING":
 				return store.state.constVal.SUBMIT_STATUS_JUDGING_COLOR;
-			case "REJUDGEING":
+			case "REJUDGING":
 				return store.state.constVal.SUBMIT_STATUS_REJUDGING_COLOR;
 			case "PENDING":
 				return store.state.constVal.SUBMIT_STATUS_PENDING_COLOR;

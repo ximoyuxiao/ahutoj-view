@@ -388,6 +388,7 @@ var aceConfig = reactive({
   ],
   themeNow: "eclipse",
   theme: ["eclipse", "one_dark"],
+  //暂存
   save() {
     let text = ace.aceEditor.getValue();
     if (text == "") {
@@ -399,9 +400,9 @@ var aceConfig = reactive({
     }
     //判断是否是竞赛题目，与普通题目分别存储
     if (!proxy.$route.query.CID) {
-      sessionStorage.setItem("pid" + problem.PID, text);
+      proxy.Buffer.Problem.problemCode(problem.PID, text);
     } else {
-      sessionStorage.setItem("cpid" + problem.PID, text);
+      proxy.Buffer.Problem.contestProblemCode(problem.PID, text);
     }
     proxy.elNotification({
       message: "暂存成功，关闭浏览器后失效",
@@ -533,6 +534,7 @@ function goToProblem(PID: number) {
 
 //改变语言模式
 function changeMode(val: string) {
+  aceConfig.modeNow = val;
   switch (val) {
     case "C":
       ace.aceEditor.session.setMode("ace/mode/c_cpp");
@@ -563,6 +565,8 @@ function changeMode(val: string) {
       aceConfig.lang = store.state.constVal.SUBMIT_LANG_C;
       break;
   }
+  //保存语言选择结果
+  proxy.Buffer.Config.submitLang(val);
 }
 
 var theme = computed(() => {
@@ -693,6 +697,11 @@ onMounted(() => {
       let text = sessionStorage.getItem("cpid" + proxy.$route.query.PID);
       if (text != null) ace.aceEditor.setValue(text);
     }
+    //设置语言
+    let Lang = localStorage.getItem("submitLang");
+    if (Lang) {
+      changeMode(Lang);
+    }
   });
 });
 </script>
@@ -715,6 +724,7 @@ onMounted(() => {
     width: 100%;
 
     .left {
+      margin-bottom: $modelDistanceLarge;
       position: relative;
       display: flex;
       flex-direction: column;
