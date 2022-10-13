@@ -5,12 +5,13 @@
       v-show="status.list.length != 0"
     >
       <div class="header">
-        <div style="width: 100px">提交ID</div>
+        <div style="width: 140px">提交ID</div>
         <div style="width: 120px">题目ID</div>
+        <div style="width: 160px">用户</div>
         <div style="width: 120px">状态</div>
         <div style="width: 140px">语言</div>
-        <div style="width: 100px">用时</div>
-        <div style="width: 100px">内存</div>
+        <div style="width: 120px">用时</div>
+        <div style="width: 120px">内存</div>
         <div style="width: 180px">提交时间</div>
       </div>
       <div
@@ -18,10 +19,9 @@
         v-for="(item, index) in status.list"
         :key="index"
       >
-
         <div
           class="SID"
-          style="width: 100px"
+          style="width: 140px"
         >
           {{ item.SID }}
         </div>
@@ -31,6 +31,12 @@
           @click="goToProblem(item.PID)"
         >
           {{ item.PID }}
+        </div>
+        <div
+          class="UID"
+          style="width: 160px"
+        >
+          {{ item.UID.length >  15 ? (item.UID.slice(0,15) + "..." ): item.UID }}
         </div>
         <div style="width: 120px; display: flex; justify-content: center;">
           <div
@@ -50,15 +56,15 @@
         </div>
         <div
           class="useTime"
-          style="width: 100px"
+          :style="'width: 120px;' + (item.Result == 'TLE' ? 'color: #ff381e;' : '')"
         >
-          {{ item.UseTime }}
+          {{ item.UseTime }}&nbsp;ms
         </div>
         <div
           class="useMemory"
-          style="width: 100px"
+          :style="'width: 120px;' + (item.Result == 'MLE' ? 'color: #ff381e;' : '')"
         >
-          {{ item.UseMemory }}
+          {{ (item.UseMemory / 1024).toFixed(0) }}&nbsp;KB
         </div>
         <div
           class="submitTime"
@@ -132,6 +138,7 @@ var config = reactive<configType>({
 //页面数据
 type statusType = {
   list: {
+    UID: string;
     Lang: number;
     PID: number;
     Result: string;
@@ -143,7 +150,7 @@ type statusType = {
 };
 var status = reactive<statusType>({ list: [] });
 
-//获取数据
+//获取提交列表
 function getStatus() {
   proxy
     .$get("api/submit/status", {
@@ -173,7 +180,7 @@ function SyncUrl() {
   });
 }
 
-//跳转到题目 
+//跳转到题目
 function goToProblem(PID) {
   proxy.$router.push({
     path: "/Problem",

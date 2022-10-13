@@ -6,7 +6,7 @@
         src="../assets/image/temporary/user.jpg"
         alt=""
       />
-      <div class="user">  
+      <div class="user">
         <div style="color:red; font-size: 20px">
         </div>
         <img
@@ -33,7 +33,7 @@
         <div>
           擅长:&nbsp;
           <el-tag
-            v-for="Adept in userInfo.AdeptArray"  
+            v-for="Adept in userInfo.AdeptArray"
             :key="Adept"
             :effect="store.state.themeSwitch.theme == 1 ? 'light' : 'dark'"
           >
@@ -594,7 +594,7 @@ var bindingVJ = reactive({
           proxy.elMessage({ message: "修改成功", type: "success" });
         }
         proxy.codeProcessor(data.code);
-      });  
+      });
   },
 });
 
@@ -832,6 +832,7 @@ onMounted(() => {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+    transition-duration: 500ms;
 
     .leftBox {
       width: $userCenter_toolnavWidth;
@@ -869,12 +870,13 @@ onMounted(() => {
 
     .rightBox {
       width: calc(100% - $userCenter_toolnavWidth - $modelDistance);
-      min-height: 300px;
+      max-height: fit-content;
       display: flex;
       flex-direction: column;
       align-items: center;
       box-sizing: border-box;
       border-radius: 20px;
+      transition-duration: 5000ms;
 
       > div {
         &:hover {

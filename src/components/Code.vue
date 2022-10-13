@@ -8,8 +8,9 @@
       v-show="!notFound"
     >
       <div class="header">
-        <div style="width: 100px">提交ID</div>
+        <div style="width: 140px">提交ID</div>
         <div style="width: 120px">题目ID</div>
+        <div style="width: 160px">用户</div>
         <div style="width: 120px">状态</div>
         <div style="width: 140px">语言</div>
         <div style="width: 120px">用时</div>
@@ -19,7 +20,7 @@
       <div class="item">
         <div
           class="SID"
-          style="width: 100px"
+          style="width: 140px"
         >
           {{ submit.SID }}
         </div>
@@ -29,6 +30,12 @@
           @click="goToProblem(submit.PID)"
         >
           {{ submit.PID }}
+        </div>
+        <div
+          class="UID"
+          style="width: 160px"
+        >
+          {{ submit.UID.length >  15 ? (submit.UID.slice(0,15) + "..." ): submit.UID }}
         </div>
         <div style="width: 120px; display: flex; justify-content: center;">
           <div
@@ -46,15 +53,15 @@
         </div>
         <div
           class="useTime"
-          style="width: 120px"
+          :style="'width: 120px;' + (submit.Result == 'TLE' ? 'color: #ff381e;' : '')"
         >
-          {{ submit.UseTime }}
+          {{ submit.UseTime }}&nbsp;ms
         </div>
         <div
           class="useMemory"
-          style="width: 120px"
+          :style="'width: 120px;' + (submit.Result == 'MLE' ? 'color: #ff381e;' : '')"
         >
-          {{ submit.UseMemory }}
+          {{ (submit.UseMemory / 1024).toFixed(0) }}&nbsp;KB
         </div>
         <div
           class="submitTime"

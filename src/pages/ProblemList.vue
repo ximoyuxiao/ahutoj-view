@@ -7,6 +7,8 @@ import { onMounted } from "@vue/runtime-core";
 import { getCurrentInstance } from "vue";
 const { proxy } = getCurrentInstance() as any;
 
+
+
 function getProblemsList() {
   proxy
     .$post("api/training/add", { UID: "11111", Title: "123" })
@@ -16,7 +18,7 @@ function getProblemsList() {
 }
 
 onMounted(() => {
-  getProblemsList();
+  // getProblemsList();
 });
 </script>
 

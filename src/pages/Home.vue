@@ -323,6 +323,7 @@ onMounted(() => {
     box-sizing: border-box;
     padding: 5px;
     border-radius: 10px;
+    transition-duration: 300ms;
 
     &::before {
       content: "— ";
@@ -330,6 +331,11 @@ onMounted(() => {
 
     &::after {
       content: " —";
+    }
+
+    &:hover {
+      letter-spacing: 4px;
+      filter: drop-shadow(0 0 2px #cdcdcd);
     }
   }
 
@@ -349,6 +355,10 @@ onMounted(() => {
         justify-content: center;
         box-sizing: border-box;
         transition-duration: 200ms;
+
+        &:hover {
+          @include fill_color("fill15");
+        }
 
         > div {
           writing-mode: vertical-lr;
