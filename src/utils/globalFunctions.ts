@@ -150,31 +150,34 @@ export class StatusConstValManager {
 	//根据提交状态获取背景配色
 	public static getStatusColor(status: string): string {
 		let store = useStore();
-		if (status == "AC")
-			return store.state.constVal.SUBMIT_STATUS_AC_COLOR;
-		if (status == "WA")
-			return store.state.constVal.SUBMIT_STATUS_WA_COLOR;
-		if (status == "TLE")
-			return store.state.constVal.SUBMIT_STATUS_TLE_COLOR;
-		if (status == "MLE")
-			return store.state.constVal.SUBMIT_STATUS_MLE_COLOR;
-		if (status == "RE")
-			return store.state.constVal.SUBMIT_STATUS_RE_COLOR;
-		if (status == "PE")
-			return store.state.constVal.SUBMIT_STATUS_PE_COLOR;
-		if (status == "OLE")
-			return store.state.constVal.SUBMIT_STATUS_OLE_COLOR;
-		if (status == "CE")
-			return store.state.constVal.SUBMIT_STATUS_CE_COLOR;
-		if (status == "JUDGEING")
-			return store.state.constVal.SUBMIT_STATUS_JUDGING_COLOR;
-		if (status == "REJUDGEING")
-			return store.state.constVal.SUBMIT_STATUS_REJUDGING_COLOR;
-		if (status == "PENDING")
-			return store.state.constVal.SUBMIT_STATUS_PENDING_COLOR;
-		if (status == "FIALED")
-			return store.state.constVal.SUBMIT_STATUS_FIALED_COLOR;
-		return "#ffffff";
+		switch (status) {
+			case "AC":
+				return store.state.constVal.SUBMIT_STATUS_AC_COLOR;
+			case "WA":
+				return store.state.constVal.SUBMIT_STATUS_WA_COLOR;
+			case "TLE":
+				return store.state.constVal.SUBMIT_STATUS_TLE_COLOR;
+			case "MLE":
+				return store.state.constVal.SUBMIT_STATUS_MLE_COLOR;
+			case "RE":
+				return store.state.constVal.SUBMIT_STATUS_RE_COLOR;
+			case "PE":
+				return store.state.constVal.SUBMIT_STATUS_PE_COLOR;
+			case "OLE":
+				return store.state.constVal.SUBMIT_STATUS_OLE_COLOR;
+			case "CE":
+				return store.state.constVal.SUBMIT_STATUS_CE_COLOR;
+			case "JUDGEING":
+				return store.state.constVal.SUBMIT_STATUS_JUDGING_COLOR;
+			case "REJUDGEING":
+				return store.state.constVal.SUBMIT_STATUS_REJUDGING_COLOR;
+			case "PENDING":
+				return store.state.constVal.SUBMIT_STATUS_PENDING_COLOR;
+			case "FAILED":
+				return store.state.constVal.SUBMIT_STATUS_FAILED_COLOR;
+			default:
+				return "#ffffff";
+		}
 	}
 
 	//获取提交语言

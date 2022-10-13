@@ -6,7 +6,9 @@
         src="../assets/image/temporary/user.jpg"
         alt=""
       />
-      <div class="user">
+      <div class="user">  
+        <div style="color:red; font-size: 20px">
+        </div>
         <img
           id="userImg"
           class="cursor_noFocus"
@@ -31,7 +33,7 @@
         <div>
           擅长:&nbsp;
           <el-tag
-            v-for="Adept in userInfo.AdeptArray"
+            v-for="Adept in userInfo.AdeptArray"  
             :key="Adept"
             :effect="store.state.themeSwitch.theme == 1 ? 'light' : 'dark'"
           >
@@ -592,7 +594,7 @@ var bindingVJ = reactive({
           proxy.elMessage({ message: "修改成功", type: "success" });
         }
         proxy.codeProcessor(data.code);
-      });
+      });  
   },
 });
 

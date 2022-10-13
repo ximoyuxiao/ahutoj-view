@@ -61,6 +61,7 @@ var config = reactive({
   },
 });
 
+//是否要ping一下服务器，用于在特定情况下测试链接状态是否通畅
 var shouldPing = computed(() => {
   return store.state.config.shouldPing;
 });

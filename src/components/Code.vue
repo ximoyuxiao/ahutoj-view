@@ -63,11 +63,26 @@
           {{ proxy.Utils.TimeTools.timestampToTime(submit.SubmitTime) }}
         </div>
       </div>
+      <div
+        class="ce"
+        v-if="submit.hasCeInfo"
+      >
+        <div class="title">错误信息</div>
+        <el-input
+          v-model="submit.CeInfo"
+          :autosize="{ minRows: 5 }"
+          readonly
+          resize="none"
+          show-word-limit
+          type="textarea"
+        />
+      </div>
       <div class="title">代码</div>
       <el-input
         v-model="submit.Source"
         :autosize="{ minRows: 5 }"
         readonly
+        resize="none"
         show-word-limit
         type="textarea"
       />
@@ -82,7 +97,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance, onMounted, reactive, ref } from "vue";
+import { getCurrentInstance, onMounted, onUnmounted, reactive, ref } from "vue";
 import { useStore } from "vuex";
 const { proxy } = getCurrentInstance() as any;
 const store = useStore();
@@ -104,6 +119,7 @@ var config = reactive<configType>({
 });
 
 type submitType = {
+  UID: string;
   Lang: number;
   PID: number;
   Result: string;
@@ -112,9 +128,11 @@ type submitType = {
   SubmitTime: number;
   UseMemory: number;
   UseTime: number;
+  CeInfo: string;
   [i: string]: any;
 };
 var submit = reactive<submitType>({
+  UID: "",
   Lang: 1,
   PID: 0,
   Result: "",
@@ -123,7 +141,25 @@ var submit = reactive<submitType>({
   SubmitTime: 0,
   UseMemory: 0,
   UseTime: 0,
+  CeInfo: "",
+  hasCeInfo: false, //是否存在ce错误
+  autoUpdate: null,
+  init() {
+    submit.UID = "";
+    submit.Lang = 1;
+    submit.PID = 0;
+    submit.Result = "";
+    submit.SID = 1;
+    submit.Source = "";
+    submit.SubmitTime = 0;
+    submit.UseMemory = 0;
+    submit.UseTime = 0;
+    submit.CeInfo = "";
+    submit.hasCeInfo = false;
+    clearTimeout(submit.autoUpdate);
+  },
   copy(data: any) {
+    submit.UID = data.UID;
     submit.Lang = data.Lang;
     submit.PID = data.PID;
     submit.Result = data.Result;
@@ -132,6 +168,20 @@ var submit = reactive<submitType>({
     submit.SubmitTime = data.SubmitTime;
     submit.UseMemory = data.UseMemory;
     submit.UseTime = data.UseTime;
+    submit.CeInfo = data.CeInfo;
+    if (data.CeInfo && data.CeInfo != "") {
+      submit.hasCeInfo = true;
+    }
+    if (
+      data.Result == "JUDGEING" ||
+      data.Result == "REJUDGEING" ||
+      data.Result == "PENDING"
+    ) {
+      submit.autoUpdate = setTimeout(() => {
+        getSubmit();
+        console.log(1);
+      }, 2000);
+    }
   },
 });
 
@@ -142,6 +192,7 @@ function getSubmit() {
   proxy.$get("api/submit/" + config.SID).then((res: any) => {
     let data = res.data;
     if (data.code == 0) {
+      submit.init();
       // proxy.$log(data);
       submit.copy(data);
       notFound.value = false;
@@ -165,6 +216,10 @@ onMounted(() => {
   //同步url参数
   if (proxy.$route.query.SID) config.SID = proxy.$route.query.SID - 0;
   getSubmit();
+});
+
+onUnmounted(() => {
+  clearTimeout(submit.autoUpdate);
 });
 </script>
 
@@ -229,5 +284,11 @@ onMounted(() => {
     font-size: $fontSize8;
     @include font_color("font1");
   }
+}
+</style>
+
+<style>
+.ce .el-textarea__inner {
+  color: rgb(233, 42, 42) !important;
 }
 </style>

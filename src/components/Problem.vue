@@ -662,7 +662,7 @@ var submit = reactive<submitType>({
       })
       .then((res: any) => {
         let data = res.data;
-        // proxy.$log(res);
+        proxy.$log(res);
         if (data.code == 0) {
           proxy.elNotification({
             message: "提交成功",
