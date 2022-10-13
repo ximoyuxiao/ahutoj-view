@@ -3,11 +3,21 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from "@vue/runtime-core";
+import { onMounted, reactive } from "@vue/runtime-core";
 import { getCurrentInstance } from "vue";
 const { proxy } = getCurrentInstance() as any;
 
+var config = reactive({
+  
+})
 
+
+//页面数据
+var ProblemList = reactive({
+  //
+  list: []
+
+})
 
 function getProblemsList() {
   proxy
