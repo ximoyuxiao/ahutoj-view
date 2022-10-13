@@ -160,7 +160,7 @@ function getStatus() {
     .then((res: any) => {
       let data = res.data;
       if (data.code == 0) {
-        // proxy.$log(data);
+        proxy.$log(data);
         config.Count = data.Count;
         status.list = data.Data;
       }
