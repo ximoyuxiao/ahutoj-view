@@ -15,7 +15,7 @@
           src="../assets/image/temporary/user.jpg"
           alt=""
         />
-        <div>{{ store.state.userData.UserName }}</div>
+        <div>{{ userDataStore.UserName }}</div>
         <div class="acStatus">
           <div class="acCount">
             AC&nbsp;&nbsp;&nbsp;<span>114514</span>
@@ -35,7 +35,7 @@
           <el-tag
             v-for="Adept in userInfo.AdeptArray"
             :key="Adept"
-            :effect="store.state.themeSwitch.theme == 1 ? 'light' : 'dark'"
+            :effect="themeSwitch.theme == 1 ? 'light' : 'dark'"
           >
             {{ Adept }}
           </el-tag>
@@ -84,7 +84,7 @@
             style="min-width: fit-content; margin: 0 1px"
             closable
             :disable-transitions="false"
-            :effect="store.state.themeSwitch.theme == 1 ? 'light' : 'dark'"
+            :effect="themeSwitch.theme == 1 ? 'light' : 'dark'"
             @close="setAdept.handleClose(Adept)"
           >
             {{ Adept }}
@@ -125,6 +125,9 @@
 
     <div class="contentBox">
       <div class="leftBox">
+        <div class="functionBtn">
+          绑定CodeForce
+        </div>
         <div
           class="functionBtn"
           @click="bindingVJ.show"
@@ -171,6 +174,7 @@
             </div>
           </div>
         </transition>
+
         <transition
           enter-active-class="animate__animated animate__zoomIn"
           leave-active-class="animate__animated animate__zoomOut"
@@ -250,10 +254,12 @@ import {
   watch,
   computed,
 } from "vue";
-import { useStore } from "vuex";
 import ActivityCalendar from "../components/MyComponents/ActivityCalendar.vue";
+import { useThemeSwitch } from "../pinia/themeSwitch";
+import { useUserDataStore } from "../pinia/userData";
 const { proxy } = getCurrentInstance() as any;
-const store = useStore();
+const userDataStore = useUserDataStore();
+const themeSwitch = useThemeSwitch();
 
 //用户资料
 type userInfoType = {
@@ -290,16 +296,14 @@ var userInfo = reactive<userInfoType>({
 
 //获取用户资料
 function getUserInfo() {
-  proxy
-    .$get("api/user/info?uid=" + store.state.userData.UID)
-    .then((res: any) => {
-      // proxy.$log(res);
-      let data = res.data;
-      if (data.code == 0) {
-        userInfo.copy(data);
-      }
-      proxy.codeProcessor(data.code);
-    });
+  proxy.$get("api/user/info?uid=" + userDataStore.UID).then((res: any) => {
+    // proxy.$log(res);
+    let data = res.data;
+    if (data.code == 0) {
+      userInfo.copy(data);
+    }
+    proxy.codeProcessor(data.code);
+  });
 }
 
 //活跃度日历配置数据
@@ -336,8 +340,7 @@ var activityCalendarConfig = reactive<activityCalendarConfigType>({
   levelFlagText: ["少", "多"],
   fontSize: 14,
   fontColor: "#707070",
-  clickEvent: function clickEvent(item: object) {},
-  //初始化数据
+  clickEvent: function clickEvent(item: object) {}, 
   init(data: { date: string; count: number; SubmitTime: number }[]) {
     this.endDate = proxy.Utils.TimeTools.timestampToDate(Date.now(), 2);
     let tempMap = new Map();
@@ -358,7 +361,7 @@ var activityCalendarConfig = reactive<activityCalendarConfigType>({
 
 //观察theme改变
 var theme = computed(() => {
-  return store.state.themeSwitch.theme;
+  return themeSwitch.theme;
 });
 
 watch(
@@ -395,22 +398,19 @@ function getUserSubmit() {
   if (storageData) {
     let data = JSON.parse(storageData);
     //10分钟内session周期内刷新直接取缓存
-    if (
-      data.UID == store.state.userData.UID &&
-      Date.now() - data.saveTime < 600000
-    ) {
+    if (data.UID == userDataStore.UID && Date.now() - data.saveTime < 600000) {
       activityCalendarConfig.init(data.data);
       return;
     }
   }
   proxy
-    .$get("api/submit/status", { UID: store.state.userData.UID })
+    .$get("api/submit/status", { UID: userDataStore.UID })
     .then((res: any) => {
       // proxy.$log(res);
       let data = res.data;
       if (data.code == 0) {
         //缓存数据
-        proxy.Buffer.UserCenter.submitData(data.Data, store.state.userData.UID);
+        proxy.Buffer.UserCenter.submitData(data.Data, userDataStore.UID);
         activityCalendarConfig.init(data.Data);
       }
       proxy.codeProcessor(data.code);
@@ -439,7 +439,7 @@ var changeInfo = reactive<changeInfoType>({
   Email: "",
   isInChangeMode: false,
   init() {
-    this.UserName = store.state.userData.UserName;
+    this.UserName = userDataStore.UserName;
     this.School = userInfo.School;
     this.Classes = userInfo.Classes;
     this.Major = userInfo.Major;
@@ -656,7 +656,7 @@ var changePassword = reactive({
   },
 });
 onMounted(() => {
-  if (!store.state.userData.isLogin) {
+  if (!userDataStore.isLogin) {
     proxy.$router.replace({ path: "/" });
     return;
   }

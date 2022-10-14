@@ -139,7 +139,7 @@
           <el-tag
             v-for="tag in problem.Label.split(';')"
             :key="tag"
-            :effect="store.state.themeSwitch.theme == 1 ? 'light' : 'dark'"
+            :effect="themeSwitch.theme == 1 ? 'light' : 'dark'"
           >
             {{ tag }}
           </el-tag>
@@ -194,20 +194,17 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  onMounted,
-  getCurrentInstance,
-  reactive,
-  nextTick,
-  watch,
-  computed,
-  ref,
-} from "vue";
-import { useStore } from "vuex";
+import { onMounted, getCurrentInstance, reactive, nextTick, ref } from "vue";
+import { useConfigStore } from "../pinia/config";
+import { useConstValStore } from "../pinia/constVal";
+import { useThemeSwitch } from "../pinia/themeSwitch";
+import { useUserDataStore } from "../pinia/userData";
 import getAceBuilds from "../utils/aceBuildsFactory";
-
 const { proxy } = getCurrentInstance() as any;
-const store = useStore();
+const themeSwitch = useThemeSwitch();
+const configStore = useConfigStore();
+const constValStore = useConstValStore();
+const userDataStore = useUserDataStore();
 
 var notFound = ref(false);
 
@@ -528,7 +525,7 @@ function goToProblem(PID: number) {
 
   setTimeout(() => {
     loading.init();
-    store.commit("config/reload");
+    configStore.reloadNow();
   }, 500);
 }
 
@@ -538,52 +535,44 @@ function changeMode(val: string) {
   switch (val) {
     case "C":
       ace.aceEditor.session.setMode("ace/mode/c_cpp");
-      aceConfig.lang = store.state.constVal.SUBMIT_LANG_C;
+      aceConfig.lang = constValStore.SUBMIT_LANG_C;
       break;
     case "CPP":
       ace.aceEditor.session.setMode("ace/mode/c_cpp");
-      aceConfig.lang = store.state.constVal.SUBMIT_LANG_CPP;
+      aceConfig.lang = constValStore.SUBMIT_LANG_CPP;
       break;
     case "CPP11":
       ace.aceEditor.session.setMode("ace/mode/c_cpp");
-      aceConfig.lang = store.state.constVal.SUBMIT_LANG_CPP11;
+      aceConfig.lang = constValStore.SUBMIT_LANG_CPP11;
       break;
     case "CPP17":
       ace.aceEditor.session.setMode("ace/mode/c_cpp");
-      aceConfig.lang = store.state.constVal.SUBMIT_LANG_CPP17;
+      aceConfig.lang = constValStore.SUBMIT_LANG_CPP17;
       break;
     case "JAVA":
       ace.aceEditor.session.setMode("ace/mode/java");
-      aceConfig.lang = store.state.constVal.SUBMIT_LANG_JAVA;
+      aceConfig.lang = constValStore.SUBMIT_LANG_JAVA;
       break;
     case "PYTHON3":
       ace.aceEditor.session.setMode("ace/mode/python");
-      aceConfig.lang = store.state.constVal.SUBMIT_LANG_PYTHON3;
+      aceConfig.lang = constValStore.SUBMIT_LANG_PYTHON3;
       break;
     default:
       ace.aceEditor.session.setMode("ace/mode/c_cpp");
-      aceConfig.lang = store.state.constVal.SUBMIT_LANG_C;
+      aceConfig.lang = constValStore.SUBMIT_LANG_C;
       break;
   }
   //保存语言选择结果
   proxy.Buffer.Config.submitLang(val);
 }
 
-var theme = computed(() => {
-  return store.state.themeSwitch.theme;
+themeSwitch.$subscribe((args, state) => {
+  if (state.theme == 1) {
+    ace.aceEditor.setTheme("ace/theme/eclipse");
+  } else {
+    ace.aceEditor.setTheme("ace/theme/one_dark");
+  }
 });
-
-watch(
-  theme,
-  (newVal, oldVal) => {
-    if (newVal == 1) {
-      ace.aceEditor.setTheme("ace/theme/eclipse");
-    } else {
-      ace.aceEditor.setTheme("ace/theme/one_dark");
-    }
-  },
-  { deep: true }
-);
 
 //复制到剪切板
 function copyText(e: any, i: number): void {
@@ -637,11 +626,11 @@ var submit = reactive<submitType>({
     this.process = 0;
   },
   submit() {
-    if (!store.state.userData.isLogin) {
+    if (!userDataStore.isLogin) {
       proxy.elMessage({ message: "请先登录!", type: "warning" });
       return;
     }
-    let UID = store.state.userData.UID;
+    let UID = userDataStore.UID;
     if (UID == "") {
       proxy.elMessage({
         message: "你的登录状态不正常!请刷新或重启浏览器",
@@ -685,8 +674,7 @@ onMounted(() => {
     //初始化代码编辑器
     let aceEditor = document.getElementById("aceEditor");
     ace.aceEditor = getAceBuilds({ node: aceEditor });
-    if (store.state.themeSwitch.theme == 2)
-      ace.aceEditor.setTheme("ace/theme/one_dark");
+    if (themeSwitch.theme != 1) ace.aceEditor.setTheme("ace/theme/one_dark");
     //获取缓存的题目数据
     if (!proxy.$route.query.CID && proxy.$route.query.PID) {
       let text = sessionStorage.getItem("pid" + proxy.$route.query.PID);

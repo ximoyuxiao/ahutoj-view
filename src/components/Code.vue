@@ -105,9 +105,7 @@
 
 <script lang="ts" setup>
 import { getCurrentInstance, onMounted, onUnmounted, reactive, ref } from "vue";
-import { useStore } from "vuex";
 const { proxy } = getCurrentInstance() as any;
-const store = useStore();
 
 var notFound = ref(true);
 

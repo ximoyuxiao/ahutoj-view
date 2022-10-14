@@ -35,24 +35,17 @@
       </router-link>
     </div>
     <div class="right">
-      <img
-        v-show="store.state.themeSwitch.theme == 2"
-        class="cyberpunkTheme cursor_pointer"
-        src="../../assets/image/global/cyberpunk.svg"
-        @click="cyberpunkTheme"
-      />
-      <label class="switch">
-        <input
-          ref="themeSwitch"
-          type="checkbox"
-          @change="changeTheme"
-        />
-        <span class="slider"></span>
-      </label>
+      <el-icon
+        size="32px"
+        class="config"
+        @click="props.config"
+      >
+        <Setting />
+      </el-icon>
       <div
         class="cursor_pointer"
-        v-if="store.state.userData.UserName == ''"
-        @click="props.login"
+        v-if="userDataStore.UserName == ''"
+        @click.stop="props.login"
       >
         <span>登录</span>
       </div>
@@ -61,7 +54,7 @@
         v-else
       >
         <span style="font-weight: 600">
-          {{ store.state.userData.UserName  }}
+          {{ userDataStore.UserName  }}
         </span>
         <div class="infoCard">
           <div style="height: 10px"></div>
@@ -72,7 +65,7 @@
               </el-icon>&nbsp;个人中心
             </div>
             <div
-              v-if="store.state.userData.PermissionMap > 3"
+              v-if="userDataStore.PermissionMap > 3"
               @click.stop="intoAdminCenter()"
             >
               <el-icon>
@@ -94,35 +87,27 @@
 
 <script lang="ts" setup>
 import { computed, getCurrentInstance, onMounted, reactive, watch } from "vue";
-import { useStore } from "vuex";
+import { useUserDataStore } from "../../pinia/userData";
 const { proxy } = getCurrentInstance() as any;
-const store = useStore();
+const userDataStore = useUserDataStore();
 
 type propsType = {
   login?: Function;
+  config?: Function;
 };
 var props = withDefaults(defineProps<propsType>(), {
   login: () => {},
+  config: () => {},
 });
 
-var config = reactive({
-  //当前主题
-  theme: 1,
+//为了解决props异步响应式丢失的问题
+var propsChange = computed(() => {
+  return props;
 });
 
-//处理切换主题事件
-function changeTheme() {
-  if (config.theme == 1) config.theme = 2;
-  else config.theme = 1;
-  store.commit("themeSwitch/switch", config.theme);
-}
-
-//切换为赛博朋克风格
-function cyberpunkTheme() {
-  if (config.theme == 1) config.theme = 2;
-  proxy.$refs.themeSwitch.checked = true;
-  store.commit("themeSwitch/switchCyberpunkTheme");
-}
+watch(propsChange, (nv, ov) => {}, {
+  deep: true,
+});
 
 //点击个人中心
 function intoUserCenter() {
@@ -136,40 +121,9 @@ function intoAdminCenter() {
 
 //初始化登录凭证
 function initLoginCredentials() {
-  sessionStorage.clear();
-  localStorage.clear();
-  store.commit("userData/logout");
+  userDataStore.logout();
   proxy.$router.replace({ path: "/" });
 }
-
-//刷新页面状态
-function refresh() {
-  //维护页面theme
-  let theme: number = Number(localStorage.getItem("theme"));
-  if (theme == 0) theme = 1;
-  if (theme == 1) {
-    config.theme = theme;
-    proxy.$refs.themeSwitch.checked = false;
-    store.commit("themeSwitch/switch", theme);
-  } else if (theme == 2) {
-    config.theme = theme;
-    proxy.$refs.themeSwitch.checked = true;
-    store.commit("themeSwitch/switch", theme);
-  }
-}
-
-//为了解决props异步响应式丢失的问题
-var propsChange = computed(() => {
-  return props;
-});
-
-watch(propsChange, (nv, ov) => {}, {
-  deep: true,
-});
-
-onMounted(() => {
-  refresh();
-});
 </script>
 
 <style scoped lang="scss">
@@ -181,7 +135,7 @@ onMounted(() => {
   height: 55px;
   display: flex;
   justify-content: space-between;
-  z-index: 2001;
+  z-index: $navBar_zindex;
   transition-duration: 200ms;
 
   &:hover {
@@ -264,55 +218,67 @@ onMounted(() => {
       z-index: 100;
     }
 
-    .switch {
-      font-size: $fontSize2;
-      position: relative;
-      display: inline-block;
-      width: 3.5em;
-      height: 2em;
-      z-index: 100;
+    .config {
+      display: block;
+      @include font_color("font1");
+      transition-duration: 300ms;
+      margin: 0 20px;
+      box-sizing: border-box;
 
-      input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-
-        &:checked + .slider {
-          background-color: #303136;
-        }
-
-        &:checked + .slider:before {
-          transform: translateX(1.5em);
-          background: #303136;
-          box-shadow: inset -3px -2px 5px -2px #8983f7,
-            inset -10px -5px 0 0 #a3dafb;
-        }
-      }
-
-      .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #f4f4f5;
-        transition: 0.4s;
-        border-radius: 30px;
-
-        &:before {
-          position: absolute;
-          content: "";
-          height: 1.4em;
-          width: 1.4em;
-          border-radius: 20px;
-          left: 0.3em;
-          bottom: 0.3em;
-          background: linear-gradient(40deg, #ff0080, #ff8c00 70%);
-          transition: 0.4s;
-        }
+      &:hover {
+        @include font_color("fill12");
       }
     }
+
+    // .switch {
+    //   font-size: $fontSize2;
+    //   position: relative;
+    //   display: inline-block;
+    //   width: 3.5em;
+    //   height: 2em;
+    //   z-index: 100;
+
+    //   input {
+    //     opacity: 0;
+    //     width: 0;
+    //     height: 0;
+
+    //     &:checked + .slider {
+    //       background-color: #303136;
+    //     }
+
+    //     &:checked + .slider:before {
+    //       transform: translateX(1.5em);
+    //       background: #303136;
+    //       box-shadow: inset -3px -2px 5px -2px #8983f7,
+    //         inset -10px -5px 0 0 #a3dafb;
+    //     }
+    //   }
+
+    //   .slider {
+    //     position: absolute;
+    //     cursor: pointer;
+    //     top: 0;
+    //     left: 0;
+    //     right: 0;
+    //     bottom: 0;
+    //     background-color: #f4f4f5;
+    //     transition: 0.4s;
+    //     border-radius: 30px;
+
+    //     &:before {
+    //       position: absolute;
+    //       content: "";
+    //       height: 1.4em;
+    //       width: 1.4em;
+    //       border-radius: 20px;
+    //       left: 0.3em;
+    //       bottom: 0.3em;
+    //       background: linear-gradient(40deg, #ff0080, #ff8c00 70%);
+    //       transition: 0.4s;
+    //     }
+    //   }
+    // }
 
     .username {
       position: relative;

@@ -1,4 +1,4 @@
-import { useStore } from "vuex";
+import { useConstValStore } from "../pinia/constVal";
 
 //时间转换工具包
 export class TimeTools {
@@ -149,32 +149,32 @@ export class TSBaseTools {
 export class StatusConstValManager {
 	//根据提交状态获取背景配色
 	public static getStatusColor(status: string): string {
-		let store = useStore();
+		const constValStore = useConstValStore();
 		switch (status) {
 			case "AC":
-				return store.state.constVal.SUBMIT_STATUS_AC_COLOR;
+				return constValStore.SUBMIT_STATUS_AC_COLOR;
 			case "WA":
-				return store.state.constVal.SUBMIT_STATUS_WA_COLOR;
+				return constValStore.SUBMIT_STATUS_WA_COLOR;
 			case "TLE":
-				return store.state.constVal.SUBMIT_STATUS_TLE_COLOR;
+				return constValStore.SUBMIT_STATUS_TLE_COLOR;
 			case "MLE":
-				return store.state.constVal.SUBMIT_STATUS_MLE_COLOR;
+				return constValStore.SUBMIT_STATUS_MLE_COLOR;
 			case "RE":
-				return store.state.constVal.SUBMIT_STATUS_RE_COLOR;
+				return constValStore.SUBMIT_STATUS_RE_COLOR;
 			case "PE":
-				return store.state.constVal.SUBMIT_STATUS_PE_COLOR;
+				return constValStore.SUBMIT_STATUS_PE_COLOR;
 			case "OLE":
-				return store.state.constVal.SUBMIT_STATUS_OLE_COLOR;
+				return constValStore.SUBMIT_STATUS_OLE_COLOR;
 			case "CE":
-				return store.state.constVal.SUBMIT_STATUS_CE_COLOR;
+				return constValStore.SUBMIT_STATUS_CE_COLOR;
 			case "JUDGING":
-				return store.state.constVal.SUBMIT_STATUS_JUDGING_COLOR;
+				return constValStore.SUBMIT_STATUS_JUDGING_COLOR;
 			case "REJUDGING":
-				return store.state.constVal.SUBMIT_STATUS_REJUDGING_COLOR;
+				return constValStore.SUBMIT_STATUS_REJUDGING_COLOR;
 			case "PENDING":
-				return store.state.constVal.SUBMIT_STATUS_PENDING_COLOR;
+				return constValStore.SUBMIT_STATUS_PENDING_COLOR;
 			case "FAILED":
-				return store.state.constVal.SUBMIT_STATUS_FAILED_COLOR;
+				return constValStore.SUBMIT_STATUS_FAILED_COLOR;
 			default:
 				return "#ffffff";
 		}
@@ -182,16 +182,13 @@ export class StatusConstValManager {
 
 	//获取提交语言
 	public static getLangString(Lang: number): string {
-		let store = useStore();
-		if (Lang == store.state.constVal.SUBMIT_LANG_C) return "C";
-		if (Lang == store.state.constVal.SUBMIT_LANG_CPP) return "CPP";
-		if (Lang == store.state.constVal.SUBMIT_LANG_CPP11)
-			return "CPP11";
-		if (Lang == store.state.constVal.SUBMIT_LANG_CPP17)
-			return "CPP17";
-		if (Lang == store.state.constVal.SUBMIT_LANG_JAVA) return "JAVA";
-		if (Lang == store.state.constVal.SUBMIT_LANG_PYTHON3)
-			return "PYTHON3";
+		const constValStore = useConstValStore();
+		if (Lang == constValStore.SUBMIT_LANG_C) return "C";
+		if (Lang == constValStore.SUBMIT_LANG_CPP) return "CPP";
+		if (Lang == constValStore.SUBMIT_LANG_CPP11) return "CPP11";
+		if (Lang == constValStore.SUBMIT_LANG_CPP17) return "CPP17";
+		if (Lang == constValStore.SUBMIT_LANG_JAVA) return "JAVA";
+		if (Lang == constValStore.SUBMIT_LANG_PYTHON3) return "PYTHON3";
 		return "UNKNOWN";
 	}
 }

@@ -47,9 +47,11 @@
 
 <script lang="ts" setup>
 import { getCurrentInstance, onMounted, reactive } from "vue";
-import { useStore } from "vuex";
+import { useConstValStore } from "../../../pinia/constVal";
+import { useUserDataStore } from "../../../pinia/userData";
 const { proxy } = getCurrentInstance() as any;
-const store = useStore();
+const constValStore = useConstValStore();
+const userDataStore = useUserDataStore();
 
 type searchType = {
   UID: string;
@@ -100,34 +102,22 @@ var search = reactive<searchType>({
           if (data.code == 0) {
             search.PermissionMap = Number(data.PermissionMap);
             search.isSearched = true;
-            if (
-              (search.PermissionMap & store.state.constVal.AdministratorBit) >
-              0
-            )
+            if ((search.PermissionMap & constValStore.AdministratorBit) > 0)
               search.permissionTabel[5] = true;
             else search.permissionTabel[5] = false;
-            if (
-              (search.PermissionMap & store.state.constVal.ProblemAdminBit) >
-              0
-            )
+            if ((search.PermissionMap & constValStore.ProblemAdminBit) > 0)
               search.permissionTabel[5] = search.permissionTabel[4] = true;
             else search.permissionTabel[4] = false;
-            if ((search.PermissionMap & store.state.constVal.ListAdminBit) > 0)
+            if ((search.PermissionMap & constValStore.ListAdminBit) > 0)
               search.permissionTabel[5] = search.permissionTabel[3] = true;
             else search.permissionTabel[3] = false;
-            if (
-              (search.PermissionMap & store.state.constVal.ContestAdminBit) >
-              0
-            )
+            if ((search.PermissionMap & constValStore.ContestAdminBit) > 0)
               search.permissionTabel[5] = search.permissionTabel[2] = true;
             else search.permissionTabel[2] = false;
-            if (
-              (search.PermissionMap & store.state.constVal.SourceBorwserBit) >
-              0
-            )
+            if ((search.PermissionMap & constValStore.SourceBorwserBit) > 0)
               search.permissionTabel[5] = search.permissionTabel[1] = true;
             else search.permissionTabel[1] = false;
-            if ((search.PermissionMap & store.state.constVal.SuperAdminBit) > 0)
+            if ((search.PermissionMap & constValStore.SuperAdminBit) > 0)
               for (let i in search.permissionTabel) {
                 search.permissionTabel[i] = true;
               }
@@ -151,7 +141,7 @@ var search = reactive<searchType>({
         type: "warning",
       });
     }
-    if (index == 0 && !result && store.state.userData.UID == search.UID) {
+    if (index == 0 && !result && userDataStore.UID == search.UID) {
       proxy.elMessage({
         message: "注意，你将取消自己的 超级管理员 权限！",
         type: "warning",

@@ -120,14 +120,28 @@
 
 <script lang="ts" setup>
 import { getCurrentInstance, reactive, ref } from "vue";
-import { useStore } from "vuex";
 import { ElMessageBox } from "element-plus";
+import { useUserDataStore } from "../../../pinia/userData";
+import { useConstValStore } from "../../../pinia/constVal";
 const { proxy } = getCurrentInstance() as any;
-const store = useStore();
+const userDataStore = useUserDataStore();
+const constValStore = useConstValStore();
 
 //比赛题单数据
-var contest = reactive({
-  UID: 0,
+type contestType = {
+  UID: string;
+  Title: string;
+  Description: string;
+  BeginTime: number;
+  EndTime: number;
+  Type: number | string;
+  IsPublic: number | string;
+  Pass: string;
+  Problems: string | string[];
+  [item: string]: any;
+};
+var contest = reactive<contestType>({
+  UID: "",
   CID: 0,
   Title: "",
   Description: "",
@@ -164,12 +178,9 @@ var contest = reactive({
         this.Description = data.Description;
         this.BeginTime = data.BeginTime;
         this.EndTime = data.EndTime;
-        this.Type =
-          data.Type == store.state.constVal.CONTEST_TYPE_ACM ? "ACM" : "OI";
+        this.Type = data.Type == constValStore.CONTEST_TYPE_ACM ? "ACM" : "OI";
         this.IsPublic =
-          data.IsPublic == store.state.constVal.CONTEST_PUBLIC
-            ? "公开"
-            : "不公开";
+          data.IsPublic == constValStore.CONTEST_PUBLIC ? "公开" : "不公开";
         this.Pass = data.Pass;
         this.Problems = data.Problems;
         contestTime.value = [new Date(data.BeginTime), new Date(data.EndTime)];
@@ -288,12 +299,12 @@ function complete() {
   contest.EndTime = contestTime.value[1].getTime();
   contest.Type =
     contest.Type == "ACM"
-      ? store.state.constVal.CONTEST_TYPE_ACM
-      : store.state.constVal.CONTEST_TYPE_OI;
+      ? constValStore.CONTEST_TYPE_ACM
+      : constValStore.CONTEST_TYPE_OI;
   contest.IsPublic =
     contest.IsPublic == "公开"
-      ? store.state.constVal.CONTEST_PUBLIC
-      : store.state.constVal.CONTEST_NOTPUBLIC;
+      ? constValStore.CONTEST_PUBLIC
+      : constValStore.CONTEST_NOTPUBLIC;
   let tempArray = [];
   for (let p in problemList.data) tempArray.push(problemList.data[p].PID);
   contest.Problems = tempArray.join(",");
@@ -301,7 +312,7 @@ function complete() {
   proxy.$axios
     .post("api/contest/edit/", {
       CID: contest.CID,
-      uid: store.state.userData.uid,
+      uid: userDataStore.UID,
       Title: contest.Title,
       Description: contest.Description,
       BeginTime: contest.BeginTime,

@@ -69,9 +69,11 @@
 
 <script lang="ts" setup>
 import { reactive, getCurrentInstance, computed, watch } from "vue";
-import { useStore } from "vuex";
+import { useUserDataStore } from "../../pinia/userData";
+import userData from "../../store/userData";
 const { proxy } = getCurrentInstance() as any;
-const store = useStore();
+const userDataStore = useUserDataStore();
+
 type propsType = {
   close?: Function;
   signin?: Function;
@@ -122,9 +124,10 @@ function login() {
         localStorage.setItem("ahutOjUserUid", loginInfo.UID);
         //vuex数据同步
         data.UID = loginInfo.UID;
-        store.commit("userData/login", data);
-        store.commit("userData/synchronizePermission", data.PermissionMap);
-        store.commit("userData/sessionUserInfo");
+
+        userDataStore.login(data);
+        userDataStore.synchronizePermission(data.PermissionMap);
+        userDataStore.sessionUserInfo();
         proxy.$log("permission 同步完成");
         props.close();
       }
@@ -154,7 +157,7 @@ watch(propsChange, (nv, ov) => {}, {
   flex-direction: column;
   align-content: center;
   justify-content: space-around;
-  z-index: 2002;
+  z-index: $login_zindex;
 
   .username,
   .password {

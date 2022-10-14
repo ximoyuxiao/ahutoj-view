@@ -27,10 +27,8 @@
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance } from 'vue'
-import { useStore } from 'vuex'
-const { proxy } = getCurrentInstance() as any
-const store = useStore()
+import { getCurrentInstance } from "vue";
+const { proxy } = getCurrentInstance() as any;
 </script>
 
 <style scoped lang="scss">
@@ -44,29 +42,29 @@ const store = useStore()
     padding: 10px 10px;
     align-items: center;
     justify-content: centers;
-    @include fill_color('fill3');
+    @include fill_color("fill3");
 
     > a {
       box-sizing: border-box;
       padding: 5px 15px;
       font-size: $fontSize7;
       border-bottom: 2px solid;
-      @include border_color('base_trans');
-      @include font_color('font2');
+      @include border_color("base_trans");
+      @include font_color("font2");
 
       &:hover {
-        @include fill_color('fill1');
+        @include fill_color("fill1");
       }
     }
 
     > .selected {
       border-bottom: 2px solid;
-      @include border_color('fill21');
+      @include border_color("fill21");
     }
   }
 
   .content {
-    @include fill_color('fill1');
+    @include fill_color("fill1");
     box-sizing: border-box;
     padding: $adminCenter_contentPadding;
     width: 100%;

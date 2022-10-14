@@ -10,11 +10,12 @@
         v-show="config.showNav"
         :is="NavBar"
         :login="loginDialog"
+        :config="configDialog"
       />
     </transition>
     <!-- 登录窗口背景遮罩 -->
     <transition
-      v-show="!config.showNav"
+      v-show="config.showCover"
       data-flag="cover"
       enter-active-class="animate__animated animate__fadeInUp"
       leave-active-class="animate__animated animate__fadeOutDown"
@@ -50,13 +51,25 @@
         :login="loginDialog"
       />
     </transition>
+    <!-- 配置窗口 -->
+    <transition
+      data-flag="configDialog"
+      enter-active-class="animate__animated animate__backInDown"
+      leave-active-class="animate__animated animate__backOutDown"
+    >
+      <component
+        v-show="config.showConfig"
+        :is="Config"
+        :close="showNav"
+      />
+    </transition>
     <!-- 页面内容 -->
     <div
       class="contentBox"
       v-show="config.showNav"
     >
       <router-view
-        v-if="!store.state.config.reload"
+        v-if="!configStore.reload"
         v-slot="{ Component }"
       >
         <transition enter-active-class="animate__animated animate__fadeInUp">
@@ -69,44 +82,67 @@
 
 <script lang="ts" setup name="Main">
 import { reactive, onMounted, getCurrentInstance } from "vue";
-import { useStore } from "vuex";
 import NavBar from "./Base/NavBar.vue";
 import Login from "./Base/Login.vue";
 import Signin from "./Base/Signin.vue";
+import Config from "./Base/Config.vue";
+import { useConfigStore } from "../pinia/config";
+import { useUserDataStore } from "../pinia/userData";
 const { proxy } = getCurrentInstance() as any;
-const store = useStore();
+const configStore = useConfigStore();
+const userDataStore = useUserDataStore();
 
 //页面配置项
 type configType = {
   showNav: boolean;
+  showCover: boolean;
   showLogin: boolean;
   showSignin: boolean;
+  showConfig: boolean;
+  init: Function;
 };
 var config = reactive<configType>({
   showNav: true,
+  showCover: false,
   showLogin: false,
   showSignin: false,
+  showConfig: false,
+  init() {
+    config.showNav = true;
+    config.showCover = false;
+    config.showSignin = false;
+    config.showLogin = false;
+    config.showConfig = false;
+  },
 });
 
 //显示导航栏
 function showNav() {
-  config.showNav = true;
-  config.showSignin = false;
-  config.showLogin = false;
+  config.init();
 }
 
-//登录窗口
+//显示登录窗口
 function loginDialog() {
+  config.init();
   config.showNav = false;
-  config.showSignin = false;
+  config.showCover = true;
   config.showLogin = true;
 }
 
-//显示注册
+//显示注册窗口
 function signinDialog() {
+  config.init();
   config.showNav = false;
+  config.showCover = true;
   config.showSignin = true;
-  config.showLogin = false;
+}
+
+//显示设置窗口
+function configDialog() {
+  config.init();
+  config.showNav = true;
+  config.showCover = false;
+  config.showConfig = true;
 }
 
 //session登录状态恢复与自动登录
@@ -130,8 +166,9 @@ async function autoLogin() {
         return;
       }
       data.PermissionMap = userInfo.PermissionMap;
-      store.commit("userData/login", data);
-      store.commit("userData/synchronizePermission", data.PermissionMap);
+
+      userDataStore.login(data);
+      userDataStore.synchronizePermission(data.PermissionMap);
     } else {
       //数据不同步
       initLoginCredentials();
@@ -150,8 +187,8 @@ async function autoLogin() {
         getUserPermission(data.UID);
 
         //vuex同步登录信息
-        store.commit("userData/login", data);
-        store.commit("userData/sessionUserInfo");
+        userDataStore.login(data);
+        userDataStore.sessionUserInfo();
         showNav();
         proxy.$log("自动登录成功");
       }
@@ -166,8 +203,9 @@ async function getUserPermission(UID: string) {
     let data = { PermissionMap: 0 };
     if (res.data.code == 0) {
       data.PermissionMap = res.data.PermissionMap;
-      store.commit("userData/synchronizePermission", data.PermissionMap);
-      store.commit("userData/sessionUserInfo");
+
+      userDataStore.synchronizePermission(data.PermissionMap);
+      userDataStore.sessionUserInfo();
       proxy.$log("permission 同步完成");
       return 1;
     }
@@ -177,9 +215,7 @@ async function getUserPermission(UID: string) {
 
 //初始化登录凭证
 function initLoginCredentials() {
-  sessionStorage.clear();
-  localStorage.clear();
-  store.commit("userData/logout");
+  userDataStore.logout();
   proxy.$router.replace({ path: "/" });
 }
 
@@ -218,6 +254,10 @@ onMounted(() => {
 }
 
 .animate__animated[data-flag="signinDialog"] {
+  animation-duration: 800ms;
+}
+
+.animate__animated[data-flag="configDialog"] {
   animation-duration: 800ms;
 }
 

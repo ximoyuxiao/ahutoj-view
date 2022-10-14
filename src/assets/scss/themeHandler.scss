@@ -58,3 +58,13 @@
 		box-shadow: $offsetX $offsetY $weight $spread themed($color) !important;
 	}
 }
+
+@mixin linear_gradient($dir, $color1, $color2) {
+	@include themeify {
+		background: linear-gradient(
+			$dir,
+			themed($color1),
+			themed($color2)
+		) !important;
+	}
+}

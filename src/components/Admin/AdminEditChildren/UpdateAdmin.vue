@@ -8,19 +8,18 @@
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance, reactive } from 'vue'
-import { useStore } from 'vuex'
-const { proxy } = getCurrentInstance() as any
-const store = useStore()
+import { getCurrentInstance, reactive } from "vue";
+const { proxy } = getCurrentInstance() as any;
+
 type searchType = {
-  UID: string
-}
+  UID: string;
+};
 var search = reactive<searchType>({
-  UID: '',
-})
+  UID: "",
+});
 </script>
 
 <style scoped lang="scss">
-UpdateAdmim {
+.UpdateAdmim {
 }
 </style>

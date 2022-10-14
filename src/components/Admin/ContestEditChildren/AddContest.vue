@@ -95,13 +95,27 @@
 
 <script lang="ts" setup>
 import { getCurrentInstance, reactive, ref } from "vue";
-import { useStore } from "vuex";
+import { useConstValStore } from "../../../pinia/constVal";
+import { useUserDataStore } from "../../../pinia/userData";
 const { proxy } = getCurrentInstance() as any;
-const store = useStore();
+const userDataStore = useUserDataStore();
+const constValStore = useConstValStore();
 
 //比赛题单数据
-var contest = reactive({
-  UID: 0,
+type contestType = {
+  UID: string;
+  Title: string;
+  Description: string;
+  BeginTime: number;
+  EndTime: number;
+  Type: number | string;
+  IsPublic: number | string;
+  Pass: string;
+  Problems: string | string[];
+  [item: string]: any;
+};
+var contest = reactive<contestType>({
+  UID: "",
   Title: "",
   Description: "",
   BeginTime: 0,
@@ -169,7 +183,7 @@ var contestTime = ref(null);
 //提交竞赛信息
 function complete() {
   //比赛没有设置题目
-  if (store.state.userData.UID == "") {
+  if (userDataStore.UID == "") {
     proxy.elMessage({
       message: "登录数据异常，请重新登录！",
       type: "warning",
@@ -196,20 +210,22 @@ function complete() {
   // proxy.$log(contestTime.value);
   contest.BeginTime = contestTime.value[0].getTime();
   contest.EndTime = contestTime.value[1].getTime();
+  //转换类型以及是否公开为数据库数据类型
   contest.Type =
     contest.Type == "ACM"
-      ? store.state.constVal.CONTEST_TYPE_ACM
-      : store.state.constVal.CONTEST_TYPE_OI;
+      ? constValStore.CONTEST_TYPE_ACM
+      : constValStore.CONTEST_TYPE_OI;
   contest.IsPublic =
     contest.IsPublic == "公开"
-      ? store.state.constVal.CONTEST_PUBLIC
-      : store.state.constVal.CONTEST_NOTPUBLIC;
+      ? constValStore.CONTEST_PUBLIC
+      : constValStore.CONTEST_NOTPUBLIC;
+  //生成题目列表
   let tempArray = [];
   for (let p in problemList.data) tempArray.push(problemList.data[p].PID);
   contest.Problems = tempArray.join(",");
   proxy.$axios
     .post("api/contest/add/", {
-      UID: store.state.userData.UID,
+      UID: userDataStore.UID,
       Title: contest.Title,
       Description: contest.Description,
       BeginTime: contest.BeginTime,

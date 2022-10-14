@@ -107,9 +107,9 @@
 
 <script lang="ts" setup>
 import { getCurrentInstance, reactive } from "vue";
-import { useStore } from "vuex";
+import { useConstValStore } from "../../../pinia/constVal";
 const { proxy } = getCurrentInstance() as any;
-const store = useStore();
+const constValStore = useConstValStore();
 
 //题目数据
 var problem = reactive({
@@ -128,13 +128,13 @@ var problem = reactive({
   OriginPID: "",
   //选项列表 const
   Origins: [
-    { label: "本地", value: store.state.constVal.PROBLEM_ORIGIN_LOCAL },
-    { label: "CodeForce", value: store.state.constVal.PROBLEM_ORIGIN_CF },
+    { label: "本地", value: constValStore.PROBLEM_ORIGIN_LOCAL },
+    { label: "CodeForce", value: constValStore.PROBLEM_ORIGIN_CF },
     {
       label: "AtCoder",
-      value: store.state.constVal.PROBLEM_ORIGIN_ATCODER,
+      value: constValStore.PROBLEM_ORIGIN_ATCODER,
     },
-    { label: "洛谷", value: store.state.constVal.PROBLEM_ORIGIN_LUOGU },
+    { label: "洛谷", value: constValStore.PROBLEM_ORIGIN_LUOGU },
   ],
   init() {
     problem.PID = 0;

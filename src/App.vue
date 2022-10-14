@@ -1,7 +1,10 @@
 <template>
   <div>
+    <!-- 主界面 -->
     <Main v-if="config.serverActive"></Main>
+    <!-- 底部 -->
     <!-- <Bottom></Bottom> -->
+    <!-- 服务器连接失败 -->
     <div
       class="heartbeat"
       v-else
@@ -17,10 +20,14 @@
 import Main from "./components/Main.vue";
 import Bottom from "./components/Base/Bottom.vue";
 import { reactive } from "@vue/reactivity";
-import { computed, getCurrentInstance, onMounted, watch } from "vue";
-import { useStore } from "vuex";
+import { computed, getCurrentInstance, onMounted } from "vue";
+import { useThemeSwitch } from "./pinia/themeSwitch";
+import { useConfigStore } from "./pinia/config";
+import { useUserDataStore } from "./pinia/userData";
 const { proxy } = getCurrentInstance() as any;
-const store = useStore();
+const themeSwitch = useThemeSwitch();
+const configStore = useConfigStore();
+const userDataStore = useUserDataStore();
 
 var config = reactive({
   //服务器是否请求正常
@@ -62,16 +69,20 @@ var config = reactive({
 });
 
 //是否要ping一下服务器，用于在特定情况下测试链接状态是否通畅
-var shouldPing = computed(() => {
-  return store.state.config.shouldPing;
+configStore.$subscribe((args, state) => {
+  if (state.shouldPing) {
+    console.log("需要ping一下服务器");
+  }
 });
 
-watch(shouldPing, (newVal, oldVal) => {
-  proxy.$log(newVal, oldVal);
-});
+//初始化仓库状态
+function initStore() {
+  themeSwitch.init();
+}
 
 onMounted(() => {
   config.pingServer();
+  initStore();
 });
 </script>
 

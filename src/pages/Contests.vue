@@ -134,10 +134,8 @@
 
 <script lang="ts" setup name="Contests">
 import { getCurrentInstance, onMounted, reactive } from "vue";
-import { useStore } from "vuex";
 import { ElMessageBox } from "element-plus";
 const { proxy } = getCurrentInstance() as any;
-const store = useStore();
 
 //页面数据
 type contestsType = {
@@ -214,7 +212,7 @@ function getContests() {
     if (res.time == null || Math.abs(res.time - now) < 1500) {
       return;
     }
-    config.serverTime = res.time; 
+    config.serverTime = res.time;
   });
 }
 

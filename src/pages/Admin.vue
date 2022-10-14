@@ -58,9 +58,11 @@
 
 <script lang="ts" setup>
 import { getCurrentInstance, onMounted, reactive } from "vue";
-import { useStore } from "vuex";
+import { useConstValStore } from "../pinia/constVal";
+import { useUserDataStore } from "../pinia/userData";
 const { proxy } = getCurrentInstance() as any;
-const store = useStore();
+const userDataStore = useUserDataStore();
+const constValStore = useConstValStore();
 
 //页面配置
 type configType = {
@@ -84,12 +86,12 @@ var config = reactive<configType>({
 function checkPermission() {
   let Token = localStorage.getItem("ahutOjToken");
   let UID = localStorage.getItem("ahutOjUserUid");
-  if (!store.state.userData.isLogin) {
+  if (!userDataStore.isLogin) {
     proxy.elMessage({ message: "登录状态无效!", type: "warning" });
     exit();
     return;
   }
-  if (store.state.userData.UID != UID || !Token) {
+  if (userDataStore.UID != UID || !Token) {
     proxy.elMessage({
       message: "登录身份验证不通过!",
       type: "warning",
@@ -127,7 +129,7 @@ function permissionParser(PermissionMap) {
         <span style='color: #00ccff'>管理员</span>";
 
   //超管
-  if ((PermissionMap & store.state.constVal.SuperAdminBit) != 0) {
+  if ((PermissionMap & constValStore.SuperAdminBit) != 0) {
     config.SuperAdmin = true;
     config.ProblemAdmin = true;
     config.ContestAdmin = true;
@@ -139,7 +141,7 @@ function permissionParser(PermissionMap) {
     : "<br /><span style='color: #ff3300'>超级管理员</span>";
 
   //题目编辑
-  if ((PermissionMap & store.state.constVal.ProblemAdminBit) != 0) {
+  if ((PermissionMap & constValStore.ProblemAdminBit) != 0) {
     config.ProblemAdmin = true;
   }
   permissionTabel += config.ProblemAdmin
@@ -147,7 +149,7 @@ function permissionParser(PermissionMap) {
     : "<br /><span style='color: #ff3300'>题目编辑</span>";
 
   //竞赛编辑
-  if ((PermissionMap & store.state.constVal.ContestAdminBit) != 0) {
+  if ((PermissionMap & constValStore.ContestAdminBit) != 0) {
     config.ContestAdmin = true;
   }
   permissionTabel += config.ContestAdmin
@@ -155,7 +157,7 @@ function permissionParser(PermissionMap) {
     : "<br /><span style='color: #ff3300'>竞赛编辑</span>";
 
   //资源管理
-  if ((PermissionMap & store.state.constVal.SourceBorwserBit) != 0) {
+  if ((PermissionMap & constValStore.SourceBorwserBit) != 0) {
     config.SourceBorwser = true;
   }
   permissionTabel += config.SourceBorwser
@@ -163,7 +165,7 @@ function permissionParser(PermissionMap) {
     : "<br /><span style='color: #ff3300'>资源管理</span>";
 
   //题单编辑
-  if ((PermissionMap & store.state.constVal.ListAdminBit) != 0) {
+  if ((PermissionMap & constValStore.ListAdminBit) != 0) {
     config.ListAdmin = true;
   }
   permissionTabel += config.ListAdmin

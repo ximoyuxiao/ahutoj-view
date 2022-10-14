@@ -126,9 +126,10 @@
 
 <script lang="ts" setup>
 import { reactive, getCurrentInstance, computed, watch, onMounted } from "vue";
-import { useStore } from "vuex";
+import { useUserDataStore } from "../../pinia/userData";
 const { proxy } = getCurrentInstance() as any;
-const store = useStore();
+const userDataStore = useUserDataStore();
+
 type propsType = {
   close?: Function;
   login?: Function;
@@ -136,6 +137,14 @@ type propsType = {
 var props = withDefaults(defineProps<propsType>(), {
   close: () => {},
   login: () => {},
+});
+
+var propsChange = computed(() => {
+  return props;
+});
+
+watch(propsChange, (nv, ov) => {}, {
+  deep: true,
 });
 
 //注册表单
@@ -235,22 +244,15 @@ function signin() {
         //vuex数据同步
         data.UID = signinInfo.UID;
         data.UserName = signinInfo.UserName;
-        store.commit("userData/login", data);
-        store.commit("userData/synchronizePermission", 3);
-        store.commit("userData/sessionUserInfo");
+
+        userDataStore.login(data);
+        userDataStore.synchronizePermission(3);
+        userDataStore.sessionUserInfo();
         props.close();
       }
       proxy.codeProcessor(data.code);
     });
 }
-
-var propsChange = computed(() => {
-  return props;
-});
-
-watch(propsChange, (nv, ov) => {}, {
-  deep: true,
-});
 </script>
 
 <style lang="scss">
@@ -266,7 +268,7 @@ watch(propsChange, (nv, ov) => {}, {
   flex-direction: column;
   align-content: center;
   justify-content: space-around;
-  z-index: 2002;
+  z-index: $signin_zindex;
 
   .username,
   .nickname,

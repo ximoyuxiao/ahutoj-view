@@ -29,9 +29,10 @@
               <div id="LID">#{{item.LID}}</div>
               <div id="Title">#{{item.Title}}</div>
             </div>
+            <div id="cover"></div>
             <div class="right">
-              <div id="Time">{{proxy.Utils.TimeTools.timestampToTime(item.StartTime)}}</div>
-              <div id="UID">{{item.UID}}</div>
+              <div id="Time">创建时间：{{proxy.Utils.TimeTools.timestampToTime(item.StartTime)}}</div>
+              <div id="UID">创建者：{{item.UID}}</div>
             </div>
           </div>
         </div>
@@ -129,6 +130,10 @@ onMounted(() => {
           margin-bottom: $modelDistanceMini;
           overflow: hidden;
 
+          &:hover {
+            @include box_shadow(0, 0, 2px, 1px, "fill53");
+          }
+
           &:hover > .right {
             transform: translateY(0);
           }
@@ -137,6 +142,10 @@ onMounted(() => {
             transform: translateX(20px);
             @include font_color("fill12");
             filter: drop-shadow(0 0 1px #cdcdcd88);
+          }
+
+          &:hover > #cover {
+            transform: translateX(0);
           }
 
           > .left {
@@ -157,21 +166,33 @@ onMounted(() => {
             }
           }
 
+          > #cover {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 70%;
+            height: 100%;
+            @include linear_gradient(to left, "fill2", "fill4");
+            transform: translateX(100%);
+            transition-duration: 300ms;
+          }
+
           > .right {
             position: absolute;
-            right: 100px;
+            right: 50px;
             top: 0;
             transform: translateY(-90px);
             transition-duration: 300ms;
+            width: 300px;
 
             > #Time {
               padding: 5px 0;
-              font-size: $fontSize4;
-              @include font_color("font3");
+              font-size: $fontSize6;
+              @include font_color("font2");
             }
             > #UID {
-              font-size: $fontSize7;
-              @include font_color("font1");
+              font-size: $fontSize5;
+              @include font_color("font3");
             }
           }
         }

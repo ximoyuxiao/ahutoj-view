@@ -142,9 +142,7 @@
 <script lang="ts" setup>
 import { ElMessageBox } from "element-plus";
 import { onMounted, reactive, getCurrentInstance } from "vue";
-import { useStore } from "vuex";
 const { proxy } = getCurrentInstance() as any;
-const store = useStore();
 
 //页面配置
 var config = reactive({

@@ -86,9 +86,7 @@
 
 <script lang="ts" setup>
 import { getCurrentInstance, onMounted, reactive } from "vue";
-import { useStore } from "vuex";
 const { proxy } = getCurrentInstance() as any;
-const store = useStore();
 
 //比赛信息
 type contestType = {
