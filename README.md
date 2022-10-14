@@ -8,7 +8,7 @@
 
 **框架:** Vue3
 
-**技术周边:** TypeScript、VueX（可能会升级成Pinia）、VueRouter、Axios、Scss……
+**技术周边:** TypeScript、Pinia、VueRouter、Axios、Scss……
 
 **UI:** Element-Plus、Animate （可能会引入GSAP）
 
