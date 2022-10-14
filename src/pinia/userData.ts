@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { UserData } from "../utils/buffer";
 import { PiniaNameSpace } from "./nameSpace";
 
 //用户信息类型
@@ -56,8 +57,7 @@ export const useUserDataStore = defineStore(PiniaNameSpace.UserData, {
 			data.Adapt = this.Adapt;
 			data.Email = this.Email;
 			data.PermissionMap = this.PermissionMap;
-			let jsonString = JSON.stringify(data);
-			sessionStorage.setItem("ahutOjUserInfo", jsonString);
+			UserData.userInfo(data);
 		},
 
 		//退出登录

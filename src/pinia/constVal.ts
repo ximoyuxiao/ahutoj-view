@@ -7,6 +7,7 @@ export const useConstValStore = defineStore(PiniaNameSpace.ConstVal, {
 			//页面主题数值
 			LightTheme: 1,
 			DarkTheme: 2,
+			Cyberpunk: 3,
 
 			//权限bit表
 			UNLOGINBit: 0x01, // B0000 0001

@@ -1,3 +1,15 @@
+type userInfoType = {
+	UID?: string;
+	UserName?: string;
+	School?: string;
+	Classes?: string;
+	Major?: string;
+	Adapt?: string;
+	Email?: string;
+	isLogin?: boolean;
+	[item: string]: any;
+};
+
 type rankData = {
 	ACNumber: number;
 	AllSubmit: number;
@@ -23,6 +35,13 @@ type submitDataType = {
 export class Config {
 	public static submitLang(lang: number | string) {
 		localStorage.setItem("submitLang", String(lang));
+	}
+}
+
+export class UserData {
+	public static userInfo(data: userInfoType) {
+		let jsonString = JSON.stringify(data);
+		sessionStorage.setItem("ahutOjUserInfo", jsonString);
 	}
 }
 
