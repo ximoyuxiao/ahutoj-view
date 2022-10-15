@@ -1,27 +1,40 @@
 
 <template>
-  <div class="BindingCodeForce">
-    <div style="height: 30px">绑定CodeForce</div>
+  <div
+    class="ChangePassword"
+    data-type="form"
+  >
+    <div style="height: 30px">修改密码</div>
     <el-icon
       class="close cursor_pointer"
       size="30px"
-      @click="props.close(1)"
+      @click="props.close(10)"
     >
       <CircleClose />
     </el-icon>
     <div>
-      <span>账号:&nbsp;</span>
+      <span>旧密码:&nbsp;</span>
       <el-input
-        v-model="codeForce.CodeForceUser"
-        placeholder="输入CodeForce账号"
+        v-model="changePassword.OldPwd"
+        placeholder="输入旧密码"
         autocomplete="off"
       />
     </div>
     <div>
-      <span>密码:&nbsp;</span>
+      <span>新密码:&nbsp;</span>
       <el-input
-        v-model="codeForce.CodeForcePass"
-        placeholder="输入CodeForce密码"
+        v-model="changePassword.Pwd"
+        placeholder="输入新密码"
+        autocomplete="off"
+        type="password"
+        show-password
+      />
+    </div>
+    <div>
+      <span>新密码:&nbsp;</span>
+      <el-input
+        v-model="changePassword.PwdAgain"
+        placeholder="重复一次新密码"
         autocomplete="off"
         type="password"
         show-password
@@ -29,12 +42,12 @@
     </div>
     <div
       class="btn cursor_noFocus cursor_pointer"
-      v-on:click="codeForce.send"
+      v-on:click="changePassword.sendForm()"
     >
       <el-icon>
-        <Link />
+        <EditPen />
       </el-icon>
-      &nbsp;绑定
+      &nbsp;修改
     </div>
   </div>
 </template>
@@ -43,39 +56,51 @@ import { getCurrentInstance, reactive } from "vue";
 const { proxy } = getCurrentInstance() as any;
 
 type propsType = {
-  CodeForceUser: string;
   close: Function;
 };
 const props = withDefaults(defineProps<propsType>(), {
-  CodeForceUser: "",
   close: () => {},
 });
 
-var codeForce = reactive({
-  CodeForceUser: props.CodeForceUser,
-  CodeForcePass: "",
-  send: () => {
-    if (codeForce.CodeForceUser == "") {
+//修改密码
+var changePassword = reactive({
+  OldPwd: "",
+  Pwd: "",
+  PwdAgain: "",
+  init() {
+    this.OldPwd = "";
+    this.Pwd = "";
+    this.PwdAgain = "";
+  },
+  sendForm() {
+    if (this.OldPwd == "") {
       proxy.elMessage({
-        message: "ID不能为空",
+        message: "旧密码不能为空",
         type: "warning",
       });
       return;
     }
-    if (codeForce.CodeForcePass == "") {
+    if (this.Pwd == "" || this.PwdAgain == "") {
       proxy.elMessage({
-        message: "密码不能为空",
+        message: "新密码不能为空",
+        type: "warning",
+      });
+      return;
+    }
+    if (this.Pwd != this.PwdAgain) {
+      proxy.elMessage({
+        message: "两次输入的新密码不同",
         type: "warning",
       });
       return;
     }
     proxy
-      .$post("api/user/CodeForceBind", {
-        CodeForceUser: codeForce.CodeForceUser,
-        CodeForcePass: codeForce.CodeForcePass,
+      .$post("api/user/edit/pass/", {
+        OldPwd: changePassword.OldPwd,
+        Pwd: changePassword.Pwd,
       })
       .then((res: any) => {
-        // proxy.$log(res);
+        proxy.$log(res);
         let data = res.data;
         if (data.code == 0) {
           proxy.elNotification({
@@ -83,7 +108,7 @@ var codeForce = reactive({
             type: "success",
             duration: 1500,
           });
-          props.close(1);
+          props.close(10);
         }
         proxy.codeProcessor(data.code);
       });
@@ -92,7 +117,7 @@ var codeForce = reactive({
 </script>
 
 <style lang="scss" scoped>
-.BindingCodeForce {
+.ChangePassword {
   position: relative;
   margin-bottom: $modelDistanceMini;
   width: 100%;

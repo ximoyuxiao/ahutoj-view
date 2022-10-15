@@ -1,41 +1,41 @@
-
 <template>
-  <div class="BindingCodeForce">
-    <div style="height: 30px">绑定CodeForce</div>
+  <div
+    class="BindingVJ"
+    data-type="form"
+  >
+    <div style="height: 30px">绑定VJ账号</div>
     <el-icon
       class="close cursor_pointer"
       size="30px"
-      @click="props.close(1)"
+      @click="props.close(2)"
     >
       <CircleClose />
     </el-icon>
     <div>
-      <span>账号:&nbsp;</span>
+      <span>VJ ID:&nbsp;</span>
       <el-input
-        v-model="codeForce.CodeForceUser"
-        placeholder="输入CodeForce账号"
-        autocomplete="off"
+        v-model="bindingVJ.Vjid"
+        placeholder="输入VJudge账号"
       />
     </div>
     <div>
-      <span>密码:&nbsp;</span>
+      <span>VJ 密码:&nbsp;</span>
       <el-input
-        v-model="codeForce.CodeForcePass"
-        placeholder="输入CodeForce密码"
-        autocomplete="off"
+        v-model="bindingVJ.Vjpwd"
+        placeholder="输入VJudge密码"
         type="password"
         show-password
       />
     </div>
     <div
       class="btn cursor_noFocus cursor_pointer"
-      v-on:click="codeForce.send"
+      v-on:click="bindingVJ.sendForm()"
     >
       <el-icon>
         <Link />
       </el-icon>
       &nbsp;绑定
-    </div>
+    </div> 
   </div>
 </template>
 <script lang="ts" setup>
@@ -43,26 +43,33 @@ import { getCurrentInstance, reactive } from "vue";
 const { proxy } = getCurrentInstance() as any;
 
 type propsType = {
-  CodeForceUser: string;
+  Vjid: string;
   close: Function;
 };
 const props = withDefaults(defineProps<propsType>(), {
-  CodeForceUser: "",
+  Vjid: "",
   close: () => {},
 });
 
-var codeForce = reactive({
-  CodeForceUser: props.CodeForceUser,
-  CodeForcePass: "",
-  send: () => {
-    if (codeForce.CodeForceUser == "") {
+//绑定vj
+var bindingVJ = reactive({
+  Vjid: props.Vjid,
+  Vjpwd: "",
+  isInChangeMode: false,
+  init() {
+    this.Vjid = props.Vjid;
+    this.Vjpwd = "";
+    this.isInChangeMode = false;
+  },
+  sendForm() {
+    if (this.Vjid == "") {
       proxy.elMessage({
         message: "ID不能为空",
         type: "warning",
       });
       return;
     }
-    if (codeForce.CodeForcePass == "") {
+    if (this.Vjpwd == "") {
       proxy.elMessage({
         message: "密码不能为空",
         type: "warning",
@@ -70,9 +77,9 @@ var codeForce = reactive({
       return;
     }
     proxy
-      .$post("api/user/CodeForceBind", {
-        CodeForceUser: codeForce.CodeForceUser,
-        CodeForcePass: codeForce.CodeForcePass,
+      .$post("api/user/vjudgeBind", {
+        Vjid: bindingVJ.Vjid,
+        Vjpwd: bindingVJ.Vjpwd,
       })
       .then((res: any) => {
         // proxy.$log(res);
@@ -83,7 +90,7 @@ var codeForce = reactive({
             type: "success",
             duration: 1500,
           });
-          props.close(1);
+          props.close(2);
         }
         proxy.codeProcessor(data.code);
       });
@@ -92,7 +99,7 @@ var codeForce = reactive({
 </script>
 
 <style lang="scss" scoped>
-.BindingCodeForce {
+.BindingVJ {
   position: relative;
   margin-bottom: $modelDistanceMini;
   width: 100%;

@@ -7,15 +7,13 @@
         alt=""
       />
       <div class="user">
-        <div style="color:red; font-size: 20px">
-        </div>
         <img
           id="userImg"
           class="cursor_noFocus"
           src="../assets/image/temporary/user.jpg"
           alt=""
         />
-        <div>{{ userDataStore.UserName }}</div>
+        <div class="username">{{ userDataStore.UserName }}</div>
         <div class="acStatus">
           <div class="acCount">
             AC&nbsp;&nbsp;&nbsp;<span>114514</span>
@@ -43,7 +41,7 @@
         <div>邮箱:&nbsp;{{ userInfo.Email }}</div>
         <div
           class="set cursor_pointer"
-          @click="changeInfo.change"
+          @click="functionConfig.show(0)"
         >
           <el-icon size="45px">
             <Setting />
@@ -55,89 +53,31 @@
       enter-active-class="animate__animated animate__zoomIn"
       leave-active-class="animate__animated animate__zoomOut"
     >
-      <div
-        v-if="changeInfo.isInChangeMode"
-        class="changeInfo"
+      <ChangeInfo
+        v-if="functionConfig.showChangeInfo"
+        :userInfo="userInfo"
+        :close="functionConfig.close"
       >
-        <div style="height: 30px">修改资料</div>
-        <div>
-          <span>昵称:&nbsp;</span>
-          <el-input v-model="changeInfo.UserName" />
-        </div>
-        <div>
-          <span>学校:&nbsp;</span>
-          <el-input v-model="changeInfo.School" />
-        </div>
-        <div>
-          <span>班级:&nbsp;</span>
-          <el-input v-model="changeInfo.Classes" />
-        </div>
-        <div>
-          <span>专业:&nbsp;</span>
-          <el-input v-model="changeInfo.Major" />
-        </div>
-        <div>
-          <span>擅长:&nbsp;</span>
-          <el-tag
-            v-for="Adept in setAdept.AdeptArray"
-            :key="Adept"
-            style="min-width: fit-content; margin: 0 1px"
-            closable
-            :disable-transitions="false"
-            :effect="themeSwitch.theme == 1 ? 'light' : 'dark'"
-            @close="setAdept.handleClose(Adept)"
-          >
-            {{ Adept }}
-          </el-tag>
-          <el-input
-            v-if="setAdept.inputVisible"
-            ref="InputRef"
-            v-model="setAdept.inputValue"
-            size="small"
-            class="ml-1 w-20"
-            style="width: 100px"
-            @keyup.enter="setAdept.handleInputConfirm()"
-            @blur="setAdept.handleInputCancel()"
-          />
-          <el-button
-            v-else
-            class="button-new-tag ml-1"
-            size="small"
-            @click="setAdept.showInput()"
-          >
-            + 添加
-          </el-button>
-        </div>
-        <div>
-          <span>邮箱:&nbsp;</span>
-          <el-input v-model="changeInfo.Email" />
-        </div>
-        <div
-          class="btn cursor_noFocus cursor_pointer"
-          v-on:click="changeInfo.sendForm()"
-        >
-          <el-icon>
-            <Check />
-          </el-icon>&nbsp;提交修改
-        </div>
-      </div>
+      </ChangeInfo>
     </transition>
-
     <div class="contentBox">
       <div class="leftBox">
-        <div class="functionBtn">
+        <div
+          class="functionBtn"
+          @click="functionConfig.show(1)"
+        >
           绑定CodeForce
         </div>
         <div
           class="functionBtn"
-          @click="bindingVJ.show"
+          @click="functionConfig.show(2)"
         >
           绑定VJudge
         </div>
         <el-divider style="margin: 2px; background-color: var(--font_color4)" />
         <div
           class="functionBtn"
-          @click="changePassword.show"
+          @click="functionConfig.show(10)"
         >
           修改密码
         </div>
@@ -147,82 +87,32 @@
           enter-active-class="animate__animated animate__zoomIn"
           leave-active-class="animate__animated animate__zoomOut"
         >
-          <div
-            v-if="bindingVJ.isInChangeMode"
-            class="bindingVJ"
-            data-type="form"
-          >
-            <div style="height: 30px">绑定VJ账号</div>
-            <div>
-              <span>VJ ID:&nbsp;</span>
-              <el-input v-model="bindingVJ.Vjid" />
-            </div>
-            <div>
-              <span>VJ 密码:&nbsp;</span>
-              <el-input
-                v-model="bindingVJ.Vjpwd"
-                placeholder="输入新密码"
-              />
-            </div>
-            <div
-              class="btn cursor_noFocus cursor_pointer"
-              v-on:click="bindingVJ.sendForm()"
-            >
-              <el-icon>
-                <Check />
-              </el-icon>&nbsp;绑定
-            </div>
-          </div>
+          <BindingCodeForce
+            v-if="functionConfig.showBindingCodeForce"
+            :CodeForceUser="userInfo.CodeForceUser"
+            :close="functionConfig.close"
+          ></BindingCodeForce>
         </transition>
-
         <transition
           enter-active-class="animate__animated animate__zoomIn"
           leave-active-class="animate__animated animate__zoomOut"
         >
-          <div
-            v-if="changePassword.isInChangeMode"
-            class="changePassword"
-            data-type="form"
-          >
-            <div style="height: 30px">修改密码</div>
-            <div>
-              <span>旧密码:&nbsp;</span>
-              <el-input
-                v-model="changePassword.OldPwd"
-                placeholder="输入旧密码"
-                autocomplete="off"
-              />
-            </div>
-            <div>
-              <span>新密码:&nbsp;</span>
-              <el-input
-                v-model="changePassword.Pwd"
-                placeholder="输入新密码"
-                autocomplete="off"
-                type="password"
-                show-password
-              />
-            </div>
-            <div>
-              <span>新密码:&nbsp;</span>
-              <el-input
-                v-model="changePassword.PwdAgain"
-                placeholder="重复一次新密码"
-                autocomplete="off"
-                type="password"
-                show-password
-              />
-            </div>
-            <div
-              class="btn cursor_noFocus cursor_pointer"
-              v-on:click="changePassword.sendForm()"
-            >
-              <el-icon>
-                <Check />
-              </el-icon>&nbsp;修改
-            </div>
-          </div>
+          <BindingVJudge
+            v-if="functionConfig.showBindingVJudge"
+            :Vjid="userInfo.Vjid"
+            :close="functionConfig.close"
+          ></BindingVJudge>
         </transition>
+        <transition
+          enter-active-class="animate__animated animate__zoomIn"
+          leave-active-class="animate__animated animate__zoomOut"
+        >
+          <ChangePassword
+            v-if="functionConfig.showChangePassword"
+            :close="functionConfig.close"
+          ></ChangePassword>
+        </transition>
+
         <div class="activityCalendarBox">
           <ActivityCalendar
             :data="activityCalendarConfig.data"
@@ -246,49 +136,53 @@
 </template>
 
 <script lang="ts" setup >
-import {
-  onMounted,
-  getCurrentInstance,
-  reactive,
-  nextTick,
-  watch,
-  computed,
-} from "vue";
+import { onMounted, getCurrentInstance, reactive, nextTick } from "vue";
 import ActivityCalendar from "../components/MyComponents/ActivityCalendar.vue";
-import { useThemeSwitch } from "../pinia/themeSwitch";
+import { useThemeSwitchStore } from "../pinia/themeSwitch";
 import { useUserDataStore } from "../pinia/userData";
+import ChangeInfo from "../components/UserCenter/ChangeInfo.vue";
+import BindingCodeForce from "../components/UserCenter/BindingCodeForce.vue";
+import BindingVJudge from "../components/UserCenter/BindingVJudge.vue";
+import ChangePassword from "../components/UserCenter/ChangePassword.vue";
+
 const { proxy } = getCurrentInstance() as any;
 const userDataStore = useUserDataStore();
-const themeSwitch = useThemeSwitch();
+const themeSwitch = useThemeSwitchStore();
 
 //用户资料
 type userInfoType = {
   UID: string;
+  UserName: string;
   School: string;
   Classes: string;
   Major: string;
   Adept: string;
   Email: string;
+  CodeForceUser: string;
   Vjid: string;
   AdeptArray: Array<string>;
   copy: Function;
 };
 var userInfo = reactive<userInfoType>({
   UID: "",
+  UserName: "",
   School: "",
   Classes: "",
   Major: "",
   Adept: "",
   Email: "",
+  CodeForceUser: "",
   Vjid: "",
   AdeptArray: [],
   copy: (data: any) => {
     userInfo.UID = data.UID;
+    userInfo.UserName = data.UserName;
     userInfo.School = data.School;
     userInfo.Classes = data.Classes;
     userInfo.Major = data.Major;
     userInfo.Adept = data.Adept;
     userInfo.Email = data.Email;
+    userInfo.CodeForceUser = data.CodeForceUser;
     userInfo.Vjid = data.Vjid;
     userInfo.AdeptArray = userInfo.Adept == "" ? [] : userInfo.Adept.split(";");
   },
@@ -297,7 +191,7 @@ var userInfo = reactive<userInfoType>({
 //获取用户资料
 function getUserInfo() {
   proxy.$get("api/user/info?uid=" + userDataStore.UID).then((res: any) => {
-    // proxy.$log(res);
+    proxy.$log(res);
     let data = res.data;
     if (data.code == 0) {
       userInfo.copy(data);
@@ -340,7 +234,7 @@ var activityCalendarConfig = reactive<activityCalendarConfigType>({
   levelFlagText: ["少", "多"],
   fontSize: 14,
   fontColor: "#707070",
-  clickEvent: function clickEvent(item: object) {}, 
+  clickEvent: function clickEvent(item: object) {},
   init(data: { date: string; count: number; SubmitTime: number }[]) {
     this.endDate = proxy.Utils.TimeTools.timestampToDate(Date.now(), 2);
     let tempMap = new Map();
@@ -358,39 +252,6 @@ var activityCalendarConfig = reactive<activityCalendarConfigType>({
     });
   },
 });
-
-//观察theme改变
-var theme = computed(() => {
-  return themeSwitch.theme;
-});
-
-watch(
-  theme,
-  (newVal, oldVal) => {
-    if (newVal == 1) {
-      activityCalendarConfig.fontColor = "#707070";
-      activityCalendarConfig.colors = [
-        "#dde0e4",
-        "#c5f6fa",
-        "#99e9f2",
-        "#66d9e8",
-        "#3bc9db",
-        "#22b8cf",
-      ];
-    } else {
-      activityCalendarConfig.fontColor = "#cdcdcd";
-      activityCalendarConfig.colors = [
-        "#d6d6d6",
-        "#e599f7",
-        "#da77f2",
-        "#be4bdb",
-        "#ae3ec9",
-        "#862e9c",
-      ];
-    }
-  },
-  { deep: true, immediate: true }
-);
 
 //获取用户提交记录
 function getUserSubmit() {
@@ -417,244 +278,82 @@ function getUserSubmit() {
     });
 }
 
-//进入修改资料模式
-type changeInfoType = {
-  UID: string;
-  UserName: string;
-  School: string;
-  Classes: string;
-  Major: string;
-  Adept: string;
-  Email: string;
-  isInChangeMode: boolean;
-  [item: string]: any;
-};
-var changeInfo = reactive<changeInfoType>({
-  UID: "",
-  UserName: "",
-  School: "",
-  Classes: "",
-  Major: "",
-  Adept: "",
-  Email: "",
-  isInChangeMode: false,
-  init() {
-    this.UserName = userDataStore.UserName;
-    this.School = userInfo.School;
-    this.Classes = userInfo.Classes;
-    this.Major = userInfo.Major;
-    this.Adept = userInfo.Adept;
-    this.Email = userInfo.Email;
-  },
-  change() {
-    if (this.isInChangeMode) {
-      this.isInChangeMode = false;
-      setAdept.AdeptArray = [];
+//监控主题变化
+themeSwitch.$subscribe(
+  (args, state) => {
+    if (state.theme == 1) {
+      activityCalendarConfig.fontColor = "#707070";
+      activityCalendarConfig.colors = [
+        "#dde0e4",
+        "#c5f6fa",
+        "#99e9f2",
+        "#66d9e8",
+        "#3bc9db",
+        "#22b8cf",
+      ];
     } else {
-      this.init();
-      setAdept.AdeptArray =
-        userInfo.Adept == "" ? [] : userInfo.Adept.split(";");
-      this.isInChangeMode = true;
+      activityCalendarConfig.fontColor = "#cdcdcd";
+      activityCalendarConfig.colors = [
+        "#d6d6d6",
+        "#e599f7",
+        "#da77f2",
+        "#be4bdb",
+        "#ae3ec9",
+        "#862e9c",
+      ];
     }
   },
-  sendForm() {
-    this.Adept =
-      setAdept.AdeptArray.length == 0 ? "" : setAdept.AdeptArray.join(";");
-    // proxy.$log(this);
-    if (this.UserName == "") {
-      proxy.elMessage({
-        message: "昵称不可为空",
-        type: "warning",
-      });
-      return;
-    }
-    if (
-      !this.Email.match("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(.[a-zA-Z0-9_-]+)+$")
-    ) {
-      proxy.elMessage({
-        message: "请输入正确的邮箱",
-        type: "warning",
-      });
-      return;
-    }
-    proxy.$axios
-      .post("api/user/edit/", {
-        UserName: this.UserName,
-        School: this.School,
-        Classes: this.Classes,
-        Major: this.Major,
-        Adept: this.Adept,
-        Email: this.Email,
-      })
-      .then((res: any) => {
-        let data = res.data;
-        if (data.code == 0) {
-          //更新数据成功
-          userInfo.School = this.School;
-          userInfo.Classes = this.Classes;
-          userInfo.Major = this.Major;
-          userInfo.Adept = this.Adept;
-          userInfo.Email = this.Email;
-          userInfo.Vjid = this.Vjid;
-          userInfo.AdeptArray =
-            userInfo.Adept == "" ? [] : userInfo.Adept.split(";");
-          changeInfo.isInChangeMode = false;
-          proxy.elMessage({ message: "修改成功", type: "success" });
-        } else {
-          proxy.codeProcessor(data.code);
-        }
-      });
-  },
-});
+  {
+    deep: true,
+    immediate: true,
+  }
+);
 
-//添加Adept标签
-type setAdapt = {
-  inputValue: string;
-  AdeptArray: string[];
-  inputVisible: boolean;
-  [item: string]: any;
-};
-var setAdept = reactive<setAdapt>({
-  inputValue: "",
-  AdeptArray: [],
-  inputVisible: false,
-  handleClose(tag: string): void {
-    this.AdeptArray.splice(this.AdeptArray.indexOf(tag), 1);
-  },
-  showInput(): void {
-    this.inputVisible = true;
-    nextTick(() => {
-      proxy.$refs.InputRef.focus();
-    });
-  },
-  //输入确认
-  handleInputConfirm(): void {
-    if (!this.inputVisible) return;
-    if (
-      this.inputValue == "" ||
-      this.AdeptArray.indexOf(this.inputValue) != -1
-    ) {
-      this.inputVisible = false;
-      this.inputValue = "";
-      proxy.elMessage({ message: "请输入正确的名称并且不得重复" });
-      return;
-    }
-    this.AdeptArray.push(this.inputValue);
-    this.inputVisible = false;
-    this.inputValue = "";
-  },
-  //输入关闭
-  handleInputCancel(): void {
-    this.inputVisible = false;
-    this.inputValue = "";
-  },
-});
-
-//绑定vj
-var bindingVJ = reactive({
-  Vjid: "",
-  Vjpwd: "",
-  isInChangeMode: false,
+var functionConfig = reactive({
+  showChangeInfo: false,
+  showBindingCodeForce: false,
+  showBindingVJudge: false,
+  showChangePassword: false,
   init() {
-    this.Vjid = "";
-    this.Vjpwd = "";
-    this.isInChangeMode = false;
+    this.showChangeInfo = false;
+    this.showBindingCodeForce = false;
+    this.showBindingVJudge = false;
+    this.showChangePassword = false;
   },
-  show() {
-    this.isInChangeMode = !this.isInChangeMode;
-    if (this.isInChangeMode) {
-      this.Vjid = userInfo.Vjid;
-      this.Vjpwd = "";
+  show: (index: number): void => {
+    switch (index) {
+      case 0:
+        functionConfig.showChangeInfo = true;
+        break;
+      case 1:
+        functionConfig.showBindingCodeForce = true;
+        break;
+      case 2:
+        functionConfig.showBindingVJudge = true;
+        break;
+      case 10:
+        functionConfig.showChangePassword = true;
+        break;
     }
   },
-  sendForm() {
-    if (this.Vjid == "") {
-      proxy.elMessage({
-        message: "ID不能为空",
-        type: "warning",
-      });
-      return;
+  close: (index: number): void => {
+    switch (index) {
+      case 0:
+        functionConfig.showChangeInfo = false;
+        break;
+      case 1:
+        functionConfig.showBindingCodeForce = false;
+        break;
+      case 2:
+        functionConfig.showBindingVJudge = false;
+        break;
+      case 10:
+        functionConfig.showChangePassword = false;
+        break;
     }
-    if (this.Vjpwd == "") {
-      proxy.elMessage({
-        message: "密码不能为空",
-        type: "warning",
-      });
-      return;
-    }
-    proxy
-      .$post("api/user/vjudgeBind", {
-        Vjid: bindingVJ.Vjid,
-        Vjpwd: bindingVJ.Vjpwd,
-      })
-      .then((res: any) => {
-        // proxy.$log(res);
-        let data = res.data;
-        if (data.code == 0) {
-          proxy.elMessage({ message: "修改成功", type: "success" });
-        }
-        proxy.codeProcessor(data.code);
-      });
   },
 });
 
-//修改密码
-var changePassword = reactive({
-  OldPwd: "",
-  Pwd: "",
-  PwdAgain: "",
-  isInChangeMode: false,
-  init() {
-    this.OldPwd = "";
-    this.Pwd = "";
-    this.PwdAgain = "";
-    this.isInChangeMode = false;
-  },
-  show() {
-    this.isInChangeMode = !this.isInChangeMode;
-    if (this.isInChangeMode) {
-      this.OldPwd = "";
-      this.Pwd = "";
-      this.PwdAgain = "";
-    }
-  },
-  sendForm() {
-    if (this.OldPwd == "") {
-      proxy.elMessage({
-        message: "旧密码不能为空",
-        type: "warning",
-      });
-      return;
-    }
-    if (this.Pwd == "" || this.PwdAgain == "") {
-      proxy.elMessage({
-        message: "新密码不能为空",
-        type: "warning",
-      });
-      return;
-    }
-    if (this.Pwd != this.PwdAgain) {
-      proxy.elMessage({
-        message: "两次输入的新密码不同",
-        type: "warning",
-      });
-      return;
-    }
-    proxy
-      .$post("api/user/edit/pass/", {
-        OldPwd: changePassword.OldPwd,
-        Pwd: changePassword.Pwd,
-      })
-      .then((res: any) => {
-        proxy.$log(res);
-        let data = res.data;
-        if (data.code == 0) {
-          proxy.elMessage({ message: "修改成功", type: "success" });
-        }
-        proxy.codeProcessor(data.code);
-      });
-  },
-});
 onMounted(() => {
   if (!userDataStore.isLogin) {
     proxy.$router.replace({ path: "/" });
@@ -714,11 +413,15 @@ onMounted(() => {
       }
 
       > div {
-        font-size: $fontSize12;
         font-weight: 600;
         height: 115px;
         display: flex;
         align-items: flex-end;
+      }
+
+      > .username {
+        font-size: $fontSize12;
+        @include font_color("font1");
       }
 
       .acStatus {
@@ -726,6 +429,7 @@ onMounted(() => {
         position: absolute;
         right: 30px;
         font-size: $fontSize5;
+        @include font_color("font2");
         display: flex;
         flex-direction: column;
         align-items: flex-end;
@@ -771,57 +475,6 @@ onMounted(() => {
         &:hover {
           transform: rotateZ(360deg);
         }
-      }
-    }
-  }
-
-  .changeInfo {
-    margin-top: $modelDistance;
-    padding: 10px 80px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
-    border-radius: 20px;
-    @include box_shadow(0, 0, 8px, 1px, "fill52");
-
-    &:hover {
-      @include fill_color("fill2");
-      @include box_shadow(0, 0, 8px, 1px, "fill51");
-    }
-
-    > div {
-      @include font_color("font1");
-      font-size: $fontSize6;
-      letter-spacing: 1px;
-      display: flex;
-      min-width: 100%;
-      margin: 5px 0;
-
-      span {
-        width: 60px;
-      }
-    }
-
-    > .btn {
-      position: relative;
-      overflow: hidden;
-      margin: 8px 0;
-      width: 220px;
-      height: 40px;
-      border-radius: 15px;
-      font-size: $fontSize5;
-      @include font_color("font1");
-      letter-spacing: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      @include box_shadow(0, 0, 2px, 1px, "border2");
-      transition-duration: 200ms;
-
-      &:hover {
-        @include box_shadow(0, 0, 2px, 1px, "fill12");
-        @include fill_color("fill15");
       }
     }
   }
@@ -878,82 +531,6 @@ onMounted(() => {
       border-radius: 20px;
       transition-duration: 5000ms;
 
-      > div {
-        &:hover {
-          @include box_shadow(0, 0, 8px, 1px, "fill12");
-        }
-
-        .btn {
-          position: relative;
-          overflow: hidden;
-          margin: 8px 0;
-          width: 220px;
-          height: 40px;
-          border-radius: 15px;
-          font-size: $fontSize5;
-          @include font_color("font1");
-          letter-spacing: 4px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          @include box_shadow(0, 0, 2px, 1px, "border2");
-          transition-duration: 200ms;
-
-          &:hover {
-            @include box_shadow(0, 0, 2px, 1px, "fill13");
-            @include fill_color("fill15");
-          }
-        }
-      }
-
-      > div[data-type="form"] {
-        margin-bottom: $modelDistanceMini;
-        width: 100%;
-        padding: 10px 80px;
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: space-between;
-        border-radius: 20px;
-        @include box_shadow(0, 0, 8px, 1px, "fill14");
-        @include fill_color("fill3");
-
-        &:hover {
-          @include box_shadow(0, 0, 8px, 1px, "fill12");
-        }
-      }
-
-      .bindingVJ {
-        > div {
-          @include font_color("font1");
-          font-size: $fontSize6;
-          letter-spacing: 1px;
-          display: flex;
-          min-width: 100%;
-          margin: 5px 0;
-
-          span {
-            width: 100px;
-          }
-        }
-      }
-
-      .changePassword {
-        > div {
-          @include font_color("font1");
-          font-size: $fontSize6;
-          letter-spacing: 1px;
-          display: flex;
-          min-width: 100%;
-          margin: 5px 0;
-
-          span {
-            width: 100px;
-          }
-        }
-      }
-
       .activityCalendarBox {
         width: 100%;
         box-sizing: border-box;
@@ -965,6 +542,10 @@ onMounted(() => {
         @include fill_color("fill3");
         border-radius: 20px;
         overflow: hidden;
+
+        &:hover {
+          @include box_shadow(0, 0, 8px, 1px, "fill12");
+        }
       }
     }
   }

@@ -21,11 +21,11 @@ import Main from "./components/Main.vue";
 import Bottom from "./components/Base/Bottom.vue";
 import { reactive } from "@vue/reactivity";
 import { computed, getCurrentInstance, onMounted } from "vue";
-import { useThemeSwitch } from "./pinia/themeSwitch";
+import { useThemeSwitchStore } from "./pinia/themeSwitch";
 import { useConfigStore } from "./pinia/config";
 import { useUserDataStore } from "./pinia/userData";
 const { proxy } = getCurrentInstance() as any;
-const themeSwitch = useThemeSwitch();
+const ThemeSwitchStore = useThemeSwitchStore();
 const configStore = useConfigStore();
 const userDataStore = useUserDataStore();
 
@@ -77,7 +77,7 @@ configStore.$subscribe((args, state) => {
 
 //初始化仓库状态
 function initStore() {
-  themeSwitch.init();
+  ThemeSwitchStore.init();
 }
 
 onMounted(() => {

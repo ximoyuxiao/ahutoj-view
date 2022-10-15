@@ -66,7 +66,7 @@
             <el-tag
               v-for="major in item.Label.split(';')"
               :key="major"
-              :effect="themeSwitch.theme == 1 ? 'light' : 'dark'"
+              :effect="themeSwitchStore.theme == 1 ? 'light' : 'dark'"
             >
               {{ major }}
             </el-tag>
@@ -77,7 +77,7 @@
           >
             <el-tag
               type="info"
-              :effect="themeSwitch.theme == 1 ? 'light' : 'dark'"
+              :effect="themeSwitchStore.theme == 1 ? 'light' : 'dark'"
             >
               暂无标签
             </el-tag>
@@ -109,9 +109,9 @@
 
 <script lang="ts" setup name = "Problems">
 import { onMounted, getCurrentInstance, reactive } from "vue";
-import { useThemeSwitch } from "../pinia/themeSwitch";
+import { useThemeSwitchStore } from "../pinia/themeSwitch";
 const { proxy } = getCurrentInstance() as any;
-const themeSwitch = useThemeSwitch();
+const themeSwitchStore = useThemeSwitchStore();
 
 //页面配置
 type configType = {

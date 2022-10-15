@@ -139,7 +139,7 @@
           <el-tag
             v-for="tag in problem.Label.split(';')"
             :key="tag"
-            :effect="themeSwitch.theme == 1 ? 'light' : 'dark'"
+            :effect="themeSwitchStore.theme == 1 ? 'light' : 'dark'"
           >
             {{ tag }}
           </el-tag>
@@ -197,11 +197,11 @@
 import { onMounted, getCurrentInstance, reactive, nextTick, ref } from "vue";
 import { useConfigStore } from "../pinia/config";
 import { useConstValStore } from "../pinia/constVal";
-import { useThemeSwitch } from "../pinia/themeSwitch";
+import { useThemeSwitchStore } from "../pinia/themeSwitch";
 import { useUserDataStore } from "../pinia/userData";
 import getAceBuilds from "../utils/aceBuildsFactory";
 const { proxy } = getCurrentInstance() as any;
-const themeSwitch = useThemeSwitch();
+const themeSwitchStore = useThemeSwitchStore();
 const configStore = useConfigStore();
 const constValStore = useConstValStore();
 const userDataStore = useUserDataStore();
@@ -566,7 +566,7 @@ function changeMode(val: string) {
   proxy.Buffer.Config.submitLang(val);
 }
 
-themeSwitch.$subscribe((args, state) => {
+themeSwitchStore.$subscribe((args, state) => {
   if (state.theme == 1) {
     ace.aceEditor.setTheme("ace/theme/eclipse");
   } else {
@@ -674,7 +674,8 @@ onMounted(() => {
     //初始化代码编辑器
     let aceEditor = document.getElementById("aceEditor");
     ace.aceEditor = getAceBuilds({ node: aceEditor });
-    if (themeSwitch.theme != 1) ace.aceEditor.setTheme("ace/theme/one_dark");
+    if (themeSwitchStore.theme != 1)
+      ace.aceEditor.setTheme("ace/theme/one_dark");
     //获取缓存的题目数据
     if (!proxy.$route.query.CID && proxy.$route.query.PID) {
       let text = sessionStorage.getItem("pid" + proxy.$route.query.PID);

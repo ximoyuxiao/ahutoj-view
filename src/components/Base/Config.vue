@@ -9,19 +9,19 @@
           切换主题
         </div>
         <div class="options">
-          <div :class="themeSwitch.theme == 1 ? 'img selected' : 'img'">
+          <div :class="themeSwitchStore.theme == 1 ? 'img selected' : 'img'">
             <img
               src="../../assets/image/global/light.svg"
               @click.stop="switchTheme(1)"
             >
           </div>
-          <div :class="themeSwitch.theme == 2 ? 'img selected' : 'img'">
+          <div :class="themeSwitchStore.theme == 2 ? 'img selected' : 'img'">
             <img
               src="../../assets/image/global/dark.svg"
               @click.stop="switchTheme(2)"
             >
           </div>
-          <div :class="themeSwitch.theme == 3 ? 'img selected' : 'img'">
+          <div :class="themeSwitchStore.theme == 3 ? 'img selected' : 'img'">
             <img
               src="../../assets/image/global/cyberpunk.svg"
               @click.stop="switchTheme(3)"
@@ -41,8 +41,8 @@
 
 <script lang="ts" setup>
 import { computed, watch } from "vue";
-import { useThemeSwitch } from "../../pinia/themeSwitch";
-const themeSwitch = useThemeSwitch();
+import { useThemeSwitchStore } from "../../pinia/themeSwitch";
+const themeSwitchStore = useThemeSwitchStore();
 
 type propsType = {
   close?: Function;
@@ -61,7 +61,7 @@ watch(propsChange, (nv, ov) => {}, {
 
 //切换主题
 function switchTheme(theme: number): void {
-  themeSwitch.switchTheme(theme);
+  themeSwitchStore.switchTheme(theme);
 }
 </script>
 

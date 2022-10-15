@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
 import { PiniaNameSpace } from "./nameSpace";
 
-export const useThemeSwitch = defineStore(
-	PiniaNameSpace.ThemeSwitch,
+export const useThemeSwitchStore = defineStore(
+	PiniaNameSpace.ThemeSwitchStore,
 	{
 		state: () => {
 			return {
