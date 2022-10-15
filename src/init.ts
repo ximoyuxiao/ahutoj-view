@@ -1,5 +1,4 @@
 import axios from "./utils/axios";
-import qs from "qs";
 import * as ElIconModules from "@element-plus/icons-vue";
 import codeProcessor from "./utils/codeProcessor";
 import elMessage from "./utils/elMessageFactory";
@@ -35,7 +34,6 @@ export default function programInitialization(app: App<Element>) {
 function mountUtils(app: App<Element>) {
 	//挂载封装的axios
 	axios.install(app);
-	app.config.globalProperties.$qs = qs;
 	//装载全局工具函数
 	app.config.globalProperties.Utils = Utils;
 	//装载全局缓存工具
