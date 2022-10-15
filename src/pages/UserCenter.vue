@@ -195,6 +195,7 @@ function getUserInfo() {
     let data = res.data;
     if (data.code == 0) {
       userInfo.copy(data);
+      userDataStore.updateData(data);
     }
     proxy.codeProcessor(data.code);
   });

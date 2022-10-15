@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { UserData } from "../utils/buffer";
+import { Config, UserData } from "../utils/buffer";
 import { PiniaNameSpace } from "./nameSpace";
 
 //用户信息类型
@@ -11,6 +11,8 @@ type userInfo = {
 	Major?: string;
 	Adapt?: string;
 	Email?: string;
+	CodeForceUser?: string;
+	Vjid?: string;
 	PermissionMap?: number;
 };
 
@@ -25,6 +27,8 @@ export const useUserDataStore = defineStore(PiniaNameSpace.UserData, {
 			Major: "",
 			Adapt: "",
 			Email: "",
+			CodeForceUser: "",
+			Vjid: "",
 			PermissionMap: 0, //十进制，使用时用二进制运算
 		};
 	},
@@ -38,12 +42,28 @@ export const useUserDataStore = defineStore(PiniaNameSpace.UserData, {
 			this.Major = data.Major;
 			this.Adapt = data.Adapt;
 			this.Email = data.Email;
+			this.CodeForceUser = data.CodeForceUser;
+			this.Vjid = data.Vjid;
 			this.isLogin = true;
 		},
 
 		//同步permission信息
 		synchronizePermission(PermissionMap: number) {
 			this.PermissionMap = PermissionMap;
+		},
+
+		//更新数据
+		updateData(data: userInfo) {
+			if (data.UID) this.UID = data.UID;
+			if (data.UserName) this.UserName = data.UserName;
+			if (data.School) this.School = data.School;
+			if (data.Classes) this.Classes = data.Classes;
+			if (data.Major) this.Major = data.Major;
+			if (data.Adapt) this.Adapt = data.Adapt;
+			if (data.Email) this.Email = data.Email;
+			if (data.CodeForceUser) this.CodeForceUser = data.CodeForceUser;
+			if (data.Vjid) this.Vjid = data.Vjid;
+			this.sessionUserInfo();
 		},
 
 		//将用户信息存入session仓库
@@ -56,6 +76,8 @@ export const useUserDataStore = defineStore(PiniaNameSpace.UserData, {
 			data.Major = this.Major;
 			data.Adapt = this.Adapt;
 			data.Email = this.Email;
+			data.CodeForceUser = this.CodeForceUser;
+			data.Vjid = this.Vjid;
 			data.PermissionMap = this.PermissionMap;
 			UserData.userInfo(data);
 		},
@@ -71,8 +93,7 @@ export const useUserDataStore = defineStore(PiniaNameSpace.UserData, {
 			this.Adapt = "";
 			this.Email = "";
 			this.PermissionMap = 0;
-			sessionStorage.clear();
-			localStorage.clear();
+			Config.clearStore();
 		},
 	},
 	getters: {},

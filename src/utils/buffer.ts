@@ -36,6 +36,11 @@ export class Config {
 	public static submitLang(lang: number | string) {
 		localStorage.setItem("submitLang", String(lang));
 	}
+
+	public static clearStore() {
+		sessionStorage.clear();
+		localStorage.clear();
+	}
 }
 
 export class UserData {
