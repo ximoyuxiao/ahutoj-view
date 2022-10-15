@@ -70,7 +70,6 @@
 <script lang="ts" setup>
 import { reactive, getCurrentInstance, computed, watch } from "vue";
 import { useUserDataStore } from "../../pinia/userData";
-import userData from "../../store/userData";
 const { proxy } = getCurrentInstance() as any;
 const userDataStore = useUserDataStore();
 

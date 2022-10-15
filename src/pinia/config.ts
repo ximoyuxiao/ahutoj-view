@@ -27,3 +27,12 @@ export const useConfigStore = defineStore(PiniaNameSpace.Config, {
 	},
 	getters: {},
 });
+
+
+
+
+
+
+
+
+

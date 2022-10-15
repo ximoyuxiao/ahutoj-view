@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { App } from "vue";
-import { useStore } from "vuex";
+import { App } from "vue"; 
 
 //默认请求地址
 axios.defaults.baseURL = "http://127.0.0.1:4212/";
@@ -25,10 +24,7 @@ axios.interceptors.response.use(
 	(res) => {
 		return res;
 	},
-	(err) => {
-		// console.log(err);
-		let store = useStore();
-
+	(err) => { 
 		return err.response;
 	}
 );

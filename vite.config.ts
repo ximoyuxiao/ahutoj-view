@@ -4,10 +4,11 @@ import { visualizer } from "rollup-plugin-visualizer";
 import externalGlobals from "rollup-plugin-external-globals";
 //CDN 引入
 const CDN_Vue = {
-	external: ["vue", "vuex"],
+	external: ["vue", "vue-router", "vue-demi"],
 	externalGlobals: {
 		vue: "Vue",
-		vuex: "Vuex",
+		"vue-router": "VueRouter",
+		"vue-demi": "VueDemi",
 	},
 };
 
