@@ -224,7 +224,7 @@ var submit = reactive<submitType>({
         getSubmit();
       }, 2000);
     } else {
-      if (judging.value) {
+      if (judging.value && data.Result == "AC") {
         //说明刚刚正在进行判题
         proxy.elNotification({
           message: "恭喜你，通过了该题！",

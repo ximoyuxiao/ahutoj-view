@@ -577,9 +577,9 @@ themeSwitchStore.$subscribe((args, state) => {
 //复制到剪切板
 function copyText(e: any, i: number): void {
   if (i == 1) {
-    navigator.clipboard.writeText(problem.sample_input).then(() => {});
+    navigator.clipboard.writeText(problem.SampleInput).then(() => {});
   } else {
-    navigator.clipboard.writeText(problem.sample_output).then(() => {});
+    navigator.clipboard.writeText(problem.SampleOutput).then(() => {});
   }
 }
 
