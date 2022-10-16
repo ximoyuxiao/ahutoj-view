@@ -4,6 +4,21 @@
       <el-input v-model="problem.Title" />
     </div>
     <div>
+      <span>文本类型：</span>
+      <el-select
+        v-model="problem.ContentType"
+        class="m-2"
+        placeholder="Select"
+      >
+        <el-option
+          v-for="(item,index) in problem.ContentTypes"
+          :key="item.label"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+    </div>
+    <div>
       <span>题目描述：</span>
       <el-input
         v-model="problem.Description"
@@ -126,6 +141,15 @@ var problem = reactive({
   Label: "",
   Origin: -1,
   OriginPID: "",
+  ContentType: -1,
+  //题目描述 文本类型
+  ContentTypes: [
+    { label: "普通 ", value: constValStore.PROBLEM_CONTENTTYPE_NORMAL },
+    {
+      label: "MarkDown",
+      value: constValStore.PROBLEM_CONTENTTYPE_MARKDOWN,
+    },
+  ],
   //选项列表 const
   Origins: [
     { label: "本地", value: constValStore.PROBLEM_ORIGIN_LOCAL },
@@ -150,6 +174,7 @@ var problem = reactive({
     problem.Label = "";
     problem.Origin = 0;
     problem.OriginPID = "";
+    problem.ContentType = -1;
   },
 });
 
@@ -169,6 +194,7 @@ function complete() {
       Label: problem.Label,
       Origin: problem.Origin,
       OriginPID: problem.OriginPID,
+      ContentType: problem.ContentType,
     })
     .then((res: any) => {
       let data = res.data;
