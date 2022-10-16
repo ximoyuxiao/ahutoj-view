@@ -36,7 +36,8 @@
           class="UID"
           style="width: 160px"
         >
-          {{ item.UID.length >  15 ? (item.UID.slice(0,15) + "..." ): item.UID }}
+        {{item.UID}}
+          {{ item.UID ?  (item.UID.length >  15 ? (item.UID.slice(0,15) + "..." ): item.UID):""}}
         </div>
         <div style="width: 120px; display: flex; justify-content: center;">
           <div

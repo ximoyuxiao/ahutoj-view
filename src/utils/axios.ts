@@ -1,9 +1,9 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { App } from "vue"; 
+import { App } from "vue";
 
 //默认请求地址
-axios.defaults.baseURL = "http://127.0.0.1:4212/";
-// axios.defaults.baseURL = "http://www.channelcz.top:1234/";
+// axios.defaults.baseURL = "http://127.0.0.1:4212/";
+axios.defaults.baseURL = "http://www.channelcz.top:1234/";
 
 // http request拦截器
 axios.interceptors.request.use(
@@ -24,7 +24,7 @@ axios.interceptors.response.use(
 	(res) => {
 		return res;
 	},
-	(err) => { 
+	(err) => {
 		return err.response;
 	}
 );
@@ -70,5 +70,5 @@ export default {
 				data,
 			});
 		};
-  }, 
+	},
 };
