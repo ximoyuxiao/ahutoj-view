@@ -657,6 +657,12 @@ var submit = reactive<submitType>({
         let data = res.data;
         proxy.$log(res);
         if (data.code == 0) {
+          proxy.$router.push({
+            path: "/Code",
+            query: {
+              SID: data.SID,
+            },
+          });
           proxy.elNotification({
             message: "提交成功",
             type: "success",

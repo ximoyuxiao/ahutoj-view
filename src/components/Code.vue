@@ -70,29 +70,36 @@
           {{ proxy.Utils.TimeTools.timestampToTime(submit.SubmitTime) }}
         </div>
       </div>
-      <div
-        class="ce"
-        v-if="submit.hasCeInfo"
-      >
-        <div class="title">错误信息</div>
+      <template v-if="!judging">
+        <div
+          class="ce"
+          v-if="submit.hasCeInfo"
+        >
+          <div class="title">错误信息</div>
+          <el-input
+            v-model="submit.CeInfo"
+            :autosize="{ minRows: 5 }"
+            readonly
+            resize="none"
+            show-word-limit
+            type="textarea"
+          />
+        </div>
+        <div class="title">代码</div>
         <el-input
-          v-model="submit.CeInfo"
+          v-model="submit.Source"
           :autosize="{ minRows: 5 }"
           readonly
           resize="none"
           show-word-limit
           type="textarea"
         />
+      </template>
+      <div
+        id="judging"
+        v-show="judging"
+      >
       </div>
-      <div class="title">代码</div>
-      <el-input
-        v-model="submit.Source"
-        :autosize="{ minRows: 5 }"
-        readonly
-        resize="none"
-        show-word-limit
-        type="textarea"
-      />
     </div>
     <div
       class="notFound"
@@ -108,6 +115,9 @@ import { getCurrentInstance, onMounted, onUnmounted, reactive, ref } from "vue";
 const { proxy } = getCurrentInstance() as any;
 
 var notFound = ref(true);
+
+var judging = ref(false);
+var judgingLoading = null;
 
 type configType = {
   SID: number;
@@ -182,10 +192,19 @@ var submit = reactive<submitType>({
       data.Result == "REJUDGING" ||
       data.Result == "PENDING"
     ) {
+      //设置当前的状态为正在判定
+      judging.value = true;
+      if (!judgingLoading)
+        judgingLoading = proxy.elLoading({
+          node: document.getElementById("judging"),
+          text: "正在判题中...",
+        });
       submit.autoUpdate = setTimeout(() => {
         getSubmit();
-        console.log(1);
       }, 2000);
+    } else {
+      judging.value = false;
+      if (judgingLoading) judgingLoading.close();
     }
   },
 });
@@ -288,6 +307,14 @@ onUnmounted(() => {
     margin: 30px 0 5px 0;
     font-size: $fontSize8;
     @include font_color("font1");
+  }
+
+  #judging {
+    width: 100%;
+    height: 400px;
+    border-end-start-radius: 10px;
+    border-end-end-radius: 10px;
+    overflow: hidden;
   }
 }
 </style>

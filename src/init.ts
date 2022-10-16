@@ -6,7 +6,7 @@ import elLoading from "./utils/elLoadingFactory";
 import elNotification from "./utils/elNotificationFactory";
 
 import "animate.css";
-import ElementPlus from "element-plus";
+import ElementPlus from "element-plus"; 
 import VMdEditor from "@kangc/v-md-editor";
 import "@kangc/v-md-editor/lib/style/base-editor.css";
 import githubTheme from "@kangc/v-md-editor/lib/theme/github.js";
