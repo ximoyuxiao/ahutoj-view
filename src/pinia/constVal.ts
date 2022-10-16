@@ -57,6 +57,10 @@ export const useConstValStore = defineStore(PiniaNameSpace.ConstVal, {
 
 			CONTEST_TYPE_ACM: 1,
 			CONTEST_TYPE_OI: 2,
+
+			//报错提示信息
+			SUBMIT_RESULT_PE:
+				"你的输出结果也许是正确的，但是格式存在问题，请检查输出结果的换行情况\n\n例如C++: cout << a; 和 cout << a << endl;\n\n或者检查输出结果的空个间隔情况、中英文格式……",
 		};
 	},
 	actions: {},

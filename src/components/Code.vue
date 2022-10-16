@@ -71,6 +71,7 @@
         </div>
       </div>
       <template v-if="!judging">
+        <!-- 如果结果是 CE 则显示报错信息 -->
         <div
           class="ce"
           v-if="submit.hasCeInfo"
@@ -78,6 +79,21 @@
           <div class="title">错误信息</div>
           <el-input
             v-model="submit.CeInfo"
+            :autosize="{ minRows: 5 }"
+            readonly
+            resize="none"
+            show-word-limit
+            type="textarea"
+          />
+        </div>
+        <!-- 如果结果是 PE 则显示提示格式有问题 -->
+        <div
+          class="pe"
+          v-if="submit.Result == 'PE'"
+        >
+          <div class="title">格式有误</div>
+          <el-input
+            v-model="constValStore.SUBMIT_RESULT_PE"
             :autosize="{ minRows: 5 }"
             readonly
             resize="none"
@@ -109,16 +125,20 @@
     </div>
   </div>
 </template>
-
 <script lang="ts" setup>
 import { getCurrentInstance, onMounted, onUnmounted, reactive, ref } from "vue";
+import { useConstValStore } from "../pinia/constVal";
 const { proxy } = getCurrentInstance() as any;
+const constValStore = useConstValStore();
 
+//未找到该提交结果
 var notFound = ref(true);
 
+//当前是否正在判题
 var judging = ref(false);
 var judgingLoading = null;
 
+//页面配置参数
 type configType = {
   SID: number;
   loading: any;
@@ -133,6 +153,7 @@ var config = reactive<configType>({
   },
 });
 
+//提交数据
 type submitType = {
   UID: string;
   Lang: number;
@@ -203,6 +224,13 @@ var submit = reactive<submitType>({
         getSubmit();
       }, 2000);
     } else {
+      if (judging.value) {
+        //说明刚刚正在进行判题
+        proxy.elNotification({
+          message: "恭喜你，通过了该题！",
+          type: "success",
+        });
+      }
       judging.value = false;
       if (judgingLoading) judgingLoading.close();
     }
@@ -243,6 +271,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+  //清除定时器 ，释放内存占用。
   clearTimeout(submit.autoUpdate);
 });
 </script>
