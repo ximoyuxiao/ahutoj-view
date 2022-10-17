@@ -262,14 +262,16 @@ var rank = reactive<{
         rank.rankList[tempPioneerFlags[i].index].ProblemsMap[i].Pioneer = true;
       }
     }
+
     //排序
     rank.rankList.sort((a, b) => {
       if (a.ACNumber < b.ACNumber) return 1;
       else if (a.ACNumber == b.ACNumber) {
-        if (a.TimePenalty < b.TimePenalty) return 1;
-        else return 0;
+        if (a.TimePenalty < b.TimePenalty) return -1;
+        else return 1;
       } else return -1;
     });
+
     //统计金银铜牌
     let goldIndex = Number((rank.rankList.length * 0.1).toFixed(0));
     let silverIndex = Number((rank.rankList.length * 0.2).toFixed(0));
