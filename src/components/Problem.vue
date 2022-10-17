@@ -8,6 +8,18 @@
         class="left"
         ref="left"
       >
+        <div
+          class="contestID"
+          @click="backToContest"
+          v-if="contest.isContestProblem"
+        >
+          <el-icon size="32px">
+            <Back />
+          </el-icon>
+          <div>
+            #{{contest.CID}}
+          </div>
+        </div>
         <div class="title">{{ problem.Title }}</div>
 
         <div class="description">
@@ -108,7 +120,10 @@
           v-if="contest.isContestProblem"
           ref="contestInfo"
         >
-          <div style="color: var(--font_color1); font-size: var(--fontSize12)">
+          <div
+            class="title cursor_pointer"
+            @click="backToContest"
+          >
             {{ contest.info.Title }}
           </div>
           <div class="problemBox">
@@ -505,6 +520,30 @@ async function checkContest() {
   return ret;
 }
 
+//返回比赛界面
+function backToContest() {
+  let params: { Pass?: string; CID?: string } = {
+    Pass: null,
+    CID: null,
+  };
+  if (proxy.$route.query.CID) {
+    params.CID = proxy.$route.query.CID;
+  } else {
+    proxy.elMessage({
+      message: "数据异常，请重新进入比赛界面",
+      type: "warning",
+    });
+    return;
+  }
+  if (proxy.$route.query.Pass) {
+    params.Pass = proxy.$route.query.Pass;
+  }
+  proxy.$router.push({
+    path: "/Contest",
+    query: params,
+  });
+}
+
 //竞赛模式跳转题目
 function goToProblem(PID: number) {
   let Pass = null;
@@ -727,6 +766,26 @@ onMounted(() => {
       @include fill_color("fill2");
       border-radius: 15px;
 
+      .contestID {
+        margin: 10px;
+        font-size: $fontSize14;
+        @include font_color("font5");
+        display: flex;
+        align-items: center;
+        border-radius: 10px;
+        width: fit-content;
+        box-sizing: border-box;
+        padding: 4px 16px;
+
+        &:hover {
+          @include fill_color("fill4");
+        }
+
+        > div {
+          margin: 0 10px;
+        }
+      }
+
       .title {
         font-size: $fontSize12;
         @include font_color("font1");
@@ -810,32 +869,44 @@ onMounted(() => {
         border-radius: 15px;
       }
 
-      .contestInfo .problemBox {
-        padding: 15px;
-        box-sizing: border-box;
-        width: 100%;
-        display: grid;
-        grid-template-columns: 20% 20% 20% 20% 20%;
-        grid-template-rows: 40px;
-
-        > div {
-          width: 100%;
-          text-align: center;
-          line-height: 40px;
+      .contestInfo {
+        > .title {
           @include font_color("font1");
-          font-size: $fontSize5;
-          border-radius: 10px;
+          font-size: $fontSize6;
 
           &:hover {
             @include font_color("fill12");
-            @include fill_color("fill16");
           }
         }
 
-        .nowProblem {
+        .problemBox {
+          padding: 15px;
           box-sizing: border-box;
-          @include border(2px, dotted, "fill11");
-          @include fill_color("fill15");
+          width: 100%;
+          display: grid;
+          grid-template-columns: repeat(5, calc(100% / 5 - 4px));
+          grid-template-rows: 40px;
+          grid-gap: 2px;
+
+          > div {
+            width: 100%;
+            text-align: center;
+            line-height: 36px;
+            @include font_color("font1");
+
+            font-size: $fontSize4;
+            border-radius: 10px;
+
+            &:hover {
+              @include font_color("fill12");
+              @include fill_color("fill16");
+            }
+          }
+
+          .nowProblem {
+            @include fill_color("fill15");
+            @include outline(2px, dotted, "fill11");
+          }
         }
       }
 

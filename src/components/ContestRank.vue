@@ -3,8 +3,16 @@
     class="ContestRank"
     ref="ContestRank"
   >
-    <div class="contestID">
-      #{{contest.CID}}
+    <div
+      class="contestID"
+      @click="backToContest"
+    >
+      <el-icon size="32px">
+        <Back />
+      </el-icon>
+      <div>
+        #{{contest.CID}}
+      </div>
     </div>
     <div class="contestInfo">
       <div class="title">
@@ -343,6 +351,30 @@ function getBackgroundColor(item: ProblemsMapType | null) {
   }
 }
 
+//返回竞赛
+function backToContest() {
+  let params: { Pass?: string; CID?: string } = {
+    Pass: null,
+    CID: null,
+  };
+  if (proxy.$route.query.CID) {
+    params.CID = proxy.$route.query.CID;
+  } else {
+    proxy.elMessage({
+      message: "数据异常，请重新进入比赛界面",
+      type: "warning",
+    });
+    return;
+  }
+  if (proxy.$route.query.Pass) {
+    params.Pass = proxy.$route.query.Pass;
+  }
+  proxy.$router.push({
+    path: "/Contest",
+    query: params,
+  });
+}
+
 onMounted(() => {
   if (!proxy.$route.query.CID) {
     proxy.elMessage({
@@ -368,6 +400,20 @@ onMounted(() => {
   .contestID {
     font-size: $fontSize14;
     @include font_color("font5");
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    width: fit-content;
+    box-sizing: border-box;
+    padding: 4px 16px;
+
+    &:hover {
+      @include fill_color("fill2");
+    }
+
+    > div {
+      margin: 0 10px;
+    }
   }
 
   .contestInfo {
