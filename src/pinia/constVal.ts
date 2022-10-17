@@ -51,6 +51,10 @@ export const useConstValStore = defineStore(PiniaNameSpace.ConstVal, {
 			PROBLEM_CONTENTTYPE_NORMAL: -1,
 			PROBLEM_CONTENTTYPE_MARKDOWN: 1,
 
+			//题目是否可见
+			PROBLEM_VISIBLE: 1,
+			PROBLEM_UNVISIBLE: -1,
+
 			//竞赛
 			CONTEST_PUBLIC: 1,
 			CONTEST_NOTPUBLIC: -1,
