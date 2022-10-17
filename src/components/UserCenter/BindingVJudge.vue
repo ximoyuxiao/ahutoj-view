@@ -3,7 +3,7 @@
     class="BindingVJ"
     data-type="form"
   >
-    <div style="height: 30px">绑定VJ账号</div>
+    <div class="title">绑定VJ账号</div>
     <el-icon
       class="close cursor_pointer"
       size="30px"
@@ -11,6 +11,12 @@
     >
       <CircleClose />
     </el-icon>
+    <div
+      v-if="props.Vjid"
+      class="bindingNow"
+    >
+      当前已绑定：{{props.Vjid}}
+    </div>
     <div>
       <span>VJ ID:&nbsp;</span>
       <el-input
@@ -35,7 +41,7 @@
         <Link />
       </el-icon>
       &nbsp;绑定
-    </div> 
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -86,7 +92,7 @@ var bindingVJ = reactive({
         let data = res.data;
         if (data.code == 0) {
           proxy.elNotification({
-            message: "修改成功",
+            message: "绑定成功",
             type: "success",
             duration: 1500,
           });
@@ -139,6 +145,15 @@ var bindingVJ = reactive({
     &:hover {
       @include font_color("font1");
     }
+  }
+
+  > .title {
+    font-size: $fontSize8;
+  }
+
+  > .bindingNow {
+    font-size: $fontSize5;
+    margin: 10px 30px;
   }
 
   > .btn {

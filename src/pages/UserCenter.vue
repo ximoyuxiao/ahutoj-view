@@ -66,13 +66,13 @@
           class="functionBtn"
           @click="functionConfig.show(1)"
         >
-          绑定CodeForce
+          {{userInfo.CodeForceUser ?  "CodeForce:\n" + userInfo.CodeForceUser : "绑定CodeForce"}}
         </div>
         <div
           class="functionBtn"
           @click="functionConfig.show(2)"
         >
-          绑定VJudge
+          {{userInfo.Vjid ?  "VJudge:\n" + userInfo.Vjid : "绑定VJudge"}}
         </div>
         <el-divider style="margin: 2px; background-color: var(--font_color4)" />
         <div
@@ -514,6 +514,7 @@ onMounted(() => {
         line-height: $fontSize8;
         text-align: center;
         transition-duration: 260ms;
+        white-space: pre;
 
         &:hover {
           @include fill_color("fill35");
