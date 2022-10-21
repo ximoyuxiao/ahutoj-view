@@ -29,12 +29,17 @@
             v-if="problem.ContentType == 1"
           >
             <span>MarkDown</span>
-            <v-md-preview :text="problem.Description" />
+            <md-editor
+              v-model="problem.Description"
+              :theme="themeSwitchStore.theme == 1 ? 'light' : 'dark'"
+              preview-only
+            />
           </div>
           <pre
             class="text"
             v-else
-          >{{ problem.Description }}</pre>
+          >{{ problem.Description }}
+          </pre>
         </div>
         <div class="input">
           <div class="label">输入</div>
@@ -209,12 +214,20 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, getCurrentInstance, reactive, nextTick, ref } from "vue";
+import {
+  onMounted,
+  getCurrentInstance,
+  reactive,
+  nextTick,
+  ref,
+} from "vue";
 import { useConfigStore } from "../pinia/config";
 import { useConstValStore } from "../pinia/constVal";
 import { useThemeSwitchStore } from "../pinia/themeSwitch";
 import { useUserDataStore } from "../pinia/userData";
 import getAceBuilds from "../utils/aceBuildsFactory";
+import MdEditor from "md-editor-v3";
+import "md-editor-v3/lib/style.css";
 const { proxy } = getCurrentInstance() as any;
 const themeSwitchStore = useThemeSwitchStore();
 const configStore = useConfigStore();
@@ -801,7 +814,10 @@ onMounted(() => {
       }
 
       .markdown {
-        @include fill_color("fill5");
+        > div {
+          box-sizing: border-box;
+          padding: 16px;
+        }
 
         > span {
           display: inline-block;

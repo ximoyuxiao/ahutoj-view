@@ -36,12 +36,20 @@
           />
         </el-select>
       </div>
-      <div>
+      <div v-if="problem.ContentType == -1">
         <span>题目描述：</span>
         <el-input
           v-model="problem.Description"
           type="textarea"
           autosize
+        />
+      </div>
+      <div v-else>
+        <span>题目描述：</span>
+        <md-editor
+          class="markdown"
+          v-model="problem.Description"
+          :toolbars="markdown.toolbar"
         />
       </div>
       <div>
@@ -224,9 +232,44 @@
 import { getCurrentInstance, reactive } from "vue";
 import { ElMessageBox } from "element-plus";
 import { useConstValStore } from "../../../pinia/constVal";
-
+import MdEditor, { ToolbarNames } from "md-editor-v3";
+import "md-editor-v3/lib/style.css";
 const { proxy } = getCurrentInstance() as any;
 const constValStore = useConstValStore();
+
+var markdown: {
+  toolbar: ToolbarNames[];
+} = {
+  toolbar: [
+    "bold",
+    "underline",
+    "italic",
+    "-",
+    "strikeThrough",
+    "title",
+    "sub",
+    "sup",
+    "quote",
+    "unorderedList",
+    "orderedList",
+    "-",
+    "codeRow",
+    "code",
+    "link",
+    "image",
+    "table",
+    "mermaid",
+    "katex",
+    "-",
+    "revoke",
+    "next",
+    "save",
+    "=",
+    "preview",
+    "htmlPreview",
+    "catalog",
+  ],
+};
 
 //题目题号搜索功能
 var search = reactive({
