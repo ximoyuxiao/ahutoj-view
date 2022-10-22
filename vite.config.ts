@@ -2,6 +2,7 @@ import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { visualizer } from "rollup-plugin-visualizer";
 import externalGlobals from "rollup-plugin-external-globals";
+
 //CDN 引入
 const CDN_Vue = {
 	external: ["vue", "vue-router", "vue-demi"],
@@ -54,25 +55,11 @@ const CDN_AceBuilds = {
 	},
 };
 
-const CDN_VMDEditor = {
-	external: [
-		"@kangc/v-md-editor",
-		"@kangc/v-md-editor/lib/preview",
-		"@kangc/v-md-editor/lib/theme/github.js",
-		"@kangc/v-md-editor/lib/style/base-editor.css",
-		"@kangc/v-md-editor/lib/theme/style/github.css",
-		"@kangc/v-md-editor/lib/style/preview.css",
-	],
+const CDN_MDEditor = {
+	external: ["md-editor-v3", "md-editor-v3/lib/style.css"],
 	externalGlobals: {
-		"@kangc/v-md-editor": "VMdEditor",
-		"@kangc/v-md-editor/lib/preview": "VMdEditor",
-		"@kangc/v-md-editor/lib/theme/github.js": "VMdTheme",
-		"@kangc/v-md-editor/lib/style/base-editor.css":
-			"@kangc/v-md-editor/lib/style/base-editor.css",
-		"@kangc/v-md-editor/lib/theme/style/github.css":
-			"@kangc/v-md-editor/lib/theme/style/github.css",
-		"@kangc/v-md-editor/lib/style/preview.css":
-			"@kangc/v-md-editor/lib/style/preview.css",
+		"md-editor-v3": "MdEditorV3",
+		"md-editor-v3/lib/style.css": "md-editor-v3/lib/style.css",
 	},
 };
 
@@ -113,7 +100,7 @@ export default ({ mode }) => {
 				external: [
 					...CDN_Vue.external,
 					...CDN_AceBuilds.external,
-					...CDN_VMDEditor.external,
+					...CDN_MDEditor.external,
 					...CDN_USE.external,
 					...CDN_ElementPlus.external,
 				],
@@ -121,7 +108,7 @@ export default ({ mode }) => {
 					externalGlobals({
 						...CDN_Vue.externalGlobals,
 						...CDN_AceBuilds.externalGlobals,
-						...CDN_VMDEditor.externalGlobals,
+						...CDN_MDEditor.externalGlobals,
 						...CDN_USE.externalGlobals,
 						...CDN_ElementPlus.externalGlobals,
 					}),

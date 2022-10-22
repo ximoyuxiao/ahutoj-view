@@ -1,7 +1,7 @@
 
 <template>
   <div class="BindingCodeForce">
-    <div style="height: 30px">绑定CodeForce</div>
+    <div class="title">绑定CodeForce</div>
     <el-icon
       class="close cursor_pointer"
       size="30px"
@@ -9,6 +9,12 @@
     >
       <CircleClose />
     </el-icon>
+    <div
+      v-if="props.CodeForceUser"
+      class="bindingNow"
+    >
+      当前已绑定：{{props.CodeForceUser}}
+    </div>
     <div>
       <span>账号:&nbsp;</span>
       <el-input
@@ -70,16 +76,16 @@ var codeForce = reactive({
       return;
     }
     proxy
-      .$post("api/user/CodeForceBind", {
+      .$post("api/user/CodeForceBind/", {
         CodeForceUser: codeForce.CodeForceUser,
         CodeForcePass: codeForce.CodeForcePass,
       })
       .then((res: any) => {
-        // proxy.$log(res);
+        proxy.$log(res);
         let data = res.data;
         if (data.code == 0) {
           proxy.elNotification({
-            message: "修改成功",
+            message: "绑定成功",
             type: "success",
             duration: 1500,
           });
@@ -123,6 +129,14 @@ var codeForce = reactive({
     }
   }
 
+  > .title {
+    font-size: $fontSize8;
+  }
+
+  > .bindingNow {
+    font-size: $fontSize5;
+    margin: 10px 30px;
+  }
   > .close {
     position: absolute;
     right: 10px;

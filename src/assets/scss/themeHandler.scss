@@ -52,6 +52,12 @@
 	}
 }
 
+@mixin outline($weight, $style, $color) {
+	@include themeify {
+		outline: $weight $style themed($color) !important;
+	}
+}
+
 //阴影
 @mixin box_shadow($offsetX, $offsetY, $weight, $spread, $color) {
 	@include themeify {

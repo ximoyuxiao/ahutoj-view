@@ -2,8 +2,8 @@ import axios, { AxiosRequestConfig } from "axios";
 import { App } from "vue";
 
 //默认请求地址
-axios.defaults.baseURL = "http://127.0.0.1:4212/";
-// axios.defaults.baseURL = "http://www.channelcz.top:1234/";
+// axios.defaults.baseURL = "http://127.0.0.1:4212/"; 
+axios.defaults.baseURL = "http://www.channelcz.top:1234/";
 
 // http request拦截器
 axios.interceptors.request.use(
@@ -40,6 +40,7 @@ const contentType = [
 export default {
 	install: (app: App<Element>) => {
 		app.config.globalProperties.$axios = axios;
+
 		//封装get请求
 		app.config.globalProperties.$get = function get(
 			url: string,
@@ -51,6 +52,7 @@ export default {
 				headers: { "Content-Type": contentType[content] },
 			});
 		};
+
 		//封装post请求
 		app.config.globalProperties.$post = function post(
 			url: string,
@@ -61,6 +63,7 @@ export default {
 				headers: { "Content-Type": contentType[content] },
 			});
 		};
+
 		//封装delete请求
 		app.config.globalProperties.$delete = function Delete(
 			url: string,

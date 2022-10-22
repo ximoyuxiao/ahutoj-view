@@ -36,12 +36,20 @@
           />
         </el-select>
       </div>
-      <div>
+      <div v-if="problem.ContentType == -1">
         <span>题目描述：</span>
         <el-input
           v-model="problem.Description"
           type="textarea"
           autosize
+        />
+      </div>
+      <div v-else>
+        <span>题目描述：</span>
+        <md-editor
+          class="markdown"
+          v-model="problem.Description"
+          :toolbars="markdown.toolbar"
         />
       </div>
       <div>
@@ -127,6 +135,21 @@
           placeholder="输入题目来源OJ的PID"
         />
       </div>
+      <div>
+        <span>可见：</span>
+        <el-select
+          v-model="problem.Visible"
+          class="m-2"
+          placeholder="Select"
+        >
+          <el-option
+            v-for="(item,index) in problem.Visibles"
+            :key="item.label"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </div>
       <div style="display: flex; justify-content: flex-end; padding: 10px 0">
         <el-button
           type="warning"
@@ -138,7 +161,9 @@
         <el-button
           plain
           v-on:click="complete()"
-        >修改</el-button>
+        >
+          修改
+        </el-button>
       </div>
     </div>
     <div class="showList">
@@ -147,6 +172,13 @@
         v-on:click="searchList.showList()"
       >
         {{searchList.isShowed ? "关闭列表" : "显示列表" }}
+      </el-button>
+      <el-button
+        plain
+        v-show="searchList.isShowed"
+        v-on:click="searchList.selectAll()"
+      >
+        当页全选
       </el-button>
       <el-button
         plain
@@ -200,9 +232,44 @@
 import { getCurrentInstance, reactive } from "vue";
 import { ElMessageBox } from "element-plus";
 import { useConstValStore } from "../../../pinia/constVal";
-
+import MdEditor, { ToolbarNames } from "md-editor-v3";
+import "md-editor-v3/lib/style.css";
 const { proxy } = getCurrentInstance() as any;
 const constValStore = useConstValStore();
+
+var markdown: {
+  toolbar: ToolbarNames[];
+} = {
+  toolbar: [
+    "bold",
+    "underline",
+    "italic",
+    "-",
+    "strikeThrough",
+    "title",
+    "sub",
+    "sup",
+    "quote",
+    "unorderedList",
+    "orderedList",
+    "-",
+    "codeRow",
+    "code",
+    "link",
+    "image",
+    "table",
+    "mermaid",
+    "katex",
+    "-",
+    "revoke",
+    "next",
+    "save",
+    "=",
+    "preview",
+    "htmlPreview",
+    "catalog",
+  ],
+};
 
 //题目题号搜索功能
 var search = reactive({
@@ -244,6 +311,7 @@ var problem = reactive({
   Origin: -1,
   OriginPID: "",
   ContentType: -1,
+  Visible: 1,
   //题目描述 文本类型
   ContentTypes: [
     { label: "普通 ", value: constValStore.PROBLEM_CONTENTTYPE_NORMAL },
@@ -262,6 +330,14 @@ var problem = reactive({
     },
     { label: "洛谷", value: constValStore.PROBLEM_ORIGIN_LUOGU },
   ],
+  //题目
+  Visibles: [
+    { label: "可见", value: constValStore.PROBLEM_VISIBLE },
+    {
+      label: "不可见",
+      value: constValStore.PROBLEM_UNVISIBLE,
+    },
+  ],
   init() {
     search.isSearched = false;
     this.PID = 0;
@@ -278,6 +354,7 @@ var problem = reactive({
     this.Origin = 0;
     this.OriginPID = "";
     this.ContentType = -1;
+    this.Visible = 1;
   },
   copy(data: any) {
     problem.PID = data.PID;
@@ -294,6 +371,7 @@ var problem = reactive({
     problem.Origin = data.Origin;
     problem.OriginPID = data.OriginPID;
     problem.ContentType = data.ContentType;
+    problem.Visible = data.Visible;
   },
 });
 
@@ -359,6 +437,12 @@ var searchList = reactive({
     searchList.Data[index].selected = searchList.Data[index].selected
       ? false
       : true;
+  },
+  //全选
+  selectAll: () => {
+    searchList.Data.forEach((element) => {
+      element.selected = true;
+    });
   },
   //批量删除
   batchDelete: () => {
@@ -451,6 +535,7 @@ function complete() {
       Origin: problem.Origin,
       OriginPID: problem.OriginPID,
       ContentType: problem.ContentType,
+      Visible: problem.Visible,
     })
     .then((res: any) => {
       let data = res.data;

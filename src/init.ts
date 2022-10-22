@@ -6,13 +6,7 @@ import elLoading from "./utils/elLoadingFactory";
 import elNotification from "./utils/elNotificationFactory";
 
 import "animate.css";
-import ElementPlus from "element-plus"; 
-import VMdEditor from "@kangc/v-md-editor";
-import "@kangc/v-md-editor/lib/style/base-editor.css";
-import githubTheme from "@kangc/v-md-editor/lib/theme/github.js";
-import "@kangc/v-md-editor/lib/theme/style/github.css";
-import VMdPreview from "@kangc/v-md-editor/lib/preview";
-import "@kangc/v-md-editor/lib/style/preview.css";
+import ElementPlus from "element-plus";
 
 import * as Utils from "./utils/globalFunctions";
 import * as Buffer from "./utils/buffer";
@@ -50,11 +44,7 @@ function mountComponents(app: App<Element>) {
 	//全局配置element-icon
 	for (let iconName in ElIconModules) {
 		app.component(iconName, ElIconModules[iconName]);
-	}
-	VMdEditor.use(githubTheme);
-	app.use(VMdEditor);
-	VMdPreview.use(githubTheme);
-	app.use(VMdPreview);
+	} 
 	console.log("Components mounted");
 }
 
