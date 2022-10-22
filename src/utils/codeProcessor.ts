@@ -1,119 +1,61 @@
 import { ElMessage } from "element-plus";
-import { stringify } from "querystring";
+import { keys, Module } from "./codeProcessorHelper/codeConstants";
+import AuthProcessor from "./codeProcessorHelper/authProcessor";
+import AdminProcessor from "./codeProcessorHelper/adminProcessor";
+import ContestProcessor from "./codeProcessorHelper/contestProcessor";
+import ProblemProcessor from "./codeProcessorHelper/problemProcessor";
+import SubmitProcessor from "./codeProcessorHelper/submitProcessor";
+import TrainingProcessor from "./codeProcessorHelper/trainingProcessor";
+import UserProcessor from "./codeProcessorHelper/userProcessor";
+import FileProcessor from "./codeProcessorHelper/fileProcessor";
 
-type codeType = "success" | "warning" | "info" | "error";
 export default function codeProcessor(
-	code: number | null | undefined,
-	type: codeType
+	code: number | null | undefined
 ) {
-	if (code == 0 || code == 200) return;
-	switch (code) {
-		case 101:
-			ElMessage({
-				message: "账号为空",
-				type: "error",
-			});
+	//正常状态码
+	if (!code || code == 0) return;
+	//开始解析
+	let ModuleCode = Math.floor(code / 1000);
+	let LocationCode = Math.floor((code % 1000) / 100);
+	let OperationCode = code % 100;
+	switch (ModuleCode) {
+		//Auth模块 101
+		case Module[keys.Auth]:
+			AuthProcessor(LocationCode, OperationCode);
 			break;
-		case 102:
-			ElMessage({
-				message: "密码为空",
-				type: "error",
-			});
+		//User模块 102
+		case Module[keys.User]:
+			UserProcessor(LocationCode, OperationCode);
 			break;
-		case 1001:
-			ElMessage({
-				message: "请求参数错误",
-				type: "error",
-			});
+		//Admin模块 103
+		case Module[keys.Admin]:
+			AdminProcessor(LocationCode, OperationCode);
 			break;
-		case 1002:
-			ElMessage({
-				message: "账号不存在",
-				type: "warning",
-			});
+		//Problem模块 104
+		case Module[keys.Problem]:
+			ProblemProcessor(LocationCode, OperationCode);
 			break;
-		case 1003:
-			ElMessage({
-				message: "账号未登录",
-				type: "warning",
-			});
+		//Training模块 105
+		case Module[keys.Training]:
+			TrainingProcessor(LocationCode, OperationCode);
 			break;
-		case 1004:
-			ElMessage({
-				message: "密码错误",
-				type: "error",
-			});
+		//Contest模块 106
+		case Module[keys.Contest]:
+			ContestProcessor(LocationCode, OperationCode);
 			break;
-		case 1005:
-			ElMessage({
-				message: "Token创建失败",
-				type: "error",
-			});
+		//Submit模块 107
+		case Module[keys.Submit]:
+			SubmitProcessor(LocationCode, OperationCode);
 			break;
-		case 1006:
-			ElMessage({
-				message: "无效的Token",
-				type: "warning",
-			});
+		//File模块 108
+		case Module[keys.File]:
+			FileProcessor(LocationCode, OperationCode);
 			break;
-		case 1007:
-			ElMessage({
-				message: "账号已存在",
-				type: "warning",
-			});
-			break;
-		case 1008:
-			ElMessage({
-				message: "该题目已存在",
-				type: "error",
-			});
-			break;
-		case 1009:
-			ElMessage({
-				message: "题目不存在",
-				type: "error",
-			});
-			break;
-		case 1010:
-			ElMessage({
-				message: "竞赛不存在",
-				type: "error",
-			});
-			break;
-		case 2000:
-			ElMessage({
-				message: "竞赛密码错误",
-				type: "error",
-			});
-			break;
-		case 2001:
-			ElMessage({
-				message: "数据库错误",
-				type: "error",
-			});
-			break;
-		case 2002:
-			ElMessage({
-				message: "缓存数据库错误",
-				type: "error",
-			});
-			break;
-		case 2005:
-			ElMessage({
-				message: "竞赛未开始",
-				type: "error",
-			});
-			break;
-		case 5001:
-			ElMessage({
-				message: "服务器繁忙",
-				type: "warning",
-			});
-			break;
-		default:
-			ElMessage({
-				message: String(code),
-				type: "info",
-			});
 	}
+
+	//旧模块，正在逐步移除
+	ElMessage({
+		message: String(code),
+		type: "info",
+	});
 }
