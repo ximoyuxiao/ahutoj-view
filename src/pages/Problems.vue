@@ -66,7 +66,7 @@
             <el-tag
               v-for="major in item.Label.split(';')"
               :key="major"
-              :effect="themeSwitchStore.theme == 1 ? 'light' : 'dark'"
+              :effect="themeSwitchStore.theme > 0 ? 'light' : 'dark'"
             >
               {{ major }}
             </el-tag>
@@ -77,7 +77,7 @@
           >
             <el-tag
               type="info"
-              :effect="themeSwitchStore.theme == 1 ? 'light' : 'dark'"
+              :effect="themeSwitchStore.theme > 0 ? 'light' : 'dark'"
             >
               暂无标签
             </el-tag>

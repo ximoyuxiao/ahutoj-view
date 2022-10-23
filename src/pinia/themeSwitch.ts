@@ -27,6 +27,7 @@ export const useThemeSwitchStore = defineStore(
 			switchTheme(theme: number | string | null): void {
 				if (!theme) theme = this.theme;
 				this.theme = theme;
+				//大于0说明是亮色 反之是暗色
 				switch (Number(theme)) {
 					case 1:
 						document.documentElement.setAttribute(
@@ -34,13 +35,19 @@ export const useThemeSwitchStore = defineStore(
 							"lightTheme"
 						);
 						break;
-					case 2:
+					case 8:
+						document.documentElement.setAttribute(
+							"data-theme",
+							"chineseTheme"
+						);
+						break;
+					case -1:
 						document.documentElement.setAttribute(
 							"data-theme",
 							"darkTheme"
 						);
 						break;
-					case 3:
+					case -2:
 						document.documentElement.setAttribute(
 							"data-theme",
 							"cyberpunkTheme"

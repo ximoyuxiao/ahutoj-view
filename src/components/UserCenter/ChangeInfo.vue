@@ -33,7 +33,7 @@
         style="min-width: fit-content; margin: 0 1px"
         closable
         :disable-transitions="false"
-        :effect="themeSwitchStore.theme == 1 ? 'light' : 'dark'"
+        :effect="themeSwitchStore.theme >  0 ? 'light' : 'dark'"
         @close="setAdept.handleClose(Adept)"
       >
         {{ Adept }}

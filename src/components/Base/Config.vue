@@ -15,16 +15,22 @@
               @click.stop="switchTheme(1)"
             >
           </div>
-          <div :class="themeSwitchStore.theme == 2 ? 'img selected' : 'img'">
+          <div :class="themeSwitchStore.theme == -1 ? 'img selected' : 'img'">
             <img
               src="../../assets/image/global/dark.svg"
-              @click.stop="switchTheme(2)"
+              @click.stop="switchTheme(-1)"
             >
           </div>
-          <div :class="themeSwitchStore.theme == 3 ? 'img selected' : 'img'">
+          <div :class="themeSwitchStore.theme == -1 ? 'img selected' : 'img'">
             <img
               src="../../assets/image/global/cyberpunk.svg"
-              @click.stop="switchTheme(3)"
+              @click.stop="switchTheme(-2)"
+            >
+          </div>
+          <div :class="themeSwitchStore.theme == 8 ? 'img selected' : 'img'">
+            <img
+              src="../../assets/image/global/chinese.svg"
+              @click.stop="switchTheme(8)"
             >
           </div>
         </div>

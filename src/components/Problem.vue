@@ -30,8 +30,9 @@
           >
             <span>MarkDown</span>
             <md-editor
+              class="mdEditor"
               v-model="problem.Description"
-              :theme="themeSwitchStore.theme == 1 ? 'light' : 'dark'"
+              :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'"
               preview-only
             />
           </div>
@@ -159,7 +160,7 @@
           <el-tag
             v-for="tag in problem.Label.split(';')"
             :key="tag"
-            :effect="themeSwitchStore.theme == 1 ? 'light' : 'dark'"
+            :effect="themeSwitchStore.theme >  0 ? 'light' : 'dark'"
           >
             {{ tag }}
           </el-tag>
@@ -613,7 +614,7 @@ function changeMode(val: string) {
 }
 
 themeSwitchStore.$subscribe((args, state) => {
-  if (state.theme == 1) {
+  if (state.theme > 0) {
     ace.aceEditor.setTheme("ace/theme/eclipse");
   } else {
     ace.aceEditor.setTheme("ace/theme/one_dark");
@@ -726,7 +727,7 @@ onMounted(() => {
     //初始化代码编辑器
     let aceEditor = document.getElementById("aceEditor");
     ace.aceEditor = getAceBuilds({ node: aceEditor });
-    if (themeSwitchStore.theme != 1)
+    if (themeSwitchStore.theme < 0 )
       ace.aceEditor.setTheme("ace/theme/one_dark");
     //获取缓存的题目数据
     if (!proxy.$route.query.CID && proxy.$route.query.PID) {
@@ -811,6 +812,7 @@ onMounted(() => {
         > div {
           box-sizing: border-box;
           padding: 16px;
+          background: none;
         }
 
         > span {
