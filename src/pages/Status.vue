@@ -162,7 +162,7 @@ function getStatus() {
         config.Count = data.Count;
         status.list = data.Data;
       }
-      proxy.codeProcessor(data.code);
+      proxy.codeProcessor(data.code, data.msg);
     });
 }
 

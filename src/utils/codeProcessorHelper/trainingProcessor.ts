@@ -2,7 +2,8 @@ import elMessage from "../elMessageFactory";
 import { keys, Location, Operation } from "./codeConstants";
 export default function TrainingProcessor(
 	LocationCode: number,
-	OperationCode: number
+	OperationCode: number,
+	msg: string
 ) {
 	// + 105
 	switch (LocationCode) {

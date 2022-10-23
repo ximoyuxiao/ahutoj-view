@@ -110,7 +110,7 @@ var changePassword = reactive({
           });
           props.close(10);
         }
-        proxy.codeProcessor(data.code);
+        proxy.codeProcessor(data.code, data.msg);
       });
   },
 });

@@ -2,7 +2,8 @@ import elMessage from "../elMessageFactory";
 import { keys, Location, Operation } from "./codeConstants";
 export default function SubmitProcessor(
 	LocationCode: number,
-	OperationCode: number
+	OperationCode: number,
+	msg: string
 ) {
 	// + 107
 	switch (LocationCode) {

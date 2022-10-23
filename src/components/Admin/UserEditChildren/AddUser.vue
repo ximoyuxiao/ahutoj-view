@@ -106,7 +106,7 @@ export default {
               type: "success",
             });
           } else {
-            proxy.codeProcessor(data.code);
+            proxy.codeProcessor(data.code, data.msg);
           }
         });
     }

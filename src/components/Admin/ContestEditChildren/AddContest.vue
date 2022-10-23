@@ -161,7 +161,7 @@ var problemList = reactive({
         this.data.push(problem);
         proxy.elMessage({ message: "添加成功!", type: "success" });
       } else {
-        proxy.codeProcessor(data.code);
+        proxy.codeProcessor(data.code, data.msg);
       }
     });
   },
@@ -240,7 +240,7 @@ function complete() {
       if (data.code == 0) {
         proxy.elMessage({ message: "添加成功!", type: "success" });
       } else {
-        proxy.codeProcessor(data.code);
+        proxy.codeProcessor(data.code, data.msg);
       }
     });
 }

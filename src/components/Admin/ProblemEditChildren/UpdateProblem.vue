@@ -290,7 +290,7 @@ var search = reactive({
       } else {
         search.isSearched = false;
       }
-      proxy.codeProcessor(data.code);
+      proxy.codeProcessor(data.code, data.msg);
     });
   },
 });
@@ -423,7 +423,7 @@ var searchList = reactive({
           });
           searchList.isShowed = true;
         }
-        proxy.codeProcessor(data.code);
+        proxy.codeProcessor(data.code, data.msg);
       });
   },
   //页面切换
@@ -480,7 +480,7 @@ var searchList = reactive({
               type: "success",
             });
           }
-          proxy.codeProcessor(data.code);
+          proxy.codeProcessor(data.code, data.msg);
         });
       searchList.isShowed = false;
     });
@@ -511,7 +511,7 @@ function deleteProblem() {
             type: "success",
           });
         } else {
-          proxy.codeProcessor(data.code);
+          proxy.codeProcessor(data.code, data.msg);
         }
       });
   });
@@ -543,7 +543,7 @@ function complete() {
         proxy.$log(data);
         proxy.elMessage({ message: "修改成功!", type: "success" });
       } else {
-        proxy.codeProcessor(data.code);
+        proxy.codeProcessor(data.code, data.msg);
       }
     });
 }

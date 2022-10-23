@@ -120,7 +120,7 @@ var search = reactive({
         proxy.elMessage({ message: "暂无文件", type: "info" });
       }
       search.isSearched = true;
-      // proxy.codeProcessor(data.code);
+      // proxy.codeProcessor(data.code,data.msg);
     });
   },
 });
@@ -197,7 +197,7 @@ function uploadF(f: any) {
       });
       proxy.elMessage({ message: f.name + " 上传成功!", type: "success" });
     }
-    proxy.codeProcessor(data.code);
+    proxy.codeProcessor(data.code, data.msg);
   });
 }
 
@@ -217,7 +217,7 @@ function unzipFile(index: number) {
       if (data.code == 0) {
         proxy.elMessage({ message: "解压成功", type: "succes" });
       }
-      proxy.codeProcessor(data.code);
+      proxy.codeProcessor(data.code, data.msg);
     });
   });
 }
@@ -238,7 +238,7 @@ function deleteFile(index: number) {
         fileList.value.splice(index, 1);
         proxy.elMessage({ message: "删除成功", type: "succes" });
       }
-      proxy.codeProcessor(data.code);
+      proxy.codeProcessor(data.code, data.msg);
     });
   });
 }

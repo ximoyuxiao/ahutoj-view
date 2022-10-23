@@ -199,7 +199,7 @@ var contest = reactive<contestType>({
         this.isFound = true;
         // proxy.$log(contestTime.value);
       } else {
-        proxy.codeProcessor(data.code);
+        proxy.codeProcessor(data.code, data.msg);
       }
     });
   },
@@ -232,7 +232,7 @@ var problemList = reactive({
         this.data.push(problem);
         proxy.elMessage({ message: "添加成功!", type: "success" });
       } else {
-        proxy.codeProcessor(data.code);
+        proxy.codeProcessor(data.code, data.msg);
       }
     });
   },
@@ -270,7 +270,7 @@ function deleteContest() {
             type: "success",
           });
         } else {
-          proxy.codeProcessor(data.code);
+          proxy.codeProcessor(data.code, data.msg);
         }
       });
   });
@@ -329,7 +329,7 @@ function complete() {
         problemList.init();
         proxy.elMessage({ message: "修改成功!", type: "success" });
       }
-      proxy.codeProcessor(data.code);
+      proxy.codeProcessor(data.code, data.msg);
     });
 }
 </script>

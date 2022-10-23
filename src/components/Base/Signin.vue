@@ -250,7 +250,7 @@ function signin() {
         userDataStore.sessionUserInfo();
         props.close();
       }
-      proxy.codeProcessor(data.code);
+      proxy.codeProcessor(data.code, data.msg);
     });
 }
 </script>

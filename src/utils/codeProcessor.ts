@@ -8,11 +8,19 @@ import SubmitProcessor from "./codeProcessorHelper/submitProcessor";
 import TrainingProcessor from "./codeProcessorHelper/trainingProcessor";
 import UserProcessor from "./codeProcessorHelper/userProcessor";
 import FileProcessor from "./codeProcessorHelper/fileProcessor";
+import messageHandle from "./codeProcessorHelper/messageHandle";
 
 export default function codeProcessor(
-	code: number | null | undefined
+	code: number | null | undefined,
+	msg: string | null | undefined
 ) {
-	//正常状态码
+	//服务器msg
+	if (msg && msg != "") {
+		messageHandle(msg);
+		return;
+	}
+
+	//一般状态码
 	if (!code || code == 0) return;
 	//开始解析
 	let ModuleCode = Math.floor(code / 1000);
@@ -21,35 +29,35 @@ export default function codeProcessor(
 	switch (ModuleCode) {
 		//Auth模块 101
 		case Module[keys.Auth]:
-			AuthProcessor(LocationCode, OperationCode);
+			AuthProcessor(LocationCode, OperationCode, msg);
 			break;
 		//User模块 102
 		case Module[keys.User]:
-			UserProcessor(LocationCode, OperationCode);
+			UserProcessor(LocationCode, OperationCode, msg);
 			break;
 		//Admin模块 103
 		case Module[keys.Admin]:
-			AdminProcessor(LocationCode, OperationCode);
+			AdminProcessor(LocationCode, OperationCode, msg);
 			break;
 		//Problem模块 104
 		case Module[keys.Problem]:
-			ProblemProcessor(LocationCode, OperationCode);
+			ProblemProcessor(LocationCode, OperationCode, msg);
 			break;
 		//Training模块 105
 		case Module[keys.Training]:
-			TrainingProcessor(LocationCode, OperationCode);
+			TrainingProcessor(LocationCode, OperationCode, msg);
 			break;
 		//Contest模块 106
 		case Module[keys.Contest]:
-			ContestProcessor(LocationCode, OperationCode);
+			ContestProcessor(LocationCode, OperationCode, msg);
 			break;
 		//Submit模块 107
 		case Module[keys.Submit]:
-			SubmitProcessor(LocationCode, OperationCode);
+			SubmitProcessor(LocationCode, OperationCode, msg);
 			break;
 		//File模块 108
 		case Module[keys.File]:
-			FileProcessor(LocationCode, OperationCode);
+			FileProcessor(LocationCode, OperationCode, msg);
 			break;
 	}
 

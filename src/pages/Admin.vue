@@ -107,7 +107,7 @@ function checkPermission() {
       // proxy.$log(data);
       permissionParser(data.PermissionMap);
     }
-    proxy.codeProcessor(data.code);
+    proxy.codeProcessor(data.code, data.msg);
   });
 }
 

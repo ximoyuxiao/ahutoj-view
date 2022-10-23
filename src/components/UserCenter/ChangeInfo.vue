@@ -167,7 +167,7 @@ var changeInfo = reactive<changeInfoType>({
           });
           props.close(0);
         } else {
-          proxy.codeProcessor(data.code);
+          proxy.codeProcessor(data.code, data.msg);
         }
       });
   },

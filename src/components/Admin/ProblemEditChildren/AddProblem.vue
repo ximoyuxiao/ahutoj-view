@@ -271,7 +271,7 @@ function complete() {
       if (data.code == 0) {
         proxy.elMessage({ message: "添加成功!", type: "success" });
       }
-      proxy.codeProcessor(data.code);
+      proxy.codeProcessor(data.code, data.msg);
     });
 }
 </script>
@@ -295,5 +295,4 @@ function complete() {
     }
   }
 }
-
 </style>

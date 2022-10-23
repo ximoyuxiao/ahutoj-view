@@ -98,7 +98,7 @@ var bindingVJ = reactive({
           });
           props.close(2);
         }
-        proxy.codeProcessor(data.code);
+        proxy.codeProcessor(data.code, data.msg);
       });
   },
 });

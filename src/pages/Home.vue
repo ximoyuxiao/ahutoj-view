@@ -245,7 +245,7 @@ function getContestsInfo() {
       while (contests.overList.length < 5)
         contests.overList.push({ Title: "" });
     }
-    proxy.codeProcessor(data.code);
+    proxy.codeProcessor(data.code, data.msg);
   });
 }
 

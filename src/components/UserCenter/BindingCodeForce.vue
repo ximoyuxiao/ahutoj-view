@@ -91,7 +91,7 @@ var codeForce = reactive({
           });
           props.close(1);
         }
-        proxy.codeProcessor(data.code);
+        proxy.codeProcessor(data.code, data.msg);
       });
   },
 });

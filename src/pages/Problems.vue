@@ -194,7 +194,7 @@ function getProblems(PID: number = null, Title: string = null) {
         config.Count = data.Count;
         search.Data = data.Data;
       }
-      proxy.codeProcessor(data.code);
+      proxy.codeProcessor(data.code, data.msg);
       //关闭加载效果
       config.loading.close();
     });

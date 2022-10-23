@@ -250,7 +250,7 @@ function getSubmit() {
       notFound.value = false;
     }
     config.loading.close();
-    proxy.codeProcessor(data.code);
+    proxy.codeProcessor(data.code, data.msg);
   });
 }
 

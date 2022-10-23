@@ -197,7 +197,7 @@ function getUserInfo() {
       userInfo.copy(data);
       userDataStore.updateData(data);
     }
-    proxy.codeProcessor(data.code);
+    proxy.codeProcessor(data.code, data.msg);
   });
 }
 
@@ -275,7 +275,7 @@ function getUserSubmit() {
         proxy.Buffer.UserCenter.submitData(data.Data, userDataStore.UID);
         activityCalendarConfig.init(data.Data);
       }
-      proxy.codeProcessor(data.code);
+      proxy.codeProcessor(data.code, data.msg);
     });
 }
 

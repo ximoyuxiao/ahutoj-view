@@ -125,7 +125,7 @@ var search = reactive<searchType>({
           }
         });
       } else {
-        proxy.codeProcessor(data.code);
+        proxy.codeProcessor(data.code, data.msg);
         return;
       }
     });
@@ -173,7 +173,7 @@ function confirm() {
           type: "success",
         });
       }
-      proxy.codeProcessor(data.code);
+      proxy.codeProcessor(data.code, data.msg);
     });
 }
 </script>

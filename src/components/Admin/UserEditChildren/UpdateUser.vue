@@ -59,7 +59,7 @@ function changeUserPass() {
   //       type: "success",
   //     });
   //   }
-  //   proxy.codeProcessor(data.code);
+  //   proxy.codeProcessor(data.code,data.msg);
   // });
 }
 

@@ -203,7 +203,7 @@ function getContests() {
         contests.list = data.Data;
       }
       config.loading.close();
-      proxy.codeProcessor(data.code);
+      proxy.codeProcessor(data.code, data.msg);
     });
 
   //同步服务器时间

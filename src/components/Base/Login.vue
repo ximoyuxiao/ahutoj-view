@@ -130,7 +130,7 @@ function login() {
         proxy.$log("permission 同步完成");
         props.close();
       }
-      proxy.codeProcessor(data.code);
+      proxy.codeProcessor(data.code, data.msg);
     });
 }
 

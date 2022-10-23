@@ -214,13 +214,7 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  onMounted,
-  getCurrentInstance,
-  reactive,
-  nextTick,
-  ref,
-} from "vue";
+import { onMounted, getCurrentInstance, reactive, nextTick, ref } from "vue";
 import { useConfigStore } from "../pinia/config";
 import { useConstValStore } from "../pinia/constVal";
 import { useThemeSwitchStore } from "../pinia/themeSwitch";
@@ -483,7 +477,7 @@ async function getProblemInfo() {
       problem.SampleOutputRows = outputLength;
       notFound.value = false;
     }
-    proxy.codeProcessor(data.code);
+    proxy.codeProcessor(data.code, data.msg);
   });
 
   loading.init();
@@ -525,7 +519,7 @@ async function checkContest() {
             type: "warning",
           });
         } else {
-          proxy.codeProcessor(data.code);
+          proxy.codeProcessor(data.code, data.msg);
         }
       }
     });
@@ -720,7 +714,7 @@ var submit = reactive<submitType>({
             type: "success",
           });
         }
-        proxy.codeProcessor(data.code);
+        proxy.codeProcessor(data.code, data.msg);
       });
   },
 });

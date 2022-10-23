@@ -192,7 +192,7 @@ async function autoLogin() {
         showNav();
         proxy.$log("自动登录成功");
       }
-      proxy.codeProcessor(data.code);
+      proxy.codeProcessor(data.code, data.msg);
     });
   }
 }

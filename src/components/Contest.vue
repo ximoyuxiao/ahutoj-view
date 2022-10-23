@@ -296,7 +296,7 @@ async function getContestById() {
         path: "/Contests",
       });
     }
-    proxy.codeProcessor(data.code);
+    proxy.codeProcessor(data.code, data.msg);
   });
 
   loading.init();
