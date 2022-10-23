@@ -1,3 +1,38 @@
+type customThemeType = {
+	font: {
+		first: string;
+		last: string;
+	};
+	fill: {
+		first: string;
+		last: string;
+	};
+	fill1: {
+		first: string;
+		last: string;
+	};
+	fill2: {
+		first: string;
+		last: string;
+	};
+	fill3: {
+		first: string;
+		last: string;
+	};
+	fill4: {
+		first: string;
+		last: string;
+	};
+	fill5: {
+		first: string;
+		last: string;
+	};
+	border: {
+		first: string;
+		last: string;
+	};
+};
+
 type userInfoType = {
 	UID?: string;
 	UserName?: string;
@@ -33,6 +68,14 @@ type submitDataType = {
 };
 
 export class Config {
+	public static theme(theme: number | string) {
+		localStorage.setItem("theme", String(theme));
+	}
+
+	public static customeTheme(colors: customThemeType) {
+		localStorage.setItem("customThemeData", JSON.stringify(colors));
+	}
+
 	public static submitLang(lang: number | string) {
 		localStorage.setItem("submitLang", String(lang));
 	}

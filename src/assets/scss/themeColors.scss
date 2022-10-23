@@ -2,10 +2,12 @@
 @import "./theme/darkTheme.scss";
 @import "./theme/cyberpunkTheme.scss";
 @import "./theme/chineseTheme.scss";
+@import "./theme/customTheme.scss";
 
 $themes: (
 	darkTheme: $darkTheme,
 	lightTheme: $lightTheme,
 	cyberpunkTheme: $cyberpunkTheme,
 	chineseTheme: $chineseTheme,
+	customTheme: $customTheme,
 );
