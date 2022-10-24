@@ -10,7 +10,7 @@ export default function elNotification({
 	message = "",
 	type = "info",
 	position = "top-right",
-	duration = 4500,
+	duration = 3000,
 	dangerouslyUseHTMLString = false,
 	offset = 0,
 }: {
@@ -29,6 +29,6 @@ export default function elNotification({
 		position,
 		duration,
 		dangerouslyUseHTMLString,
-		offset,
+		offset: offset + 50,
 	});
 }

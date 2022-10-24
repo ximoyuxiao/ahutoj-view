@@ -77,6 +77,7 @@ configStore.$subscribe((args, state) => {
 
 //初始化仓库状态
 function initStore() {
+  configStore.init();
   ThemeSwitchStore.init();
 }
 

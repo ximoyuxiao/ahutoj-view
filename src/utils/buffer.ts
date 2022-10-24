@@ -1,4 +1,9 @@
-type customThemeType = {
+export type configDataType = {
+	UID: string;
+	submitThenRedirectToCode: boolean;
+};
+
+export type customThemeType = {
 	font: {
 		first: string;
 		last: string;
@@ -33,7 +38,7 @@ type customThemeType = {
 	};
 };
 
-type userInfoType = {
+export type userInfoType = {
 	UID?: string;
 	UserName?: string;
 	School?: string;
@@ -45,7 +50,7 @@ type userInfoType = {
 	[item: string]: any;
 };
 
-type rankData = {
+export type rankDataType = {
 	ACNumber: number;
 	AllSubmit: number;
 	CENumber: number;
@@ -56,7 +61,7 @@ type rankData = {
 	UserID: string;
 };
 
-type submitDataType = {
+export type submitDataType = {
 	Lang: number | null;
 	PID: number | null;
 	Result: any;
@@ -78,6 +83,10 @@ export class Config {
 
 	public static submitLang(lang: number | string) {
 		localStorage.setItem("submitLang", String(lang));
+	}
+
+	public static saveConfig(config: configDataType) {
+		localStorage.setItem("configData", JSON.stringify(config));
 	}
 
 	public static clearStore() {
@@ -104,7 +113,7 @@ export class Problem {
 
 export class ContestRank {
 	//保存竞赛排名数据
-	public static rankData(data: rankData, CID: number | string): void {
+	public static rankData(data: rankDataType, CID: number | string): void {
 		if (CID) {
 			sessionStorage.setItem(
 				"contestRankData" + CID,

@@ -80,7 +80,6 @@
         </div>
       </template>
     </el-drawer>
-
     <div class="title">
       页面设置
     </div>
@@ -122,6 +121,13 @@
           </div>
         </div>
       </div>
+      <div class="submit">
+        <div class="text">提交后跳转到提交状态页</div>
+        <el-switch
+          v-model="configStore.submitThenRedirectToCode"
+          size="large"
+        />
+      </div>
       <div
         class="close cursor_pointer"
         @click="props.close"
@@ -133,9 +139,14 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, reactive, watch } from "vue";
+import { computed, getCurrentInstance, onMounted, reactive, watch } from "vue";
+import { useConfigStore } from "../../pinia/config";
 import { useThemeSwitchStore } from "../../pinia/themeSwitch";
+import { useUserDataStore } from "../../pinia/userData";
+const { proxy } = getCurrentInstance() as any;
 const themeSwitchStore = useThemeSwitchStore();
+const configStore = useConfigStore();
+const userDataStore = useUserDataStore();
 
 type propsType = {
   close?: Function;
@@ -215,6 +226,17 @@ var customTheme = reactive({
   },
 });
 
+var config = reactive({});
+
+configStore.$subscribe((a, b) => {
+  //监测到config发生改变，更新store中的配置信息
+  if (!userDataStore.isLogin) {
+    proxy.elMessage({ message: "请登录后修改配置", type: "warning" });
+    return;
+  }
+  configStore.save();
+});
+
 //切换主题
 function switchTheme(theme: number): void {
   themeSwitchStore.switchTheme(theme);
@@ -270,10 +292,11 @@ onMounted(() => {
       width: 100%;
       display: flex;
       flex-direction: column;
+      box-sizing: border-box;
+      padding: 5px 20px;
 
       .text {
         box-sizing: border-box;
-        padding: 5px 20px;
       }
 
       .options {
@@ -302,6 +325,19 @@ onMounted(() => {
         .selected {
           @include linear_gradient(to top, "fill2", "fill3");
         }
+      }
+    }
+
+    .submit {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+      padding: 10px 20px;
+
+      .text {
+        box-sizing: border-box;
       }
     }
 

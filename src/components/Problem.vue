@@ -23,7 +23,10 @@
         <div class="title">{{ problem.Title }}</div>
         <template v-if="problem.ContentType == 1">
           <div class="markdown">
-            <div class="copy cursor_pointer">
+            <div
+              class="copy cursor_pointer"
+              @click="copyText($event, 0)"
+            >
               <el-icon size="20px">
                 <MagicStick />
               </el-icon>
@@ -160,7 +163,7 @@
         >
           <div>时间限制: {{ problem.LimitTime }} ms</div>
           <div>内存限制: {{ problem.LimitMemory }} MB</div>
-          <div style="color: var(--font_color41)">通过数:</div>
+          <div>通过数:</div>
         </div>
         <div
           class="tags"
@@ -196,8 +199,7 @@
               position: absolute;
               box-shadow: -2px 0 1px 2px rgba(130, 220, 250, 0.8);
               top: 0;
-              left: 0;
-            "
+              left: 0;"
             />
           </div>
           <div class="solutions cursor_pointer">
@@ -234,6 +236,7 @@ const constValStore = useConstValStore();
 const userDataStore = useUserDataStore();
 
 var notFound = ref(false);
+
 
 //页面加载效果维护
 var loading = reactive({
@@ -627,10 +630,17 @@ themeSwitchStore.$subscribe((args, state) => {
 
 //复制到剪切板
 function copyText(e: any, i: number): void {
-  if (i == 1) {
-    navigator.clipboard.writeText(problem.SampleInput).then(() => {});
-  } else {
-    navigator.clipboard.writeText(problem.SampleOutput).then(() => {});
+  switch (i) {
+    case 0:
+      navigator.clipboard.writeText(problem.Description).then(() => {
+        proxy.elNotification({ message: "复制成功", type: "success" });
+      });
+    case 1:
+      navigator.clipboard.writeText(problem.SampleInput).then(() => {});
+      break;
+    case 2:
+      navigator.clipboard.writeText(problem.SampleOutput).then(() => {});
+      break;
   }
 }
 
@@ -706,14 +716,17 @@ var submit = reactive<submitType>({
       })
       .then((res: any) => {
         let data = res.data;
-        proxy.$log(res);
+        // proxy.$log(res);
         if (data.code == 0) {
-          proxy.$router.push({
-            path: "/Code",
-            query: {
-              SID: data.SID,
-            },
-          });
+          if (configStore.submitThenRedirectToCode) {
+            proxy.$router.push({
+              path: "/Code",
+              query: {
+                SID: data.SID,
+              },
+            });
+          }
+
           proxy.elNotification({
             message: "提交成功",
             type: "success",
