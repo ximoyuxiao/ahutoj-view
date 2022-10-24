@@ -366,7 +366,7 @@ onMounted(() => {
           margin: 5px 0;
 
           > span {
-            margin: 0 1px;
+            margin: 1px 1px;
           }
         }
 

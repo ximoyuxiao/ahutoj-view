@@ -9,7 +9,7 @@
         ref="left"
       >
         <div
-          class="contestID"
+          class="contestID cursor_pointer"
           @click="backToContest"
           v-if="contest.isContestProblem"
         >
@@ -791,6 +791,7 @@ onMounted(() => {
 
         &:hover {
           @include fill_color("fill4");
+          @include font_color("font2");
         }
 
         > div {
@@ -805,20 +806,53 @@ onMounted(() => {
         padding: $modelDistance 0;
       }
 
-      .label {
-        box-sizing: border-box;
-        padding: $modelDistance 0 $modelDistanceMini 20px;
-        font-size: $fontSize7;
-        @include font_color("font1");
+      .normal {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+
+        > div {
+          > .label {
+            box-sizing: border-box;
+            padding: $modelDistance 0 $modelDistanceMini 20px;
+            font-size: $fontSize7;
+            @include font_color("font1");
+          }
+
+          > .text {
+            box-sizing: border-box;
+            padding: 0 30px;
+            font-size: $fontSize6;
+            @include font_color("font2");
+          }
+        }
+
+        .textarea {
+          width: calc(100% - 60px);
+          box-sizing: border-box;
+          margin: 0 30px;
+          padding: 15px;
+          line-height: $fontSize6;
+          font-size: $fontSize6;
+          @include font_color("font1");
+          @include fill_color("fill3");
+          resize: none;
+          border-radius: 12px;
+          overflow: visible;
+        }
       }
 
       .markdown {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+
         > .copy {
+          width: fit-content;
           @include font_color("font3");
           display: flex;
           align-items: center;
           font-size: $fontSize5;
-          justify-content: right;
 
           &:hover {
             @include font_color("fill11");
@@ -841,27 +875,6 @@ onMounted(() => {
           @include font_color("font3");
           font-size: $fontSize4;
         }
-      }
-
-      > .text {
-        box-sizing: border-box;
-        padding: 0 30px;
-        font-size: $fontSize6;
-        @include font_color("font2");
-      }
-
-      .textarea {
-        width: calc(100% - 60px);
-        box-sizing: border-box;
-        margin: 0 30px;
-        padding: 15px;
-        line-height: $fontSize6;
-        font-size: $fontSize6;
-        @include font_color("font1");
-        @include fill_color("fill3");
-        resize: none;
-        border-radius: 12px;
-        overflow: visible;
       }
 
       > .ace {
