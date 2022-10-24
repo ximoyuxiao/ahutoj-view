@@ -237,7 +237,6 @@ const userDataStore = useUserDataStore();
 
 var notFound = ref(false);
 
-
 //页面加载效果维护
 var loading = reactive({
   content: null,
@@ -259,7 +258,7 @@ var loading = reactive({
   },
 });
 
-//页面数据
+//竞赛题目的竞赛数据
 type contestType = {
   CID: number;
   Pass: string;
@@ -338,6 +337,7 @@ var contest = reactive<contestType>({
   },
 });
 
+//题目数据
 type problemType = {
   PID?: number;
   Description: string;
@@ -394,6 +394,7 @@ var problem = reactive<problemType>({
   },
 });
 
+//ace编辑插件
 var ace = reactive({
   aceEditor: null,
 });
@@ -644,6 +645,7 @@ function copyText(e: any, i: number): void {
   }
 }
 
+//提交
 type submitType = {
   time: any;
   isInLongTouch: boolean;

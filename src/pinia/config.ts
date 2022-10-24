@@ -1,4 +1,4 @@
-import { defineStore } from "pinia"; 
+import { defineStore } from "pinia";
 import { nextTick } from "vue";
 import { Config, configDataType, UserData } from "../utils/buffer";
 import { PiniaNameSpace } from "./nameSpace";
@@ -20,10 +20,12 @@ export const useConfigStore = defineStore(PiniaNameSpace.Config, {
 		init() {
 			let configData = localStorage.getItem("configData") as any;
 			let userDataStore = useUserDataStore();
+			//用户未登录则暂停从storage中初始化
 			if (!configData || !userDataStore.isLogin) {
 				return;
 			}
 			configData = JSON.parse(configData) as configDataType;
+			//用户登录的UID和保存的参数中的UID不同则停止初始化
 			if (configData.UID != userDataStore.UID) {
 				localStorage.removeItem("configData");
 				return;
@@ -35,6 +37,7 @@ export const useConfigStore = defineStore(PiniaNameSpace.Config, {
 		//保存状态
 		save() {
 			let userDataStore = useUserDataStore();
+			//如用户没有登录就暂停保存
 			if (userDataStore.isLogin && userDataStore.UID != "") {
 				let configData = {
 					UID: userDataStore.UID,
@@ -48,6 +51,7 @@ export const useConfigStore = defineStore(PiniaNameSpace.Config, {
 
 		//重新加载页面
 		reloadNow() {
+			//在页面中使用v-if使用该参数的true false变化修可以实现重新渲染
 			this.reload = true;
 			nextTick(() => {
 				this.reload = false;
