@@ -116,11 +116,14 @@
                 :label="item.name"
                 :value="item.name"
                 :disabled="item.disabled"
+                :effect="themeSwitchStore.theme >  0 ? 'light' : 'dark'"
               />
             </el-select>
             <el-button
-              plain
               v-on:click="aceConfig.save()"
+              size="small"
+              type="primary"
+              :plain="themeSwitchStore.theme >  0 ? true : false"
             >暂存</el-button>
           </div>
           <div id="aceEditor" />
@@ -172,12 +175,7 @@
           </el-tag>
         </div>
         <div class="function">
-          <span style="
-            height: 40px;
-            line-height: 40px;
-            font-size: var(--fontSize6);
-            color: var(--font_color1);
-          ">
+          <span class="modeNow">
             当前模式：{{ aceConfig.modeNow }}
           </span>
           <div
@@ -951,18 +949,24 @@ onMounted(() => {
         justify-content: center;
       }
 
-      .tags > span {
-        margin: 0 1px;
-      }
-
       .tags {
         margin-bottom: $modelDistance;
         @include fill_color("fill2");
         border-radius: 15px;
         padding: 10px 15px;
+
+        > span {
+          margin: 3px 3px;
+        }
       }
+
       .function {
         @include font_color("font1");
+
+        > .modeNow {
+          font-size: $fontSize6;
+          margin: 10px 0;
+        }
 
         > div {
           position: relative;
