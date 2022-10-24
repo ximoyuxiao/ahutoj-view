@@ -18,54 +18,73 @@
         />
       </el-select>
     </div>
-    <div v-if="problem.ContentType == -1">
-      <span>题目描述：</span>
-      <el-input
-        v-model="problem.Description"
-        type="textarea"
-        autosize
-      />
-    </div>
-    <div v-else>
-      <span>题目描述：</span>
-      <md-editor
-        class="markdown"
-        v-model="problem.Description"
-        :toolbars="markdown.toolbar"
-      />
-    </div>
-    <div>
-      <span>输入描述：</span>
-      <el-input
-        v-model="problem.Input"
-        type="textarea"
-        autosize
-      />
-    </div>
-    <div>
-      <span>输出描述：</span>
-      <el-input
-        v-model="problem.Output"
-        type="textarea"
-        autosize
-      />
-    </div>
-    <div>
-      <span>输入样例：</span>
-      <el-input
-        v-model="problem.SampleInput"
-        type="textarea"
-        autosize
-      />
-    </div>
-    <div>
-      <span>输出样例：</span>
-      <el-input
-        v-model="problem.SampleOutput"
-        type="textarea"
-        autosize
-      />
-    </div>
+    <template v-if="problem.ContentType == 1">
+      <div class="markdown">
+        <md-editor
+          v-model="problem.Description"
+          :toolbars="markdown.toolbar"
+        />
+      </div>
+    </template>
+    <template v-else>
+      <div class="normal">
+        <div>
+          <span>题目描述：</span>
+          <el-input
+            v-model="problem.Description"
+            type="textarea"
+            autosize
+          />
+        </div>
+        <div>
+          <span>输入描述：</span>
+          <el-input
+            v-model="problem.Input"
+            type="textarea"
+            autosize
+          />
+        </div>
+        <div>
+          <span>输出描述：</span>
+          <el-input
+            v-model="problem.Output"
+            type="textarea"
+            autosize
+          />
+        </div>
+        <div>
+          <span>输入样例：</span>
+          <el-input
+            v-model="problem.SampleInput"
+            type="textarea"
+            autosize
+          />
+        </div>
+        <div>
+          <span>输出样例：</span>
+          <el-input
+            v-model="problem.SampleOutput"
+            type="textarea"
+            autosize
+          />
+        </div>
+        <div>
+          <span>提示：</span>
+          <el-input
+            v-model="problem.Hit"
+            type="textarea"
+            autosize
+          />
+        </div>
+        <div>
+          <span>标签：</span>
+          <el-input
+            v-model="problem.Label"
+            placeholder="请输入的每个标签之间用';'隔开"
+          />
+        </div>
+      </div>
+    </template>
     <div>
       <span>时间限制：</span>
       <el-input-number
@@ -83,21 +102,6 @@
       <span>&nbsp;MB</span>
     </div>
     <div>
-      <span>提示：</span>
-      <el-input
-        v-model="problem.Hit"
-        type="textarea"
-        autosize
-      />
-    </div>
-    <div>
-      <span>标签：</span>
-      <el-input
-        v-model="problem.Label"
-        placeholder="请输入的每个标签之间用';'隔开"
-      />
-    </div>
-    <div>
       <span>来源：</span>
       <el-select
         v-model="problem.Origin"
@@ -112,7 +116,7 @@
         />
       </el-select>
       <el-input
-        v-show="problem.Origin != 0"
+        v-show="problem.Origin != -1"
         v-model="problem.OriginPID"
         placeholder="输入题目来源OJ的PID"
       />
@@ -279,6 +283,29 @@ function complete() {
 <style scoped lang="scss">
 .addProblem {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .normal {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    > div {
+      display: flex;
+      align-content: center;
+      justify-content: flex-start;
+      box-sizing: border-box;
+      margin: 5px 0;
+
+      > span {
+        display: block;
+        font-size: 22px;
+        width: 150px;
+        @include font_color("font1");
+      }
+    }
+  }
 
   > div {
     display: flex;

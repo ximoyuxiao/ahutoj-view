@@ -21,14 +21,16 @@
           </div>
         </div>
         <div class="title">{{ problem.Title }}</div>
-
-        <div class="description">
-          <div class="label">描述</div>
-          <div
-            class="markdown"
-            v-if="problem.ContentType == 1"
-          >
-            <span>MarkDown</span>
+        <template v-if="problem.ContentType == 1">
+          <div class="markdown">
+            <div class="copy cursor_pointer">
+              <el-icon size="20px">
+                <MagicStick />
+              </el-icon>
+              &nbsp;
+              复制MarkDown
+              &nbsp;
+            </div>
             <md-editor
               class="mdEditor"
               v-model="problem.Description"
@@ -36,65 +38,69 @@
               preview-only
             />
           </div>
-          <pre
-            class="text"
-            v-else
-          >{{ problem.Description }}
-          </pre>
-        </div>
-        <div class="input">
-          <div class="label">输入</div>
-          <pre class="text">{{ problem.Input }}</pre>
-        </div>
-        <div class="output">
-          <div class="label">输出</div>
-          <pre class="text">{{ problem.Output }}</pre>
-        </div>
-        <div class="sampleInput">
-          <div class="label">输入样例</div>
-          <el-popover
-            placement="top-start"
-            content="复制成功"
-            :width="50"
-            trigger="focus"
-          >
-            <template #reference>
-              <textarea
-                class="textarea"
-                v-model="problem.SampleInput"
-                :rows="problem.SampleInputRows"
-                :readonly="true"
-                @click="copyText($event, 1)"
-              />
-            </template>
-          </el-popover>
-        </div>
-        <div class="sampleOutput">
-          <div class="label">输出样例</div>
-          <el-popover
-            placement="top-start"
-            content="复制成功"
-            :width="50"
-            trigger="focus"
-          >
-            <template #reference>
-              <textarea
-                class="textarea"
-                v-model="problem.SampleOutput"
-                :rows="problem.SampleOutputRows"
-                :readonly="true"
-                @click="copyText($event, 2)"
-              />
-            </template>
-          </el-popover>
-        </div>
-        <div
-          class="hit"
-          v-if="problem.Hit.length > 0"
-        >
-          <div class="label">提示</div>
-          <pre class="text">{{ problem.Hit }}</pre>
-        </div>
+        </template>
+        <template v-else>
+          <div class="normal">
+            <div class="description">
+              <div class="label">描述</div>
+              <pre class="text">{{ problem.Description }}</pre>
+            </div>
+
+            <div class="input">
+              <div class="label">输入</div>
+              <pre class="text">{{ problem.Input }}</pre>
+            </div>
+            <div class="output">
+              <div class="label">输出</div>
+              <pre class="text">{{ problem.Output }}</pre>
+            </div>
+            <div class="sampleInput">
+              <div class="label">输入样例</div>
+              <el-popover
+                placement="top-start"
+                content="复制成功"
+                :width="50"
+                trigger="focus"
+              >
+                <template #reference>
+                  <textarea
+                    class="textarea"
+                    v-model="problem.SampleInput"
+                    :rows="problem.SampleInputRows"
+                    :readonly="true"
+                    @click="copyText($event, 1)"
+                  />
+                </template>
+              </el-popover>
+            </div>
+            <div class="sampleOutput">
+              <div class="label">输出样例</div>
+              <el-popover
+                placement="top-start"
+                content="复制成功"
+                :width="50"
+                trigger="focus"
+              >
+                <template #reference>
+                  <textarea
+                    class="textarea"
+                    v-model="problem.SampleOutput"
+                    :rows="problem.SampleOutputRows"
+                    :readonly="true"
+                    @click="copyText($event, 2)"
+                  />
+                </template>
+              </el-popover>
+            </div>
+            <div
+              class="hit"
+              v-if="problem.Hit.length > 0"
+            >
+              <div class="label">提示</div>
+              <pre class="text">{{ problem.Hit }}</pre>
+            </div>
+          </div>
+        </template>
         <div class="ace">
           <div>
             <el-select
@@ -727,7 +733,7 @@ onMounted(() => {
     //初始化代码编辑器
     let aceEditor = document.getElementById("aceEditor");
     ace.aceEditor = getAceBuilds({ node: aceEditor });
-    if (themeSwitchStore.theme < 0 )
+    if (themeSwitchStore.theme < 0)
       ace.aceEditor.setTheme("ace/theme/one_dark");
     //获取缓存的题目数据
     if (!proxy.$route.query.CID && proxy.$route.query.PID) {
@@ -809,6 +815,19 @@ onMounted(() => {
       }
 
       .markdown {
+        > .copy {
+          @include font_color("font3");
+          display: flex;
+          align-items: center;
+          font-size: $fontSize5;
+          justify-content: right;
+
+          &:hover {
+            @include font_color("fill11");
+            text-decoration: underline;
+          }
+        }
+
         > div {
           box-sizing: border-box;
           padding: 16px;
@@ -826,7 +845,7 @@ onMounted(() => {
         }
       }
 
-      .text {
+      > .text {
         box-sizing: border-box;
         padding: 0 30px;
         font-size: $fontSize6;

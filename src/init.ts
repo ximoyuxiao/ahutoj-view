@@ -7,6 +7,7 @@ import elNotification from "./utils/elNotificationFactory";
 
 import "animate.css";
 import ElementPlus from "element-plus";
+import "element-plus/dist/index.css";
 
 import * as Utils from "./utils/globalFunctions";
 import * as Buffer from "./utils/buffer";
@@ -44,7 +45,7 @@ function mountComponents(app: App<Element>) {
 	//全局配置element-icon
 	for (let iconName in ElIconModules) {
 		app.component(iconName, ElIconModules[iconName]);
-	} 
+	}
 	console.log("Components mounted");
 }
 
