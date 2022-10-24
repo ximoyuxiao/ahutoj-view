@@ -226,8 +226,6 @@ var customTheme = reactive({
   },
 });
 
-var config = reactive({});
-
 configStore.$subscribe((a, b) => {
   //监测到config发生改变，更新store中的配置信息
   if (!userDataStore.isLogin) {
@@ -242,7 +240,7 @@ function switchTheme(theme: number): void {
   themeSwitchStore.switchTheme(theme);
 }
 
-onMounted(() => {
+onMounted(() => { 
   customTheme.init();
 });
 </script>
@@ -354,3 +352,4 @@ onMounted(() => {
   }
 }
 </style>
+

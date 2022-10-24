@@ -20,10 +20,21 @@
 import Main from "./components/Main.vue";
 import Bottom from "./components/Base/Bottom.vue";
 import { reactive } from "@vue/reactivity";
-import { computed, getCurrentInstance, onMounted } from "vue";
+import {
+  computed,
+  getCurrentInstance,
+  onActivated,
+  onBeforeUnmount,
+  onBeforeUpdate,
+  onDeactivated,
+  onMounted,
+  onUnmounted,
+  onUpdated,
+} from "vue";
 import { useThemeSwitchStore } from "./pinia/themeSwitch";
 import { useConfigStore } from "./pinia/config";
 import { useUserDataStore } from "./pinia/userData";
+import { Config, UserData } from "./utils/buffer";
 const { proxy } = getCurrentInstance() as any;
 const ThemeSwitchStore = useThemeSwitchStore();
 const configStore = useConfigStore();
@@ -81,10 +92,12 @@ function initStore() {
   ThemeSwitchStore.init();
 }
 
-onMounted(() => {
+onMounted(() => { 
   config.pingServer();
   initStore();
 });
+
+() => {};
 </script>
 
 <style lang="scss" scoped>

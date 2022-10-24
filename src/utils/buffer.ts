@@ -100,6 +100,15 @@ export class UserData {
 		let jsonString = JSON.stringify(data);
 		sessionStorage.setItem("ahutOjUserInfo", jsonString);
 	}
+
+	//清空用户登录相关凭证
+	public static clearUserLoginCertificate() {
+		localStorage.removeItem("ahutOjToken");
+		localStorage.removeItem("ahutOjSaveLoginStatus");
+		localStorage.removeItem("ahutOjUserUid");
+		sessionStorage.removeItem("userSubmitData");
+		sessionStorage.removeItem("ahutOjUserInfo");
+	}
 }
 
 export class Problem {
@@ -113,7 +122,10 @@ export class Problem {
 
 export class ContestRank {
 	//保存竞赛排名数据
-	public static rankData(data: rankDataType, CID: number | string): void {
+	public static rankData(
+		data: rankDataType,
+		CID: number | string
+	): void {
 		if (CID) {
 			sessionStorage.setItem(
 				"contestRankData" + CID,

@@ -1,4 +1,9 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import {
+	createRouter,
+	createWebHashHistory,
+	NavigationGuardNext,
+	RouteLocationNormalized,
+} from "vue-router";
 // import Home from "../pages/Home.vue";
 // import Problem from "../components/Problem.vue";
 // import Code from "../components/Code.vue";
@@ -10,6 +15,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 // import UserCenter from "../pages/UserCenter.vue";
 
 import Admin from "./Admin";
+import { needLoginCertificate } from "./guard";
 const router = createRouter({
 	history: createWebHashHistory(),
 	routes: [
@@ -32,6 +38,13 @@ const router = createRouter({
 		{
 			path: "/Code",
 			component: () => import("../components/Code.vue"),
+			beforeEnter: (
+				to: RouteLocationNormalized,
+				from: RouteLocationNormalized,
+				next: NavigationGuardNext
+			) => {
+				if (needLoginCertificate()) next();
+			},
 		},
 		{
 			path: "/Contests",
@@ -56,6 +69,13 @@ const router = createRouter({
 		{
 			path: "/UserCenter",
 			component: () => import("../pages/UserCenter.vue"),
+			beforeEnter: (
+				to: RouteLocationNormalized,
+				from: RouteLocationNormalized,
+				next: NavigationGuardNext
+			) => {
+				if (needLoginCertificate()) next();
+			},
 		},
 		Admin,
 	],

@@ -1,8 +1,9 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { App } from "vue";
+import { useUserDataStore } from "../pinia/userData";
 
 //默认请求地址
-// axios.defaults.baseURL = "http://127.0.0.1:4212/"; 
+// axios.defaults.baseURL = "http://127.0.0.1:4212/";
 axios.defaults.baseURL = "http://www.channelcz.top:1234/";
 
 // http request拦截器
@@ -10,7 +11,10 @@ axios.interceptors.request.use(
 	function (config: AxiosRequestConfig): AxiosRequestConfig {
 		let Token: string | null = localStorage.getItem("ahutOjToken");
 		if (Token && config.headers) {
-			config.headers.Authorization = Token;
+			const userDataStore = useUserDataStore();
+			if (userDataStore.isLogin) {
+				config.headers.Authorization = Token;
+			} 
 		}
 		return config;
 	},

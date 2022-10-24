@@ -3,14 +3,14 @@
     <div class="nav">
       <router-link
         active-class="selected"
-        to="/Admin/ProblemEdit/AddProblem"
+        to="/Admin/ListEdit/AddList"
       >
         添加题目
       </router-link>
       <el-divider direction="vertical" />
       <router-link
         active-class="selected"
-        to="/Admin/ProblemEdit/UpdateProblem"
+        to="/Admin/ListEdit/UpdateList"
       >
         修改题目
       </router-link>

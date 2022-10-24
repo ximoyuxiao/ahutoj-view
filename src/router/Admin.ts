@@ -16,14 +16,40 @@
 // import AdminEdit from "../components/Admin/AdminEdit.vue";
 // import AddAdmin from "../components/Admin/AdminEditChildren/AddAdmin.vue";
 // import UpdateAdmin from "../components/Admin/AdminEditChildren/UpdateAdmin.vue";
+import {
+	NavigationGuardNext,
+	RouteLocationNormalized,
+} from "vue-router";
+import {
+	needAdminCertificate,
+	needContestAdminCertificate,
+	needListAdminCertificate,
+	needLoginCertificate,
+	needProblemAdminCertificate,
+	needSuperAdminCertificate,
+} from "./guard";
 
 const Admin = {
 	path: "/Admin",
 	component: () => import("../pages/Admin.vue"),
+	beforeEnter: (
+		to: RouteLocationNormalized,
+		from: RouteLocationNormalized,
+		next: NavigationGuardNext
+	) => {
+		if (needAdminCertificate()) next();
+	},
 	children: [
 		{
 			path: "ProblemEdit",
 			component: () => import("../components/Admin/ProblemEdit.vue"),
+			beforeEnter: (
+				to: RouteLocationNormalized,
+				from: RouteLocationNormalized,
+				next: NavigationGuardNext
+			) => {
+				if (needProblemAdminCertificate()) next();
+			},
 			redirect: "/Admin/ProblemEdit/AddProblem",
 			children: [
 				{
@@ -59,6 +85,13 @@ const Admin = {
 		{
 			path: "ContestEdit",
 			component: () => import("../components/Admin/ContestEdit.vue"),
+			beforeEnter: (
+				to: RouteLocationNormalized,
+				from: RouteLocationNormalized,
+				next: NavigationGuardNext
+			) => {
+				if (needContestAdminCertificate()) next();
+			},
 			redirect: "/Admin/ContestEdit/AddContest",
 			children: [
 				{
@@ -80,7 +113,14 @@ const Admin = {
 		{
 			path: "ListEdit",
 			component: () => import("../components/Admin/ListEdit.vue"),
-			redirect: "Admin/ListEdit/AddList",
+			beforeEnter: (
+				to: RouteLocationNormalized,
+				from: RouteLocationNormalized,
+				next: NavigationGuardNext
+			) => {
+				if (needListAdminCertificate()) next();
+			},
+			redirect: "/Admin/ListEdit/AddList",
 			children: [
 				{
 					path: "AddList",
@@ -130,6 +170,13 @@ const Admin = {
 			path: "AdminEdit",
 			component: () => import("../components/Admin/AdminEdit.vue"),
 			redirect: "/Admin/AdminEdit/AddAdmin",
+			beforeEnter: (
+				to: RouteLocationNormalized,
+				from: RouteLocationNormalized,
+				next: NavigationGuardNext
+			) => {
+				if (needSuperAdminCertificate()) next();
+			},
 			children: [
 				{
 					path: "AddAdmin",
