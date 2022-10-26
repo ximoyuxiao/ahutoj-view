@@ -22,10 +22,14 @@ export default function codeProcessor(
 
 	//一般状态码
 	if (!code || code == 0) return;
+	//code码正则表达式匹配解构
+	let reg =
+		/(?<ModuleCode>[0-9]{3})(?<LocationCode>[0-9]{1})(?<OperationCode>[0-9]{2})/;
+	let res = reg.exec(String(code));
 	//开始解析
-	let ModuleCode = Math.floor(code / 1000);
-	let LocationCode = Math.floor((code % 1000) / 100);
-	let OperationCode = code % 100;
+	let ModuleCode = Number(res.groups.ModuleCode);
+	let LocationCode = Number(res.groups.LocationCode);
+	let OperationCode = Number(res.groups.OperationCode);
 	switch (ModuleCode) {
 		//Auth模块 101
 		case Module[keys.Auth]:
