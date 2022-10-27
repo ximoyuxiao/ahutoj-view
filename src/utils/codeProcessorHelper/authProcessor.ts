@@ -117,7 +117,8 @@ function logicLevelHandle(OperationCode: number) {
 			elMessage({
 				message: "该账号已经被注册过了哦，换一个试试吧！",
 				type: "warning",
-			});
+      });
+      
 			break;
 		case Operation[keys.UIDNotExist]:
 			elMessage({

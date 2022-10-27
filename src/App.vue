@@ -21,24 +21,14 @@ import Main from "./components/Main.vue";
 import Bottom from "./components/Base/Bottom.vue";
 import { reactive } from "@vue/reactivity";
 import {
-  computed,
   getCurrentInstance,
-  onActivated,
-  onBeforeUnmount,
-  onBeforeUpdate,
-  onDeactivated,
   onMounted,
-  onUnmounted,
-  onUpdated,
 } from "vue";
 import { useThemeSwitchStore } from "./pinia/themeSwitch";
 import { useConfigStore } from "./pinia/config";
-import { useUserDataStore } from "./pinia/userData";
-import { Config, UserData } from "./utils/buffer";
 const { proxy } = getCurrentInstance() as any;
 const ThemeSwitchStore = useThemeSwitchStore();
 const configStore = useConfigStore();
-const userDataStore = useUserDataStore();
 
 var config = reactive({
   //服务器是否请求正常

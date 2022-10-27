@@ -636,6 +636,7 @@ function copyText(e: any, i: number): void {
       navigator.clipboard.writeText(problem.Description).then(() => {
         proxy.elNotification({ message: "复制成功", type: "success" });
       });
+      break;
     case 1:
       navigator.clipboard.writeText(problem.SampleInput).then(() => {});
       break;

@@ -11,10 +11,7 @@ axios.interceptors.request.use(
 	function (config: AxiosRequestConfig): AxiosRequestConfig {
 		let Token: string | null = localStorage.getItem("ahutOjToken");
 		if (Token && config.headers) {
-			const userDataStore = useUserDataStore();
-			if (userDataStore.isLogin) {
-				config.headers.Authorization = Token;
-			} 
+			config.headers.Authorization = Token;
 		}
 		return config;
 	},
@@ -29,6 +26,7 @@ axios.interceptors.response.use(
 		return res;
 	},
 	(err) => {
+		console.log(err);
 		return err.response;
 	}
 );

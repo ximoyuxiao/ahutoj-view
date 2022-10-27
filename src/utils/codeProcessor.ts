@@ -30,7 +30,8 @@ export default function codeProcessor(
 	let ModuleCode = Number(res.groups.ModuleCode);
 	let LocationCode = Number(res.groups.LocationCode);
 	let OperationCode = Number(res.groups.OperationCode);
-	switch (ModuleCode) {
+  switch (ModuleCode) {
+    
 		//Auth模块 101
 		case Module[keys.Auth]:
 			AuthProcessor(LocationCode, OperationCode, msg);

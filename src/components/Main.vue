@@ -88,6 +88,7 @@ import Signin from "./Base/Signin.vue";
 import Config from "./Base/Config.vue";
 import { useConfigStore } from "../pinia/config";
 import { useUserDataStore } from "../pinia/userData";
+import { UserData } from "../utils/buffer";
 const { proxy } = getCurrentInstance() as any;
 const configStore = useConfigStore();
 const userDataStore = useUserDataStore();
@@ -179,14 +180,15 @@ async function autoLogin() {
   }
   //自动登录
   if (save == "true" && Token != null) {
-    proxy.$axios.get("api/user/info").then((res: any) => {
+    proxy.$get("api/user/info").then((res: any) => {
       //获取用户信息
+      console.log(res);
       let data: any = res.data;
       if (data.code == 0) {
         //获取权限信息
         getUserPermission(data.UID);
 
-        //vuex同步登录信息
+        //store同步登录信息
         userDataStore.login(data);
         userDataStore.sessionUserInfo();
         showNav();
@@ -194,6 +196,9 @@ async function autoLogin() {
       }
       proxy.codeProcessor(data.code, data.msg);
     });
+  } else {
+    //清除token
+    UserData.clearUserLoginCertificate();
   }
 }
 

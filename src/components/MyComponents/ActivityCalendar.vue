@@ -1,123 +1,127 @@
 <template>
   <div class="activityCalendar">
     <div
-      class="header"
-      v-show="config.showHeader"
-      :style="'height:' + (config.fontSize)+ 'px;'"
+      class="left"
+      v-show="config.showWeekDayFlag"
     >
       <div
-        v-for="(month, index) in config.headerLength"
+        v-for="(weekDay, index) in config.weekDayFlagLength"
         :key="index"
-        :style="style.header(month)"
+        :style="style.weekDay(weekDay)"
       >
-        {{month.text}}
+        {{weekDay.text}}
       </div>
     </div>
-    <div
-      class="content"
-      :style="style.content()"
-    >
+    <div class="right">
       <div
-        class="item"
-        v-for="(item, index) in config.data"
-        :key="index"
-        :style="style.item(item)"
-        @click="config.clickEvent ? config.clickEvent(item) : null "
-      >
-      </div>
-    </div>
-    <div
-      class="levelFlagContent"
-      v-show="config.showLevelFlag"
-    >
-      <div :style="'font-size:'  +config.fontSize+ 'px;'+ 'color: ' + config.fontColor">
-        {{ config.levelFlagText ? config.levelFlagText[0] : ""}}
-      </div>
-      <div
-        class="levelFlag"
-        :style="style.levelFlag()"
+        class="header"
+        v-show="config.showHeader"
+        :style="'height:' + (config.fontSize)+ 'px;'"
       >
         <div
-          v-for="(i,index) in config.colors"
+          v-for="(month, index) in config.headerLength"
           :key="index"
-          :style="style.levelFlagItem(index)"
+          :style="style.header(month)"
+        >
+          {{month.text}}
+        </div>
+      </div>
+      <div
+        class="content"
+        :style="style.content()"
+      >
+        <div
+          class="item"
+          v-for="(item, index) in config.data"
+          :key="index"
+          :style="style.item(item)"
+          @click="config.clickEvent ? config.clickEvent(item) : null "
         >
         </div>
       </div>
-      <div :style="'font-size:'  +config.fontSize+ 'px;'+ 'color: ' + config.fontColor">
-        {{config.levelFlagText ? config.levelFlagText[1] : ""}}
+      <div
+        class="levelFlagContent"
+        v-show="config.showLevelFlag"
+      >
+        <div :style="'font-size:'  +config.fontSize+ 'px;'+ 'color: ' + config.fontColor">
+          {{ config.levelFlagText ? config.levelFlagText[0] : ""}}
+        </div>
+        <div
+          class="levelFlag"
+          :style="style.levelFlag()"
+        >
+          <div
+            v-for="(i,index) in config.colors"
+            :key="index"
+            :style="style.levelFlagItem(index)"
+          >
+          </div>
+        </div>
+        <div :style="'font-size:'  +config.fontSize+ 'px;'+ 'color: ' + config.fontColor">
+          {{config.levelFlagText ? config.levelFlagText[1] : ""}}
+        </div>
       </div>
     </div>
+
   </div>
 </template>
-
-<script lang="ts" setup name="vue-activity-calendar">
+<script lang="ts">
+export default {
+  name: "ActivityCalendar",
+};
+</script>
+<script lang="ts" setup name="ActivityCalendar">
 import {
   nextTick,
   onMounted,
   reactive,
   watch,
   computed,
-  withDefaults,
   defineProps,
 } from "vue";
+
 type propsType = {
-  data?: { date: string; count: number; index?: number }[] | null | undefined;
+  data: { date: string; count: number; index: number }[] | null | undefined;
   endDate?: string | null | undefined;
   width?: number;
   height?: number;
   cellLength?: number;
   cellInterval?: number;
   cellBorderRadius?: number;
-  header?: string[] | null;
+  header?: string[];
   showHeader?: boolean;
-  backgroundColor?: string | null | undefined;
-  colors?: string[] | null;
+  backgroundColor?: string;
+  colors?: string[];
+  showWeekDayFlag?: boolean;
+  weekDayFlagText?: string[];
   levelMapper?: Function;
   showLevelFlag?: boolean;
-  levelFlagText?: string[] | null;
+  levelFlagText?: string[];
   fontSize?: number;
-  fontColor?: string | null;
+  fontColor?: string;
   clickEvent?: Function;
   //不接受指定
-  beginDate?: string | null | undefined;
-  levels?: number | null | undefined;
-  headerLength?: { length: number; text: string }[] | null;
+  beginDate?: string;
+  levels?: number;
+  headerLength?: { length: number; text: string }[];
+  weekDayFlagLength?: { length: number; text: string }[];
 };
-const props = withDefaults(defineProps<propsType>(), {
-  data: null,
-  endDate: null,
-  width: 35,
-  height: 7,
-  cellLength: 16,
-  cellInterval: 6,
-  cellBorderRadius: 3,
-  header: null,
-  showHeader: true,
-  backgroundColor: null,
-  colors: null,
-  levelMapper: function levelMapper(count: any) {
-    if (count == 0) {
-      return 0;
-    } else if (count <= 1) {
-      return 1;
-    } else if (count <= 3) {
-      return 2;
-    } else if (count <= 6) {
-      return 3;
-    } else if (count <= 9) {
-      return 4;
-    } else {
-      return 5;
-    }
-  },
-  showLevelFlag: true,
-  fontSize: 12,
-  fontColor: null,
-  clickEvent: function clickEvent(item: any) {},
+const props = defineProps<propsType>();
+
+var propsChange = computed(() => {
+  return props;
 });
 
-//接收的数据
+watch(
+  propsChange,
+  (nv, ov) => {
+    init();
+  },
+  {
+    deep: true,
+  }
+);
+
 var data: { date: string; count: number }[] | null | undefined = [];
 
 const config = reactive<propsType>({
@@ -159,6 +163,12 @@ const config = reactive<propsType>({
   backgroundColor: "#ffffff",
   //颜色数组，用于指定不同活跃level的颜色
   colors: ["#f5f5f5", "#ebfaff", "#e5f9ff", "#c7f1ff", "#86e0fe", "#3ecefe"],
+  //是否显示左侧的星期标志
+  showWeekDayFlag: true,
+  //自定义左侧星期标志
+  weekDayFlagText: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+  //weekFlag占位高度，不接受指定
+  weekDayFlagLength: [],
   //与颜色数组同步，代表颜色数组长度
   levels: 6,
   //颜色映射表，可自定义颜色与count的关系
@@ -198,10 +208,22 @@ const style = reactive({
       config.fontColor
     );
   },
+  weekDay(weekDay: { length: number; text: string }): string {
+    return (
+      "top:" +
+      weekDay.length +
+      "px;" +
+      "font-size: " +
+      (config.fontSize - 2) +
+      "px;" +
+      "color: " +
+      config.fontColor
+    );
+  },
   content(): string {
     return (
       "grid-template-columns: repeat(" +
-      config.width +
+      (config.width + 1) + //加一的原因是为了对上星期，单元格发生了一定的位移，这时候可能会多出一列
       "," +
       (config.cellLength + config.cellInterval / 2) +
       "px);" +
@@ -214,17 +236,21 @@ const style = reactive({
       config.backgroundColor
     );
   },
-  item(i: { index?: number; count: number; date: string }): string {
+  item(varitem: { index: number; count: number; date: string }): string {
     return (
       "width:" +
       config.cellLength +
+      "px; height:" +
+      config.cellLength +
       "px; background-color:" +
-      config.colors[config.levelMapper(i.count)] +
+      config?.colors[
+        config.levelMapper ? config.levelMapper(varitem.count) : 0
+      ] +
       ";" +
       "border-radius:" +
       config.cellBorderRadius +
       "px;" +
-      (i.index < 0 ? "visibility: hidden;" : "")
+      (varitem.index < 0 ? "visibility: hidden;" : "")
     );
   },
   levelFlag(): string {
@@ -262,6 +288,7 @@ const style = reactive({
 function calculateBeginDate() {
   let tempMonthDay = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   let tempAll = config.width * config.height;
+  if (!config.endDate) return;
   let tempYMD = config.endDate.split("-");
   let endY = Number(tempYMD[0]) - 0,
     endM = Number(tempYMD[1]) - 0,
@@ -316,6 +343,7 @@ function dataProcessor() {
   //保存当前处理的单元格数
   let tempCount = 0;
   //保存起始日期的 年 月 日
+  if (!config.beginDate) return;
   let tempYMD = config.beginDate.split("-");
   let nowY = Number(tempYMD[0]) - 0,
     nowM = Number(tempYMD[1]) - 0,
@@ -338,7 +366,7 @@ function dataProcessor() {
     else tempMonthDay[2] = 28;
   }
   //开始逐个填写
-  let tempArray = [];
+  let tempArray: { index: number; count: number; date: string }[] = [];
   let j = 0;
   for (let i = 0; i < tempAll; i++) {
     let tempNowDate =
@@ -369,12 +397,14 @@ function dataProcessor() {
         else tempMonthDay[2] = 28;
       }
       //跟随月份，header也增加相应的表头
-      config.headerLength.push({
-        length:
-          (config.cellLength + config.cellInterval / 2) *
-          (tempCount / config.height),
-        text: config.header[nowM - 1],
-      });
+      if (config.headerLength) {
+        config.headerLength.push({
+          length:
+            (config.cellLength + config.cellInterval / 2) *
+            (tempCount / config.height),
+          text: config.header[nowM - 1],
+        });
+      }
     }
   }
   //结束日期的星期 并且空格填充偏移量，为了让endDate在对的日期上
@@ -382,6 +412,24 @@ function dataProcessor() {
   for (let i = 0; i < endWeekDay; i++)
     tempArray.unshift({ index: i - endWeekDay, date: "", count: 0 });
   config.data = tempArray;
+  //显示星期标志
+  if (config.showWeekDayFlag && config.weekDayFlagText) {
+    //长度超过7，截取前7个
+    if (config.weekDayFlagText.length > 7) {
+      config.weekDayFlagText = config.weekDayFlagText.slice(0, 7);
+    }
+    for (let i = 0; i < config.height; i++) {
+      if (i % 2 != 0) continue;
+      config.weekDayFlagLength.push({
+        length:
+          (config.fontSize * 4) / 2 +
+          20 +
+          config.cellInterval +
+          i * (config.cellLength + config.cellInterval / 2),
+        text: config.weekDayFlagText[i % 7],
+      });
+    }
+  }
 }
 
 //数据初始化
@@ -403,10 +451,12 @@ function init() {
   if (props.cellInterval) config.cellInterval = props.cellInterval;
   if (props.cellBorderRadius) config.cellBorderRadius = props.cellBorderRadius;
   if (props.header) config.header = props.header;
-  if (typeof props.showHeader != "undefined")
-    config.showHeader = props.showHeader;
+  if (props.showHeader) config.showHeader = props.showHeader;
   if (props.backgroundColor) config.backgroundColor = props.backgroundColor;
   if (props.colors) config.colors = props.colors;
+  if (typeof props.showWeekDayFlag != "undefined")
+    config.showWeekDayFlag = props.showWeekDayFlag;
+  if (props.weekDayFlagText) config.weekDayFlagText = props.weekDayFlagText;
   if (props.levelMapper) config.levelMapper = props.levelMapper;
   if (typeof props.showLevelFlag != "undefined")
     config.showLevelFlag = props.showLevelFlag;
@@ -417,21 +467,6 @@ function init() {
   calculateBeginDate();
   dataProcessor();
 }
-
-//为了解决props异步响应式丢失的问题
-var propsChange = computed(() => {
-  return props;
-});
-
-watch(
-  propsChange,
-  (nv, ov) => {
-    init();
-  },
-  {
-    deep: true,
-  }
-);
 
 onMounted(() => {
   nextTick(() => {
@@ -445,49 +480,66 @@ onMounted(() => {
   width: max-content;
   height: max-content;
   box-sizing: border-box;
-  padding: 10px;
   display: flex;
-  flex-direction: column;
 
-  .header {
+  .left {
+    width: 100px;
     position: relative;
-    padding: 10px 0;
-    div {
+
+    > div {
       width: max-content;
-      top: 0;
+      right: 0;
       position: absolute;
       font-size: 16px;
     }
   }
 
-  .content {
-    display: grid;
-    grid-auto-flow: column;
-    .item {
-      aspect-ratio: 1;
-      margin: auto;
-      transition-duration: 100ms;
-      &:hover {
-        cursor: pointer;
-        transform: scale(1.2);
+  .right {
+    width: max-content;
+    height: max-content;
+    box-sizing: border-box;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    .header {
+      position: relative;
+      padding: 10px 0;
+      div {
+        width: max-content;
+        top: 0;
+        position: absolute;
       }
     }
-  }
 
-  .levelFlagContent {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin: 10px 8px;
-
-    .levelFlag {
+    .content {
       display: grid;
       grid-auto-flow: column;
-      margin: 0 5px;
-
-      div {
+      .item {
         aspect-ratio: 1;
         margin: auto;
+        transition-duration: 100ms;
+        &:hover {
+          cursor: pointer;
+          transform: scale(1.2);
+        }
+      }
+    }
+
+    .levelFlagContent {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin: 10px 8px;
+
+      .levelFlag {
+        display: grid;
+        grid-auto-flow: column;
+        margin: 0 5px;
+
+        div {
+          aspect-ratio: 1;
+          margin: auto;
+        }
       }
     }
   }

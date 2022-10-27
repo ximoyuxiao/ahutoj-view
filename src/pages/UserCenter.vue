@@ -126,6 +126,7 @@
             :fontColor="activityCalendarConfig.fontColor"
             :showLevelFlag="activityCalendarConfig.showLevelFlag"
             :colors="activityCalendarConfig.colors"
+            :showWeekDayFlag="true"
             :levelMapper="activityCalendarConfig.levelMapper"
             :levelFlagText="activityCalendarConfig.levelFlagText"
           />
@@ -136,7 +137,7 @@
 </template>
 
 <script lang="ts" setup >
-import { onMounted, getCurrentInstance, reactive, nextTick } from "vue";
+import { onMounted, getCurrentInstance, reactive } from "vue";
 import ActivityCalendar from "../components/MyComponents/ActivityCalendar.vue";
 import { useThemeSwitchStore } from "../pinia/themeSwitch";
 import { useUserDataStore } from "../pinia/userData";
@@ -203,7 +204,7 @@ function getUserInfo() {
 
 //活跃度日历配置数据
 type activityCalendarConfigType = {
-  data: { date: string; count: number }[];
+  data: { date: string; count: number; index: number }[];
   [item: string]: any;
 };
 var activityCalendarConfig = reactive<activityCalendarConfigType>({
@@ -211,7 +212,7 @@ var activityCalendarConfig = reactive<activityCalendarConfigType>({
   endDate: "",
   width: 35,
   height: 7,
-  cellLength: 16,
+  cellLength: 20,
   cellInterval: 6,
   cellBorderRadius: 3,
   showHeader: true,
@@ -233,7 +234,7 @@ var activityCalendarConfig = reactive<activityCalendarConfigType>({
   },
   showLevelFlag: true,
   levelFlagText: ["少", "多"],
-  fontSize: 14,
+  fontSize: 12,
   fontColor: "#707070",
   clickEvent: function clickEvent(item: object) {},
   init(data: { date: string; count: number; SubmitTime: number }[]) {
