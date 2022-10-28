@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { Config, UserData } from "../utils/buffer";
+import { Config, UserData } from "../utils/buffer/buffer";
 import { PiniaNameSpace } from "./nameSpace";
 
 //用户信息类型

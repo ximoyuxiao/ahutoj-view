@@ -24,6 +24,12 @@ export default function ProblemProcessor(
 
 function serviceLevelHandle(OperationCode: number) {
 	switch (OperationCode) {
+		case Operation[keys.ServerBusy]:
+			elMessage({
+				message: "服务器繁忙",
+				type: "warning",
+      });
+			break;
 	}
 }
 

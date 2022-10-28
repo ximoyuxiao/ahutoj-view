@@ -1,17 +1,18 @@
 const keys = {
 	//model
-	Auth: Symbol(),
-	User: Symbol(),
-	Admin: Symbol(),
-	Problem: Symbol(),
-	Training: Symbol(),
-	Contest: Symbol(),
-	Submit: Symbol(),
-	File: Symbol(),
+	Default: Symbol(100),
+	Auth: Symbol(101),
+	User: Symbol(102),
+	Admin: Symbol(103),
+	Problem: Symbol(104),
+	Training: Symbol(105),
+	Contest: Symbol(106),
+	Submit: Symbol(107),
+	File: Symbol(108),
 	//location
-	Service: Symbol(),
-	Logic: Symbol(),
-	Models: Symbol(),
+	Service: Symbol(1),
+	Logic: Symbol(2),
+	Models: Symbol(3),
 
 	//operation
 	MysqlAdd: Symbol(),
@@ -29,6 +30,7 @@ const keys = {
 	ParametersFormatError: Symbol(), //参数格式错误
 	ParametersConversionError: Symbol(), //参数转换失败
 	TokenBuildError: Symbol(), //创建错误
+	VerifyError: Symbol(), //权限不足
 	DataEmpty: Symbol(), //数据为空
 	DataNotExist: Symbol(), //数据不存在
 	DataResolutionError: Symbol(), //数据解析失败
@@ -37,9 +39,14 @@ const keys = {
 	UIDEmpty: Symbol(), //UID为空
 	PasswordError: Symbol(), //密码错误
 	PasswordEmpty: Symbol(), //密码为空
+	PIDNotExist: Symbol(), //题目不存在
+	CIDNotExist: Symbol(), //竞赛不存在
+	CIDPassWordError: Symbol(), //竞赛密码错误
+	ContestNotBegin: Symbol(), //竞赛未开始
+	FileUnsupport: Symbol(), //文件不支持
+	Duplicate: Symbol(), //副本
 	Notimplemented: Symbol(), //接口未实现
 };
-
 
 const Module = {
 	[keys.Auth]: 101,
@@ -74,6 +81,7 @@ const Operation = {
 	[keys.ParametersFormatError]: 34,
 	[keys.ParametersConversionError]: 35,
 	[keys.TokenBuildError]: 36,
+	[keys.VerifyError]: 37,
 	[keys.DataEmpty]: 40,
 	[keys.DataNotExist]: 41,
 	[keys.DataResolutionError]: 42,
@@ -82,6 +90,12 @@ const Operation = {
 	[keys.UIDEmpty]: 52,
 	[keys.PasswordError]: 53,
 	[keys.PasswordEmpty]: 54,
+	[keys.PIDNotExist]: 55,
+	[keys.CIDNotExist]: 56,
+	[keys.CIDPassWordError]: 57,
+	[keys.ContestNotBegin]: 60,
+	[keys.FileUnsupport]: 71,
+	[keys.Duplicate]: 72,
 	[keys.Notimplemented]: 99,
 };
 

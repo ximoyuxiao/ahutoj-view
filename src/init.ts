@@ -10,7 +10,7 @@ import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 
 import * as Utils from "./utils/globalFunctions";
-import * as Buffer from "./utils/buffer";
+import * as Buffer from "./utils/buffer/buffer";
 import log from "./utils/consoleLog";
 
 import { App, Component } from "vue";

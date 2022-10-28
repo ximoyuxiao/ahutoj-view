@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { nextTick } from "vue";
-import { Config, configDataType, UserData } from "../utils/buffer";
+import { Config, configDataType, UserData } from "../utils/buffer/buffer";
 import { PiniaNameSpace } from "./nameSpace";
 import { useUserDataStore } from "./userData";
 

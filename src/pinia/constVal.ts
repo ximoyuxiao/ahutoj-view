@@ -10,14 +10,14 @@ export const useConstValStore = defineStore(PiniaNameSpace.ConstVal, {
 			Cyberpunk: 3,
 
 			//权限bit表
-			UNLOGINBit: 0x01, // B0000 0001
-			CommonUserBit: 0x02, // B0000 0010
-			AdministratorBit: 0x04, // B0000 0100
-			ProblemAdminBit: 0x08, // B0000 1000
-			ContestAdminBit: 0x10, // B0001 0000
-			SourceBorwserBit: 0x20, // B0010 0000
-			ListAdminBit: 0x40, // B0100 0000
-			SuperAdminBit: 0x80, // B1000 0000
+			UNLOGINBit: 0b0000_0001,
+			CommonUserBit: 0b0000_0010,
+			AdministratorBit: 0b0000_0100,
+			ProblemAdminBit: 0b0000_1000,
+			ContestAdminBit: 0b0001_0000,
+			SourceBorwserBit: 0b0010_0000,
+			ListAdminBit: 0b0100_0000,
+			SuperAdminBit: 0b1000_0000,
 
 			//提交代码语言
 			SUBMIT_LANG_C: 1,

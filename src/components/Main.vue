@@ -88,7 +88,7 @@ import Signin from "./Base/Signin.vue";
 import Config from "./Base/Config.vue";
 import { useConfigStore } from "../pinia/config";
 import { useUserDataStore } from "../pinia/userData";
-import { UserData } from "../utils/buffer";
+import { UserData } from "../utils/buffer/buffer";
 const { proxy } = getCurrentInstance() as any;
 const configStore = useConfigStore();
 const userDataStore = useUserDataStore();

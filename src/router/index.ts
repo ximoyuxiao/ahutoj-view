@@ -14,7 +14,7 @@ import {
 // import Status from "../pages/Status.vue";
 // import UserCenter from "../pages/UserCenter.vue";
 
-import Admin from "./Admin";
+import Admin from "./admin";
 import { needLoginCertificate } from "./guard";
 const router = createRouter({
 	history: createWebHashHistory(),

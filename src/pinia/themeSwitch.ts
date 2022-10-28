@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { Config } from "../utils/buffer";
+import { Config } from "../utils/buffer/buffer";
 import { ColorValTools } from "../utils/globalFunctions";
 import { PiniaNameSpace } from "./nameSpace";
 
