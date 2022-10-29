@@ -1,4 +1,4 @@
-import axios from "./utils/axios";
+import axios from "./utils/axios/axios";
 import * as ElIconModules from "@element-plus/icons-vue";
 import codeProcessor from "./utils/codeProcessor";
 import elMessage from "./utils/elMessageFactory";

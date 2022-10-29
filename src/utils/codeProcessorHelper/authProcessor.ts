@@ -1,201 +1,99 @@
-import elMessage from "../elMessageFactory";
-import { keys, Location, Operation } from "./codeConstants";
+import { UserData } from "../buffer/buffer";
+
+const APICodes = {
+	token: 0,
+	login: 1,
+	register: 2,
+};
+
 export default function AuthProcessor(
-	LocationCode: number,
-	OperationCode: number,
-	msg: string
+	APICode: number,
+	ReasonCode: number
 ) {
-	// + 101
-	switch (LocationCode) {
-		// + 1
-		case Location[keys.Service]:
-			serviceLevelHandle(OperationCode);
+	// 11
+	switch (APICode) {
+		// 00
+		case APICodes.token:
+			tokenHandle(ReasonCode);
 			break;
-		// + 2
-		case Location[keys.Logic]:
-			logicLevelHandle(OperationCode);
+		// 01
+		case APICodes.login:
+			loginHandle(ReasonCode);
 			break;
-		// + 3
-		case Location[keys.Models]:
-			modelsLevelHandle(OperationCode);
-			break;
-	}
-}
-
-function serviceLevelHandle(OperationCode: number) {
-	switch (OperationCode) {
-		case Operation[keys.MysqlAdd]:
-			break;
-		case Operation[keys.MysqlDelete]:
-			break;
-		case Operation[keys.MysqlUpdate]:
-			break;
-		case Operation[keys.MysqlQuery]:
-			break;
-		case Operation[keys.RedisAdd]:
-			break;
-		case Operation[keys.RedisDelete]:
-			break;
-		case Operation[keys.RedisUpdate]:
-			break;
-		case Operation[keys.RedisQuery]:
-			break;
-		case Operation[keys.ServerBusy]:
-			break;
-		case Operation[keys.ServerError]:
-			break;
-		case Operation[keys.Parsesparameters]:
-			break;
-		case Operation[keys.ParametersTypeError]:
-			break;
-		case Operation[keys.ParametersFormatError]:
-			break;
-		case Operation[keys.ParametersConversionError]:
-			break;
-		case Operation[keys.TokenBuildError]:
-			break;
-		case Operation[keys.DataEmpty]:
-			break;
-		case Operation[keys.DataNotExist]:
-			break;
-		case Operation[keys.DataResolutionError]:
-			break;
-		case Operation[keys.UIDExist]:
-			break;
-		case Operation[keys.UIDNotExist]:
-			break;
-		case Operation[keys.UIDEmpty]:
-			break;
-		case Operation[keys.PasswordError]:
-			break;
-		case Operation[keys.PasswordEmpty]:
-			break;
-		case Operation[keys.Notimplemented]:
+		// 02
+		case APICodes.register:
+			registerHandle(ReasonCode);
 			break;
 	}
 }
 
-function logicLevelHandle(OperationCode: number) {
-	switch (OperationCode) {
-		case Operation[keys.MysqlAdd]:
+const tokenType = {
+	AUTH_Token_EmptyCode: 1,
+	AUTH_Token_InvalidCode: 2,
+	AUTH_Token_URLVerifyCode: 3,
+};
+function tokenHandle(ReasonCode: number) {
+	switch (ReasonCode) {
+		// 01
+		case tokenType.AUTH_Token_EmptyCode:
+			UserData.clearUserLoginCertificate();
 			break;
-		case Operation[keys.MysqlDelete]:
+		// 02
+		case tokenType.AUTH_Token_InvalidCode:
+			UserData.clearUserLoginCertificate();
 			break;
-		case Operation[keys.MysqlUpdate]:
+		// 03
+		case tokenType.AUTH_Token_URLVerifyCode:
 			break;
-		case Operation[keys.MysqlQuery]:
-			break;
-		case Operation[keys.RedisAdd]:
-			break;
-		case Operation[keys.RedisDelete]:
-			break;
-		case Operation[keys.RedisUpdate]:
-			break;
-		case Operation[keys.RedisQuery]:
-			break;
-		case Operation[keys.ServerBusy]:
-			break;
-		case Operation[keys.ServerError]:
-			break;
-		case Operation[keys.Parsesparameters]:
-			break;
-		case Operation[keys.ParametersTypeError]:
-			break;
-		case Operation[keys.ParametersFormatError]:
-			break;
-		case Operation[keys.ParametersConversionError]:
-			break;
-		case Operation[keys.TokenBuildError]:
-			break;
-		case Operation[keys.DataEmpty]:
-			break;
-		case Operation[keys.DataNotExist]:
-			break;
-		case Operation[keys.DataResolutionError]:
-			break;
-		case Operation[keys.UIDExist]:
-			elMessage({
-				message: "该账号已经被注册过了哦，换一个试试吧！",
-				type: "warning",
-      });
-      
-			break;
-		case Operation[keys.UIDNotExist]:
-			elMessage({
-				message: "您输入的账号不存在，请确认是否正确输入账号",
-				type: "warning",
-			});
-			break;
-		case Operation[keys.UIDEmpty]:
-			elMessage({
-				message: "您输入的账号为空，请正确输入账号",
-				type: "warning",
-			});
-			break;
-		case Operation[keys.PasswordError]:
-			elMessage({
-				message: "密码错误",
-				type: "warning",
-			});
-			break;
-		case Operation[keys.PasswordEmpty]:
-			elMessage({
-				message: "密码不能为空",
-				type: "error",
-			});
-			break;
-		case Operation[keys.Notimplemented]:
 	}
 }
 
-function modelsLevelHandle(OperationCode: number) {
-	switch (OperationCode) {
-		case Operation[keys.MysqlAdd]:
+const loginType = {
+	AUTH_LOGIN_FAILED: 1,
+	AUTH_LOGIN_UIDEmptyCode: 2,
+	AUTH_LOGIN_PassEmptyCode: 3,
+	AUTH_LOGIN_PASSERRORCode: 4,
+	AUTH_LOGIN_UIDNotExistCode: 5,
+	AUTH_LOGIN_TokenBuildCode: 6,
+};
+function loginHandle(ReasonCode: number) {
+	switch (ReasonCode) {
+		// 01
+		case loginType.AUTH_LOGIN_FAILED:
 			break;
-		case Operation[keys.MysqlDelete]:
+		// 02
+		case loginType.AUTH_LOGIN_UIDEmptyCode:
 			break;
-		case Operation[keys.MysqlUpdate]:
+		// 03
+		case loginType.AUTH_LOGIN_PassEmptyCode:
 			break;
-		case Operation[keys.MysqlQuery]:
+		// 04
+		case loginType.AUTH_LOGIN_PASSERRORCode:
 			break;
-		case Operation[keys.RedisAdd]:
+		// 05
+		case loginType.AUTH_LOGIN_UIDNotExistCode:
 			break;
-		case Operation[keys.RedisDelete]:
+		// 06
+		case loginType.AUTH_LOGIN_TokenBuildCode:
 			break;
-		case Operation[keys.RedisUpdate]:
+	}
+}
+
+const registerType = {
+	AUTH_REGISTER_FAILED: 1,
+	AUTH_REGISTER_UIDExistCode: 2,
+	AUTH_REGISTER_TokenBuildCode: 3,
+};
+function registerHandle(ReasonCode: number) {
+	switch (ReasonCode) {
+		// 01
+		case registerType.AUTH_REGISTER_FAILED:
 			break;
-		case Operation[keys.RedisQuery]:
+		// 02
+		case registerType.AUTH_REGISTER_UIDExistCode:
 			break;
-		case Operation[keys.ServerBusy]:
+		// 03
+		case registerType.AUTH_REGISTER_TokenBuildCode:
 			break;
-		case Operation[keys.ServerError]:
-			break;
-		case Operation[keys.Parsesparameters]:
-			break;
-		case Operation[keys.ParametersTypeError]:
-			break;
-		case Operation[keys.ParametersFormatError]:
-			break;
-		case Operation[keys.ParametersConversionError]:
-			break;
-		case Operation[keys.TokenBuildError]:
-			break;
-		case Operation[keys.DataEmpty]:
-			break;
-		case Operation[keys.DataNotExist]:
-			break;
-		case Operation[keys.DataResolutionError]:
-			break;
-		case Operation[keys.UIDExist]:
-			break;
-		case Operation[keys.UIDNotExist]:
-			break;
-		case Operation[keys.UIDEmpty]:
-			break;
-		case Operation[keys.PasswordError]:
-			break;
-		case Operation[keys.PasswordEmpty]:
-			break;
-		case Operation[keys.Notimplemented]:
 	}
 }

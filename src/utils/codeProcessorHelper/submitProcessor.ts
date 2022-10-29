@@ -1,38 +1,73 @@
-import elMessage from "../elMessageFactory";
-import { keys, Location, Operation } from "./codeConstants";
+const APICodes = {
+	add: 1,
+	rejudg: 2,
+	list: 4,
+	get: 5,
+};
 export default function SubmitProcessor(
-	LocationCode: number,
-	OperationCode: number,
-	msg: string
+	APICode: number,
+	ReasonCode: number
 ) {
-	// + 107
-	switch (LocationCode) {
-		// + 1
-		case Location[keys.Service]:
-			serviceLevelHandle(OperationCode);
+	// + 17
+	switch (APICode) {
+		// 01
+		case APICodes.add:
+			addHandle(ReasonCode);
 			break;
-		// + 2
-		case Location[keys.Logic]:
-			logicLevelHandle(OperationCode);
+		// 02
+		case APICodes.rejudg:
+			rejudgHandle(ReasonCode);
 			break;
-		// + 3
-		case Location[keys.Models]:
-			modelsLevelHandle(OperationCode);
+		// 04
+		case APICodes.list:
+			listHandle(ReasonCode);
+			break;
+		// 05
+		case APICodes.get:
+			getHandle(ReasonCode);
 			break;
 	}
 }
 
-function serviceLevelHandle(OperationCode: number) {
-	switch (OperationCode) {
+const addType = {
+	SUBMIT_ADD_FAILEDCode: 1,
+	SUBMIT_ADD_DUPLICATECODE: 2,
+};
+function addHandle(ReasonCode: number) {
+	switch (ReasonCode) {
+		case addType.SUBMIT_ADD_FAILEDCode:
+			break;
+		case addType.SUBMIT_ADD_DUPLICATECODE:
+			break;
 	}
 }
 
-function logicLevelHandle(OperationCode: number) {
-	switch (OperationCode) {
+const rejudgType = {
+	SUBMIT_REJUDG_FAILEDCode: 1,
+};
+function rejudgHandle(ReasonCode: number) {
+	switch (ReasonCode) {
+		case rejudgType.SUBMIT_REJUDG_FAILEDCode:
+			break;
 	}
 }
 
-function modelsLevelHandle(OperationCode: number) {
-	switch (OperationCode) {
+const listType = {
+	SUBMIT_LIST_FAILEDCode: 1,
+};
+function listHandle(ReasonCode: number) {
+	switch (ReasonCode) {
+		case listType.SUBMIT_LIST_FAILEDCode:
+			break;
+	}
+}
+
+const getType = {
+	SUBMIT_GET_FAILEDCode: 1,
+};
+function getHandle(ReasonCode: number) {
+	switch (ReasonCode) {
+		case getType.SUBMIT_GET_FAILEDCode:
+			break;
 	}
 }

@@ -1,6 +1,8 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { App } from "vue";
-import { useUserDataStore } from "../pinia/userData";
+import { useConfigStore } from "../../pinia/config";
+import { useUserDataStore } from "../../pinia/userData";
+import httpErrorHandler from "./httpErrorHandler";
 
 //默认请求地址
 // axios.defaults.baseURL = "http://127.0.0.1:4212/";
@@ -20,13 +22,13 @@ axios.interceptors.request.use(
 	}
 );
 
-// http respense拦截器
+// http response拦截器
 axios.interceptors.response.use(
 	(res) => {
 		return res;
 	},
-	(err) => {
-		console.log(err);
+  (err) => {
+		httpErrorHandler(err.response);
 		return err.response;
 	}
 );

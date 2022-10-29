@@ -1,4 +1,3 @@
-import { ElMessage } from "element-plus";
 import { keys, Module } from "./codeProcessorHelper/codeConstants";
 import AuthProcessor from "./codeProcessorHelper/authProcessor";
 import AdminProcessor from "./codeProcessorHelper/adminProcessor";
@@ -9,67 +8,62 @@ import TrainingProcessor from "./codeProcessorHelper/trainingProcessor";
 import UserProcessor from "./codeProcessorHelper/userProcessor";
 import FileProcessor from "./codeProcessorHelper/fileProcessor";
 import messageHandle from "./codeProcessorHelper/messageHandle";
+import DefaultProcessor from "./codeProcessorHelper/defaultProcessor";
 
 export default function codeProcessor(
 	code: number | null | undefined,
 	msg: string | null | undefined
 ) {
-
 	//服务器msg
 	if (msg && msg != "") {
 		messageHandle(msg);
-		return;
 	}
 
-	//一般状态码
-	if (!code || code == 0) return;
-	//code码正则表达式匹配解构
+	if (!code || Number(code) == 0) return;
+	//code码正则表达式匹配解构 2-2-2格式
 	let reg =
-		/(?<ModuleCode>[0-9]{3})(?<LocationCode>[0-9]{1})(?<OperationCode>[0-9]{2})/;
+		/(?<ModuleCode>[0-9]{2})(?<APICode>[0-9]{2})(?<ReasonCode>[0-9]{2})/;
 	let res = reg.exec(String(code));
 	//开始解析
 	let ModuleCode = Number(res.groups.ModuleCode);
-	let LocationCode = Number(res.groups.LocationCode);
-	let OperationCode = Number(res.groups.OperationCode);
-  switch (ModuleCode) {
-    
-		//Auth模块 101
+	let APICode = Number(res.groups.APICode);
+	let ReasonCode = Number(res.groups.ReasonCode);
+
+	switch (ModuleCode) {
+		//Default模块 10
+		case Module[keys.Default]:
+			DefaultProcessor(APICode, ReasonCode);
+		//Auth模块 11
 		case Module[keys.Auth]:
-			AuthProcessor(LocationCode, OperationCode, msg);
+			AuthProcessor(APICode, ReasonCode);
 			break;
-		//User模块 102
+		//User模块 12
 		case Module[keys.User]:
-			UserProcessor(LocationCode, OperationCode, msg);
+			UserProcessor(APICode, ReasonCode);
 			break;
-		//Admin模块 103
+		//Admin模块 13
 		case Module[keys.Admin]:
-			AdminProcessor(LocationCode, OperationCode, msg);
+			AdminProcessor(APICode, ReasonCode);
 			break;
-		//Problem模块 104
+		//Problem模块 14
 		case Module[keys.Problem]:
-			ProblemProcessor(LocationCode, OperationCode, msg);
+			ProblemProcessor(APICode, ReasonCode);
 			break;
-		//Training模块 105
+		//Training模块 15
 		case Module[keys.Training]:
-			TrainingProcessor(LocationCode, OperationCode, msg);
+			TrainingProcessor(APICode, ReasonCode);
 			break;
-		//Contest模块 106
+		//Contest模块 16
 		case Module[keys.Contest]:
-			ContestProcessor(LocationCode, OperationCode, msg);
+			ContestProcessor(APICode, ReasonCode);
 			break;
-		//Submit模块 107
+		//Submit模块 17
 		case Module[keys.Submit]:
-			SubmitProcessor(LocationCode, OperationCode, msg);
+			SubmitProcessor(APICode, ReasonCode);
 			break;
-		//File模块 108
+		//File模块 18
 		case Module[keys.File]:
-			FileProcessor(LocationCode, OperationCode, msg);
+			FileProcessor(APICode, ReasonCode);
 			break;
 	}
-
-	//旧模块，正在逐步移除
-	ElMessage({
-		message: String(code),
-		type: "info",
-	});
 }

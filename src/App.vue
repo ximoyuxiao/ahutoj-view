@@ -72,7 +72,9 @@ var config = reactive({
 //是否要ping一下服务器，用于在特定情况下测试链接状态是否通畅
 configStore.$subscribe((args, state) => {
   if (state.shouldPing) {
-    console.log("需要ping一下服务器");
+    console.log("正在测试服务器连通性");
+    config.pingServer();
+    configStore.hasPing();
   }
 });
 

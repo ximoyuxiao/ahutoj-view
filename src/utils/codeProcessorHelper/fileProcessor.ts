@@ -1,38 +1,79 @@
-import elMessage from "../elMessageFactory";
-import { keys, Location, Operation } from "./codeConstants";
+const APICodes = {
+	up: 1,
+	remove: 2,
+	unzip: 3,
+	list: 4,
+};
 export default function FileProcessor(
-	LocationCode: number,
-	OperationCode: number,
-	msg: string
+	APICode: number,
+	ReasonCode: number
 ) {
-	// + 108
-	switch (LocationCode) {
-		// + 1
-		case Location[keys.Service]:
-			serviceLevelHandle(OperationCode);
+	// + 18
+	switch (APICode) {
+		// 01
+		case APICodes.up:
+			upHandle(ReasonCode);
 			break;
-		// + 2
-		case Location[keys.Logic]:
-			logicLevelHandle(OperationCode);
+		// 02
+		case APICodes.remove:
+			removeHandle(ReasonCode);
 			break;
-		// + 3
-		case Location[keys.Models]:
-			modelsLevelHandle(OperationCode);
+		// 03
+		case APICodes.unzip:
+			unzipHandle(ReasonCode);
+			break;
+		// 04
+		case APICodes.list:
+			listHandle(ReasonCode);
 			break;
 	}
 }
 
-function serviceLevelHandle(OperationCode: number) {
-	switch (OperationCode) {
+const upType = {
+	FILE_UP_FAILEDCode: 1,
+	FILE_UP_UNSUPPORTCode: 2,
+};
+function upHandle(ReasonCode: number) {
+	switch (ReasonCode) {
+		case upType.FILE_UP_FAILEDCode:
+			break;
+		case upType.FILE_UP_UNSUPPORTCode:
+			break;
 	}
 }
 
-function logicLevelHandle(OperationCode: number) {
-	switch (OperationCode) {
+const removeType = {
+	FILE_REMOVE_FAILEDCode: 1,
+};
+function removeHandle(ReasonCode: number) {
+	switch (ReasonCode) {
+		case removeType.FILE_REMOVE_FAILEDCode:
+			break;
 	}
 }
 
-function modelsLevelHandle(OperationCode: number) {
-	switch (OperationCode) {
+const unzipType = {
+	FILE_UNZIP_FAILEDCode: 1,
+	FILE_UNZIP_UNSUPPORTCode: 2,
+	FILE_UNZIP_NotExistCode: 3,
+};
+function unzipHandle(ReasonCode: number) {
+	switch (ReasonCode) {
+		case unzipType.FILE_UNZIP_FAILEDCode:
+			break;
+		case unzipType.FILE_UNZIP_UNSUPPORTCode:
+			break;
+		case unzipType.FILE_UNZIP_NotExistCode:
+			break;
+	}
+}
+
+const listType = {
+	FILE_LIST_FAILEDCode: 1,
+};
+function listHandle(ReasonCode: number) {
+	switch (ReasonCode) {
+		case listType.FILE_LIST_FAILEDCode:
+			break;
 	}
 }

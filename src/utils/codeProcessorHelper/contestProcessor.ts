@@ -1,38 +1,108 @@
-import elMessage from "../elMessageFactory";
-import { keys, Location, Operation } from "./codeConstants";
+const APICodes = {
+	add: 1,
+	edit: 2,
+	delete: 3,
+	list: 4,
+	get: 5,
+	rank: 6,
+};
 export default function ContestProcessor(
-	LocationCode: number,
-	OperationCode: number,
-	msg: string
+	APICode: number,
+	ReasonCode: number
 ) {
-	// + 106
-	switch (LocationCode) {
-		// + 1
-		case Location[keys.Service]:
-			serviceLevelHandle(OperationCode);
+	// + 16
+	switch (APICode) {
+		// 01
+		case APICodes.add:
+			addHandle(ReasonCode);
 			break;
-		// + 2
-		case Location[keys.Logic]:
-			logicLevelHandle(OperationCode);
+		// 02
+		case APICodes.edit:
+			editHandle(ReasonCode);
 			break;
-		// + 3
-		case Location[keys.Models]:
-			modelsLevelHandle(OperationCode);
+		// 03
+		case APICodes.delete:
+			deleteHandle(ReasonCode);
+			break;
+		// 04
+		case APICodes.list:
+			listHandle(ReasonCode);
+			break;
+		// 05
+		case APICodes.get:
+			getHandle(ReasonCode);
+			break;
+		// 05
+		case APICodes.get:
+			rankHandle(ReasonCode);
+			break;
+	}
+}
+const addType = {
+	CONTEST_ADD_FAILED: 1,
+};
+function addHandle(ReasonCode: number) {
+	switch (ReasonCode) {
+		case addType.CONTEST_ADD_FAILED:
 			break;
 	}
 }
 
-function serviceLevelHandle(OperationCode: number) {
-	switch (OperationCode) {
+const editType = {
+	CONTEST_EDIT_FAILED: 1,
+};
+function editHandle(ReasonCode: number) {
+	switch (ReasonCode) {
+		case editType.CONTEST_EDIT_FAILED:
+			break;
 	}
 }
 
-function logicLevelHandle(OperationCode: number) {
-	switch (OperationCode) {
+const deleteType = {
+	CONTEST_DELETE_FAILED: 1,
+};
+function deleteHandle(ReasonCode: number) {
+	switch (ReasonCode) {
+		case deleteType.CONTEST_DELETE_FAILED:
+			break;
 	}
 }
 
-function modelsLevelHandle(OperationCode: number) {
-	switch (OperationCode) {
+const listType = {
+	CONTEST_LIST_FAILED: 1,
+};
+function listHandle(ReasonCode: number) {
+	switch (ReasonCode) {
+		case listType.CONTEST_LIST_FAILED:
+			break;
+	}
+}
+
+const getType = {
+	CONTEST_GET_FAILED: 1,
+	CONTEST_GET_CIDNotExistCode: 2,
+	CONTEST_GET_NotBegin: 3,
+	CONTEST_GET_CIDPassWordErrorCode: 4,
+};
+function getHandle(ReasonCode: number) {
+	switch (ReasonCode) {
+		case getType.CONTEST_GET_FAILED:
+			break;
+		case getType.CONTEST_GET_CIDNotExistCode:
+			break;
+		case getType.CONTEST_GET_NotBegin:
+			break;
+		case getType.CONTEST_GET_CIDPassWordErrorCode:
+			break;
+	}
+}
+
+const rankType = {
+	CONTEST_RANK_FAILED: 1,
+};
+function rankHandle(ReasonCode: number) {
+	switch (ReasonCode) {
+		case rankType.CONTEST_RANK_FAILED:
+			break;
 	}
 }
