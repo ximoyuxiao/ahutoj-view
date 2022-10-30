@@ -5,8 +5,13 @@ import { useUserDataStore } from "../../pinia/userData";
 import httpErrorHandler from "./httpErrorHandler";
 
 //默认请求地址
-// axios.defaults.baseURL = "http://127.0.0.1:4212/";
-axios.defaults.baseURL = "http://channelcz.top/";
+
+// console.log(import.meta.env);
+if (import.meta.env.MODE === "production") {
+	axios.defaults.baseURL = "/";
+} else {
+	axios.defaults.baseURL = "http://channelcz.top/";
+}
 
 // http request拦截器
 axios.interceptors.request.use(
@@ -27,7 +32,7 @@ axios.interceptors.response.use(
 	(res) => {
 		return res;
 	},
-  (err) => {
+	(err) => {
 		httpErrorHandler(err.response);
 		return err.response;
 	}
