@@ -20,10 +20,7 @@
 import Main from "./components/Main.vue";
 import Bottom from "./components/Base/Bottom.vue";
 import { reactive } from "@vue/reactivity";
-import {
-  getCurrentInstance,
-  onMounted,
-} from "vue";
+import { getCurrentInstance, onMounted } from "vue";
 import { useThemeSwitchStore } from "./pinia/themeSwitch";
 import { useConfigStore } from "./pinia/config";
 const { proxy } = getCurrentInstance() as any;
@@ -38,7 +35,7 @@ var config = reactive({
   nextHeartbeatTime: 0,
   timer: null,
   pingServer() {
-    proxy.$get("ping").then((res: any) => {
+    proxy.$get("api/ping").then((res: any) => {
       clearInterval(config.timer);
       if (res.status == 200) {
         config.serverActive = true;
@@ -84,7 +81,7 @@ function initStore() {
   ThemeSwitchStore.init();
 }
 
-onMounted(() => { 
+onMounted(() => {
   config.pingServer();
   initStore();
 });

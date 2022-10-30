@@ -15,7 +15,7 @@ export default function codeProcessor(
 	msg: string | null | undefined
 ) {
 	//服务器msg
-	if (msg && msg != "") {
+	if (msg && msg != "" && msg != "success") {
 		messageHandle(msg);
 	}
 
