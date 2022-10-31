@@ -23,8 +23,7 @@ import {
 import {
 	needAdminCertificate,
 	needContestAdminCertificate,
-	needListAdminCertificate,
-	needLoginCertificate,
+	needListAdminCertificate, 
 	needProblemAdminCertificate,
 	needSuperAdminCertificate,
 } from "./guard";

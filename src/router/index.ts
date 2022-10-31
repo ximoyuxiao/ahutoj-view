@@ -33,11 +33,11 @@ const router = createRouter({
 		},
 		{
 			path: "/Problem",
-			component: () => import("../components/Problem.vue"),
+			component: () => import("../pages/Problem.vue"),
 		},
 		{
 			path: "/Code",
-			component: () => import("../components/Code.vue"),
+			component: () => import("../pages/Code.vue"),
 			beforeEnter: (
 				to: RouteLocationNormalized,
 				from: RouteLocationNormalized,
@@ -52,11 +52,11 @@ const router = createRouter({
 		},
 		{
 			path: "/Contest",
-			component: () => import("../components/Contest.vue"),
+			component: () => import("../pages/Contest.vue"),
 		},
 		{
 			path: "/ContestRank",
-			component: () => import("../components/ContestRank.vue"),
+			component: () => import("../pages/ContestRank.vue"),
 		},
 		{
 			path: "/ProblemList",

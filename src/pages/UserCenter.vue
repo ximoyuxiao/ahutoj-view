@@ -141,10 +141,10 @@ import { onMounted, getCurrentInstance, reactive } from "vue";
 import ActivityCalendar from "../components/MyComponents/ActivityCalendar.vue";
 import { useThemeSwitchStore } from "../pinia/themeSwitch";
 import { useUserDataStore } from "../pinia/userData";
-import ChangeInfo from "../components/UserCenter/ChangeInfo.vue";
-import BindingCodeForce from "../components/UserCenter/BindingCodeForce.vue";
-import BindingVJudge from "../components/UserCenter/BindingVJudge.vue";
-import ChangePassword from "../components/UserCenter/ChangePassword.vue";
+import ChangeInfo from "../components/UserCenterChildren/ChangeInfo.vue";
+import BindingCodeForce from "../components/UserCenterChildren/BindingCodeForce.vue";
+import BindingVJudge from "../components/UserCenterChildren/BindingVJudge.vue";
+import ChangePassword from "../components/UserCenterChildren/ChangePassword.vue";
 
 const { proxy } = getCurrentInstance() as any;
 const userDataStore = useUserDataStore();

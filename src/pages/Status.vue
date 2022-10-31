@@ -200,8 +200,9 @@ function goToSeeCode(SID) {
 
 onMounted(() => {
   //同步url参数
-  if (proxy.$route.query.Page) config.currentPage = proxy.$route.query.Page - 0;
-  if (proxy.$route.query.Limit) config.limit = proxy.$route.query.Limit - 0;
+  if (proxy.$route.query.Page)
+    config.currentPage = Number(proxy.$route.query.Page);
+  if (proxy.$route.query.Limit) config.limit = Number(proxy.$route.query.Limit);
   getStatus();
 });
 </script>

@@ -82,10 +82,10 @@
 
 <script lang="ts" setup name="Main">
 import { reactive, onMounted, getCurrentInstance } from "vue";
-import NavBar from "./MainChildren/NavBar.vue";
-import Login from "./MainChildren/Login.vue";
-import Signin from "./MainChildren/Signin.vue";
-import Config from "./MainChildren/Config.vue";
+import NavBar from "../components/MainChildren/NavBar.vue";
+import Login from "../components/MainChildren/Login.vue";
+import Signin from "../components/MainChildren/Signin.vue";
+import Config from "../components/MainChildren/Config.vue";
 import { useConfigStore } from "../pinia/config";
 import { useUserDataStore } from "../pinia/userData";
 import { UserData } from "../utils/buffer/buffer";

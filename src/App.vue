@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-import Main from "./components/Main.vue";
+import Main from "./pages/Main.vue";
 import Bottom from "./components/Base/Bottom.vue";
 import { reactive } from "@vue/reactivity";
 import { getCurrentInstance, onMounted } from "vue";

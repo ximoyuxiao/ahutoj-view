@@ -4,7 +4,7 @@
     ref="ContestRank"
   >
     <div
-      class="contestID"
+      class="contestID cursor_pointer"
       @click="backToContest"
     >
       <el-icon size="32px">
@@ -359,12 +359,9 @@ function getBackgroundColor(item: ProblemsMapType | null) {
 
 //返回竞赛
 function backToContest() {
-  let params: { Pass?: string; CID?: string } = {
-    Pass: null,
-    CID: null,
-  };
+  let params = {};
   if (proxy.$route.query.CID) {
-    params.CID = proxy.$route.query.CID;
+    params["CID"] = proxy.$route.query.CID;
   } else {
     proxy.elMessage({
       message: "数据异常，请重新进入比赛界面",
@@ -373,7 +370,7 @@ function backToContest() {
     return;
   }
   if (proxy.$route.query.Pass) {
-    params.Pass = proxy.$route.query.Pass;
+    params["Pass"] = proxy.$route.query.Pass;
   }
   proxy.$router.push({
     path: "/Contest",
