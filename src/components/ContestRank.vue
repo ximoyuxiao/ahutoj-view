@@ -112,6 +112,7 @@ type contestType = {
   [item: string]: any;
 };
 var contest = reactive<contestType>({
+  //Data保存当前存在的题目
   Data: [],
   length: 0,
   BeginTime: 0,
@@ -212,14 +213,18 @@ var rank = reactive<{
   calculate(data: listItemType[]) {
     //保存题目PID 最先AC的人
     let tempPioneerFlags = new Map<number, any>();
+    //保存当前已有的题目防止出现题目被删除但是已有人提交而产生的问题。
+    let tempNowContestProblems = new Array();
     for (let i in contest.Data) {
       tempPioneerFlags[contest.Data[i].PID] = {
         index: -1,
         Time: 0xfffffff,
       };
+      tempNowContestProblems.push(contest.Data[i].PID);
     }
     //遍历并封装数据
     for (let i in data) {
+      //暂存当期处理的行的数据
       let listItem: listItemType = {
         ACNumber: 0,
         AllSubmit: 0,
@@ -236,14 +241,15 @@ var rank = reactive<{
       listItem.CENumber = data[i].CENumber;
       listItem.Uname = data[i].Uname;
       listItem.UserID = data[i].UserID;
+      //计算总罚时
       let tempACTime = 0;
       for (let j in data[i].Problems) {
         let problem = data[i].Problems[j];
+        if (problem.PID == 0) continue;
         if (problem.Status == "AC") {
-          //计算 总ac时间
           tempACTime += Number((problem.Time / 1000).toFixed(0));
           //找出先锋（最先ac者）
-          if (problem.Time < tempPioneerFlags[problem.PID].Time) {
+          if (problem.Time < tempPioneerFlags[problem.PID]?.Time) {
             tempPioneerFlags[problem.PID] = {
               index: Number(i),
               Time: problem.Time,

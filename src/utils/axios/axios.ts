@@ -1,16 +1,14 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { App } from "vue";
-import { useConfigStore } from "../../pinia/config";
-import { useUserDataStore } from "../../pinia/userData";
 import httpErrorHandler from "./httpErrorHandler";
 
 //默认请求地址
-
 // console.log(import.meta.env);
 if (import.meta.env.MODE === "production") {
 	axios.defaults.baseURL = "/";
 } else {
-	axios.defaults.baseURL = "http://channelcz.top/";
+  axios.defaults.baseURL = "http://channelcz.top/";
+  axios.defaults.baseURL = "http://81.68.182.68/";
 }
 
 // http request拦截器
