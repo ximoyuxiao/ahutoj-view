@@ -101,6 +101,27 @@
             type="textarea"
           />
         </div>
+        <!-- 如果结果是 Failed 则显示重判按钮 -->
+        <div
+          class="failed"
+          v-if="submit.Result == 'FAILED'"
+        >
+          <div class="title">意外的错误</div>
+          <el-input
+            v-model="constValStore.SUBMIT_RESULT_FAILED"
+            :autosize="{ minRows: 3 }"
+            readonly
+            resize="none"
+            show-word-limit
+            type="textarea"
+          />
+          <div
+            class="rejudge cursor_pointer"
+            @click="rejudge"
+          >
+            重判
+          </div>
+        </div>
         <div class="title">代码</div>
         <el-input
           v-model="submit.Source"
@@ -111,6 +132,7 @@
           type="textarea"
         />
       </template>
+      <!-- 判题中 -->
       <div
         id="judging"
         v-show="judging"
@@ -254,6 +276,25 @@ function getSubmit() {
   });
 }
 
+//结果为failed重判
+function rejudge() {
+  let params: { [item: string]: any } = {};
+  if (submit.SID) params.SID = submit.SID;
+  else {
+    proxy.elMessage({ message: "数据异常，请刷新后重试", type: "error" });
+    return;
+  }
+  proxy.$post("api/submit/rejudge/", params).then((res: any) => {
+    console.log(res);
+    let data = res.data;
+    if (data.code == 0) {
+      getSubmit();
+      proxy.elNotification({ message: "重判成功!", type: "success" });
+    }
+    proxy.codeProcessor(data.code, data.msg);
+  });
+}
+
 //跳转到题目
 function goToProblem(PID: number | string) {
   proxy.$router.push({
@@ -332,10 +373,29 @@ onUnmounted(() => {
     }
   }
 
-  .title {
-    margin: 30px 0 5px 0;
-    font-size: $fontSize8;
-    @include font_color("font1");
+  > div {
+    > .title,
+    + .title {
+      margin: 30px 0 5px 0;
+      font-size: $fontSize8;
+      @include font_color("font1");
+    }
+
+    > .rejudge {
+      box-sizing: border-box;
+      padding: 10px 50px;
+      text-align: center;
+      font-size: $fontSize8;
+      font-weight: 600;
+      @include font_color("font3");
+      @include fill_color("fill35");
+
+      &:hover {
+        @include font_color("font2");
+        @include fill_color("fill33");
+        @include box_shadow(0, 0, 2px, 1px, "border1");
+      }
+    }
   }
 
   #judging {

@@ -65,6 +65,8 @@ export const useConstValStore = defineStore(PiniaNameSpace.ConstVal, {
 			//报错提示信息
 			SUBMIT_RESULT_PE:
 				"你的输出结果也许是正确的，但是格式存在问题，请检查输出结果的换行情况\n\n例如C++: cout << a; 和 cout << a << endl;\n\n或者检查输出结果的空个间隔情况、中英文格式……",
+			SUBMIT_RESULT_FAILED:
+				"判题出现了问题，也许你的代码最终运行结果是正确的，请尝试单击下方重判按钮，尝试重新判题。",
 		};
 	},
 	actions: {},
