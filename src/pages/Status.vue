@@ -1,135 +1,109 @@
 <template>
   <div class="status">
-    <div
-      class="list"
-      v-show="status.list.length != 0"
-    >
-      <div class="header">
-        <div style="width: 140px">提交ID</div>
-        <div style="width: 120px">题目ID</div>
-        <div style="width: 160px">用户</div>
-        <div style="width: 120px">状态</div>
-        <div style="width: 140px">语言</div>
-        <div style="width: 120px">用时</div>
-        <div style="width: 120px">内存</div>
-        <div style="width: 180px">提交时间</div>
-      </div>
-      <div
-        class="item"
-        v-for="(item, index) in status.list"
-        :key="index"
-      >
-        <div
-          class="SID"
-          style="width: 140px"
-        >
-          {{ item.SID }}
-        </div>
-        <div
-          class="PID cursor_pointer"
-          style="width: 120px"
-          @click="goToProblem(item.PID)"
-        >
-          {{ item.PID }}
-        </div>
-        <div
-          class="UID"
-          style="width: 160px"
-        >
-          {{ item.UID.length >  15 ? (item.UID.slice(0,15) + "..." ): item.UID}}
-        </div>
-        <div style="width: 120px; display: flex; justify-content: center;">
-          <div
-            class="res cursor_pointer"
-            :style="
-          'color: #ffffff; background-color:' +
-          proxy.Utils.StatusConstValManager.getStatusColor(item.Result)
-        "
-            @click="goToSeeCode(item.SID)"
-          >
-            {{ item.Result }}
-          </div>
-        </div>
-
-        <div style="width: 140px">
-          {{ proxy.Utils.StatusConstValManager.getLangString(item.Lang) }}
-        </div>
-        <div
-          class="useTime"
-          :style="'width: 120px;' + (item.Result == 'TLE' ? 'color: #ff381e;' : '')"
-        >
-          {{ item.UseTime }}&nbsp;ms
-        </div>
-        <div
-          class="useMemory"
-          :style="'width: 120px;' + (item.Result == 'MLE' ? 'color: #ff381e;' : '')"
-        >
-          {{ (item.UseMemory / 1024).toFixed(0) }}&nbsp;KB
-        </div>
-        <div
-          class="submitTime"
-          style="width: 180px"
-        >
-          {{ proxy.Utils.TimeTools.timestampToTime(item.SubmitTime) }}
-        </div>
-      </div>
-      <div class="pagination">
-        <el-pagination
-          background
-          layout="prev, pager, next"
-          :page-size="config.limit"
-          :total="config.Count"
-          :current-page="config.currentPage"
-          @current-change="config.changePage"
-        />
-        <el-radio-group
-          v-model="config.limit"
-          @change="config.changePage(1)"
-          style="margin: 0 20px"
-        >
-          <el-radio-button :label="20" />
-          <el-radio-button :label="30" />
-          <el-radio-button :label="50" />
-        </el-radio-group>
-      </div>
-    </div>
-    <div
-      class="notFound"
-      v-show="status.list.length == 0"
-    >
-      <el-empty description="无结果" />
-    </div>
+    <StatusSearch :query="query">
+    </StatusSearch>
+    <StatusList :data="status.list">
+    </StatusList>
   </div>
 </template>
 
 <script lang="ts" setup name="Status" >
-import { getCurrentInstance, onMounted, reactive } from "vue";
+import {
+  getCurrentInstance,
+  onBeforeMount,
+  onMounted,
+  provide,
+  reactive,
+} from "vue";
+import StatusList from "../components/Status/StatusList.vue";
+import StatusSearch from "../components/Status/StatusSearch.vue";
 const { proxy } = getCurrentInstance() as any;
 
-//页面配置
-type configType = {
-  Count: number;
-  currentPage: number;
-  limit: number;
-  loading: any;
-  [item: string]: any;
-};
-var config = reactive<configType>({
-  Count: 0,
-  currentPage: 1,
-  limit: 20,
-  loading: null,
-  init() {
-    this.Count = 0;
-    this.currentPage = 1;
-    this.limit = 20;
-    this.loading = null;
+//页面控制
+var config = reactive({
+  //搜索
+  search: (tempQuery: any) => {
+    query.Page = 1;
+    query.PID = tempQuery.PID;
+    query.UID = tempQuery.UID;
+    query.Lang = tempQuery.Lang;
+    query.Result = tempQuery.Result;
+    config.update();
   },
-  //切换页面
-  changePage: (page: number) => {
-    config.currentPage = page;
-    SyncUrl();
-    getStatus();
+  //更新数据
+  update: () => {
+    let params = {};
+    if (query.Page) {
+      params["Page"] = query.Page - 1;
+    }
+    if (query.Limit) {
+      params["Limit"] = query.Limit;
+    }
+    if (query.PID && query.PID > 0) {
+      params["PID"] = query.PID;
+    }
+    if (query.UID && query.UID != "") {
+      params["UID"] = query.UID;
+    }
+    if (query.Lang && query.Lang > 0) {
+      params["Lang"] = query.Lang;
+    }
+    if (query.Result && query.Result != "不限") {
+      params["Result"] = query.Result;
+    }
+    proxy.$get("api/submit/status", params).then((res: any) => {
+      let data = res.data;
+      if (data.code == 0) {
+        // proxy.$log(data);
+        query.Count = data.Count;
+        status.list = data.Data;
+        config.syncUrl(query);
+      }
+      proxy.codeProcessor(data.code, data.msg);
+    });
+  },
+  //同步url
+  syncUrl: (query: any) => {
+    let params = {};
+    if (query.Page) {
+      params["Page"] = query.Page;
+    }
+    if (query.Limit) {
+      params["Limit"] = query.Limit;
+    }
+    if (query.PID && query.PID > 0) {
+      params["PID"] = query.PID;
+    }
+    if (query.UID && query.UID != "") {
+      params["UID"] = query.UID;
+    }
+    if (query.Lang && query.Lang > 0) {
+      params["Lang"] = query.Lang;
+    }
+    if (query.Result && query.Result != "不限") {
+      params["Result"] = query.Result;
+    }
+    proxy.$router.replace({
+      path: "/Status",
+      query: params,
+    });
+  },
+});
+
+//页面查询参数
+var query = reactive({
+  PID: null,
+  UID: "",
+  Lang: -1,
+  Result: "不限",
+  Count: 0,
+  Page: 1,
+  Limit: 20,
+  PIDSetter: (value: number) => {
+    query.PID = value;
+  },
+  UIDSetter: (value: string) => {
+    query.UID = value;
   },
 });
 
@@ -148,137 +122,33 @@ type statusType = {
 };
 var status = reactive<statusType>({ list: [] });
 
-//获取提交列表
-function getStatus() {
-  proxy
-    .$get("api/submit/status", {
-      Page: config.currentPage - 1,
-      Limit: config.limit,
-    })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.code == 0) {
-        // proxy.$log(data);
-        config.Count = data.Count;
-        status.list = data.Data;
-      }
-      proxy.codeProcessor(data.code, data.msg);
-    });
-}
+provide("config", config);
+provide("query", query);
 
-//用于同步浏览器url
-function SyncUrl() {
-  //仅用于展示实时url，可用于复制跳转
-  proxy.$router.replace({
-    path: "/Status",
-    query: {
-      Page: config.currentPage,
-      Limit: config.limit,
-    },
-  });
-}
+onBeforeMount(() => {
+  //同步url参数
+  if (proxy.$route.query.Page) query.Page = Number(proxy.$route.query.Page);
+  if (proxy.$route.query.Limit) query.Limit = Number(proxy.$route.query.Limit);
 
-//跳转到题目
-function goToProblem(PID) {
-  proxy.$router.push({
-    path: "/Problem",
-    query: {
-      PID,
-    },
-  });
-}
-
-//跳转到自己提交的代码
-function goToSeeCode(SID) {
-  proxy.$router.push({
-    path: "/Code",
-    query: {
-      SID,
-    },
-  });
-}
+  if (typeof proxy.$route.query.PID != "undefined")
+    query.PID = Number(proxy.$route.query.PID);
+  if (typeof proxy.$route.query.UID != "undefined")
+    query.UID = proxy.$route.query.UID;
+  if (typeof proxy.$route.query.Result != "undefined")
+    query.Result = proxy.$route.query.Result;
+  if (typeof proxy.$route.query.Lang != "undefined")
+    query.Lang = Number(proxy.$route.query.Lang);
+});
 
 onMounted(() => {
-  //同步url参数
-  if (proxy.$route.query.Page)
-    config.currentPage = Number(proxy.$route.query.Page);
-  if (proxy.$route.query.Limit) config.limit = Number(proxy.$route.query.Limit);
-  getStatus();
+  config.update();
 });
 </script>
 
 <style  scoped lang="scss">
-.notFound {
-  width: 100%;
-  height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .status {
   width: 100%;
   box-sizing: border-box;
   padding: $status_outerPaddingTop $status_outerPaddingLeft;
-
-  .list {
-    @include fill_color("fill2");
-    border-radius: 10px;
-    box-sizing: border-box;
-    padding: $status_listPadding;
-
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: $fontSize7;
-      @include font_color("font1");
-      border-bottom: 2px solid;
-      @include border_color("border2");
-      padding: 10px 0;
-
-      > div {
-        text-align: center;
-      }
-    }
-
-    .item {
-      display: flex;
-      align-items: center;
-      font-size: $fontSize5;
-      @include font_color("font2");
-      @include fill_color("fill3");
-      justify-content: space-between;
-      border-bottom: 2px solid;
-      box-sizing: border-box;
-      @include border_color("border2");
-
-      .PID {
-        @include font_color("fill12");
-        box-sizing: border-box;
-      }
-      .res {
-        margin: 8px 0;
-        padding: 4px 10px;
-        box-sizing: border-box;
-        border-radius: 6px;
-        width: fit-content;
-        filter: drop-shadow(0 0 1px #00000088);
-      }
-
-      > div {
-        text-align: center;
-      }
-    }
-
-    .pagination {
-      margin: 25px 0;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      justify-items: center;
-    }
-  }
 }
 </style>

@@ -2,8 +2,6 @@
   <div>
     <!-- 主界面 -->
     <Main v-if="config.serverActive"></Main>
-    <!-- 底部 -->
-    <!-- <Bottom></Bottom> -->
     <!-- 服务器连接失败 -->
     <div
       class="heartbeat"
@@ -18,7 +16,6 @@
 
 <script lang="ts" setup>
 import Main from "./pages/Main.vue";
-import Bottom from "./components/Base/Bottom.vue";
 import { reactive } from "@vue/reactivity";
 import { getCurrentInstance, onMounted } from "vue";
 import { useThemeSwitchStore } from "./pinia/themeSwitch";
