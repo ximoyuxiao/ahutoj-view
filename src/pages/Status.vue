@@ -19,6 +19,10 @@ import StatusList from "../components/Status/StatusList.vue";
 import StatusSearch from "../components/Status/StatusSearch.vue";
 const { proxy } = getCurrentInstance() as any;
 
+var loadings = {
+  list: null,
+};
+
 //页面控制
 var config = reactive({
   //搜索
@@ -32,6 +36,9 @@ var config = reactive({
   },
   //更新数据
   update: () => {
+    loadings.list = proxy.elLoading({
+      node: document.getElementsByClassName("statusList")[0],
+    });
     let params = {};
     if (query.Page) {
       params["Page"] = query.Page - 1;
@@ -60,6 +67,7 @@ var config = reactive({
         config.syncUrl(query);
       }
       proxy.codeProcessor(data.code, data.msg);
+      loadings.list.close();
     });
   },
   //同步url
