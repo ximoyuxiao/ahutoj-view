@@ -6,112 +6,121 @@
     >
       <el-empty description="肥肠抱歉，木有找到该比赛，返回重试吧。" />
     </div>
-    <div
-      v-show="!notFound"
-      class="infoBox"
-      ref="infoBox"
-    >
-      <div class="title">{{ contest.Title }}</div>
-      <div class="text">创建者：{{ contest.UID }}</div>
-      <div class="text">类型：{{ contest.Type == 1 ? "ACM" : "OI" }}</div>
-      <div class="text">描述：{{ contest.Description }}</div>
-      <!-- <div class="text" v-if="contest.ispublic == 0">
+    <template v-if="!notFound">
+      <div
+        class="infoBox"
+        ref="infoBox"
+      >
+        <div class="title">{{ contest.Title }}</div>
+        <div class="text">创建者：{{ contest.UID }}</div>
+        <div class="text">类型：{{ contest.Type == 1 ? "ACM" : "OI" }}</div>
+        <div class="text">描述：{{ contest.Description }}</div>
+        <!-- <div class="text" v-if="contest.ispublic == 0">
         比赛密码：{{ contest.pass }}
       </div> -->
-      <div
-        class="status"
-        v-if="timePercent.status == 1"
-      >
         <div
-          class="point"
-          style="background-color: #5ebd00"
-        ></div>
-        进行中
-      </div>
-      <div
-        class="status"
-        v-else
-      >
-        <div
-          class="point"
-          style="background-color: #ff3300"
-        ></div>
-        已结束
-      </div>
-
-      <div class="time">
-        <div class="begin_time">
-          {{ proxy.Utils.TimeTools.timestampToTime(contest.BeginTime) }}
+          class="status"
+          v-if="timePercent.status == 1"
+        >
+          <div
+            class="point"
+            style="background-color: #5ebd00"
+          ></div>
+          进行中
         </div>
-        <div class="left_time">
-          {{
+        <div
+          class="status"
+          v-else
+        >
+          <div
+            class="point"
+            style="background-color: #ff3300"
+          ></div>
+          已结束
+        </div>
+
+        <div class="time">
+          <div class="begin_time">
+            {{ proxy.Utils.TimeTools.timestampToTime(contest.BeginTime) }}
+          </div>
+          <div class="left_time">
+            {{
           proxy.Utils.TimeTools.timestampToInterval(
           timePercent.allTime - timePercent.lostTime,
           2
           )
           }}
+          </div>
+          <div class="end_time">
+            {{ proxy.Utils.TimeTools.timestampToTime(contest.EndTime) }}
+          </div>
         </div>
-        <div class="end_time">
-          {{ proxy.Utils.TimeTools.timestampToTime(contest.EndTime) }}
-        </div>
-      </div>
-      <div class="process">
-        <el-progress
-          :text-inside="true"
-          :stroke-width="24"
-          :color="timePercent.color"
-          :percentage="timePercent.percent"
-        />
-      </div>
-    </div>
-    <div
-      v-show="!notFound"
-      class="problemList"
-      ref="problemList"
-    >
-      <div
-        class="contestRank cursor_pointer"
-        v-on:click="goToRank()"
-      >
-        查看排名
-      </div>
-      <div class="nav">
-        <div style="width: 90px">序号</div>
-        <div style="width: calc(100% - 190px)">题目</div>
-        <div style="width: 100px">通过情况</div>
-      </div>
-      <div
-        class="item"
-        v-for="(item, index) in contest.Data"
-        :key="index"
-      >
-        <div
-          class="flag cursor_pointer"
-          v-on:click="goToProblem(item.PID)"
-        >
-          {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
-        </div>
-        <div
-          class="title cursor_pointer"
-          v-on:click="goToProblem(item.PID)"
-        >
-          {{ item.Title }}
-        </div>
-        <div class="status">
+        <div class="process">
           <el-progress
-            type="circle"
-            :width="22"
-            :stroke-width="3"
-            :percentage="
+            :text-inside="true"
+            :stroke-width="24"
+            :color="timePercent.color"
+            :percentage="timePercent.percent"
+          />
+        </div>
+      </div>
+      <div
+        class="problemList"
+        ref="problemList"
+      >
+        <div class="functionBox">
+          <div
+            class="contestRank cursor_pointer"
+            v-on:click="goToRank()"
+          >
+            查看排名
+          </div>
+          <div
+            class="contestRank cursor_pointer"
+            v-on:click="goToStatus()"
+          >
+            比赛状态
+          </div>
+        </div>
+        <div class="nav">
+          <div style="width: 90px">序号</div>
+          <div style="width: calc(100% - 190px)">题目</div>
+          <div style="width: 100px">通过情况</div>
+        </div>
+        <div
+          class="item"
+          v-for="(item, index) in contest.Data"
+          :key="index"
+        >
+          <div
+            class="flag cursor_pointer"
+            v-on:click="goToProblem(item.PID)"
+          >
+            {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
+          </div>
+          <div
+            class="title cursor_pointer"
+            v-on:click="goToProblem(item.PID)"
+          >
+            {{ item.Title }}
+          </div>
+          <div class="status">
+            <el-progress
+              type="circle"
+              :width="22"
+              :stroke-width="3"
+              :percentage="
             item.SubmitNum == 0 ? 0 : (item.ACNum / item.SubmitNum) * 100
           "
-            :show-text="false"
-            style="margin: 0 10px"
-          />
-          {{ item.ACNum + "/" + item.SubmitNum }}
+              :show-text="false"
+              style="margin: 0 10px"
+            />
+            {{ item.ACNum + "/" + item.SubmitNum }}
+          </div>
         </div>
       </div>
-    </div>
+
+    </template>
   </div>
 </template>
 
@@ -340,6 +349,20 @@ function goToRank(): void {
   });
 }
 
+//跳转到当前比赛的状态
+function goToStatus(): void {
+  let CID = contest.CID;
+  let Pass: string;
+  if (proxy.$route.query.Pass) Pass = proxy.$route.query.Pass;
+  proxy.$router.push({
+    path: "/ContestStatus",
+    query: {
+      CID,
+      Pass,
+    },
+  });
+}
+
 onMounted(() => {
   getContestById();
 });
@@ -427,17 +450,31 @@ onUnmounted(() => {
     border-radius: 10px;
     @include fill_color("fill2");
 
-    .contestRank {
-      width: 200px;
-      line-height: 40px;
-      @include font_color("font2");
-      font-size: $fontSize9;
-      @include fill_color("fill4");
-      border-radius: 16px;
-      text-align: center;
+    .functionBox {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+      border-radius: 10px;
+      @include fill_color("fill2");
+      padding-bottom: 30px;
 
-      &:hover {
-        @include fill_color("fill3");
+      > div {
+        margin: 0 10px;
+        width: 140px;
+        line-height: 32px;
+        @include font_color("font2");
+        font-size: $fontSize6;
+        @include fill_color("fill4");
+        @include box_shadow(0, 0, 2px, 1px, "border1");
+        border-radius: 10px;
+        text-align: center;
+
+        &:hover {
+          @include font_color("font1");
+          @include fill_color("fill13");
+          @include box_shadow(0, 0, 2px, 1px, "fill11");
+        }
       }
     }
 

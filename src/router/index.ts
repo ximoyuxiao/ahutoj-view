@@ -56,7 +56,13 @@ const router = createRouter({
 		},
 		{
 			path: "/ContestRank",
-			component: () => import("../pages/ContestRank.vue"),
+			component: () =>
+				import("../pages/ContestChildren/ContestRank.vue"),
+		},
+		{
+			path: "/ContestStatus",
+			component: () =>
+				import("../pages/ContestChildren/ContestStatus.vue"),
 		},
 		{
 			path: "/ProblemList",

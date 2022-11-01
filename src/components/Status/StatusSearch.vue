@@ -8,7 +8,6 @@
             :v-model="query.PID"
             @change="query.PIDSetter"
             placeholder="题目ID"
-            :onAction="config.search(query)"
             type="number"
           >
           </Input>
@@ -21,7 +20,6 @@
             :v-model="query.UID"
             @change="query.UIDSetter"
             placeholder="用户ID"
-            :onAction="config.search(query)"
             type="text"
           >
           </Input>
@@ -59,7 +57,6 @@
             <el-radio-button label="FAILED"></el-radio-button>
           </el-radio-group>
         </div>
-
       </div>
     </div>
     <div
@@ -88,6 +85,7 @@ var query = reactive({
   CID: "",
   Lang: -1,
   Result: "不限",
+  //为防止数据响应式丢失，设置setter
   PIDSetter: (value: number) => {
     query.PID = value;
   },

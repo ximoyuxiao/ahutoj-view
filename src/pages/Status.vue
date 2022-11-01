@@ -141,6 +141,7 @@ onBeforeMount(() => {
 });
 
 onMounted(() => {
+  //页面数据初始化
   config.update();
 });
 </script>

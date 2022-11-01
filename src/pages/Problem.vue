@@ -521,16 +521,8 @@ async function checkContest() {
         }
         contest.copy(data);
         contest.isContestProblem = true;
-      } else {
-        if (contest.Pass != null) {
-          proxy.elMessage({
-            message: "竞赛不存在或者密码错误！",
-            type: "warning",
-          });
-        } else {
-          proxy.codeProcessor(data.code, data.msg);
-        }
       }
+      proxy.codeProcessor(data.code, data.msg);
     });
 
   return ret;
