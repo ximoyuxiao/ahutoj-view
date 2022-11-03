@@ -41,6 +41,7 @@
           <md-editor
             v-model="problem.Description"
             :toolbars="markdown.toolbar"
+            :on-upload-img="problem.updateImg"
           />
         </div>
       </template>
@@ -154,6 +155,9 @@
           />
         </el-select>
       </div>
+      <div class="imgs">
+        <img src="../../../assets/image/temporary/user.jpg">
+      </div>
       <div style="display: flex; justify-content: flex-end; padding: 10px 0">
         <el-button
           type="warning"
@@ -241,6 +245,7 @@ import "md-editor-v3/lib/style.css";
 const { proxy } = getCurrentInstance() as any;
 const constValStore = useConstValStore();
 
+// markdown 工具栏
 var markdown: {
   toolbar: ToolbarNames[];
 } = {
@@ -377,6 +382,9 @@ var problem = reactive({
     problem.ContentType = data.ContentType;
     problem.Visible = data.Visible;
   },
+  updateImg: (files) => {
+    uploadFiles(files);
+  },
 });
 
 //列表分页的配置项
@@ -490,6 +498,42 @@ var searchList = reactive({
     });
   },
 });
+
+//上传图片
+function uploadFiles(files) {
+  if (files.length == 0) {
+    proxy.elMessage({
+      message: "上传内容为空！",
+      type: "warning",
+    });
+    return;
+  }
+  ElMessageBox.confirm("确定上传吗？", "注意", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  }).then(() => {
+    files.forEach((f: any) => {
+      uploadF(f);
+    });
+  });
+}
+
+//上传文件
+function uploadF(f: any) { 
+  var renameFile = new File([f], "123");
+  console.log(renameFile);
+  return;
+  let file = new FormData();
+  file.append("file", f);
+  proxy.$post("api/file/image", file, 2).then((res: any) => {
+    let data = res.data;
+    if (data.code == 0) {
+      proxy.elMessage({ message: f.name + " 上传成功!", type: "success" });
+    }
+    proxy.codeProcessor(data.code, data.msg);
+  });
+}
 
 //删除题目
 function deleteProblem() {

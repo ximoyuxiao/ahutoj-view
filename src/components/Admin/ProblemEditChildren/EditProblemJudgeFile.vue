@@ -236,7 +236,7 @@ function deleteFile(index: number) {
       let data = res.data;
       if (data.code == 0) {
         fileList.value.splice(index, 1);
-        proxy.elMessage({ message: "删除成功", type: "succes" });
+        proxy.elMessage({ message: "删除成功", type: "success" });
       }
       proxy.codeProcessor(data.code, data.msg);
     });

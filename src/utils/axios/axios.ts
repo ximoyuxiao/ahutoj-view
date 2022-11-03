@@ -7,8 +7,8 @@ import httpErrorHandler from "./httpErrorHandler";
 if (import.meta.env.MODE === "production") {
 	axios.defaults.baseURL = "/";
 } else {
-	axios.defaults.baseURL = "http://127.0.0.1:4212/";
-	// axios.defaults.baseURL = "http://channelcz.top/";
+	// axios.defaults.baseURL = "http://127.0.0.1:4212/";
+	axios.defaults.baseURL = "http://channelcz.top/";
 	// axios.defaults.baseURL = "http://81.68.182.68/";
 }
 

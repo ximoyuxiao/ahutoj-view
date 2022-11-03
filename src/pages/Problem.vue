@@ -20,6 +20,7 @@
             #{{contest.CID}}
           </div>
         </div>
+        <div class="PID">#{{ problem.PID }}</div>
         <div class="title">{{ problem.Title }}</div>
         <template v-if="problem.ContentType == 1">
           <div class="markdown">
@@ -235,7 +236,7 @@ const configStore = useConfigStore();
 const constValStore = useConstValStore();
 const userDataStore = useUserDataStore();
 
-var notFound = ref(false);
+var notFound = ref(true);
 
 //页面加载效果维护
 var loading = reactive({
@@ -805,6 +806,19 @@ onMounted(() => {
 
         > div {
           margin: 0 10px;
+        }
+      }
+
+      .PID {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: $fontSize10;
+        @include font_color("font5");
+        transition-duration: 200ms;
+
+        &:hover {
+          @include font_color("fill11");
         }
       }
 
