@@ -15,6 +15,7 @@ import {
   provide,
   reactive,
 } from "vue";
+import { onBeforeRouteUpdate } from "vue-router";
 import StatusList from "../components/Status/StatusList.vue";
 import StatusSearch from "../components/Status/StatusSearch.vue";
 const { proxy } = getCurrentInstance() as any;

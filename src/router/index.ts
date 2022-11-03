@@ -87,9 +87,4 @@ const router = createRouter({
 	],
 });
 
-//路由跳转后回到页面顶端
-router.afterEach((to, from, next) => {
-	window.scrollTo(0, 0);
-});
-
 export default router;
