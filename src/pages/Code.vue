@@ -149,9 +149,11 @@
 </template>
 <script lang="ts" setup>
 import { getCurrentInstance, onMounted, onUnmounted, reactive, ref } from "vue";
+import { useConfigStore } from "../pinia/config";
 import { useConstValStore } from "../pinia/constVal";
 const { proxy } = getCurrentInstance() as any;
 const constValStore = useConstValStore();
+const configStore = useConfigStore();
 
 //未找到该提交结果
 var notFound = ref(true);
@@ -201,7 +203,9 @@ var submit = reactive<submitType>({
   UseTime: 0,
   CeInfo: "",
   hasCeInfo: false, //是否存在ce错误
+  //判题自动刷新
   autoUpdate: null,
+  updateTimeStep: 1,
   init() {
     submit.UID = "";
     submit.Lang = 1;
@@ -243,8 +247,18 @@ var submit = reactive<submitType>({
           text: "正在判题中...",
         });
       submit.autoUpdate = setTimeout(() => {
-        getSubmit();
-      }, 2000);
+        if (submit.updateTimeStep < 15) {
+          getSubmit();
+          submit.updateTimeStep++;
+        } else {
+          //推测可能网络问题，这时候需要ping一下
+          configStore.needPing();
+          proxy.elMessage({
+            message: "网络可能出现问题，或者服务器繁忙，请刷新或稍后再试。",
+            type: "warning",
+          });
+        }
+      }, (submit.updateTimeStep / 3) * 1000 + 500);
     } else {
       if (judging.value && data.Result == "AC") {
         //说明刚刚正在进行判题
@@ -267,7 +281,7 @@ function getSubmit() {
     let data = res.data;
     if (data.code == 0) {
       submit.init();
-      // proxy.$log(data);
+      proxy.$log(data);
       submit.copy(data);
       notFound.value = false;
     }
@@ -307,7 +321,7 @@ function goToProblem(PID: number | string) {
 
 onMounted(() => {
   //同步url参数
-  if (proxy.$route.query.SID) config.SID = proxy.$route.query.SID - 0;
+  if (proxy.$route.query.SID) config.SID = Number(proxy.$route.query.SID);
   getSubmit();
 });
 
