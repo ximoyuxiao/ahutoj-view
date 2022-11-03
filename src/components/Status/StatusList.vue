@@ -115,8 +115,8 @@ var functions = inject("config") as any;
 var config = reactive({
   loading: null,
   //切换页面
-  changePage: (page: number) => {
-    query.page = page;
+  changePage: (Page: number) => {
+    query.Page = Page;
     //更新数据
     functions.update(query);
   },
