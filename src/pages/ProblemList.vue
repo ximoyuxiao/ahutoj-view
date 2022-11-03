@@ -61,32 +61,32 @@ var ProblemList = reactive({
     {
       LID: 1000,
       UID: "11111",
-      Title: "测试提单1",
+      Title: "测试题单1",
       StartTime: 1688995545665,
     },
     {
       LID: 1001,
       UID: "11111",
-      Title: "测试提单2",
+      Title: "测试题单2",
       StartTime: 1688995545999,
     },
     {
       LID: 1002,
       UID: "11111",
-      Title: "测试提单3",
+      Title: "测试题单3",
       StartTime: 1688995559888,
     },
   ],
 });
 
-function getProblemsList() { 
+function getProblemsList() {
   proxy.$get("api/training/list", { Page: 0, Limit: 20 }).then((res) => {
     console.log(res);
   });
 }
 
 onMounted(() => {
-//   getProblemsList();
+  //   getProblemsList();
 });
 </script>
 

@@ -376,7 +376,7 @@ var problem = reactive<problemType>({
   ContentType: -1,
   copy(data: problemType) {
     // this.Pid = data.Pid;
-    console.log(data);
+    // console.log(data);
     problem.Description = data.Description;
     problem.Hit = data.Hit;
     problem.Input = data.Input;
@@ -733,6 +733,7 @@ var submit = reactive<submitType>({
 });
 
 onMounted(() => {
+  window.scrollTo(0, 0);
   nextTick(() => {
     //获取题目
     getProblemInfo();

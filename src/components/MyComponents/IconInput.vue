@@ -1,15 +1,15 @@
 <template>
   <div class="iconInput">
     <input
-      :value="props.vModel"
-      @change="onValueChange"
-      placeholder="题目ID"
-      @keydown.enter="props.onAction ? props.onAction : null"
+      v-model="vModel"
+      @input="onValueChange"
+      :placeholder="props.placeholder"
+      @keydown.enter="onClick"
       :type="props.type"
     />
     <div
       class="icon cursor_pointer"
-      @click="props.onAction"
+      @click="onClick"
     >
       <slot name="icon"></slot>
     </div>
@@ -17,11 +17,25 @@
 </template>
 
 <script lang='ts' setup>
-const props = defineProps(["vModel", "type", "onAction"]);
-var emit = defineEmits(["change"]);
+import { onMounted, ref } from "vue";
+
+const props = defineProps(["modelValue", "placeholder", "type"]);
+var emit = defineEmits(["update:modelValue", "click"]);
+//代理数据
+var vModel = ref(null);
+
 function onValueChange(e: any) {
-  emit("change", e.target.value);
+  emit("update:modelValue", e.target.value);
 }
+
+function onClick(e: any) {
+  emit("click", e);
+}
+
+onMounted(() => {
+  //初始化
+  if (props.modelValue) vModel.value = props.modelValue;
+});
 </script>
 
 <style lang='scss' scoped>

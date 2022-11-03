@@ -2,39 +2,30 @@
   <div class="problems">
     <div class="left">
       <div class="search">
-        <div class="searchById">
-          <input
-            class="input"
-            v-model="search.PID"
-            placeholder="题目ID"
-            @keydown.enter="getProblemsById()"
-            type="number"
-          />
-          <div
-            class="cursor_pointer"
-            @click="getProblemsById()"
-          >
+        <IconInput
+          v-model="search.PID"
+          placeholder="题目ID"
+          type="number"
+          @click="getProblemsById"
+        >
+          <template v-slot:icon>
             <el-icon size="22px">
               <Aim />
             </el-icon>
-          </div>
-        </div>
-        <div class="searchByTitle">
-          <input
-            class="input"
-            v-model="search.Title"
-            placeholder="题目标题"
-            type="text"
-          />
-          <div
-            class="cursor_pointer"
-            @click="getProblemByTitle()"
-          >
+          </template>
+        </IconInput>
+        <IconInput
+          v-model="search.Title"
+          placeholder="题目标题"
+          type="number"
+          @click="getProblemByTitle"
+        >
+          <template v-slot:icon>
             <el-icon size="22px">
               <Search />
             </el-icon>
-          </div>
-        </div>
+          </template>
+        </IconInput>
       </div>
     </div>
     <div
@@ -110,6 +101,7 @@
 <script lang="ts" setup name = "Problems">
 import { onMounted, getCurrentInstance, reactive } from "vue";
 import { useThemeSwitchStore } from "../pinia/themeSwitch";
+import IconInput from "../components/MyComponents/IconInput.vue";
 const { proxy } = getCurrentInstance() as any;
 const themeSwitchStore = useThemeSwitchStore();
 
@@ -150,12 +142,12 @@ type searchType = {
 };
 var search = reactive<searchType>({
   PID: null,
-  Title: null,
+  Title: "",
   Label: null,
   Data: [],
   init() {
     search.PID = null;
-    search.Title = null;
+    search.Title = "";
     search.Data = [];
   },
 });
@@ -201,9 +193,11 @@ function getProblems(PID: number = null, Title: string = null) {
 }
 
 //id搜索
-function getProblemsById(PID: number = null) {
-  if (PID != null) search.PID = PID;
-  if (search.PID == null || search.PID <= 0) {
+function getProblemsById(PID?: number) {
+  if (typeof PID == "number") {
+    search.PID = PID;
+  }
+  if (!search.PID || search.PID <= 0) {
     proxy.elMessage({
       message: "请输入有效的题目ID！",
       type: "warning",
@@ -219,7 +213,7 @@ function getProblemsById(PID: number = null) {
 }
 
 //title搜索
-function getProblemByTitle() {}
+function getProblemByTitle(e?: any) {}
 
 //用于同步浏览器url
 function SyncUrl() {
