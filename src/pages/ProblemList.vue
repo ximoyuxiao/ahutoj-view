@@ -46,7 +46,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive } from "@vue/runtime-core";
+import { onMounted, reactive } from "vue";
 import { getCurrentInstance } from "vue";
 const { proxy } = getCurrentInstance() as any;
 
@@ -79,16 +79,14 @@ var ProblemList = reactive({
   ],
 });
 
-function getProblemsList() {
-  proxy
-    .$post("api/training/add", { UID: "11111", Title: "123" })
-    .then((res) => {
-      console.log(res);
-    });
+function getProblemsList() { 
+  proxy.$get("api/training/list", { Page: 0, Limit: 20 }).then((res) => {
+    console.log(res);
+  });
 }
 
 onMounted(() => {
-  // getProblemsList();
+//   getProblemsList();
 });
 </script>
 
