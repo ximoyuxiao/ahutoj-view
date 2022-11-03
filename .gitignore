@@ -12,6 +12,7 @@ dist
 dist-ssr
 stats.html
 *.local
+dist.rar
 
 # Editor directories and files
 .VSCodeCounter
