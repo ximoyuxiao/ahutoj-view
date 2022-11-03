@@ -124,8 +124,7 @@
               />
             </el-select>
             <el-button
-              v-on:click="aceConfig.save()"
-              size="small"
+              v-on:click="aceConfig.save()" 
               type="primary"
               :plain="themeSwitchStore.theme >  0 ? true : false"
             >暂存</el-button>
@@ -449,19 +448,12 @@ async function getProblemInfo() {
     node: proxy.$refs.demand,
   });
 
-  //检查题目url:id是否存在
-  if (!proxy.$route.query.PID) {
-    loading.init();
-    return;
-  }
-  problem.PID = proxy.$route.query.PID;
-
   //检查从竞赛跳转过来的题目是否存在cid 以及 pass
   if (proxy.$route.query.CID) contest.CID = proxy.$route.query.CID;
   if (proxy.$route.query.Pass) contest.Pass = proxy.$route.query.Pass;
 
   //cid存在说明是从竞赛跳转来的题目,检查合理性
-  if (contest.CID != null) {
+  if (contest.CID) {
     //说明不合理
     if ((await checkContest()) != 0) {
       loading.init();
@@ -503,7 +495,6 @@ async function checkContest() {
       if (data.code == 0) {
         ret = 0;
         // proxy.$log(data);
-
         //判断题目在不在该竞赛中
         let flag = false;
         let tempProblemSequence = data.Problems.split(",");
@@ -735,15 +726,23 @@ var submit = reactive<submitType>({
 
 onMounted(() => {
   window.scrollTo(0, 0);
+  //检查题目url:id是否存在
+  if (!proxy.$route.query.PID) {
+    loading.init();
+    proxy.elMessage({
+      message: "地址栏参数错误，请正常进入题目界面！",
+      type: "warning",
+    });
+    return;
+  }
+  problem.PID = proxy.$route.query.PID;
   nextTick(() => {
-    //获取题目
-    getProblemInfo();
     //初始化代码编辑器
     let aceEditor = document.getElementById("aceEditor");
     ace.aceEditor = getAceBuilds({ node: aceEditor });
     if (themeSwitchStore.theme < 0)
       ace.aceEditor.setTheme("ace/theme/one_dark");
-    //获取缓存的题目数据
+    //获取缓存的题目代码数据
     if (!proxy.$route.query.CID && proxy.$route.query.PID) {
       let text = sessionStorage.getItem("pid" + proxy.$route.query.PID);
       if (text != null) ace.aceEditor.setValue(text);
@@ -758,6 +757,8 @@ onMounted(() => {
     if (Lang) {
       changeMode(Lang);
     }
+    //获取题目
+    getProblemInfo();
   });
 });
 </script>
@@ -826,7 +827,7 @@ onMounted(() => {
         font-size: $fontSize12;
         @include font_color("font1");
         text-align: center;
-        padding: $modelDistance 0;
+        padding: $modelDistanceLarge 0;
       }
 
       .normal {
