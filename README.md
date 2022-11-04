@@ -12,7 +12,7 @@
 
 **UI:** Element-Plus、Animate （可能会引入GSAP）
 
-**Plugin:** Ace-builds、markdown-it-vue、qs……
+**Plugin:** Ace-builds、md-editor-v3、qs、compressorjs、xlsx……
 
 **构建工具：** Vite
 
