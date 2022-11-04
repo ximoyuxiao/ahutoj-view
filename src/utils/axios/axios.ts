@@ -4,7 +4,7 @@ import httpErrorHandler from "./httpErrorHandler";
 
 // export const baseURL = "http://127.0.0.1:4212/";
 // export const baseURL = "http://81.68.182.68/";
-export const baseURL = "http://channelcz.top/";
+export const baseURL = "http://channelcz.top:1234/";
 
 //默认请求地址
 // console.log(import.meta.env);

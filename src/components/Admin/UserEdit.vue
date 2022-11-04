@@ -42,7 +42,6 @@ export default {
 <style scoped lang="scss">
 .UserEdit {
   width: 100%;
-  overflow: hidden;
 
   .nav {
     display: flex;

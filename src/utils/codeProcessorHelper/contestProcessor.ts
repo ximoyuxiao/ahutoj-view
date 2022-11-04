@@ -33,7 +33,7 @@ export default function ContestProcessor(
 			getHandle(ReasonCode);
 			break;
 		// 05
-		case APICodes.get:
+		case APICodes.rank:
 			rankHandle(ReasonCode);
 			break;
 	}
