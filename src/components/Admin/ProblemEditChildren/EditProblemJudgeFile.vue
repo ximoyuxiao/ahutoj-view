@@ -34,7 +34,7 @@
         <div
           class="fileItem"
           v-for="(item,index) in fileList"
-          :key="index"
+          :key="item.Filename"
         >
           <div>{{item.Filename}}</div>
           <div>{{item.Filename.split('.')[1]}}</div>
@@ -65,6 +65,7 @@
         class="uploadJson"
         drag
         accept=".zip,.in,.out"
+        :multiple="true"
         :auto-upload="false"
         :on-change="selectFile"
         :on-remove="removeFile"
@@ -90,6 +91,7 @@
 <script lang="ts" setup>
 import { ElMessageBox } from "element-plus";
 import { getCurrentInstance, onMounted, reactive, ref } from "vue";
+import { FileUpdateUtils } from "../../../utils/fileUtils";
 const { proxy } = getCurrentInstance() as any;
 
 //文件列表
@@ -108,10 +110,10 @@ var search = reactive({
     if (PID) {
       search.PID = PID;
     }
-    fileList.value = [];
-    uploadList.value = [];
     proxy.$get("api/file/" + search.PID).then((res: any) => {
       // proxy.$log(res);
+      fileList.value = [];
+      uploadList.value = [];
       let data = res.data;
       if (data.code == 0) {
         fileList.value = data.Data;
@@ -171,33 +173,27 @@ function uploadFileList() {
     type: "warning",
   }).then(() => {
     uploadList.value.forEach((f: any) => {
-      uploadF(f);
+      f = f.raw;
+      FileUpdateUtils.uploadProblemJudgeFile(f, search.PID).then((res: any) => {
+        let data = res.data;
+        if (data.code == 0) {
+          for (let existFile in fileList.value) {
+            if (fileList.value[existFile].Filename == f.name) {
+              fileList.value.splice(Number(existFile), 1);
+              break;
+            }
+          }
+          fileList.value.push({
+            Filename: f.name,
+            FileType: f.name.split(".")[1],
+            FileSize: f.size,
+          });
+          proxy.elMessage({ message: f.name + " 上传成功!", type: "success" });
+        }
+        proxy.codeProcessor(data.code, data.msg);
+      });
     });
     proxy.$refs.upload.clearFiles();
-  });
-}
-
-//上传文件
-function uploadF(f: any) {
-  let file = new FormData();
-  file.append("file", f.raw);
-  proxy.$post("api/file/" + search.PID, file, 2).then((res: any) => {
-    let data = res.data;
-    if (data.code == 0) {
-      for (let existFile in fileList.value) {
-        if (fileList.value[existFile].Filename == f.name) {
-          fileList.value.splice(Number(existFile), 1);
-          break;
-        }
-      }
-      fileList.value.push({
-        Filename: f.name,
-        FileType: f.name.split(".")[1],
-        FileSize: f.size,
-      });
-      proxy.elMessage({ message: f.name + " 上传成功!", type: "success" });
-    }
-    proxy.codeProcessor(data.code, data.msg);
   });
 }
 
@@ -215,7 +211,8 @@ function unzipFile(index: number) {
       console.log(res);
       let data = res.data;
       if (data.code == 0) {
-        proxy.elMessage({ message: "解压成功", type: "succes" });
+        search.getProblem(search.PID);
+        proxy.elMessage({ message: "解压成功", type: "success" });
       }
       proxy.codeProcessor(data.code, data.msg);
     });

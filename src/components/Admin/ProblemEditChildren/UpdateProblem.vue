@@ -243,6 +243,7 @@ import { useConstValStore } from "../../../pinia/constVal";
 import MdEditor, { ToolbarNames } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 import { baseURL } from "../../../utils/axios/axios";
+import { ImageFileUploadUtils, ImageFileUtils } from "../../../utils/fileUtils";
 const { proxy } = getCurrentInstance() as any;
 const constValStore = useConstValStore();
 
@@ -385,21 +386,21 @@ var problem = reactive({
   },
   updateImg: (files) => {
     if (files.length == 0) {
-    proxy.elMessage({
-      message: "上传内容为空！",
+      proxy.elMessage({
+        message: "上传内容为空！",
+        type: "warning",
+      });
+      return;
+    }
+    ElMessageBox.confirm("确定上传吗？", "注意", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
       type: "warning",
+    }).then(() => {
+      files.forEach((f: any) => {
+        uploadF(f);
+      });
     });
-    return;
-  }
-  ElMessageBox.confirm("确定上传吗？", "注意", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  }).then(() => {
-    files.forEach((f: any) => {
-      uploadF(f);
-    });
-  });
   },
 });
 
@@ -515,20 +516,32 @@ var searchList = reactive({
   },
 });
 
-
 //上传文件
 function uploadF(f: any) {
-  console.log(f);
-  let file = new FormData();
-  file.append("file", f);
-  proxy.$post("api/file/image/", file, 2).then((res: any) => {
-    let data = res.data;
-    if (data.code == 0) {
-      let ImageURL = data.ImageURL;
-      problem.Description += `\n![](${baseURL}${ImageURL})`;
-      proxy.elMessage({ message: f.name + " 上传成功!", type: "success" });
+  ImageFileUtils.problemImageCompress(f).then((response: any) => {
+    if (response.code == 0) {
+      ImageFileUploadUtils.uploadProblemImage(response.data).then(
+        (res: any) => {
+          let data = res.data;
+          if (data.code == 0) {
+            let ImageURL = data.ImageURL;
+            problem.Description += `\n![](${baseURL}${ImageURL})`;
+            proxy.elMessage({
+              message: `
+              <strong>${f.name}上传成功</strong><br/>
+              <span>已压缩:${(f.size / 1024).toFixed(2)}KB->${(
+                response.data.size / 1024
+              ).toFixed(2)}KB</span>
+            `,
+              type: "success",
+              duration: 5000,
+              dangerouslyUseHTMLString: true,
+            });
+          }
+          proxy.codeProcessor(data.code, data.msg);
+        }
+      );
     }
-    proxy.codeProcessor(data.code, data.msg);
   });
 }
 
