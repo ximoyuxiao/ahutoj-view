@@ -8,8 +8,8 @@ export default function elMessage({
 }: {
 	message: string;
 	type: elMessageType;
-	duration: number;
-	dangerouslyUseHTMLString: boolean;
+	duration?: number;
+	dangerouslyUseHTMLString?: boolean;
 }) {
 	return ElMessage({
 		message,

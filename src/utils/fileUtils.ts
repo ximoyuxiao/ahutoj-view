@@ -76,7 +76,7 @@ export class ExcelFileUtils {
 				} catch (e) {
 					respondBody = {
 						code: -1,
-						msg: "文件类型不正确",
+						msg: e,
 						data: "",
 					};
 					reject(respondBody);

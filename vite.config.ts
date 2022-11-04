@@ -64,10 +64,12 @@ const CDN_MDEditor = {
 };
 
 const CDN_USE = {
-	external: ["axios", "animate.css"],
+	external: ["axios", "animate.css", "xlsx", "compressorjs"],
 	externalGlobals: {
 		axios: "axios",
 		"animate.css": "animate.css",
+		xlsx: "XLSX",
+		compressorjs: "Compressor",
 	},
 };
 
