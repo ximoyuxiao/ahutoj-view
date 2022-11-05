@@ -41,6 +41,19 @@ export class ImageFileUploadUtils {
 				});
 		});
 	}
+
+	//上传头像图片
+	public static uploadUserHeadImage(image: Blob) {
+		let file = new FormData();
+		file.append("file", image);
+		return new Promise((resolve, reject) => {
+			appProxy.config.globalProperties
+				.$post("api/user/editHead/", file, 2)
+				.then((res: any) => {
+					resolve(res);
+				});
+		});
+	}
 }
 
 //excel文件工具
@@ -131,6 +144,32 @@ export class ImageFileUtils {
 		});
 	}
 
+	//用户头像文件压缩
+	public static userHeadImageCompress(image: File) {
+		return new Promise((resolve) => {
+			let name = image.name;
+			let type = image.type;
+			ImageFileUtils.compress(
+				image,
+				0.55,
+				200,
+				200,
+				(blob: File | Blob) => {
+					let file = new File([blob], name, {
+						type,
+						lastModified: Date.now(),
+					});
+					let response = { code: 0, data: file };
+					resolve(response);
+				},
+				(error: Error) => {
+					let response = { code: -1, msg: error };
+					resolve(response);
+				}
+			);
+		});
+	}
+
 	//图片压缩
 	public static compress(
 		image: File,
@@ -153,5 +192,17 @@ export class ImageFileUtils {
 			success,
 			error,
 		});
+	}
+}
+
+export class FileConvertor {
+	public static file2Blob(file: File): string {
+		var url = "";
+		if (window.URL != undefined) {
+			url = window.URL.createObjectURL(file);
+		} else if (window.webkitURL != undefined) {
+			url = window.webkitURL.createObjectURL(file);
+		}
+		return url;
 	}
 }

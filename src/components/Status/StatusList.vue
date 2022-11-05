@@ -106,7 +106,7 @@
 <script lang="ts" setup>
 import { getCurrentInstance, inject, onMounted, reactive } from "vue";
 const { proxy } = getCurrentInstance() as any;
-const props = defineProps(["data"]);
+const props = defineProps(["data", "isContestStatus"]);
 //传入的参数
 var query = inject("query") as any;
 var functions = inject("config") as any;
@@ -128,6 +128,8 @@ function goToProblem(PID: number | string) {
     path: "/Problem",
     query: {
       PID,
+      //解决竞赛状态跳转
+      CID: props.isContestStatus ? functions.CID : undefined,
     },
   });
 }

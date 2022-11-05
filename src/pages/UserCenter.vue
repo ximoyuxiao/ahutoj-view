@@ -1,18 +1,25 @@
 <template>
   <div class="userCenter">
     <div class="infoBox">
+      <!-- 头像背景效果 -->
       <img
         class="filter cursor_noFocus"
-        src="../assets/image/temporary/user.jpg"
+        :src="userInfo.HeadURL ? (baseURL + userInfo.HeadURL) : userInfo.defaultHeadImage.show()"
         alt=""
       />
       <div class="user">
-        <img
+        <div
           id="userImg"
-          class="cursor_noFocus"
-          src="../assets/image/temporary/user.jpg"
-          alt=""
-        />
+          class="cursor_noFocus cursor_pointer"
+          @click="functionConfig.show(11)"
+        >
+          <img :src="userInfo.HeadURL ? (baseURL + userInfo.HeadURL) : userInfo.defaultHeadImage.show()" />
+          <div class="changImage">
+            <el-icon size="42px">
+              <Upload />
+            </el-icon>
+          </div>
+        </div>
         <div class="username">{{ userDataStore.UserName }}</div>
         <div class="acStatus">
           <div class="acCount">
@@ -59,6 +66,17 @@
         :close="functionConfig.close"
       >
       </ChangeInfo>
+    </transition>
+    <transition
+      enter-active-class="animate__animated animate__zoomIn"
+      leave-active-class="animate__animated animate__zoomOut"
+    >
+      <ChangeHeadImage
+        v-if="functionConfig.showChangeHeadImage"
+        :userInfo="userInfo"
+        :close="functionConfig.close"
+      >
+      </ChangeHeadImage>
     </transition>
     <div class="contentBox">
       <div class="leftBox">
@@ -145,6 +163,8 @@ import ChangeInfo from "../components/UserCenterChildren/ChangeInfo.vue";
 import BindingCodeForce from "../components/UserCenterChildren/BindingCodeForce.vue";
 import BindingVJudge from "../components/UserCenterChildren/BindingVJudge.vue";
 import ChangePassword from "../components/UserCenterChildren/ChangePassword.vue";
+import ChangeHeadImage from "../components/UserCenterChildren/ChangeHeadImage.vue";
+import { baseURL } from "../utils/axios/axios";
 
 const { proxy } = getCurrentInstance() as any;
 const userDataStore = useUserDataStore();
@@ -153,6 +173,7 @@ const themeSwitch = useThemeSwitchStore();
 //用户资料
 type userInfoType = {
   UID: string;
+  HeadURL: string;
   UserName: string;
   School: string;
   Classes: string;
@@ -163,9 +184,11 @@ type userInfoType = {
   Vjid: string;
   AdeptArray: Array<string>;
   copy: Function;
+  defaultHeadImage: any;
 };
 var userInfo = reactive<userInfoType>({
   UID: "",
+  HeadURL: "",
   UserName: "",
   School: "",
   Classes: "",
@@ -176,7 +199,9 @@ var userInfo = reactive<userInfoType>({
   Vjid: "",
   AdeptArray: [],
   copy: (data: any) => {
+    console.log(data);
     userInfo.UID = data.UID;
+    userInfo.HeadURL = data.HeadURL;
     userInfo.UserName = data.UserName;
     userInfo.School = data.School;
     userInfo.Classes = data.Classes;
@@ -187,12 +212,33 @@ var userInfo = reactive<userInfoType>({
     userInfo.Vjid = data.Vjid;
     userInfo.AdeptArray = userInfo.Adept == "" ? [] : userInfo.Adept.split(";");
   },
+  //获取默认头像
+  defaultHeadImage: {
+    images: [
+      new URL("../assets/image/defaultHeadImage/0.svg", import.meta.url).href,
+      new URL("../assets/image/defaultHeadImage/1.svg", import.meta.url).href,
+      new URL("../assets/image/defaultHeadImage/2.svg", import.meta.url).href,
+      new URL("../assets/image/defaultHeadImage/3.svg", import.meta.url).href,
+      new URL("../assets/image/defaultHeadImage/4.svg", import.meta.url).href,
+      new URL("../assets/image/defaultHeadImage/5.svg", import.meta.url).href,
+      new URL("../assets/image/defaultHeadImage/6.svg", import.meta.url).href,
+      new URL("../assets/image/defaultHeadImage/7.svg", import.meta.url).href,
+      new URL("../assets/image/defaultHeadImage/8.svg", import.meta.url).href,
+      new URL("../assets/image/defaultHeadImage/9.svg", import.meta.url).href,
+      new URL("../assets/image/defaultHeadImage/10.svg", import.meta.url).href,
+      new URL("../assets/image/defaultHeadImage/11.svg", import.meta.url).href,
+    ],
+    show() {
+      let index = userInfo.UID.length % 12;
+      return userInfo.defaultHeadImage.images[index];
+    },
+  },
 });
 
 //获取用户资料
 function getUserInfo() {
   proxy.$get("api/user/info?uid=" + userDataStore.UID).then((res: any) => {
-    proxy.$log(res);
+    // proxy.$log(res);
     let data = res.data;
     if (data.code == 0) {
       userInfo.copy(data);
@@ -312,15 +358,22 @@ themeSwitch.$subscribe(
 );
 
 var functionConfig = reactive({
+  //修改资料窗口
   showChangeInfo: false,
+  //绑定codeforce窗口
   showBindingCodeForce: false,
+  //绑定vj窗口
   showBindingVJudge: false,
+  //修改密码窗口
   showChangePassword: false,
+  //修改头像
+  showChangeHeadImage: false,
   init() {
     this.showChangeInfo = false;
     this.showBindingCodeForce = false;
     this.showBindingVJudge = false;
     this.showChangePassword = false;
+    this.showChangeHeadImage = false;
   },
   show: (index: number): void => {
     switch (index) {
@@ -336,6 +389,8 @@ var functionConfig = reactive({
       case 10:
         functionConfig.showChangePassword = true;
         break;
+      case 11:
+        functionConfig.showChangeHeadImage = true;
     }
   },
   close: (index: number): void => {
@@ -352,6 +407,8 @@ var functionConfig = reactive({
       case 10:
         functionConfig.showChangePassword = false;
         break;
+      case 11:
+        functionConfig.showChangeHeadImage = false;
     }
   },
 });
@@ -407,11 +464,42 @@ onMounted(() => {
       align-items: center;
       justify-content: flex-start;
 
-      > img {
+      > #userImg {
+        position: relative;
         margin: 15px;
-        height: 120px;
-        width: 120px;
+        height: $userCenter_UserHeadImageSide;
+        width: $userCenter_UserHeadImageSide;
         border-radius: 20px;
+        @include box_shadow(0, 0, 2px, 1px, "font2");
+        overflow: hidden;
+
+        &:hover > .changImage {
+          visibility: visible;
+          opacity: 1;
+        }
+
+        &:hover > img {
+          filter: blur(5px);
+        }
+
+        > .changImage {
+          height: $userCenter_UserHeadImageSide;
+          width: $userCenter_UserHeadImageSide;
+          visibility: hidden;
+          position: absolute;
+          opacity: 0;
+          background-color: #cdcdcd55;
+          transition-duration: 260ms;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+
+        > img {
+          width: 100%;
+          height: 100%;
+        }
       }
 
       > div {

@@ -52,6 +52,7 @@ const router = createRouter({
 		},
 		{
 			path: "/Contest",
+			name: "Contest",
 			component: () => import("../pages/Contest.vue"),
 		},
 		{

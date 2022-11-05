@@ -7,4 +7,6 @@ export const enum PiniaNameSpace {
 	ThemeSwitchStore = "ThemeSwitchStore",
 	//保存用户数据
 	UserData = "UserData",
+	//页面跳转数据缓存
+	PageBufferedData = "PageBufferedData",
 }

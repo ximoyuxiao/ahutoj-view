@@ -311,10 +311,12 @@ function rejudge() {
 
 //跳转到题目
 function goToProblem(PID: number | string) {
+  console.log(proxy.$route.query.CID);
   proxy.$router.push({
     path: "/Problem",
     query: {
       PID,
+      CID: proxy.$route.query.CID ? proxy.$route.query.CID : undefined,
     },
   });
 }

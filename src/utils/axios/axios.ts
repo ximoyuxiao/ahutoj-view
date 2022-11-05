@@ -10,6 +10,7 @@ export const baseURL = "http://channelcz.top/";
 // console.log(import.meta.env);
 if (import.meta.env.MODE === "production") {
 	axios.defaults.baseURL = "/";
+	axios.defaults.baseURL = baseURL;
 } else {
 	axios.defaults.baseURL = baseURL;
 }

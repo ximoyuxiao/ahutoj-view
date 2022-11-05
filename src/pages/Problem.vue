@@ -1,221 +1,247 @@
 <template>
   <div class="problem">
-    <div
-      class="content"
-      v-show="!notFound"
-    >
+    <template v-if="!needPass">
       <div
-        class="left"
-        ref="left"
+        class="content"
+        v-show="!notFound"
       >
         <div
-          class="contestID cursor_pointer"
-          @click="backToContest"
-          v-if="contest.isContestProblem"
-        >
-          <el-icon size="32px">
-            <Back />
-          </el-icon>
-          <div>
-            #{{contest.CID}}
-          </div>
-        </div>
-        <div class="PID">#{{ problem.PID }}</div>
-        <div class="title">{{ problem.Title }}</div>
-        <template v-if="problem.ContentType == 1">
-          <div class="markdown">
-            <div
-              class="copy cursor_pointer"
-              @click="copyText($event, 0)"
-            >
-              <el-icon size="20px">
-                <MagicStick />
-              </el-icon>
-              &nbsp;
-              复制MarkDown
-              &nbsp;
-            </div>
-            <md-editor
-              class="mdEditor"
-              v-model="problem.Description"
-              :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'"
-              preview-only
-            />
-          </div>
-        </template>
-        <template v-else>
-          <div class="normal">
-            <div class="description">
-              <div class="label">描述</div>
-              <pre class="text">{{ problem.Description }}</pre>
-            </div>
-
-            <div class="input">
-              <div class="label">输入</div>
-              <pre class="text">{{ problem.Input }}</pre>
-            </div>
-            <div class="output">
-              <div class="label">输出</div>
-              <pre class="text">{{ problem.Output }}</pre>
-            </div>
-            <div class="sampleInput">
-              <div class="label">输入样例</div>
-              <el-popover
-                placement="top-start"
-                content="复制成功"
-                :width="50"
-                trigger="focus"
-              >
-                <template #reference>
-                  <textarea
-                    class="textarea"
-                    v-model="problem.SampleInput"
-                    :rows="problem.SampleInputRows"
-                    :readonly="true"
-                    @click="copyText($event, 1)"
-                  />
-                </template>
-              </el-popover>
-            </div>
-            <div class="sampleOutput">
-              <div class="label">输出样例</div>
-              <el-popover
-                placement="top-start"
-                content="复制成功"
-                :width="50"
-                trigger="focus"
-              >
-                <template #reference>
-                  <textarea
-                    class="textarea"
-                    v-model="problem.SampleOutput"
-                    :rows="problem.SampleOutputRows"
-                    :readonly="true"
-                    @click="copyText($event, 2)"
-                  />
-                </template>
-              </el-popover>
-            </div>
-            <div
-              class="hit"
-              v-if="problem.Hit.length > 0"
-            >
-              <div class="label">提示</div>
-              <pre class="text">{{ problem.Hit }}</pre>
-            </div>
-          </div>
-        </template>
-        <div class="ace">
-          <div>
-            <el-select
-              style="margin: 15px 5px"
-              v-model="aceConfig.modeNow"
-              class="m-2"
-              placeholder="Select"
-              @change="changeMode(aceConfig.modeNow)"
-            >
-              <el-option
-                v-for="item in aceConfig.modeSelect"
-                :key="item.name"
-                :label="item.name"
-                :value="item.name"
-                :disabled="item.disabled"
-                :effect="themeSwitchStore.theme >  0 ? 'light' : 'dark'"
-              />
-            </el-select>
-            <el-button
-              v-on:click="aceConfig.save()" 
-              type="primary"
-              :plain="themeSwitchStore.theme >  0 ? true : false"
-            >暂存</el-button>
-          </div>
-          <div id="aceEditor" />
-        </div>
-      </div>
-      <div class="right">
-        <div
-          class="contestInfo"
-          v-if="contest.isContestProblem"
-          ref="contestInfo"
+          class="left"
+          ref="left"
         >
           <div
-            class="title cursor_pointer"
+            class="contestID cursor_pointer"
             @click="backToContest"
+            v-if="contest.isContestProblem"
           >
-            {{ contest.info.Title }}
+            <el-icon size="32px">
+              <Back />
+            </el-icon>
+            <div>
+              #{{contest.CID}}
+            </div>
           </div>
-          <div class="problemBox">
+          <div class="PID">#{{ problem.PID }}</div>
+          <div class="title">{{ problem.Title }}</div>
+          <template v-if="problem.ContentType == 1">
+            <div class="markdown">
+              <div
+                class="copy cursor_pointer"
+                @click="copyText($event, 0)"
+              >
+                <el-icon size="20px">
+                  <MagicStick />
+                </el-icon>
+                &nbsp;
+                复制MarkDown
+                &nbsp;
+              </div>
+              <md-editor
+                class="mdEditor"
+                v-model="problem.Description"
+                :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'"
+                preview-only
+              />
+            </div>
+          </template>
+          <template v-else>
+            <div class="normal">
+              <div class="description">
+                <div class="label">描述</div>
+                <pre class="text">{{ problem.Description }}</pre>
+              </div>
+
+              <div class="input">
+                <div class="label">输入</div>
+                <pre class="text">{{ problem.Input }}</pre>
+              </div>
+              <div class="output">
+                <div class="label">输出</div>
+                <pre class="text">{{ problem.Output }}</pre>
+              </div>
+              <div class="sampleInput">
+                <div class="label">输入样例</div>
+                <el-popover
+                  placement="top-start"
+                  content="复制成功"
+                  :width="50"
+                  trigger="focus"
+                >
+                  <template #reference>
+                    <textarea
+                      class="textarea"
+                      v-model="problem.SampleInput"
+                      :rows="problem.SampleInputRows"
+                      :readonly="true"
+                      @click="copyText($event, 1)"
+                    />
+                  </template>
+                </el-popover>
+              </div>
+              <div class="sampleOutput">
+                <div class="label">输出样例</div>
+                <el-popover
+                  placement="top-start"
+                  content="复制成功"
+                  :width="50"
+                  trigger="focus"
+                >
+                  <template #reference>
+                    <textarea
+                      class="textarea"
+                      v-model="problem.SampleOutput"
+                      :rows="problem.SampleOutputRows"
+                      :readonly="true"
+                      @click="copyText($event, 2)"
+                    />
+                  </template>
+                </el-popover>
+              </div>
+              <div
+                class="hit"
+                v-if="problem.Hit.length > 0"
+              >
+                <div class="label">提示</div>
+                <pre class="text">{{ problem.Hit }}</pre>
+              </div>
+            </div>
+          </template>
+          <div class="ace">
+            <div>
+              <el-select
+                style="margin: 15px 5px"
+                v-model="aceConfig.modeNow"
+                class="m-2"
+                placeholder="Select"
+                @change="changeMode(aceConfig.modeNow)"
+              >
+                <el-option
+                  v-for="item in aceConfig.modeSelect"
+                  :key="item.name"
+                  :label="item.name"
+                  :value="item.name"
+                  :disabled="item.disabled"
+                  :effect="themeSwitchStore.theme >  0 ? 'light' : 'dark'"
+                />
+              </el-select>
+              <el-button
+                v-on:click="aceConfig.save()"
+                type="primary"
+                :plain="themeSwitchStore.theme >  0 ? true : false"
+              >暂存</el-button>
+            </div>
+            <div id="aceEditor" />
+          </div>
+        </div>
+        <div class="right">
+          <div
+            class="contestInfo"
+            v-if="contest.isContestProblem"
+            ref="contestInfo"
+          >
             <div
-              :class="
+              class="title cursor_pointer"
+              @click="backToContest"
+            >
+              {{ contest.info.Title }}
+            </div>
+            <div class="problemBox">
+              <div
+                :class="
             'cursor_pointer ' + (item.PID == problem.PID ? 'nowProblem' : '')
           "
-              v-for="(item, index) in contest.info.Data"
-              :key="index"
-              v-on:click="goToProblem(item.PID)"
-            >
-              {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
+                v-for="(item, index) in contest.info.Data"
+                :key="index"
+                v-on:click="goToProblem(item.PID)"
+              >
+                {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
+              </div>
             </div>
           </div>
-        </div>
-        <div
-          class="demand"
-          ref="demand"
-        >
-          <div>时间限制: {{ problem.LimitTime }} ms</div>
-          <div>内存限制: {{ problem.LimitMemory }} MB</div>
-          <div>通过数:</div>
-        </div>
-        <div
-          class="tags"
-          v-if="problem.Label.length != 0"
-        >
-          <el-tag
-            v-for="tag in problem.Label.split(';')"
-            :key="tag"
-            :effect="themeSwitchStore.theme >  0 ? 'light' : 'dark'"
-          >
-            {{ tag }}
-          </el-tag>
-        </div>
-        <div class="function">
-          <span class="modeNow">
-            当前模式：{{ aceConfig.modeNow }}
-          </span>
           <div
-            class="submit cursor_pointer cursor_noFocus"
-            @mousedown="submit.submitTouchStart"
-            @mouseup="submit.submitTouchEnd"
-            @mouseleave="submit.submitTouchEnd"
+            class="demand"
+            ref="demand"
           >
-            <el-icon size="26px">
-              <Check />
-            </el-icon>
-            &nbsp;提交
+            <div>时间限制: {{ problem.LimitTime }} ms</div>
+            <div>内存限制: {{ problem.LimitMemory }} MB</div>
+            <div>通过数:</div>
+          </div>
+          <div
+            class="tags"
+            v-if="problem.Label.length != 0"
+          >
+            <el-tag
+              v-for="tag in problem.Label.split(';')"
+              :key="tag"
+              :effect="themeSwitchStore.theme >  0 ? 'light' : 'dark'"
+            >
+              {{ tag }}
+            </el-tag>
+          </div>
+          <div class="function">
+            <span class="modeNow">
+              当前模式：{{ aceConfig.modeNow }}
+            </span>
             <div
-              ref="submitCover"
-              style="
-              background-color: rgba(130, 220, 250, 0.65);
+              class="submit cursor_pointer cursor_noFocus"
+              @mousedown="submit.submitTouchStart"
+              @mouseup="submit.submitTouchEnd"
+              @mouseleave="submit.submitTouchEnd"
+            >
+              <el-icon size="26px">
+                <Check />
+              </el-icon>
+              &nbsp;提交
+              <div
+                ref="submitCover"
+                style="background-color: rgba(130, 220, 250, 0.65);
               height: 100%;
               position: absolute;
               box-shadow: -2px 0 1px 2px rgba(130, 220, 250, 0.8);
               top: 0;
               left: 0;"
-            />
-          </div>
-          <div class="solutions cursor_pointer">
-            <el-icon size="26px">
-              <Document />
-            </el-icon>
-            &nbsp;题解
+              />
+            </div>
+            <div class="solutions cursor_pointer">
+              <el-icon size="26px">
+                <Document />
+              </el-icon>
+              &nbsp;题解
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <div
+        class="notFound"
+        v-show="notFound"
+      >
+        <el-empty description="肥肠抱歉，木有找到该题，返回重试吧。" />
+      </div>
+    </template>
+    <!-- 密码验证 -->
     <div
-      class="notFound"
-      v-show="notFound"
+      v-show="needPass"
+      class="needPass"
     >
-      <el-empty description="肥肠抱歉，木有找到该题，返回重试吧。" />
+      <div class="title">验证</div>
+      <div class="input">
+        <div class="label">密码</div>
+        <Input
+          v-model="inputPass"
+          @click="checkContest(contest.CID,inputPass)"
+          type="text"
+        ></Input>
+      </div>
+
+      <div
+        class="btn cursor_pointer"
+        @click="checkContest(contest.CID,inputPass)"
+      >
+        <el-icon>
+          <Unlock />
+        </el-icon>
+        &nbsp;确定
+      </div>
     </div>
   </div>
 </template>
@@ -229,13 +255,18 @@ import { useUserDataStore } from "../pinia/userData";
 import getAceBuilds from "../utils/aceBuildsFactory";
 import MdEditor from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
+import { usePageBufferedDataStore } from "../pinia/pageBufferdData";
+import Input from "../components/MyComponents/Input.vue";
 const { proxy } = getCurrentInstance() as any;
 const themeSwitchStore = useThemeSwitchStore();
 const configStore = useConfigStore();
 const constValStore = useConstValStore();
 const userDataStore = useUserDataStore();
+const pageBufferedDataStore = usePageBufferedDataStore();
 
-var notFound = ref(true);
+var needPass = ref(false); //是否需要验证
+var inputPass = ref(""); //检验密码
+var notFound = ref(true); //未找到
 
 //页面加载效果维护
 var loading = reactive({
@@ -440,8 +471,7 @@ var aceConfig = reactive({
   },
 });
 
-//获取题目信息
-async function getProblemInfo() {
+async function init() {
   loading.init();
   loading.content = proxy.elLoading({ node: proxy.$refs.left });
   loading.performanceInfo = proxy.elLoading({
@@ -449,18 +479,21 @@ async function getProblemInfo() {
   });
 
   //检查从竞赛跳转过来的题目是否存在cid 以及 pass
-  if (proxy.$route.query.CID) contest.CID = proxy.$route.query.CID;
-  if (proxy.$route.query.Pass) contest.Pass = proxy.$route.query.Pass;
-
-  //cid存在说明是从竞赛跳转来的题目,检查合理性
-  if (contest.CID) {
-    //说明不合理
-    if ((await checkContest()) != 0) {
-      loading.init();
-      return;
-    }
+  let CID = proxy.$route.query.CID;
+  contest.CID = CID;
+  if (CID) {
+    contest.isContestProblem = true;
+    let temp = pageBufferedDataStore.getContestRouterData(CID);
+    let Pass = temp?.Pass;
+    await checkContest(CID, Pass);
+  } else {
+    contest.isContestProblem = false;
+    getProblemInfo();
   }
+}
 
+//获取题目信息
+async function getProblemInfo() {
   //获取题目
   await proxy.$get("api/problem/" + problem.PID).then((res) => {
     let data = res.data;
@@ -481,51 +514,54 @@ async function getProblemInfo() {
     }
     proxy.codeProcessor(data.code, data.msg);
   });
-
   loading.init();
 }
 
 //检查竞赛跳转是否合理
-async function checkContest() {
-  let ret = -1;
-  await proxy
-    .$get("api/contest/" + contest.CID + "?Pass=" + contest.Pass)
-    .then((res) => {
-      let data = res.data;
-      if (data.code == 0) {
-        ret = 0;
-        // proxy.$log(data);
-        //判断题目在不在该竞赛中
-        let flag = false;
-        let tempProblemSequence = data.Problems.split(",");
-        for (let i in tempProblemSequence) {
-          if (tempProblemSequence[i] == problem.PID) {
-            flag = true;
-            break;
-          }
-        }
-        if (!flag) {
-          ret = -1;
-          proxy.elMessage({
-            message: "该题不在竞赛中！",
-            type: "warning",
-          });
-        }
-        contest.copy(data);
-        contest.isContestProblem = true;
-      }
-      proxy.codeProcessor(data.code, data.msg);
-    });
+async function checkContest(CID: number, Pass: string) {
+  await proxy.$get("api/contest/" + CID, { Pass }).then((res) => {
+    let data = res.data;
+    if (data.code == 0) {
+      //更新数据
+      pageBufferedDataStore.setContestRouterData(CID, Pass ? -1 : 1, Pass);
 
-  return ret;
+      needPass.value = false;
+      // proxy.$log(data);
+      //判断题目在不在该竞赛中
+      let flag = false;
+      let tempProblemSequence = data.Problems.split(",");
+      for (let i in tempProblemSequence) {
+        if (tempProblemSequence[i] == problem.PID) {
+          flag = true;
+          break;
+        }
+      }
+      if (!flag) {
+        proxy.elMessage({
+          message: "该题不在竞赛中！",
+          type: "warning",
+        });
+        notFound.value = true;
+      }
+      contest.copy(data);
+    } else if (data.code == 160504) {
+      //密码错误
+      needPass.value = true;
+      inputPass.value = "";
+    } else if (data.code == 160503) {
+      //未开始
+      proxy.$router.push({
+        path: "/Contests",
+      });
+    }
+    proxy.codeProcessor(data.code, data.msg);
+  });
+  await getProblemInfo();
 }
 
 //返回比赛界面
 function backToContest() {
-  let params: { Pass?: string; CID?: string } = {
-    Pass: null,
-    CID: null,
-  };
+  let params = { CID: null };
   if (proxy.$route.query.CID) {
     params.CID = proxy.$route.query.CID;
   } else {
@@ -535,9 +571,6 @@ function backToContest() {
     });
     return;
   }
-  if (proxy.$route.query.Pass) {
-    params.Pass = proxy.$route.query.Pass;
-  }
   proxy.$router.push({
     path: "/Contest",
     query: params,
@@ -546,15 +579,11 @@ function backToContest() {
 
 //竞赛模式跳转题目
 function goToProblem(PID: number) {
-  let Pass = null;
-  if (proxy.$route.query.Pass) Pass = proxy.$route.query.Pass;
-
   proxy.$router.replace({
     path: "/Problem",
     query: {
       PID,
       CID: contest.CID,
-      Pass,
     },
   });
 
@@ -710,10 +739,10 @@ var submit = reactive<submitType>({
               path: "/Code",
               query: {
                 SID: data.SID,
+                CID: contest.CID ? contest.CID : undefined,
               },
             });
           }
-
           proxy.elNotification({
             message: "提交成功",
             type: "success",
@@ -757,8 +786,7 @@ onMounted(() => {
     if (Lang) {
       changeMode(Lang);
     }
-    //获取题目
-    getProblemInfo();
+    init();
   });
 });
 </script>
@@ -777,7 +805,7 @@ onMounted(() => {
   align-items: center;
   justify-content: space-between;
 
-  .content {
+  > .content {
     width: 100%;
 
     .left {
@@ -1025,6 +1053,61 @@ onMounted(() => {
             @include fill_color("fill16");
           }
         }
+      }
+    }
+  }
+
+  > .needPass {
+    top: calc(50vh - 100px);
+    left: calc(50vw - 200px);
+    position: absolute;
+    width: 400px;
+    @include fill_color("fill2");
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    @include font_color("font1");
+    @include box_shadow(0, 0, 3px, 1px, "border1");
+    box-sizing: border-box;
+    padding: 16px;
+
+    > .title {
+      font-size: $fontSize8;
+    }
+
+    > .input {
+      display: flex;
+      align-items: center;
+      margin: 20px 0;
+
+      > .label {
+        width: 100px;
+        font-size: $fontSize6;
+        padding: 0 10px;
+        text-align: right;
+      }
+    }
+
+    .btn {
+      position: relative;
+      overflow: hidden;
+      margin: 8px 0;
+      width: 220px;
+      height: 40px;
+      border-radius: 15px;
+      font-size: $fontSize5;
+      @include font_color("font1");
+      letter-spacing: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      @include box_shadow(0, 0, 2px, 1px, "border2");
+      transition-duration: 200ms;
+
+      &:hover {
+        @include box_shadow(0, 0, 2px, 1px, "fill12");
+        @include fill_color("fill15");
       }
     }
   }

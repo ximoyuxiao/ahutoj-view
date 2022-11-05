@@ -142,7 +142,9 @@
 <script lang="ts" setup>
 import { ElMessageBox } from "element-plus";
 import { onMounted, reactive, getCurrentInstance } from "vue";
+import { usePageBufferedDataStore } from "../pinia/pageBufferdData";
 const { proxy } = getCurrentInstance() as any;
+const pageBufferedDataStore = usePageBufferedDataStore();
 
 //页面配置
 var config = reactive({
@@ -255,41 +257,14 @@ function recentContestsProcessor() {
 }
 
 var goto = {
-  contest: (contest: contestsType) => {
-    //验证策略
-    if (contest.IsPublic == 1) {
-      proxy.$router.push({
-        path: "/Contest",
-        query: {
-          CID: contest.CID,
-        },
-      });
-    } else {
-      ElMessageBox.prompt("请输入竞赛“" + contest.Title + "”的密码：", "验证", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        inputValidator: function f(s) {
-          if (s == "") return "请输入密码";
-        },
-        inputErrorMessage: "",
-      }).then((res) => {
-        let pass: string = res.value;
-        if (!pass) {
-          proxy.elMessage({
-            message: "密码不能为空!",
-            type: "warning",
-          });
-          return;
-        }
-        proxy.$router.push({
-          path: "/Contest",
-          query: {
-            CID: contest.CID,
-            Pass: pass,
-          },
-        });
-      });
-    }
+  contest: (contest: any) => {
+    pageBufferedDataStore.setContestRouterData(contest.CID, contest.IsPublic);
+    proxy.$router.push({
+      name: "Contest",
+      query: {
+        CID: contest.CID,
+      },
+    });
   },
 };
 

@@ -94,93 +94,9 @@
 
 <script lang="ts" setup>
 import { getCurrentInstance, onMounted, reactive } from "vue";
+import { usePageBufferedDataStore } from "../../pinia/pageBufferdData";
 const { proxy } = getCurrentInstance() as any;
-
-//比赛信息
-type contestType = {
-  Data: { PID: number; Title: string; ACNum: number; SubmitNum: number }[];
-  BeginTime: number;
-  CID: number;
-  Type: number;
-  Description: string;
-  EndTime: number;
-  IsPublic: number;
-  Pass: string;
-  Size: number;
-  Title: string;
-  UID: string;
-  [item: string]: any;
-};
-var contest = reactive<contestType>({
-  //Data保存当前存在的题目
-  Data: [],
-  length: 0,
-  BeginTime: 0,
-  CID: null,
-  Type: 1,
-  Description: "",
-  EndTime: 0,
-  IsPublic: 1,
-  Pass: null,
-  Size: 0,
-  Title: "",
-  UID: "",
-  copy(data: any) {
-    let tempProblemSequence = data.Problems.split(",");
-    for (let temp in tempProblemSequence) {
-      for (let p in data.Data) {
-        if (tempProblemSequence[temp] == data.Data[p].PID) {
-          contest.Data.push({
-            PID: data.Data[p].PID,
-            Title: data.Data[p].Title,
-            ACNum: data.Data[p].ACNum,
-            SubmitNum: data.Data[p].SubmitNum,
-          });
-          break;
-        }
-      }
-    }
-    contest.length = data.length;
-    contest.BeginTime = data.BeginTime;
-    contest.CID = data.CID;
-    contest.Type = data.Type;
-    contest.Description = data.Description;
-    contest.EndTime = data.EndTime;
-    contest.IsPublic = data.IsPublic;
-    contest.Pass = data.Pass;
-    contest.Size = data.Size;
-    contest.Title = data.Title;
-    contest.UID = data.UID;
-  },
-});
-
-//获取竞赛信息
-async function getContest() {
-  let params: { [item: string]: any } = {};
-  contest.CID = proxy.$route.query.CID;
-  if (proxy.$route.query.Pass) {
-    contest.Pass = proxy.$route.query.Pass;
-    params.Pass = proxy.$route.query.Pass;
-  }
-  await proxy.$get("api/contest/" + contest.CID, params).then((res) => {
-    let data = res.data;
-    if (data.code == 0) {
-      // proxy.$log(data);
-      contest.copy(data);
-    }
-    if (data.code == 2000) {
-      proxy.$router.push({
-        path: "/Contests",
-      });
-      proxy.elMessage({
-        message: "竞赛密码错误！",
-        type: "warning",
-      });
-    } else {
-      proxy.codeProcessor(data.code, data.msg);
-    }
-  });
-}
+const pageBufferedDataStore = usePageBufferedDataStore();
 
 type ProblemsMapType = {
   PID?: number;
@@ -313,15 +229,27 @@ var rank = reactive<{
 
 //获取竞赛提交数据
 async function getRankList() {
+  if (!proxy.$route.query.CID) {
+    proxy.elMessage({
+      message: "跳转地址错误，请重试",
+      type: "warning",
+    });
+    return;
+  }
   let loading = proxy.elLoading({ node: proxy.$refs.ContestRank });
-  await getContest();
+  let CID = proxy.$route.query.CID;
+  let temp = pageBufferedDataStore.getContestRouterData(CID);
+  let Pass = temp?.Pass;
+  //验证比赛信息
+  await getContest(CID, Pass);
+
   //从缓存拿数据
   let bufferedData: any = sessionStorage.getItem(
     "contestRankData" + contest.CID
   );
   if (bufferedData) {
     bufferedData = JSON.parse(bufferedData);
-    //5秒内刷新会拿buffer中的数据
+    //10秒内刷新会拿buffer中的数据
     if (
       bufferedData.CID == contest.CID &&
       Date.now() - bufferedData.saveTime < 10000
@@ -331,16 +259,92 @@ async function getRankList() {
       return;
     }
   }
-  let params: { [item: string]: any } = { Pass: "" };
-  let CID = proxy.$route.query.CID;
-  if (proxy.$route.query.Pass) {
-    params.Pass = proxy.$route.query.Pass;
-  }
-  params.CID = CID;
-  proxy.$get("api/contest/" + CID + "/rank", params).then((res: any) => {
+
+  //请求数据
+  proxy.$get("api/contest/" + CID + "/rank", { Pass }).then((res: any) => {
     // proxy.$log(res.data);
     rank.calculate(res.data.Data);
     loading.close();
+  });
+}
+
+//比赛信息
+type contestType = {
+  Data: { PID: number; Title: string; ACNum: number; SubmitNum: number }[];
+  BeginTime: number;
+  CID: number;
+  Type: number;
+  Description: string;
+  EndTime: number;
+  IsPublic: number;
+  Pass: string;
+  Size: number;
+  Title: string;
+  UID: string;
+  [item: string]: any;
+};
+var contest = reactive<contestType>({
+  //Data保存当前存在的题目
+  Data: [],
+  length: 0,
+  BeginTime: 0,
+  CID: null,
+  Type: 1,
+  Description: "",
+  EndTime: 0,
+  IsPublic: 1,
+  Pass: null,
+  Size: 0,
+  Title: "",
+  UID: "",
+  copy(data: any) {
+    let tempProblemSequence = data.Problems.split(",");
+    for (let temp in tempProblemSequence) {
+      for (let p in data.Data) {
+        if (tempProblemSequence[temp] == data.Data[p].PID) {
+          contest.Data.push({
+            PID: data.Data[p].PID,
+            Title: data.Data[p].Title,
+            ACNum: data.Data[p].ACNum,
+            SubmitNum: data.Data[p].SubmitNum,
+          });
+          break;
+        }
+      }
+    }
+    contest.length = data.length;
+    contest.BeginTime = data.BeginTime;
+    contest.CID = data.CID;
+    contest.Type = data.Type;
+    contest.Description = data.Description;
+    contest.EndTime = data.EndTime;
+    contest.IsPublic = data.IsPublic;
+    contest.Pass = data.Pass;
+    contest.Size = data.Size;
+    contest.Title = data.Title;
+    contest.UID = data.UID;
+  },
+});
+
+//获取竞赛信息
+async function getContest(CID: number, Pass: string) {
+  await proxy.$get("api/contest/" + CID, { Pass }).then((res: any) => {
+    let data = res.data;
+    if (data.code == 0) {
+      // proxy.$log(data);
+      contest.copy(data);
+    } else if (data.code == 160504) {
+      //密码错误
+      proxy.$router.push({
+        path: "/Contests",
+      });
+    } else if (data.code == 160503) {
+      //未开始
+      proxy.$router.push({
+        path: "/Contests",
+      });
+    }
+    proxy.codeProcessor(data.code, data.msg);
   });
 }
 
@@ -369,9 +373,6 @@ function backToContest() {
     });
     return;
   }
-  if (proxy.$route.query.Pass) {
-    params["Pass"] = proxy.$route.query.Pass;
-  }
   proxy.$router.push({
     path: "/Contest",
     query: params,
@@ -379,13 +380,6 @@ function backToContest() {
 }
 
 onMounted(() => {
-  if (!proxy.$route.query.CID) {
-    proxy.elMessage({
-      message: "跳转地址错误，请重试",
-      type: "warning",
-    });
-    return;
-  }
   getRankList();
 });
 </script>

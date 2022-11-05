@@ -1,135 +1,163 @@
 <template>
   <div class="contest">
-    <div
-      class="notFound"
-      v-show="notFound"
-    >
-      <el-empty description="肥肠抱歉，木有找到该比赛，返回重试吧。" />
-    </div>
-    <template v-if="!notFound">
+    <template v-if="!needPass">
       <div
-        class="infoBox"
-        ref="infoBox"
+        class="notFound"
+        v-show="notFound"
       >
-        <div class="title">{{ contest.Title }}</div>
-        <div class="text">创建者：{{ contest.UID }}</div>
-        <div class="text">类型：{{ contest.Type == 1 ? "ACM" : "OI" }}</div>
-        <div class="text">描述：{{ contest.Description }}</div>
-        <!-- <div class="text" v-if="contest.ispublic == 0">
-        比赛密码：{{ contest.pass }}
-      </div> -->
+        <el-empty description="肥肠抱歉，木有找到该比赛，返回重试吧。" />
+      </div>
+      <template v-if="!notFound">
         <div
-          class="status"
-          v-if="timePercent.status == 1"
+          class="infoBox"
+          ref="infoBox"
         >
+          <div class="title">{{ contest.Title }}</div>
+          <div class="text">创建者：{{ contest.UID }}</div>
+          <div class="text">类型：{{ contest.Type == 1 ? "ACM" : "OI" }}</div>
+          <div class="text">描述：{{ contest.Description }}</div>
           <div
-            class="point"
-            style="background-color: #5ebd00"
-          ></div>
-          进行中
-        </div>
-        <div
-          class="status"
-          v-else
-        >
-          <div
-            class="point"
-            style="background-color: #ff3300"
-          ></div>
-          已结束
-        </div>
-
-        <div class="time">
-          <div class="begin_time">
-            {{ proxy.Utils.TimeTools.timestampToTime(contest.BeginTime) }}
+            class="status"
+            v-if="timePercent.status == 1"
+          >
+            <div
+              class="point"
+              style="background-color: #5ebd00"
+            ></div>
+            进行中
           </div>
-          <div class="left_time">
-            {{
+          <div
+            class="status"
+            v-else
+          >
+            <div
+              class="point"
+              style="background-color: #ff3300"
+            ></div>
+            已结束
+          </div>
+
+          <div class="time">
+            <div class="begin_time">
+              {{ proxy.Utils.TimeTools.timestampToTime(contest.BeginTime) }}
+            </div>
+            <div class="left_time">
+              {{
           proxy.Utils.TimeTools.timestampToInterval(
           timePercent.allTime - timePercent.lostTime,
           2
           )
           }}
+            </div>
+            <div class="end_time">
+              {{ proxy.Utils.TimeTools.timestampToTime(contest.EndTime) }}
+            </div>
           </div>
-          <div class="end_time">
-            {{ proxy.Utils.TimeTools.timestampToTime(contest.EndTime) }}
+          <div class="process">
+            <el-progress
+              :text-inside="true"
+              :stroke-width="24"
+              :color="timePercent.color"
+              :percentage="timePercent.percent"
+            />
           </div>
-        </div>
-        <div class="process">
-          <el-progress
-            :text-inside="true"
-            :stroke-width="24"
-            :color="timePercent.color"
-            :percentage="timePercent.percent"
-          />
-        </div>
-      </div>
-      <div
-        class="problemList"
-        ref="problemList"
-      >
-        <div class="functionBox">
-          <div
-            class="contestRank cursor_pointer"
-            v-on:click="goToRank()"
-          >
-            查看排名
-          </div>
-          <div
-            class="contestRank cursor_pointer"
-            v-on:click="goToStatus()"
-          >
-            比赛状态
-          </div>
-        </div>
-        <div class="nav">
-          <div style="width: 90px">序号</div>
-          <div style="width: calc(100% - 190px)">题目</div>
-          <div style="width: 100px">通过情况</div>
         </div>
         <div
-          class="item"
-          v-for="(item, index) in contest.Data"
-          :key="index"
+          class="problemList"
+          ref="problemList"
         >
-          <div
-            class="flag cursor_pointer"
-            v-on:click="goToProblem(item.PID)"
-          >
-            {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
+          <div class="functionBox">
+            <div
+              class="contestRank cursor_pointer"
+              v-on:click="goToRank()"
+            >
+              查看排名
+            </div>
+            <div
+              class="contestRank cursor_pointer"
+              v-on:click="goToStatus()"
+            >
+              比赛状态
+            </div>
+          </div>
+          <div class="nav">
+            <div style="width: 90px">序号</div>
+            <div style="width: calc(100% - 190px)">题目</div>
+            <div style="width: 100px">通过情况</div>
           </div>
           <div
-            class="title cursor_pointer"
-            v-on:click="goToProblem(item.PID)"
+            class="item"
+            v-for="(item, index) in contest.Data"
+            :key="index"
           >
-            {{ item.Title }}
-          </div>
-          <div class="status">
-            <el-progress
-              type="circle"
-              :width="22"
-              :stroke-width="3"
-              :percentage="
+            <div
+              class="flag cursor_pointer"
+              v-on:click="goToProblem(item.PID)"
+            >
+              {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
+            </div>
+            <div
+              class="title cursor_pointer"
+              v-on:click="goToProblem(item.PID)"
+            >
+              {{ item.Title }}
+            </div>
+            <div class="status">
+              <el-progress
+                type="circle"
+                :width="22"
+                :stroke-width="3"
+                :percentage="
             item.SubmitNum == 0 ? 0 : (item.ACNum / item.SubmitNum) * 100
           "
-              :show-text="false"
-              style="margin: 0 10px"
-            />
-            {{ item.ACNum + "/" + item.SubmitNum }}
+                :show-text="false"
+                style="margin: 0 10px"
+              />
+              {{ item.ACNum + "/" + item.SubmitNum }}
+            </div>
           </div>
         </div>
+
+      </template>
+    </template>
+    <!-- 密码验证 -->
+    <div
+      v-show="needPass"
+      class="needPass"
+    >
+      <div class="title">验证</div>
+      <div class="input">
+        <div class="label">密码</div>
+        <Input
+          v-model="inputPass"
+          @click="getContestById(contest.CID , inputPass)"
+          type="text"
+        ></Input>
       </div>
 
-    </template>
+      <div
+        class="btn cursor_pointer"
+        @click="getContestById(contest.CID , inputPass)"
+      >
+        <el-icon>
+          <Unlock />
+        </el-icon>
+        &nbsp;确定
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, getCurrentInstance, reactive, ref, onUnmounted } from "vue";
+import { usePageBufferedDataStore } from "../pinia/pageBufferdData";
+import Input from "../components/MyComponents/Input.vue";
 const { proxy } = getCurrentInstance() as any;
+const pageBufferedDataStore = usePageBufferedDataStore();
 
-//未找到
-var notFound = ref(true);
+var needPass = ref(false); //是否需要验证
+var inputPass = ref(""); //检验密码
+var notFound = ref(true); //未找到
 
 //加载
 var loading = reactive({
@@ -163,10 +191,10 @@ type contestType = {
   [item: string]: any;
 };
 var contest = reactive<contestType>({
+  CID: null,
   Data: [],
   length: 0,
   BeginTime: 0,
-  CID: null,
   Type: 1,
   Description: "",
   EndTime: 0,
@@ -267,8 +295,47 @@ var timePercent = reactive<timePercentType>({
   },
 });
 
+async function init() {
+  //检查路由参数完整性
+  let CID = proxy.$route.query.CID;
+  contest.CID = CID; //暂存一份在contest数据中
+  if (!CID) {
+    proxy.elMessage({
+      message: "页面跳转异常，请重试。",
+      type: "error",
+    });
+    needPass.value = false;
+    return;
+  }
+
+  //检查竞赛密码
+  let temp = pageBufferedDataStore.getContestRouterData(CID);
+  let IsPublic = temp?.IsPublic ?? 1; //默认公开
+  let Pass = temp?.Pass ?? "";
+  if (IsPublic == -1) {
+    //否公开
+    checkContestPass(CID, Pass);
+  } else if (IsPublic == 1) {
+    //公开
+    getContestById(CID, Pass);
+  }
+}
+
+//验证密码
+async function checkContestPass(CID: number, Pass: string) {
+  if (Pass) {
+    //尝试已有的密码
+    getContestById(CID, Pass);
+  } else {
+    inputPass.value = "";
+    needPass.value = true;
+  }
+}
+
 //获取竞赛信息
-async function getContestById() {
+async function getContestById(CID: number, Pass: string) {
+  needPass.value = false;
+  notFound.value = true;
   loading.init();
   loading.contestInfo = proxy.elLoading({
     node: proxy.$refs.infoBox,
@@ -276,30 +343,20 @@ async function getContestById() {
   loading.problemList = proxy.elLoading({
     node: proxy.$refs.problemList,
   });
-  if (!proxy.$route.query.CID) {
-    loading.init();
-    return;
-  }
 
-  let params: { [item: string]: any } = {};
-  contest.CID = proxy.$route.query.CID;
-  if (proxy.$route.query.Pass) {
-    contest.Pass = proxy.$route.query.Pass;
-    params.Pass = proxy.$route.query.Pass;
-  }
+  let params: { [item: string]: any } = { Pass };
 
-  await proxy.$get("api/contest/" + contest.CID, params).then((res) => {
+  await proxy.$get("api/contest/" + CID, params).then((res: any) => {
     let data = res.data;
-    proxy.$log(res);
+    // proxy.$log(res);
     if (data.code == 0) {
       contest.copy(data);
+      pageBufferedDataStore.setContestRouterData(CID, Pass ? -1 : 1, Pass);
       notFound.value = false;
-    } else if (data.code == 2000) {
+    } else if (data.code == 160504) {
       //密码错误
-      proxy.$router.push({
-        path: "/Contests",
-      });
-    } else if (data.code == 2005) {
+      checkContestPass(CID, "");
+    } else if (data.code == 160503) {
       //未开始
       proxy.$router.push({
         path: "/Contests",
@@ -309,6 +366,7 @@ async function getContestById() {
   });
 
   loading.init();
+  //同步时间
   await proxy.getServerTime().then((res: any) => {
     let now = Date.now();
     if (res.time == null || Math.abs(res.time - now) < 1500) {
@@ -338,13 +396,10 @@ function goToProblem(PID: number): void {
 //跳转到当前比赛排名列表
 function goToRank(): void {
   let CID = contest.CID;
-  let Pass: string;
-  if (proxy.$route.query.Pass) Pass = proxy.$route.query.Pass;
   proxy.$router.push({
     path: "/ContestRank",
     query: {
       CID,
-      Pass,
     },
   });
 }
@@ -364,7 +419,7 @@ function goToStatus(): void {
 }
 
 onMounted(() => {
-  getContestById();
+  init();
 });
 
 onUnmounted(() => {
@@ -375,6 +430,7 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .contest {
+  position: relative;
   width: 100%;
   box-sizing: border-box;
   padding: $contest_outerPaddingTop $contest_outerPaddingLeft;
@@ -533,6 +589,38 @@ onUnmounted(() => {
       }
     }
   }
+
+  .needPass {
+    top: calc(50vh - 200px);
+    position: absolute;
+    width: 400px;
+    @include fill_color("fill2");
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    @include font_color("font1");
+    @include box_shadow(0, 0, 3px, 1px, "border1");
+    box-sizing: border-box;
+    padding: 16px;
+
+    > .title {
+      font-size: $fontSize8;
+    }
+
+    > .input {
+      display: flex;
+      align-items: center;
+      margin: 20px 0;
+
+      > .label {
+        width: 100px;
+        font-size: $fontSize6;
+        padding: 0 10px;
+        text-align: right;
+      }
+    }
+  }
 }
 
 .notFound {
@@ -541,5 +629,27 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.btn {
+  position: relative;
+  overflow: hidden;
+  margin: 8px 0;
+  width: 220px;
+  height: 40px;
+  border-radius: 15px;
+  font-size: $fontSize5;
+  @include font_color("font1");
+  letter-spacing: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @include box_shadow(0, 0, 2px, 1px, "border2");
+  transition-duration: 200ms;
+
+  &:hover {
+    @include box_shadow(0, 0, 2px, 1px, "fill12");
+    @include fill_color("fill15");
+  }
 }
 </style>
