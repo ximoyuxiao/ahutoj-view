@@ -155,9 +155,6 @@
           />
         </el-select>
       </div>
-      <div class="imgs">
-        <img src="../../../assets/image/temporary/user.jpg">
-      </div>
       <div style="display: flex; justify-content: flex-end; padding: 10px 0">
         <el-button
           type="warning"

@@ -140,6 +140,8 @@ function goToSeeCode(SID: number | string) {
     path: "/Code",
     query: {
       SID,
+      //竞赛跳转
+      CID: props.isContestStatus ? functions.CID : undefined,
     },
   });
 }

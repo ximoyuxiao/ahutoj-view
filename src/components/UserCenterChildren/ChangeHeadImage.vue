@@ -143,6 +143,7 @@ var headImage = reactive({
         if (data.code == 0) {
           //修改成功
           props.close(11);
+          props.userInfo.HeadURL = data.ImageURL;
           proxy.elMessage({ message: "修改成功", type: "success" });
         }
         proxy.codeProcessor(data.code, data.msg);

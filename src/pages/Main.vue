@@ -15,12 +15,14 @@
     </transition>
     <!-- 登录窗口背景遮罩 -->
     <transition
-      v-show="config.showCover"
       data-flag="cover"
       enter-active-class="animate__animated animate__fadeInUp"
       leave-active-class="animate__animated animate__fadeOutDown"
     >
-      <div class="coverBox">
+      <div
+        class="coverBox"
+        v-if="config.showCover"
+      >
         <div class="cover" />
       </div>
 
@@ -32,7 +34,7 @@
       leave-active-class="animate__animated animate__backOutDown"
     >
       <component
-        v-show="config.showLogin"
+        v-if="config.showLogin"
         :is="Login"
         :close="showNav"
         :signin="signinDialog"
@@ -45,7 +47,7 @@
       leave-active-class="animate__animated animate__backOutDown"
     >
       <component
-        v-show="config.showSignin"
+        v-if="config.showSignin"
         :is="Signin"
         :close="showNav"
         :login="loginDialog"
@@ -58,7 +60,7 @@
       leave-active-class="animate__animated animate__backOutDown"
     >
       <component
-        v-show="config.showConfig"
+        v-if="config.showConfig"
         :is="Config"
         :close="showNav"
       />

@@ -281,7 +281,7 @@ function getSubmit() {
     let data = res.data;
     if (data.code == 0) {
       submit.init();
-      proxy.$log(data);
+      // proxy.$log(data);
       submit.copy(data);
       notFound.value = false;
     }
@@ -311,7 +311,6 @@ function rejudge() {
 
 //跳转到题目
 function goToProblem(PID: number | string) {
-  console.log(proxy.$route.query.CID);
   proxy.$router.push({
     path: "/Problem",
     query: {
