@@ -175,6 +175,10 @@ export class StatusConstValManager {
 				return constValStore.SUBMIT_STATUS_PENDING_COLOR;
 			case "FAILED":
 				return constValStore.SUBMIT_STATUS_FAILED_COLOR;
+			case "JUDGE_TIMEOUT":
+				return constValStore.SUBMIT_STATUS_JUDGE_TIMEOUT;
+			case "DENIAL_JUDGE":
+				return constValStore.SUBMIT_STATUS_DENIAL_JUDGE;
 			default:
 				return "#ffffff";
 		}

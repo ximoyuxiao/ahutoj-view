@@ -136,11 +136,15 @@
     <div class="flag">
       其他
     </div>
+    <div id="hint">
+      题解、论坛、互动功能正在路上，敬请期待AhutOj二期计划!
+      <br>
+      <a href="https://github.com/cz2542079957/AhutOjForum.git">跟踪二期工程动态</a>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ElMessageBox } from "element-plus";
 import { onMounted, reactive, getCurrentInstance } from "vue";
 import { usePageBufferedDataStore } from "../pinia/pageBufferdData";
 const { proxy } = getCurrentInstance() as any;
@@ -309,6 +313,15 @@ onMounted(() => {
     &:hover {
       letter-spacing: 4px;
       filter: drop-shadow(0 0 2px #cdcdcd);
+    }
+  }
+
+  #hint {
+    @include font_color("font1");
+    font-size: $fontSize6;
+
+    & > a {
+      @include font_color("fill11");
     }
   }
 

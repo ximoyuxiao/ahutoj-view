@@ -38,7 +38,9 @@ export const useConstValStore = defineStore(PiniaNameSpace.ConstVal, {
 			SUBMIT_STATUS_CE_COLOR: "#8c8c8c",
 			SUBMIT_STATUS_JUDGING_COLOR: "#ff9933",
 			SUBMIT_STATUS_REJUDGING_COLOR: "#ff9933",
-			SUBMIT_STATUS_PENDING_COLOR: "#ebcb8b",
+      SUBMIT_STATUS_PENDING_COLOR: "#ebcb8b",
+      SUBMIT_STATUS_DENIAL_JUDGE: "#9E1030",
+      SUBMIT_STATUS_JUDGE_TIMEOUT: "#bdbdbd", 
 			SUBMIT_STATUS_FAILED_COLOR: "#4d1700",
 
 			//题目来源

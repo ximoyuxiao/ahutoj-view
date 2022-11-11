@@ -51,7 +51,7 @@ const contentType = [
 export default {
 	install: (app: App<Element>) => {
 		app.config.globalProperties.$axios = axios;
-
+    
 		//封装get请求
 		app.config.globalProperties.$get = function get(
 			url: string,
