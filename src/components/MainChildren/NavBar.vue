@@ -31,7 +31,11 @@
         id="status"
         active-class="selected"
         to="/Status"
-      >状态
+      >
+        状态
+      </router-link>
+      <router-link to="/">
+        论坛
       </router-link>
     </div>
     <div class="right">

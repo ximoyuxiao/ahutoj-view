@@ -204,8 +204,8 @@ var rank = reactive<{
 
     //统计金银铜牌
     let goldIndex = Number((rank.rankList.length * 0.1).toFixed(0));
-    let silverIndex = Number((rank.rankList.length * 0.2).toFixed(0));
-    let copperIndex = Number((rank.rankList.length * 0.3).toFixed(0));
+    let silverIndex = Number((rank.rankList.length * 0.3).toFixed(0));
+    let copperIndex = Number((rank.rankList.length * 0.6).toFixed(0));
     goldIndex = goldIndex < 1 ? 1 : goldIndex;
     silverIndex = silverIndex < 2 ? 2 : silverIndex;
     copperIndex = copperIndex < 3 ? 3 : copperIndex;

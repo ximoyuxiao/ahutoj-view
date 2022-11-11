@@ -264,7 +264,7 @@ var goto = {
   contest: (contest: any) => {
     pageBufferedDataStore.setContestRouterData(contest.CID, contest.IsPublic);
     proxy.$router.push({
-      name: "Contest",
+      path: "/Contest",
       query: {
         CID: contest.CID,
       },

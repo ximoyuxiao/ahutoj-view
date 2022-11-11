@@ -217,7 +217,7 @@ function getContests() {
   });
 }
 
-//跳转题目
+//跳转竞赛
 function getContestById(contest: any) {
   //竞赛未开始
   if (contest.BeginTime > config.serverTime) {
@@ -231,7 +231,7 @@ function getContestById(contest: any) {
   //验证策略
   pageBufferedDataStore.setContestRouterData(contest.CID, contest.IsPublic);
   proxy.$router.push({
-    name: "Contest",
+    path: "/Contest",
     query: {
       CID: contest.CID,
     },

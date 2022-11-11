@@ -1,4 +1,10 @@
-import { configDataType, customThemeType, rankDataType, submitDataType, userInfoType } from "./bufferTypes";
+import {
+	configDataType,
+	customThemeType,
+	rankDataType,
+	submitDataType,
+	userInfoType,
+} from "./bufferTypes";
 
 export * from "./bufferTypes";
 
@@ -36,6 +42,7 @@ export class UserData {
 		localStorage.removeItem("ahutOjToken");
 		localStorage.removeItem("ahutOjSaveLoginStatus");
 		localStorage.removeItem("ahutOjUserUid");
+		localStorage.removeItem("pageRouterData_contest");
 		sessionStorage.removeItem("userSubmitData");
 		sessionStorage.removeItem("ahutOjUserInfo");
 	}

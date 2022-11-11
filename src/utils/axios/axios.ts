@@ -13,6 +13,7 @@ if (import.meta.env.MODE === "production") {
 	axios.defaults.baseURL = baseURL;
 } else {
 	axios.defaults.baseURL = baseURL;
+	// axios.defaults.baseURL = "http://127.0.0.1:4077/";
 }
 
 // http request拦截器
@@ -51,7 +52,7 @@ const contentType = [
 export default {
 	install: (app: App<Element>) => {
 		app.config.globalProperties.$axios = axios;
-    
+
 		//封装get请求
 		app.config.globalProperties.$get = function get(
 			url: string,
@@ -72,6 +73,15 @@ export default {
 		) {
 			return axios.post(url, data, {
 				headers: { "Content-Type": contentType[content] },
+			});
+		};
+
+		app.config.globalProperties.$put = function Put(
+			url: string,
+			data: object | null
+		) {
+			return axios.put(url, {
+				data,
 			});
 		};
 

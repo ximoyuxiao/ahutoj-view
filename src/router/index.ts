@@ -34,7 +34,11 @@ const router = createRouter({
 		{
 			path: "/Problem",
 			component: () => import("../pages/Problem.vue"),
-		},
+    },
+    {
+      path: "/Solution",
+      component: () => import("../pages/Solution.vue"),
+    },
 		{
 			path: "/Code",
 			component: () => import("../pages/Code.vue"),
@@ -52,7 +56,6 @@ const router = createRouter({
 		},
 		{
 			path: "/Contest",
-			name: "Contest",
 			component: () => import("../pages/Contest.vue"),
 		},
 		{

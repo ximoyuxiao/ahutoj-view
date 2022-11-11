@@ -195,14 +195,16 @@
               <div
                 ref="submitCover"
                 style="background-color: rgba(130, 220, 250, 0.65);
-              height: 100%;
-              position: absolute;
-              box-shadow: -2px 0 1px 2px rgba(130, 220, 250, 0.8);
-              top: 0;
-              left: 0;"
+                    height: 100%;
+                    position: absolute;
+                    box-shadow: -2px 0 1px 2px rgba(130, 220, 250, 0.8);
+                    top: 0;left: 0;"
               />
             </div>
-            <div class="solutions cursor_pointer">
+            <div
+              class="solutions cursor_pointer"
+              @click="goToSolution(problem.PID)"
+            >
               <el-icon size="26px">
                 <Document />
               </el-icon>
@@ -595,6 +597,16 @@ function goToProblem(PID: number) {
     loading.init();
     configStore.reloadNow();
   }, 500);
+}
+
+//跳转题解
+function goToSolution(PID: number) {
+  proxy.$route.push({
+    path: "/Solution",
+    query: {
+      PID,
+    },
+  });
 }
 
 //改变语言模式
