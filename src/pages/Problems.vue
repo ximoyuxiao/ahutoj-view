@@ -6,10 +6,12 @@
           v-model="search.PID"
           placeholder="题目ID"
           type="text"
-          @click="getProblemsById"
         >
           <template v-slot:icon>
-            <el-icon size="22px">
+            <el-icon
+              size="22px"
+              @click="getProblemsById()"
+            >
               <Aim />
             </el-icon>
           </template>
@@ -18,7 +20,6 @@
           v-model="search.Title"
           placeholder="题目标题"
           type="text"
-          @click="getProblemByTitle"
         >
           <template v-slot:icon>
             <el-icon size="22px">
@@ -205,6 +206,7 @@ function getProblemsById(PID?: string) {
     });
     return;
   }
+  console.log(PID);
   proxy.$router.push({
     name: "Problem",
     params: {

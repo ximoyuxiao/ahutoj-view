@@ -78,9 +78,9 @@
         <el-table-column align="right">
           <template #header>
             <div style="display: flex">
-              <el-input-number
+              <el-input
                 v-model="problemList.searchPid"
-                :min="1"
+                style="width: 200px;"
               />
               <el-button
                 type="primary"

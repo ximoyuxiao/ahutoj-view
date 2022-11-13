@@ -13,7 +13,7 @@ export class FileUpdateUtils {
 	//上传题目的图片
 	public static uploadProblemJudgeFile(
 		file: File | Blob,
-		PID: number
+		PID: string
 	) {
 		let formData = new FormData();
 		formData.append("file", file as Blob);

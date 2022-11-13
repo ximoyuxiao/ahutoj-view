@@ -9,9 +9,9 @@
     </div>
     <div>
       <span>题目ID：</span>
-      <el-input-number
+      <el-input
         v-model="submit.PID"
-        :min="0"
+        style="width: 200px"
       />
     </div>
     <div>
@@ -49,12 +49,12 @@ const { proxy } = getCurrentInstance() as any;
 //题目数据
 var submit = reactive({
   SID: 0,
-  PID: 0,
+  PID: "",
   UID: "",
   CID: 0,
   init() {
     this.SID = 0;
-    this.PID = 0;
+    this.PID = "";
     this.UID = "";
     this.CID = 0;
   },

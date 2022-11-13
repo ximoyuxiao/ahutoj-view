@@ -2,9 +2,9 @@
   <div class="updateProblem">
     <div class="search">
       <span style="width: 70px">题号：</span>
-      <el-input-number
+      <el-input
         v-model="search.PID"
-        :min="1"
+        style="width:200px;"
         v-on:focus="search.onFocus()"
       />
       <el-button
@@ -239,8 +239,8 @@ import { ElMessageBox } from "element-plus";
 import { useConstValStore } from "../../../pinia/constVal";
 import MdEditor, { ToolbarNames } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
-import { baseURL } from "../../../utils/axios/axios";
 import { ImageFileUploadUtils, ImageFileUtils } from "../../../utils/fileUtils";
+import { staticSourceBaseURL } from "../../../utils/axios/axios";
 const { proxy } = getCurrentInstance() as any;
 const constValStore = useConstValStore();
 
@@ -281,12 +281,12 @@ var markdown: {
 
 //题目题号搜索功能
 var search = reactive({
-  PID: 0,
+  PID: "",
   isSearched: false,
   onFocus() {
     search.isSearched = false;
   },
-  getProblem(PID: number) {
+  getProblem(PID: string) {
     if (PID) {
       search.PID = PID;
     }
@@ -308,7 +308,7 @@ var search = reactive({
 
 //题目数据
 var problem = reactive({
-  PID: 0,
+  PID: "",
   Title: "",
   Description: "",
   Input: "",
@@ -531,7 +531,7 @@ function uploadF(f: any) {
           let data = res.data;
           if (data.code == 0) {
             let ImageURL = data.ImageURL;
-            problem.Description += `\n![](${baseURL}${ImageURL})`;
+            problem.Description += `\n![](${staticSourceBaseURL}${ImageURL})`;
             proxy.elMessage({
               message: `
               <strong>${f.name}上传成功</strong><br/>

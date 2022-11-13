@@ -153,9 +153,9 @@ import { getCurrentInstance, reactive } from "vue";
 import { useConstValStore } from "../../../pinia/constVal";
 import MdEditor, { ToolbarNames } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
-import { baseURL } from "../../../utils/axios/axios";
 import { ElMessageBox } from "element-plus";
 import { ImageFileUploadUtils, ImageFileUtils } from "../../../utils/fileUtils";
+import { staticSourceBaseURL } from "../../../utils/axios/axios";
 const { proxy } = getCurrentInstance() as any;
 const constValStore = useConstValStore();
 
@@ -195,7 +195,7 @@ var markdown: {
 
 //题目数据
 var problem = reactive({
-  PID: 0,
+  PID: "",
   Title: "",
   Description: "",
   Input: "",
@@ -237,7 +237,7 @@ var problem = reactive({
     },
   ],
   init() {
-    problem.PID = 0;
+    problem.PID = "";
     problem.Title = "";
     problem.Description = "";
     problem.Input = "";
@@ -282,7 +282,7 @@ function uploadF(f: any) {
           let data = res.data;
           if (data.code == 0) {
             let ImageURL = data.ImageURL;
-            problem.Description += `\n![](${baseURL}${ImageURL})`;
+            problem.Description += `\n![](${staticSourceBaseURL}${ImageURL})`;
             proxy.elMessage({
               message: `
               <strong>${f.name}上传成功</strong><br/>

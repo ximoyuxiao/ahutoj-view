@@ -2,9 +2,9 @@
   <div class="EditProblemJudgeFile">
     <div class="search">
       <span style="width: 70px">题号：</span>
-      <el-input-number
+      <el-input
         v-model="search.PID"
-        :min="1"
+        style="width: 200px"
         v-on:focus="search.onFocus()"
       />
       <el-button
@@ -101,12 +101,12 @@ var fileList = ref<{ Filename: string; FileType: string; FileSize: number }[]>(
 );
 
 var search = reactive({
-  PID: 0,
+  PID: "",
   isSearched: false,
   onFocus() {
     search.isSearched = false;
   },
-  getProblem(PID: number | null) {
+  getProblem(PID: string | null) {
     if (PID) {
       search.PID = PID;
     }
