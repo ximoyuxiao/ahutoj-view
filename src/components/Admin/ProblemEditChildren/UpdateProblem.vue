@@ -298,7 +298,10 @@ var search = reactive({
       } else {
         search.isSearched = false;
       }
-      proxy.codeProcessor(data.code, data.msg);
+      proxy.codeProcessor(
+        data?.code ?? 100001,
+        data?.msg ?? "服务器错误\\\\error"
+      );
     });
   },
 });
@@ -449,7 +452,10 @@ var searchList = reactive({
           });
           searchList.isShowed = true;
         }
-        proxy.codeProcessor(data.code, data.msg);
+        proxy.codeProcessor(
+          data?.code ?? 100001,
+          data?.msg ?? "服务器错误\\\\error"
+        );
       });
   },
   //页面切换
@@ -506,7 +512,10 @@ var searchList = reactive({
               type: "success",
             });
           }
-          proxy.codeProcessor(data.code, data.msg);
+          proxy.codeProcessor(
+            data?.code ?? 100001,
+            data?.msg ?? "服务器错误\\\\error"
+          );
         });
       searchList.isShowed = false;
     });
@@ -535,7 +544,10 @@ function uploadF(f: any) {
               dangerouslyUseHTMLString: true,
             });
           }
-          proxy.codeProcessor(data.code, data.msg);
+          proxy.codeProcessor(
+            data?.code ?? 100001,
+            data?.msg ?? "服务器错误\\\\error"
+          );
         }
       );
     }
@@ -566,7 +578,10 @@ function deleteProblem() {
             type: "success",
           });
         } else {
-          proxy.codeProcessor(data.code, data.msg);
+          proxy.codeProcessor(
+            data?.code ?? 100001,
+            data?.msg ?? "服务器错误\\\\error"
+          );
         }
       });
   });
@@ -574,8 +589,8 @@ function deleteProblem() {
 
 //完成修改
 function complete() {
-  proxy.$axios
-    .post("api/problem/edit/", {
+  proxy
+    .$post("api/problem/edit/", {
       Pid: problem.PID,
       Title: problem.Title,
       Description: problem.Description,
@@ -598,7 +613,10 @@ function complete() {
         proxy.$log(data);
         proxy.elMessage({ message: "修改成功!", type: "success" });
       } else {
-        proxy.codeProcessor(data.code, data.msg);
+        proxy.codeProcessor(
+          data?.code ?? 100001,
+          data?.msg ?? "服务器错误\\\\error"
+        );
       }
     });
 }

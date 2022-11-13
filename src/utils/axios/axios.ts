@@ -1,19 +1,34 @@
 import axios, { AxiosRequestConfig } from "axios";
+import { Server } from "http";
 import { App } from "vue";
 import httpErrorHandler from "./httpErrorHandler";
 
-// export const baseURL = "http://127.0.0.1:4212/";
-// export const baseURL = "http://81.68.182.68/";
-export var baseURL = "http://channelcz.top/";
+// export var baseURL = "http://81.68.182.68/";
+export var staticSourceBaseURL = "";
+export var server1 = "http://channelcz.top/";
+export var server2 = "http://127.0.0.1:4077/";
+
+if (import.meta.env.MODE === "production") {
+	staticSourceBaseURL = "/";
+} else {
+	staticSourceBaseURL = "http://channelcz.top/";
+}
 
 //默认请求地址
 // console.log(import.meta.env);
-if (import.meta.env.MODE === "production") {
-	baseURL = "/";
-	axios.defaults.baseURL = baseURL;
-} else {
-	axios.defaults.baseURL = baseURL;
-	// axios.defaults.baseURL = "http://127.0.0.1:4077/";
+function chooseServer(server) {
+	if (import.meta.env.MODE === "production") {
+		axios.defaults.baseURL = "/";
+	} else {
+		switch (server) {
+			case 1:
+				axios.defaults.baseURL = server1;
+				break;
+			case 2:
+				axios.defaults.baseURL = server2;
+				break;
+		}
+	}
 }
 
 // http request拦截器
@@ -57,8 +72,10 @@ export default {
 		app.config.globalProperties.$get = function get(
 			url: string,
 			params: object | null,
-			content: number = 0
+			content: number = 0,
+			server: number = 1
 		) {
+			chooseServer(server);
 			return axios.get(url, {
 				params,
 				headers: { "Content-Type": contentType[content] },
@@ -69,8 +86,10 @@ export default {
 		app.config.globalProperties.$post = function post(
 			url: string,
 			data: object | null,
-			content: number = 0
+			content: number = 0,
+			server: number = 1
 		) {
+			chooseServer(server);
 			return axios.post(url, data, {
 				headers: { "Content-Type": contentType[content] },
 			});
@@ -78,20 +97,28 @@ export default {
 
 		app.config.globalProperties.$put = function Put(
 			url: string,
-			data: object | null
+			data: object | null,
+			content: number = 0,
+			server: number = 1
 		) {
+			chooseServer(server);
 			return axios.put(url, {
 				data,
+				headers: { "Content-Type": contentType[content] },
 			});
 		};
 
 		//封装delete请求
 		app.config.globalProperties.$delete = function Delete(
 			url: string,
-			data: object | null
+			data: object | null,
+			content: number = 0,
+			server: number = 1
 		) {
+			chooseServer(server);
 			return axios.delete(url, {
 				data,
+				headers: { "Content-Type": contentType[content] },
 			});
 		};
 	},

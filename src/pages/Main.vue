@@ -196,7 +196,10 @@ async function autoLogin() {
         showNav();
         proxy.$log("自动登录成功");
       }
-      proxy.codeProcessor(data.code, data.msg);
+      proxy.codeProcessor(
+        data?.code ?? 100001,
+        data?.msg ?? "服务器错误\\\\error"
+      );
     });
   } else {
     //清除token

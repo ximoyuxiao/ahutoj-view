@@ -106,7 +106,10 @@ export default {
               type: "success",
             });
           } else {
-            proxy.codeProcessor(data.code, data.msg);
+            proxy.codeProcessor(
+              data?.code ?? 100001,
+              data?.msg ?? "服务器错误\\\\error"
+            );
           }
         });
     }

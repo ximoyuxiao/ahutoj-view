@@ -123,10 +123,10 @@ var config = reactive({
 });
 
 //跳转到题目
-function goToProblem(PID: number | string) {
+function goToProblem(PID: string) {
   proxy.$router.push({
-    path: "/Problem",
-    query: {
+    name: "Problem",
+    params: {
       PID,
       //解决竞赛状态跳转
       CID: props.isContestStatus ? functions.CID : undefined,

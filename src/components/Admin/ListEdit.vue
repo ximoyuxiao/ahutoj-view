@@ -32,8 +32,8 @@ import { getCurrentInstance } from "vue";
 const { proxy } = getCurrentInstance() as any;
 
 function getProblemsList() {
-  proxy.$axios
-    .post("api/training/add/", { UID: "11111", Title: "123" })
+  proxy
+    .$post("api/training/add/", { UID: "11111", Title: "123" })
     .then((res) => {
       console.log(res);
     });

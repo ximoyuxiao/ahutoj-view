@@ -32,13 +32,20 @@ const router = createRouter({
 			component: () => import("../pages/Problems.vue"),
 		},
 		{
-			path: "/Problem",
+			path: "/Problem/:PID",
+			name: "Problem",
 			component: () => import("../pages/Problem.vue"),
-    },
-    {
-      path: "/Solution",
-      component: () => import("../pages/Solution.vue"),
-    },
+		},
+		{
+			path: "/Problem/:PID/:CID",
+			name: "ContestProblem",
+			component: () => import("../pages/Problem.vue"),
+		},
+		{
+			path: "/Solution",
+			name: "Solution",
+			component: () => import("../pages/Solution.vue"),
+		},
 		{
 			path: "/Code",
 			component: () => import("../pages/Code.vue"),
@@ -52,19 +59,23 @@ const router = createRouter({
 		},
 		{
 			path: "/Contests",
+			name: "Contests",
 			component: () => import("../pages/Contests.vue"),
 		},
 		{
-			path: "/Contest",
+			path: "/Contest/:CID",
+			name: "Contest",
 			component: () => import("../pages/Contest.vue"),
 		},
 		{
-			path: "/ContestRank",
+			path: "/ContestRank/:CID",
+			name: "ContestRank",
 			component: () =>
 				import("../pages/ContestChildren/ContestRank.vue"),
 		},
 		{
 			path: "/ContestStatus",
+			name: "ContestStatus",
 			component: () =>
 				import("../pages/ContestChildren/ContestStatus.vue"),
 		},

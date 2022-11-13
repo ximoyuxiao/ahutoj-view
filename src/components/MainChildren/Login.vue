@@ -108,8 +108,8 @@ function login() {
   }
   localStorage.clear();
   sessionStorage.clear();
-  proxy.$axios
-    .post("api/auth/login/", {
+  proxy
+    .$post("api/auth/login/", {
       UID: loginInfo.UID,
       Pass: loginInfo.Pass,
     })
@@ -130,7 +130,10 @@ function login() {
         proxy.$log("permission 同步完成");
         props.close();
       }
-      proxy.codeProcessor(data.code, data.msg);
+      proxy.codeProcessor(
+        data?.code ?? 100001,
+        data?.msg ?? "服务器错误\\\\error"
+      );
     });
 }
 

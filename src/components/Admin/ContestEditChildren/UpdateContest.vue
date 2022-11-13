@@ -199,7 +199,10 @@ var contest = reactive<contestType>({
         this.isFound = true;
         // proxy.$log(contestTime.value);
       } else {
-        proxy.codeProcessor(data.code, data.msg);
+        proxy.codeProcessor(
+          data?.code ?? 100001,
+          data?.msg ?? "服务器错误\\\\error"
+        );
       }
     });
   },
@@ -232,7 +235,10 @@ var problemList = reactive({
         this.data.push(problem);
         proxy.elMessage({ message: "添加成功!", type: "success" });
       } else {
-        proxy.codeProcessor(data.code, data.msg);
+        proxy.codeProcessor(
+          data?.code ?? 100001,
+          data?.msg ?? "服务器错误\\\\error"
+        );
       }
     });
   },
@@ -270,7 +276,10 @@ function deleteContest() {
             type: "success",
           });
         } else {
-          proxy.codeProcessor(data.code, data.msg);
+          proxy.codeProcessor(
+            data?.code ?? 100001,
+            data?.msg ?? "服务器错误\\\\error"
+          );
         }
       });
   });
@@ -309,8 +318,8 @@ function complete() {
   for (let p in problemList.data) tempArray.push(problemList.data[p].PID);
   contest.Problems = tempArray.join(",");
   // proxy.$log(contest);
-  proxy.$axios
-    .post("api/contest/edit/", {
+  proxy
+    .$post("api/contest/edit/", {
       CID: contest.CID,
       uid: userDataStore.UID,
       Title: contest.Title,
@@ -329,7 +338,10 @@ function complete() {
         problemList.init();
         proxy.elMessage({ message: "修改成功!", type: "success" });
       }
-      proxy.codeProcessor(data.code, data.msg);
+      proxy.codeProcessor(
+        data?.code ?? 100001,
+        data?.msg ?? "服务器错误\\\\error"
+      );
     });
 }
 </script>

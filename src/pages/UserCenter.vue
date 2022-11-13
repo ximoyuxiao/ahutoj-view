@@ -4,7 +4,7 @@
       <!-- 头像背景效果 -->
       <img
         class="filter cursor_noFocus"
-        :src="userInfo.HeadURL ? (baseURL + userInfo.HeadURL) : userInfo.defaultHeadImage.show()"
+        :src="userInfo.HeadURL ? (staticSourceBaseURL + userInfo.HeadURL) : proxy.Utils.DefaultHeadImage.show(userInfo.UID)"
         alt=""
       />
       <div class="user">
@@ -13,7 +13,7 @@
           class="cursor_noFocus cursor_pointer"
           @click="functionConfig.show(11)"
         >
-          <img :src="userInfo.HeadURL ? (baseURL + userInfo.HeadURL) : userInfo.defaultHeadImage.show()" />
+          <img :src="userInfo.HeadURL ? (staticSourceBaseURL + userInfo.HeadURL) : proxy.Utils.DefaultHeadImage.show(userInfo.UID)" />
           <div class="changImage">
             <el-icon size="42px">
               <Upload />
@@ -30,7 +30,7 @@
           </div>
         </div>
       </div>
-      <el-divider style="margin: 2px; background-color: var(--font_color4)" />
+      <el-divider style="margin: 2px;" />
       <div class="userInfo">
         <div>学校:&nbsp;{{ userInfo.School }}</div>
         <div>班级:&nbsp;{{ userInfo.Classes }}</div>
@@ -164,7 +164,7 @@ import BindingCodeForce from "../components/UserCenterChildren/BindingCodeForce.
 import BindingVJudge from "../components/UserCenterChildren/BindingVJudge.vue";
 import ChangePassword from "../components/UserCenterChildren/ChangePassword.vue";
 import ChangeHeadImage from "../components/UserCenterChildren/ChangeHeadImage.vue";
-import { baseURL } from "../utils/axios/axios";
+import { staticSourceBaseURL } from "../utils/axios/axios";
 
 const { proxy } = getCurrentInstance() as any;
 const userDataStore = useUserDataStore();
@@ -184,7 +184,6 @@ type userInfoType = {
   Vjid: string;
   AdeptArray: Array<string>;
   copy: Function;
-  defaultHeadImage: any;
 };
 var userInfo = reactive<userInfoType>({
   UID: "",
@@ -212,27 +211,6 @@ var userInfo = reactive<userInfoType>({
     userInfo.Vjid = data.Vjid;
     userInfo.AdeptArray = userInfo.Adept == "" ? [] : userInfo.Adept.split(";");
   },
-  //获取默认头像
-  defaultHeadImage: {
-    images: [
-      new URL("../assets/image/defaultHeadImage/0.svg", import.meta.url).href,
-      new URL("../assets/image/defaultHeadImage/1.svg", import.meta.url).href,
-      new URL("../assets/image/defaultHeadImage/2.svg", import.meta.url).href,
-      new URL("../assets/image/defaultHeadImage/3.svg", import.meta.url).href,
-      new URL("../assets/image/defaultHeadImage/4.svg", import.meta.url).href,
-      new URL("../assets/image/defaultHeadImage/5.svg", import.meta.url).href,
-      new URL("../assets/image/defaultHeadImage/6.svg", import.meta.url).href,
-      new URL("../assets/image/defaultHeadImage/7.svg", import.meta.url).href,
-      new URL("../assets/image/defaultHeadImage/8.svg", import.meta.url).href,
-      new URL("../assets/image/defaultHeadImage/9.svg", import.meta.url).href,
-      new URL("../assets/image/defaultHeadImage/10.svg", import.meta.url).href,
-      new URL("../assets/image/defaultHeadImage/11.svg", import.meta.url).href,
-    ],
-    show() {
-      let index = userInfo.UID.length % 12;
-      return userInfo.defaultHeadImage.images[index];
-    },
-  },
 });
 
 //获取用户资料
@@ -244,7 +222,10 @@ function getUserInfo() {
       userInfo.copy(data);
       userDataStore.updateData(data);
     }
-    proxy.codeProcessor(data.code, data.msg);
+    proxy.codeProcessor(
+      data?.code ?? 100001,
+      data?.msg ?? "服务器错误\\\\error"
+    );
   });
 }
 
@@ -322,7 +303,10 @@ function getUserSubmit() {
         proxy.Buffer.UserCenter.submitData(data.Data, userDataStore.UID);
         activityCalendarConfig.init(data.Data);
       }
-      proxy.codeProcessor(data.code, data.msg);
+      proxy.codeProcessor(
+        data?.code ?? 100001,
+        data?.msg ?? "服务器错误\\\\error"
+      );
     });
 }
 

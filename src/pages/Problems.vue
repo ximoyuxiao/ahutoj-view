@@ -5,7 +5,7 @@
         <IconInput
           v-model="search.PID"
           placeholder="题目ID"
-          type="number"
+          type="text"
           @click="getProblemsById"
         >
           <template v-slot:icon>
@@ -17,7 +17,7 @@
         <IconInput
           v-model="search.Title"
           placeholder="题目标题"
-          type="number"
+          type="text"
           @click="getProblemByTitle"
         >
           <template v-slot:icon>
@@ -134,10 +134,10 @@ var config = reactive<configType>({
 
 //页面数据 页面搜索数据配置项
 type searchType = {
-  PID: number;
+  PID: string;
   Title: string;
   Label: string;
-  Data: { PID: number; Title: string; Label: string }[];
+  Data: { PID: string; Title: string; Label: string }[];
   [item: string]: any;
 };
 var search = reactive<searchType>({
@@ -166,7 +166,7 @@ function init() {
 }
 
 //获取题目列表
-function getProblems(PID: number = null, Title: string = null) {
+function getProblems(PID: string = null, Title: string = null) {
   //显示加载效果
   config.loading = proxy.elLoading({
     node: proxy.$refs.searchResult,
@@ -186,18 +186,19 @@ function getProblems(PID: number = null, Title: string = null) {
         config.Count = data.Count;
         search.Data = data.Data;
       }
-      proxy.codeProcessor(data.code, data.msg);
+      proxy.codeProcessor(
+        data?.code ?? 100001,
+        data?.msg ?? "服务器错误\\\\error"
+      );
       //关闭加载效果
       config.loading.close();
     });
 }
 
 //id搜索
-function getProblemsById(PID?: number) {
-  if (typeof PID == "number") {
-    search.PID = PID;
-  }
-  if (!search.PID || search.PID <= 0) {
+function getProblemsById(PID?: string) {
+  search.PID = PID ?? search.PID;
+  if (!search.PID) {
     proxy.elMessage({
       message: "请输入有效的题目ID！",
       type: "warning",
@@ -205,8 +206,8 @@ function getProblemsById(PID?: number) {
     return;
   }
   proxy.$router.push({
-    path: "/Problem",
-    query: {
+    name: "Problem",
+    params: {
       PID: search.PID,
     },
   });

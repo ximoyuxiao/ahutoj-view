@@ -229,7 +229,7 @@ var rank = reactive<{
 
 //获取竞赛提交数据
 async function getRankList() {
-  if (!proxy.$route.query.CID) {
+  if (!proxy.$route.params.CID) {
     proxy.elMessage({
       message: "跳转地址错误，请重试",
       type: "warning",
@@ -237,7 +237,7 @@ async function getRankList() {
     return;
   }
   let loading = proxy.elLoading({ node: proxy.$refs.ContestRank });
-  let CID = proxy.$route.query.CID;
+  let CID = proxy.$route.params.CID;
   let temp = pageBufferedDataStore.getContestRouterData(CID);
   let Pass = temp?.Pass;
   //验证比赛信息
@@ -344,7 +344,10 @@ async function getContest(CID: number, Pass: string) {
         path: "/Contests",
       });
     }
-    proxy.codeProcessor(data.code, data.msg);
+    proxy.codeProcessor(
+      data?.code ?? 100001,
+      data?.msg ?? "服务器错误\\\\error"
+    );
   });
 }
 
@@ -364,8 +367,8 @@ function getBackgroundColor(item: ProblemsMapType | null) {
 //返回竞赛
 function backToContest() {
   let params = {};
-  if (proxy.$route.query.CID) {
-    params["CID"] = proxy.$route.query.CID;
+  if (proxy.$route.params.CID) {
+    params["CID"] = proxy.$route.params.CID;
   } else {
     proxy.elMessage({
       message: "数据异常，请重新进入比赛界面",
@@ -374,8 +377,8 @@ function backToContest() {
     return;
   }
   proxy.$router.push({
-    path: "/Contest",
-    query: params,
+    name: "Contest",
+    params,
   });
 }
 

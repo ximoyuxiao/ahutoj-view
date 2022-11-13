@@ -226,8 +226,8 @@ function signin() {
   }
   localStorage.clear();
   sessionStorage.clear();
-  proxy.$axios
-    .post("api/auth/register/", {
+  proxy
+    .$post("api/auth/register/", {
       UID: signinInfo.UID,
       UserName: signinInfo.UserName,
       Pass: signinInfo.Pass,
@@ -250,7 +250,10 @@ function signin() {
         userDataStore.sessionUserInfo();
         props.close();
       }
-      proxy.codeProcessor(data.code, data.msg);
+      proxy.codeProcessor(
+        data?.code ?? 100001,
+        data?.msg ?? "服务器错误\\\\error"
+      );
     });
 }
 </script>

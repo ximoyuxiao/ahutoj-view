@@ -286,7 +286,10 @@ function getSubmit() {
       notFound.value = false;
     }
     config.loading.close();
-    proxy.codeProcessor(data.code, data.msg);
+    proxy.codeProcessor(
+      data?.code ?? 100001,
+      data?.msg ?? "服务器错误\\\\error"
+    );
   });
 }
 
@@ -305,7 +308,10 @@ function rejudge() {
       getSubmit();
       proxy.elNotification({ message: "重判成功!", type: "success" });
     }
-    proxy.codeProcessor(data.code, data.msg);
+    proxy.codeProcessor(
+      data?.code ?? 100001,
+      data?.msg ?? "服务器错误\\\\error"
+    );
   });
 }
 

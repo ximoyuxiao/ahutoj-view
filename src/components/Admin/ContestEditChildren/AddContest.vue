@@ -161,7 +161,10 @@ var problemList = reactive({
         this.data.push(problem);
         proxy.elMessage({ message: "添加成功!", type: "success" });
       } else {
-        proxy.codeProcessor(data.code, data.msg);
+        proxy.codeProcessor(
+          data?.code ?? 100001,
+          data?.msg ?? "服务器错误\\\\error"
+        );
       }
     });
   },
@@ -223,8 +226,8 @@ function complete() {
   let tempArray = [];
   for (let p in problemList.data) tempArray.push(problemList.data[p].PID);
   contest.Problems = tempArray.join(",");
-  proxy.$axios
-    .post("api/contest/add/", {
+  proxy
+    .$post("api/contest/add/", {
       UID: userDataStore.UID,
       Title: contest.Title,
       Description: contest.Description,
@@ -240,7 +243,10 @@ function complete() {
       if (data.code == 0) {
         proxy.elMessage({ message: "添加成功!", type: "success" });
       } else {
-        proxy.codeProcessor(data.code, data.msg);
+        proxy.codeProcessor(
+          data?.code ?? 100001,
+          data?.msg ?? "服务器错误\\\\error"
+        );
       }
     });
 }

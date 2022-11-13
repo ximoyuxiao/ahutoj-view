@@ -7,7 +7,7 @@
           <Input
             v-model="query.PID"
             placeholder="题目ID"
-            type="number"
+            type="text"
             @click="config.search(query)"
           >
           </Input>
@@ -80,7 +80,7 @@ var config = inject("config") as any;
 const props = defineProps(["query"]);
 //暂存的查询数据，在点击查询后才同步到真实查询参数中
 var query = reactive({
-  PID: null,
+  PID: "",
   UID: "",
   CID: "",
   Lang: -1,

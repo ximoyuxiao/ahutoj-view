@@ -28,7 +28,10 @@
         </div>
       </div>
 
-      <StatusList :data="status.list" :isContestStatus="true">
+      <StatusList
+        :data="status.list"
+        :isContestStatus="true"
+      >
       </StatusList>
     </template>
     <template v-else>
@@ -45,13 +48,7 @@
 </template>
 
 <script lang="ts" setup name="Status" >
-import {
-  getCurrentInstance,
-  onBeforeMount,
-  onMounted,
-  provide,
-  reactive,
-} from "vue";
+import { getCurrentInstance, onMounted, provide, reactive } from "vue";
 import StatusList from "../../components/Status/StatusList.vue";
 import StatusSearch from "../../components/Status/StatusSearch.vue";
 import { usePageBufferedDataStore } from "../../pinia/pageBufferdData";
@@ -95,7 +92,7 @@ var config = reactive({
     if (query.Limit) {
       params["Limit"] = query.Limit;
     }
-    if (query.PID && query.PID > 0) {
+    if (query.PID) {
       params["PID"] = query.PID;
     }
     if (query.UID && query.UID != "") {
@@ -115,7 +112,10 @@ var config = reactive({
         status.list = data.Data;
         config.syncUrl(query);
       }
-      proxy.codeProcessor(data.code, data.msg);
+      proxy.codeProcessor(
+        data?.code ?? 100001,
+        data?.msg ?? "服务器错误\\\\error"
+      );
       loadings.list.close();
     });
   },
@@ -134,7 +134,7 @@ var config = reactive({
     if (query.Limit) {
       params["Limit"] = query.Limit;
     }
-    if (query.PID && query.PID > 0) {
+    if (query.PID) {
       params["PID"] = query.PID;
     }
     if (query.UID && query.UID != "") {
@@ -162,11 +162,11 @@ var query = reactive({
   Count: 0,
   Page: 1,
   Limit: 20,
-  queryPID: (PID: number) => {
+  queryPID: (PID: string) => {
     query.PID = PID;
     config.update();
   },
-  PIDSetter: (value: number) => {
+  PIDSetter: (value: string) => {
     query.PID = value;
   },
   UIDSetter: (value: string) => {
@@ -179,7 +179,7 @@ type contestType = {
   CID: number;
   Pass: string;
   info: {
-    Data: { PID: number; Title: string; ACNum: number; SubmitNum: number }[];
+    Data: { PID: string; Title: string; ACNum: number; SubmitNum: number }[];
     BeginTime: number;
     CID: number;
     Type: number;
@@ -212,7 +212,7 @@ var contest = reactive<contestType>({
   },
   copy(data: {
     Problems: string;
-    Data: { PID: number; Title: string; ACNum: number; SubmitNum: number }[];
+    Data: { PID: string; Title: string; ACNum: number; SubmitNum: number }[];
     UID: string;
     Title: string;
     CID: number;
@@ -259,7 +259,10 @@ var contest = reactive<contestType>({
         contest.copy(data);
         config.correct = true;
       }
-      proxy.codeProcessor(data.code, data.msg);
+      proxy.codeProcessor(
+        data?.code ?? 100001,
+        data?.msg ?? "服务器错误\\\\error"
+      );
     });
   },
   //返回比赛界面
@@ -277,8 +280,8 @@ var contest = reactive<contestType>({
       return;
     }
     proxy.$router.push({
-      path: "/Contest",
-      query: params,
+      name: "Contest",
+      params,
     });
   },
 });
@@ -288,7 +291,7 @@ type statusType = {
   list: {
     UID: string;
     Lang: number;
-    PID: number;
+    PID: string;
     Result: string;
     SID: number;
     SubmitTime: number;

@@ -15,7 +15,6 @@ import {
   provide,
   reactive,
 } from "vue";
-import { onBeforeRouteUpdate } from "vue-router";
 import StatusList from "../components/Status/StatusList.vue";
 import StatusSearch from "../components/Status/StatusSearch.vue";
 const { proxy } = getCurrentInstance() as any;
@@ -47,7 +46,7 @@ var config = reactive({
     if (query.Limit) {
       params["Limit"] = query.Limit;
     }
-    if (query.PID && query.PID > 0) {
+    if (query.PID) {
       params["PID"] = query.PID;
     }
     if (query.UID && query.UID != "") {
@@ -67,7 +66,10 @@ var config = reactive({
         status.list = data.Data;
         config.syncUrl(query);
       }
-      proxy.codeProcessor(data.code, data.msg);
+      proxy.codeProcessor(
+        data?.code ?? 100001,
+        data?.msg ?? "服务器错误\\\\error"
+      );
       loadings.list.close();
     });
   },
@@ -80,7 +82,7 @@ var config = reactive({
     if (query.Limit) {
       params["Limit"] = query.Limit;
     }
-    if (query.PID && query.PID > 0) {
+    if (query.PID) {
       params["PID"] = query.PID;
     }
     if (query.UID && query.UID != "") {
@@ -108,7 +110,7 @@ var query = reactive({
   Count: 0,
   Page: 1,
   Limit: 20,
-  PIDSetter: (value: number) => {
+  PIDSetter: (value: string) => {
     query.PID = value;
   },
   UIDSetter: (value: string) => {
@@ -121,7 +123,7 @@ type statusType = {
   list: {
     UID: string;
     Lang: number;
-    PID: number;
+    PID: string;
     Result: string;
     SID: number;
     SubmitTime: number;
@@ -140,7 +142,7 @@ onBeforeMount(() => {
   if (proxy.$route.query.Limit) query.Limit = Number(proxy.$route.query.Limit);
 
   if (typeof proxy.$route.query.PID != "undefined")
-    query.PID = Number(proxy.$route.query.PID);
+    query.PID = proxy.$route.query.PID;
   if (typeof proxy.$route.query.UID != "undefined")
     query.UID = proxy.$route.query.UID;
   if (typeof proxy.$route.query.Result != "undefined")

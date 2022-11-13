@@ -297,7 +297,7 @@ type contestType = {
   Pass: string;
   isContestProblem: boolean; //是否是竞赛题目
   info: {
-    Data: { PID: number; Title: string; ACNum: number; SubmitNum: number }[];
+    Data: { PID: string; Title: string; ACNum: number; SubmitNum: number }[];
     BeginTime: number;
     CID: number;
     Type: number;
@@ -330,7 +330,7 @@ var contest = reactive<contestType>({
   },
   copy(data: {
     Problems: string;
-    Data: { PID: number; Title: string; ACNum: number; SubmitNum: number }[];
+    Data: { PID: string; Title: string; ACNum: number; SubmitNum: number }[];
     UID: string;
     Title: string;
     CID: number;
@@ -372,7 +372,7 @@ var contest = reactive<contestType>({
 
 //题目数据
 type problemType = {
-  PID?: number;
+  PID?: string;
   Description: string;
   Hit: string;
   Input: string;
@@ -460,7 +460,7 @@ var aceConfig = reactive({
       return;
     }
     //判断是否是竞赛题目，与普通题目分别存储
-    if (!proxy.$route.query.CID) {
+    if (!proxy.$route.params.CID) {
       proxy.Buffer.Problem.problemCode(problem.PID, text);
     } else {
       proxy.Buffer.Problem.contestProblemCode(problem.PID, text);
@@ -481,7 +481,7 @@ async function init() {
   });
 
   //检查从竞赛跳转过来的题目是否存在cid 以及 pass
-  let CID = proxy.$route.query.CID;
+  let CID = proxy.$route.params.CID;
   contest.CID = CID;
   if (CID) {
     contest.isContestProblem = true;
@@ -514,7 +514,10 @@ async function getProblemInfo() {
       problem.SampleOutputRows = outputLength;
       notFound.value = false;
     }
-    proxy.codeProcessor(data.code, data.msg);
+    proxy.codeProcessor(
+      data?.code ?? 100001,
+      data?.msg ?? "服务器错误\\\\error"
+    );
   });
   loading.init();
 }
@@ -544,6 +547,9 @@ async function checkContest(CID: number, Pass: string) {
           type: "warning",
         });
         notFound.value = true;
+        proxy.$router.push({
+          path: "/Contests",
+        });
       }
       contest.copy(data);
     } else if (data.code == 160504) {
@@ -556,7 +562,10 @@ async function checkContest(CID: number, Pass: string) {
         path: "/Contests",
       });
     }
-    proxy.codeProcessor(data.code, data.msg);
+    proxy.codeProcessor(
+      data?.code ?? 100001,
+      data?.msg ?? "服务器错误\\\\error"
+    );
   });
   await getProblemInfo();
 }
@@ -564,8 +573,8 @@ async function checkContest(CID: number, Pass: string) {
 //返回比赛界面
 function backToContest() {
   let params = { CID: null };
-  if (proxy.$route.query.CID) {
-    params.CID = proxy.$route.query.CID;
+  if (proxy.$route.params.CID) {
+    params.CID = proxy.$route.params.CID;
   } else {
     proxy.elMessage({
       message: "数据异常，请重新进入比赛界面",
@@ -574,16 +583,16 @@ function backToContest() {
     return;
   }
   proxy.$router.push({
-    path: "/Contest",
-    query: params,
+    name: "Contest",
+    params,
   });
 }
 
 //竞赛模式跳转题目
-function goToProblem(PID: number) {
+function goToProblem(PID: string) {
   proxy.$router.replace({
-    path: "/Problem",
-    query: {
+    name: "ContestProblem",
+    params: {
       PID,
       CID: contest.CID,
     },
@@ -600,8 +609,8 @@ function goToProblem(PID: number) {
 }
 
 //跳转题解
-function goToSolution(PID: number) {
-  proxy.$route.push({
+function goToSolution(PID: string) {
+  proxy.$router.push({
     path: "/Solution",
     query: {
       PID,
@@ -760,7 +769,10 @@ var submit = reactive<submitType>({
             type: "success",
           });
         }
-        proxy.codeProcessor(data.code, data.msg);
+        proxy.codeProcessor(
+          data?.code ?? 100001,
+          data?.msg ?? "服务器错误\\\\error"
+        );
       });
   },
 });
@@ -768,7 +780,7 @@ var submit = reactive<submitType>({
 onMounted(() => {
   window.scrollTo(0, 0);
   //检查题目url:id是否存在
-  if (!proxy.$route.query.PID) {
+  if (!proxy.$route.params.PID) {
     loading.init();
     proxy.elMessage({
       message: "地址栏参数错误，请正常进入题目界面！",
@@ -776,7 +788,7 @@ onMounted(() => {
     });
     return;
   }
-  problem.PID = proxy.$route.query.PID;
+  problem.PID = proxy.$route.params.PID;
   nextTick(() => {
     //初始化代码编辑器
     let aceEditor = document.getElementById("aceEditor");
@@ -784,13 +796,13 @@ onMounted(() => {
     if (themeSwitchStore.theme < 0)
       ace.aceEditor.setTheme("ace/theme/one_dark");
     //获取缓存的题目代码数据
-    if (!proxy.$route.query.CID && proxy.$route.query.PID) {
-      let text = sessionStorage.getItem("pid" + proxy.$route.query.PID);
+    if (!proxy.$route.params.CID && proxy.$route.params.PID) {
+      let text = sessionStorage.getItem("pid" + proxy.$route.params.PID);
       if (text != null) ace.aceEditor.setValue(text);
     }
     //如果是竞赛跳转
-    else if (proxy.$route.query.CID && proxy.$route.query.PID) {
-      let text = sessionStorage.getItem("cpid" + proxy.$route.query.PID);
+    else if (proxy.$route.params.CID && proxy.$route.params.PID) {
+      let text = sessionStorage.getItem("cpid" + proxy.$route.params.PID);
       if (text != null) ace.aceEditor.setValue(text);
     }
     //设置语言

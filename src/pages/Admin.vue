@@ -107,7 +107,10 @@ function checkPermission() {
       // proxy.$log(data);
       permissionParser(data.PermissionMap);
     }
-    proxy.codeProcessor(data.code, data.msg);
+    proxy.codeProcessor(
+      data?.code ?? 100001,
+      data?.msg ?? "服务器错误\\\\error"
+    );
   });
 }
 

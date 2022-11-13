@@ -295,7 +295,10 @@ function uploadF(f: any) {
               dangerouslyUseHTMLString: true,
             });
           }
-          proxy.codeProcessor(data.code, data.msg);
+          proxy.codeProcessor(
+            data?.code ?? 100001,
+            data?.msg ?? "服务器错误\\\\error"
+          );
         }
       );
     }
@@ -304,8 +307,8 @@ function uploadF(f: any) {
 
 //完成提交题目
 function complete() {
-  proxy.$axios
-    .post("api/problem/add/", {
+  proxy
+    .$post("api/problem/add/", {
       Title: problem.Title,
       Description: problem.Description,
       Input: problem.Input,
@@ -326,7 +329,10 @@ function complete() {
       if (data.code == 0) {
         proxy.elMessage({ message: "添加成功!", type: "success" });
       }
-      proxy.codeProcessor(data.code, data.msg);
+      proxy.codeProcessor(
+        data?.code ?? 100001,
+        data?.msg ?? "服务器错误\\\\error"
+      );
     });
 }
 </script>

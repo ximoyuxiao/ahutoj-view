@@ -297,7 +297,7 @@ var timePercent = reactive<timePercentType>({
 
 async function init() {
   //检查路由参数完整性
-  let CID = proxy.$route.query.CID;
+  let CID = proxy.$route.params.CID;
   contest.CID = CID; //暂存一份在contest数据中
   if (!CID) {
     proxy.elMessage({
@@ -362,7 +362,10 @@ async function getContestById(CID: number, Pass: string) {
         path: "/Contests",
       });
     }
-    proxy.codeProcessor(data.code, data.msg);
+    proxy.codeProcessor(
+      data?.code ?? 100001,
+      data?.msg ?? "服务器错误\\\\error"
+    );
   });
 
   loading.init();
@@ -380,15 +383,11 @@ async function getContestById(CID: number, Pass: string) {
 
 //跳转到题目
 function goToProblem(PID: number): void {
-  let CID = contest.CID;
-  let Pass: string;
-  if (proxy.$route.query.Pass) Pass = proxy.$route.query.Pass;
   proxy.$router.push({
-    path: "/Problem",
-    query: {
+    name: "ContestProblem",
+    params: {
       PID,
-      CID,
-      Pass,
+      CID: contest.CID,
     },
   });
 }
@@ -397,8 +396,8 @@ function goToProblem(PID: number): void {
 function goToRank(): void {
   let CID = contest.CID;
   proxy.$router.push({
-    path: "/ContestRank",
-    query: {
+    name: "ContestRank",
+    params: {
       CID,
     },
   });
@@ -408,7 +407,7 @@ function goToRank(): void {
 function goToStatus(): void {
   let CID = contest.CID;
   let Pass: string;
-  if (proxy.$route.query.Pass) Pass = proxy.$route.query.Pass;
+  if (proxy.$route.params.Pass) Pass = proxy.$route.params.Pass;
   proxy.$router.push({
     path: "/ContestStatus",
     query: {

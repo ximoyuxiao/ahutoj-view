@@ -204,7 +204,10 @@ function getContests() {
         contests.list = data.Data;
       }
       config.loading.close();
-      proxy.codeProcessor(data.code, data.msg);
+      proxy.codeProcessor(
+        data?.code ?? 100001,
+        data?.msg ?? "服务器错误\\\\error"
+      );
     });
 
   //同步服务器时间
@@ -231,8 +234,8 @@ function getContestById(contest: any) {
   //验证策略
   pageBufferedDataStore.setContestRouterData(contest.CID, contest.IsPublic);
   proxy.$router.push({
-    path: "/Contest",
-    query: {
+    name: "Contest",
+    params: {
       CID: contest.CID,
     },
   });

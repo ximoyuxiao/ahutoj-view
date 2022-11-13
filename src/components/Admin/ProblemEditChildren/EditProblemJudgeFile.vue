@@ -190,7 +190,10 @@ function uploadFileList() {
           });
           proxy.elMessage({ message: f.name + " 上传成功!", type: "success" });
         }
-        proxy.codeProcessor(data.code, data.msg);
+        proxy.codeProcessor(
+          data?.code ?? 100001,
+          data?.msg ?? "服务器错误\\\\error"
+        );
       });
     });
     proxy.$refs.upload.clearFiles();
@@ -214,7 +217,10 @@ function unzipFile(index: number) {
         search.getProblem(search.PID);
         proxy.elMessage({ message: "解压成功", type: "success" });
       }
-      proxy.codeProcessor(data.code, data.msg);
+      proxy.codeProcessor(
+        data?.code ?? 100001,
+        data?.msg ?? "服务器错误\\\\error"
+      );
     });
   });
 }
@@ -235,7 +241,10 @@ function deleteFile(index: number) {
         fileList.value.splice(index, 1);
         proxy.elMessage({ message: "删除成功", type: "success" });
       }
-      proxy.codeProcessor(data.code, data.msg);
+      proxy.codeProcessor(
+        data?.code ?? 100001,
+        data?.msg ?? "服务器错误\\\\error"
+      );
     });
   });
 }

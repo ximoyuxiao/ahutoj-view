@@ -251,7 +251,10 @@ function getContestsInfo() {
       while (contests.overList.length < 5)
         contests.overList.push({ Title: "" });
     }
-    proxy.codeProcessor(data.code, data.msg);
+    proxy.codeProcessor(
+      data?.code ?? 100001,
+      data?.msg ?? "服务器错误\\\\error"
+    );
   });
 }
 
@@ -264,8 +267,8 @@ var goto = {
   contest: (contest: any) => {
     pageBufferedDataStore.setContestRouterData(contest.CID, contest.IsPublic);
     proxy.$router.push({
-      path: "/Contest",
-      query: {
+      name: "Contest",
+      params: {
         CID: contest.CID,
       },
     });
