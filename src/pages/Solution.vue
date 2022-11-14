@@ -12,7 +12,7 @@
           <div class="count">共发现&nbsp;{{config.Count}}&nbsp;个题解</div>
         </div>
         <div
-          class="item"
+          :class="item.IThumbsUp == 1 ? 'item itemThumbsUp' : 'item'"
           v-for="(item, index) in solutions.data"
         >
           <div class="userInfo">
@@ -37,8 +37,17 @@
             />
             <div
               class="foldCover"
-              v-show="item?.Fold ?? true"
-            >123</div>
+              v-show="(item?.Fold ?? true) && item.CanFold"
+            >
+              <div @click="solutions.fold(index, false)">
+                展开
+                &nbsp;
+                <el-icon size="26px">
+                  <ArrowDown />
+                </el-icon>
+              </div>
+            </div>
+
           </div>
           <div class="status">
             <div class="left">
@@ -61,7 +70,10 @@
                 </el-icon>
                 &nbsp;{{item.ThumbsUp}}&nbsp;个人觉得很赞
               </div>
-              <div class="conmment cursor_pointer">
+              <div
+                class="conmment cursor_pointer"
+                @click="solutions.openComment(index)"
+              >
                 <el-icon
                   class="icon cursor_pointer"
                   size="20px"
@@ -71,10 +83,81 @@
                 &nbsp;{{item.CommentCount}}&nbsp;条评论
               </div>
             </div>
-            <div class="right cursor_pointer">
+            <div
+              class="right cursor_pointer"
+              v-if="!item?.Fold && item.CanFold"
+              @click="solutions.fold(index, true)"
+            >
               收起&nbsp;
               <el-icon size="26px">
                 <ArrowUp />
+              </el-icon>
+            </div>
+          </div>
+          <div
+            class="comment"
+            v-show="item?.ShowComment ?? false"
+          >
+            <div
+              class="item"
+              v-for="(comment , commentIndex) in (item?.Comments ?? [])"
+            >
+              <div class="left">
+                <img
+                  :src=" comment.HeadURL ? (staticSourceBaseURL + comment.HeadURL) : proxy.Utils.DefaultHeadImage.show(comment.UID)"
+                  alt=""
+                >
+              </div>
+              <div class="
+                  right">
+                <div class="userName">
+                  {{comment.UserName}}
+                </div>
+                <div class="content">{{comment.Content}}</div>
+                <div class="time">{{ proxy.Utils.TimeTools.timestampToDate(comment.CreateTime,2) }}</div>
+              </div>
+            </div>
+            <div
+              class="notFound"
+              v-if="(item.Count ?? 0) == 0"
+            >
+              <el-empty description="当前还没有评论哦~" />
+            </div>
+            <div
+              class="pagination"
+              v-if="(item.Count ?? 0) >= 10"
+            >
+              <el-pagination
+                background
+                layout="prev, pager, next"
+                :page-size="item.Limit"
+                :total="item.Count"
+                :current-page="item.Page"
+                @current-change="item.CommentChangePage"
+              />
+            </div>
+            <div class="myComment">
+              <el-input
+                v-model="solutions.myComment"
+                autosize
+                type="textarea"
+                placeholder="留下你友好的评论吧！"
+              />
+              <el-button
+                type="primary"
+                :plain="themeSwitchStore.theme >  0 ? true : false"
+                @click="solutions.publishComment(index)"
+              >
+                发表
+              </el-button>
+            </div>
+            <div
+              class="hideComment cursor_pointer"
+              @click="solutions.closeComment(index)"
+            >
+              隐藏评论&nbsp;
+              <el-icon size="24px">
+                <Hide />
               </el-icon>
             </div>
           </div>
@@ -102,7 +185,21 @@
           </el-radio-group>
         </div>
       </template>
-
+      <div class="publish">
+        <md-editor
+          class="mdEditor"
+          v-model="solutions.mySolution"
+          :toolbars="markdown.toolbar"
+          :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'"
+        />
+        <el-button
+          type="primary"
+          :plain="themeSwitchStore.theme >  0 ? true : false"
+          @click="solutions.publishSolution"
+        >
+          发布题解
+        </el-button>
+      </div>
     </div>
     <div class="right">
       <div class="hint">
@@ -123,7 +220,7 @@
 <script lang='ts' setup>
 import { getCurrentInstance, onMounted, reactive, ref } from "vue";
 import { useThemeSwitchStore } from "../pinia/themeSwitch";
-import MdEditor from "md-editor-v3";
+import MdEditor, { ToolbarNames } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 import { staticSourceBaseURL } from "../utils/axios/axios";
 import { useUserDataStore } from "../pinia/userData";
@@ -147,10 +244,48 @@ var config = reactive({
   },
 });
 
+var markdown: {
+  toolbar: ToolbarNames[];
+} = {
+  toolbar: [
+    "bold",
+    "underline",
+    "italic",
+    "-",
+    "strikeThrough",
+    "title",
+    "sub",
+    "sup",
+    "quote",
+    "unorderedList",
+    "orderedList",
+    "-",
+    "codeRow",
+    "code",
+    "link",
+    "image",
+    "table",
+    "mermaid",
+    "katex",
+    "-",
+    "revoke",
+    "next",
+    "save",
+    "=",
+    "preview",
+    "htmlPreview",
+    "catalog",
+  ],
+};
+
 //solution相关数据
 var solutions = reactive({
   PID: "",
   data: [],
+  //暂存我的评论
+  myComment: "",
+  //暂存我的题解
+  mySolution: "",
   getSolutions: (PID: string) => {
     notFound.value = true;
     let UID = userDataStore.isLogin ? userDataStore.UID : null;
@@ -168,7 +303,23 @@ var solutions = reactive({
           config.Count = data.Count;
           //初始状态为折叠
           for (let item of solutions.data) {
-            item["Fold"] = true;
+            if (item.Content.split("\n").length > 4) {
+              item["CanFold"] = true;
+              item["Fold"] = true;
+            } else {
+              item["CanFold"] = false;
+              item["Fold"] = false;
+            }
+            //给每个数据增加评论相关的数据
+            item["Page"] = 1;
+            item["Limit"] = 10;
+            item["Count"] = 0;
+            item["Comments"] = [];
+            item["ShowComments"] = false;
+            item["CommentChangePage"] = (Page: number) => {
+              item["Page"] = Page;
+              solutions.getComments(item);
+            };
           }
           notFound.value = solutions.data.length == 0 ? true : false;
         }
@@ -177,6 +328,10 @@ var solutions = reactive({
           data?.msg ?? "服务器错误\\\\error"
         );
       });
+  },
+  //展开、收缩
+  fold: (index: number, fold: boolean) => {
+    solutions.data[index].Fold = fold;
   },
   //点赞
   thumbUp: (index: number, SLTID: number, State: number) => {
@@ -204,7 +359,92 @@ var solutions = reactive({
         );
       });
   },
+  //打开评论
+  openComment: (index: number) => {
+    if (solutions.data[index].ShowComment) {
+      solutions.data[index].ShowComment = false;
+      return;
+    }
+    solutions.myComment = ""; //清空暂存的我的评论
+    solutions.data[index].ShowComment = true;
+    solutions.getComments(solutions.data[index]);
+  },
   //获取评论
+  getComments: (item: any) => {
+    //传入题解对象
+    proxy
+      .$get(
+        "forum/solution/comment/" + item.SLTID,
+        {
+          Page: item.Page - 1,
+          Limit: item.Limit,
+        },
+        0,
+        2
+      )
+      .then((res: any) => {
+        //输出结果
+        let data = res.data;
+        if (data?.code == 0) {
+          item["Count"] = data.Count;
+          item["Comments"] = data.data;
+        }
+
+        proxy.codeProcessor(
+          data?.code ?? 100001,
+          data?.msg ?? "服务器错误\\\\error"
+        );
+      });
+  },
+  //关闭评论
+  closeComment: (index: number) => {
+    solutions.data[index].ShowComment = false;
+  },
+  //发表评论
+  publishComment: (index: number) => {
+    let content = solutions.myComment;
+    console.log(content);
+    proxy.elMessage({ message: "功能在完善中，敬请期待!" });
+  },
+
+  //发布题解
+  publishSolution: () => {
+    //发布我的题解
+    if (!userDataStore.isLogin || !userDataStore.UID) {
+      proxy.elMessage({ message: "您还未登录", type: "warning" });
+      return;
+    }
+    if (!solutions.mySolution) {
+      proxy.elMessage({ message: "请输入内容", type: "warning" });
+      return;
+    }
+    let UID = userDataStore.UID;
+    proxy
+      .$post(
+        "forum/solution/add/" + solutions.PID,
+        {
+          UID,
+          Content: solutions.mySolution,
+        },
+        0,
+        2
+      )
+      .then((res: any) => {
+        let data = res.data;
+        if (data.code == 0) {
+          solutions.mySolution = "";
+          window.scroll(0, 0);
+          proxy.elNotification({
+            message: "发布成功！请耐心等待审核。",
+            type: "success",
+          });
+        }
+        proxy.codeProcessor(
+          data?.code ?? 100001,
+          data?.msg ?? "服务器错误\\\\error"
+        );
+      });
+  },
 });
 
 function SyncUrl() {
@@ -305,6 +545,7 @@ onMounted(() => {
 
       > .content,
       > .contentFold {
+        height: fit-content;
         position: relative;
         box-sizing: border-box;
         padding: 16px;
@@ -312,24 +553,34 @@ onMounted(() => {
         > .mdEditor {
           box-sizing: border-box;
           padding: 14px;
+          @include fill_color("fill2");
         }
       }
 
       > .contentFold {
-        height: 220px;
         max-height: 220px;
         overflow: hidden;
 
         > .foldCover {
           position: absolute;
-          top: 14px;
+          top: 16px;
           bottom: 0;
-          left: 14px;
-          right: 14px;
+          left: 16px;
+          right: 16px;
           box-sizing: border-box;
           padding: 14px;
-          @include linear_gradient(to top, "fill13", "fill15");
+          text-align: center;
+          display: flex;
+          flex-direction: column-reverse;
+          align-items: center;
+          @include linear_gradient(to top, "fill1", "fill3");
           opacity: 0.7;
+
+          > div {
+            display: flex;
+            font-size: $fontSize7;
+            @include font_color("font1");
+          }
         }
       }
 
@@ -369,6 +620,112 @@ onMounted(() => {
           font-size: $fontSize6;
         }
       }
+
+      > .comment {
+        box-sizing: border-box;
+        margin: 0 20px 10px 20px;
+        padding: 10px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        @include fill_color("fill3");
+
+        > .item {
+          width: 100%;
+          display: flex;
+          align-items: flex-start;
+          border-bottom: 1px solid;
+          padding: 14px 0;
+          @include border_color("border1");
+          transition-duration: 160ms;
+
+          &:hover {
+            @include fill_color("fill2");
+          }
+
+          > .left {
+            position: relative;
+            margin: 4px 15px;
+            height: 46px;
+            width: 46px;
+            border-radius: 8px;
+            @include box_shadow(0, 0, 2px, 1px, "font2");
+            overflow: hidden;
+
+            > img {
+              width: 100%;
+              height: 100%;
+            }
+          }
+
+          > .right {
+            width: calc(100% - 76px);
+            display: flex;
+            flex-direction: column;
+
+            > .userName {
+              font-size: $fontSize5;
+              @include font_color("font1");
+            }
+
+            > .content {
+              min-height: 40px;
+              box-sizing: border-box;
+              padding: 10px;
+              font-size: $fontSize4;
+              @include font_color("font2");
+              word-wrap: break-word;
+            }
+
+            > .time {
+              margin: 0 10px;
+              font-size: $fontSize4;
+              text-align: right;
+              @include font_color("font3");
+            }
+          }
+        }
+
+        > .notFound {
+          > div {
+            padding: 5px 0;
+          }
+        }
+
+        > .pagination {
+          margin: 25px 0;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          justify-items: center;
+        }
+
+        > .myComment {
+          width: 100%;
+          margin: 10px 0;
+          display: flex;
+        }
+
+        > .hideComment {
+          font-size: $fontSize6;
+          @include font_color("font2");
+          width: fit-content;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          justify-items: center;
+
+          &:hover {
+            @include font_color("fill12");
+          }
+        }
+      }
+    }
+
+    > .itemThumbsUp {
+      @include fill_color("fill15");
     }
 
     > .pagination {
@@ -378,6 +735,20 @@ onMounted(() => {
       align-items: center;
       justify-content: center;
       justify-items: center;
+    }
+
+    > .publish {
+      display: flex;
+      flex-direction: column;
+      margin-top: 100px;
+
+      > .mdEditor {
+        @include fill_color("fill3");
+      }
+
+      > .el-button {
+        font-size: $fontSize7;
+      }
     }
   }
 

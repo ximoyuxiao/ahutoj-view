@@ -206,7 +206,6 @@ function getProblemsById(PID?: string) {
     });
     return;
   }
-  console.log(PID);
   proxy.$router.push({
     name: "Problem",
     params: {
