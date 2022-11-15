@@ -98,6 +98,7 @@
             class="comment"
             v-show="item?.ShowComment ?? false"
           >
+            <!-- 评论列表 -->
             <div
               class="item"
               v-for="(comment , commentIndex) in (item?.Comments ?? [])"
@@ -114,15 +115,26 @@
                   {{comment.UserName}}
                 </div>
                 <div class="content">{{comment.Content}}</div>
-                <div class="time">{{ proxy.Utils.TimeTools.timestampToDate(comment.CreateTime,2) }}</div>
+                <div class="buttom">
+                  <div
+                    class="delete cursor_pointer"
+                    v-if="userDataStore.isLogin && userDataStore.UID == comment.UID"
+                    @click="solutions.deleteComment(index,comment.SLTCMTID,item.SLTID, userDataStore.UID)"
+                  >
+                    删除
+                  </div>
+                  <div class="time">{{ proxy.Utils.TimeTools.timestampToDate(comment.CreateTime,2) }}</div>
+                </div>
               </div>
             </div>
+            <!-- 未找到 -->
             <div
               class="notFound"
               v-if="(item.Count ?? 0) == 0"
             >
               <el-empty description="当前还没有评论哦~" />
             </div>
+            <!-- 分页 -->
             <div
               class="pagination"
               v-if="(item.Count ?? 0) >= 10"
@@ -136,6 +148,7 @@
                 @current-change="item.CommentChangePage"
               />
             </div>
+            <!-- 发表评论 -->
             <div class="myComment">
               <el-input
                 v-model="solutions.myComment"
@@ -386,8 +399,9 @@ var solutions = reactive({
         //输出结果
         let data = res.data;
         if (data?.code == 0) {
-          item["Count"] = data.Count;
+          item["Count"] = data.Count; //实时的评论数
           item["Comments"] = data.data;
+          item.CommentCount = data.Count; //改变一下评论数
         }
 
         proxy.codeProcessor(
@@ -402,9 +416,73 @@ var solutions = reactive({
   },
   //发表评论
   publishComment: (index: number) => {
-    let content = solutions.myComment;
-    console.log(content);
-    proxy.elMessage({ message: "功能在完善中，敬请期待!" });
+    if (!userDataStore.isLogin || !userDataStore.UID) {
+      proxy.elMessage({ message: "您还未登录", type: "warning" });
+      return;
+    }
+    if (!solutions.myComment) {
+      proxy.elMessage({ message: "请输入内容", type: "warning" });
+      return;
+    }
+    let Content = solutions.myComment;
+    proxy
+      .$post(
+        "forum/solution/comment/add/" + solutions.data[index].SLTID,
+        {
+          UID: userDataStore.UID,
+          Content,
+        },
+        0,
+        2
+      )
+      .then((res: any) => {
+        let data = res.data;
+        if (data?.code == 0) {
+          solutions.getComments(solutions.data[index]);
+          solutions.myComment = "";
+          proxy.elNotification({
+            message: "评论成功！",
+            type: "success",
+          });
+        }
+        proxy.codeProcessor(
+          data?.code ?? 100001,
+          data?.msg ?? "服务器错误\\\\error"
+        );
+      });
+  },
+  //撤回评论
+  deleteComment: (
+    index: number,
+    SLTCMTID: number,
+    SLTID: string,
+    UID: string
+  ) => {
+    
+    proxy
+      .$delete(
+        "forum/solution/comment/delete/" + SLTCMTID,
+        {
+          UID,
+          SLTID,
+        },
+        0,
+        2
+      )
+      .then((res) => {
+        let data = res.data;
+        if (data?.code == 0) {
+          solutions.getComments(solutions.data[index]);
+          proxy.elNotification({
+            message: "删除成功",
+            type: "success",
+          });
+        }
+        proxy.codeProcessor(
+          data?.code ?? 100001,
+          data?.msg ?? "服务器错误\\\\error"
+        );
+      });
   },
 
   //发布题解
@@ -678,11 +756,21 @@ onMounted(() => {
               word-wrap: break-word;
             }
 
-            > .time {
-              margin: 0 10px;
+            > .buttom {
               font-size: $fontSize4;
-              text-align: right;
-              @include font_color("font3");
+              display: flex;
+              margin-left: auto;
+
+              > .delete {
+                @include font_color("fill42");
+                margin: 0 10px;
+              }
+
+              > .time {
+                margin: 0 10px;
+                text-align: right;
+                @include font_color("font3");
+              }
             }
           }
         }
