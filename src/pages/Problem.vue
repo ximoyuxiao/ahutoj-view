@@ -745,7 +745,7 @@ var submit = reactive<submitType>({
     }
     proxy
       .$post("api/submit/commit/", {
-        PID: Number(problem.PID),
+        PID: problem.PID,
         UID: UID,
         CID: contest.CID ? Number(contest.CID) : -1,
         Source: ace.aceEditor.getValue(),
