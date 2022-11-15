@@ -711,6 +711,10 @@ var submit = reactive({
       });
       return;
     }
+    //锁定
+    submit.enabled = false;
+    submit.process = 3000; //3s
+    submit.middleWare();
     proxy
       .$post("api/submit/commit/", {
         PID: problem.PID,
@@ -742,10 +746,7 @@ var submit = reactive({
           data?.msg ?? "服务器错误\\\\error"
         );
       });
-    //锁定
-    submit.enabled = false;
-    submit.process = 3000; //3s
-    submit.middleWare();
+
   },
 });
 
