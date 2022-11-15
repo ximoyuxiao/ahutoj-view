@@ -183,23 +183,18 @@
               当前模式：{{ aceConfig.modeNow }}
             </span>
             <div
-              class="submit cursor_pointer cursor_noFocus"
-              @mousedown="submit.submitTouchStart"
-              @mouseup="submit.submitTouchEnd"
-              @mouseleave="submit.submitTouchEnd"
+              :class="submit.enabled ? 'submit cursor_pointer cursor_noFocus': 'submitNotEnable cursor_pointer'"
+              @click="submit.submit()"
             >
-              <el-icon size="26px">
-                <Check />
-              </el-icon>
-              &nbsp;提交
-              <div
-                ref="submitCover"
-                style="background-color: rgba(130, 220, 250, 0.65);
-                    height: 100%;
-                    position: absolute;
-                    box-shadow: -2px 0 1px 2px rgba(130, 220, 250, 0.8);
-                    top: 0;left: 0;"
-              />
+              <template v-if="submit.enabled">
+                <el-icon size="26px">
+                  <Check />
+                </el-icon>
+                &nbsp;提交
+              </template>
+              <template v-else>
+                {{(submit.process / 1000).toFixed(2)}}S
+              </template>
             </div>
             <div
               class="solutions cursor_pointer"
@@ -681,47 +676,20 @@ function copyText(e: any, i: number): void {
 }
 
 //提交
-type submitType = {
-  time: any;
-  isInLongTouch: boolean;
-  process: number;
-  [item: string]: any;
-};
-var submit = reactive<submitType>({
-  time: null, //定时器任务
-  isInLongTouch: false,
-  process: 0, //进度条进度
-  middleware() {
-    if (!this.isInLongTouch) {
-      this.submitTouchEnd();
-      return;
+var submit = reactive({
+  timer: null, //定时器任务
+  enabled: true,
+  process: 0,
+  middleWare: () => {
+    clearTimeout(submit.timer);
+    if (submit.process > 0) {
+      setTimeout(() => {
+        submit.process -= 25;
+        submit.middleWare();
+      }, 25);
     } else {
-      clearTimeout(this.time);
-      //进度条结束
-      if (this.process >= 100) {
-        this.submitTouchEnd();
-        this.submit();
-      }
-      this.time = setTimeout(() => {
-        this.process += 3;
-        proxy.$refs.submitCover.style.width = this.process + "%";
-        this.middleware();
-      }, 15);
+      submit.enabled = true;
     }
-  },
-  submitTouchStart() {
-    this.isInLongTouch = true;
-    this.process = 0;
-    //设置点击事件计时器
-    this.time = setTimeout(() => {
-      this.middleware();
-    }, 15);
-  },
-  submitTouchEnd() {
-    proxy.$refs.submitCover.style.width = 0 + "%";
-    this.isInLongTouch = false;
-    clearTimeout(this.time);
-    this.process = 0;
   },
   submit() {
     if (!userDataStore.isLogin) {
@@ -774,6 +742,10 @@ var submit = reactive<submitType>({
           data?.msg ?? "服务器错误\\\\error"
         );
       });
+    //锁定
+    submit.enabled = false;
+    submit.process = 3000; //3s
+    submit.middleWare();
   },
 });
 
@@ -1057,7 +1029,8 @@ onMounted(() => {
           margin: 10px 0;
         }
 
-        > div {
+        > .submit,
+        > .solutions {
           position: relative;
           overflow: hidden;
           margin: 8px 0;
@@ -1076,6 +1049,23 @@ onMounted(() => {
             @include box_shadow(0, 0, 2px, 1px, "fill12");
             @include fill_color("fill16");
           }
+        }
+
+        > .submitNotEnable {
+          position: relative;
+          overflow: hidden;
+          margin: 8px 0;
+          width: 220px;
+          height: 40px;
+          border-radius: 15px;
+          font-size: $fontSize8;
+          letter-spacing: 4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          @include box_shadow(0, 0, 2px, 1px, "border2");
+          @include fill_color("fill54");
+          cursor: not-allowed;
         }
       }
     }
