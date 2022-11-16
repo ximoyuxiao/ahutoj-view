@@ -121,7 +121,6 @@
                   :label="item.name"
                   :value="item.name"
                   :disabled="item.disabled"
-                  :effect="themeSwitchStore.theme >  0 ? 'light' : 'dark'"
                 />
               </el-select>
               <el-button
@@ -173,7 +172,6 @@
             <el-tag
               v-for="tag in problem.Label.split(';')"
               :key="tag"
-              :effect="themeSwitchStore.theme >  0 ? 'light' : 'dark'"
             >
               {{ tag }}
             </el-tag>
@@ -746,7 +744,6 @@ var submit = reactive({
           data?.msg ?? "服务器错误\\\\error"
         );
       });
-
   },
 });
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="input"> 
+  <div class="input">
     <input
       v-model="vModel"
       @input="onValueChange"
@@ -34,7 +34,8 @@ onMounted(() => {
 <style lang='scss' scoped>
 .input {
   width: 100%;
-  padding: 10px 0;
+  box-sizing: border-box;
+  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -44,23 +45,10 @@ onMounted(() => {
     @include font_color("fill12");
   }
 
-  .icon {
-    height: 30px;
-    width: 30px;
-    @include fill_color("fill4");
-    box-sizing: border-box;
-    border: 2px solid;
-    @include border_color("font2");
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   input {
     box-sizing: border-box;
     height: 30px;
-    width: calc(100% - 32px);
+    width: 100%;
     padding: 2px 10px;
     border-radius: 8px;
     font-size: $fontSize5;

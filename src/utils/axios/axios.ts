@@ -4,8 +4,8 @@ import httpErrorHandler from "./httpErrorHandler";
 
 // export var baseURL = "http://81.68.182.68/";
 export var staticSourceBaseURL = "";
-export var server1 = "http://channelcz.top/";
-// export var server1 = "http://81.68.182.68/";
+// export var server1 = "http://channelcz.top/";
+export var server1 = "http://81.68.182.68/";
 export var server2 = "http://127.0.0.1:4077/";
 
 if (import.meta.env.MODE === "production") {

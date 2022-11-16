@@ -40,8 +40,9 @@ onMounted(() => {
 
 <style lang='scss' scoped>
 .iconInput {
-  width: 94%;
-  padding: 10px 0;
+  width: 100%;
+  box-sizing: border-box;
+  padding:  10px;
   display: flex;
   align-items: center;
   justify-content: space-between;

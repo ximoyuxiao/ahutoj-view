@@ -2,6 +2,11 @@ import { defineStore } from "pinia";
 import { Config } from "../utils/buffer/buffer";
 import { ColorValTools } from "../utils/globalFunctions";
 import { PiniaNameSpace } from "./nameSpace";
+import { useToggle, useDark } from "@vueuse/core";
+const isDark = useDark({
+	storageKey: "vitepress-theme-appearance",
+});
+const toggleDark = useToggle(isDark);
 
 export const useThemeSwitchStore = defineStore(
 	PiniaNameSpace.ThemeSwitchStore,
@@ -27,9 +32,12 @@ export const useThemeSwitchStore = defineStore(
 
 			//切换主题
 			switchTheme(theme: number | string | null): void {
+				theme = Number(theme);
 				this.theme = theme;
+				if (theme > 0 && isDark.value) toggleDark();
+				if (theme < 0 && !isDark.value) toggleDark();
 				//大于0说明是亮色 反之是暗色
-				switch (Number(theme)) {
+				switch (theme) {
 					case 8:
 						document.documentElement.setAttribute(
 							"data-theme",

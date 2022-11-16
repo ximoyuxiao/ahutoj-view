@@ -40,7 +40,6 @@
           <el-tag
             v-for="Adept in userInfo.AdeptArray"
             :key="Adept"
-            :effect="themeSwitch.theme == 1 ? 'light' : 'dark'"
           >
             {{ Adept }}
           </el-tag>
@@ -92,7 +91,7 @@
         >
           {{userInfo.Vjid ?  "VJudge:\n" + userInfo.Vjid : "绑定VJudge"}}
         </div>
-        <el-divider style="margin: 2px; background-color: var(--font_color4)" />
+        <el-divider style="margin: 2px;" />
         <div
           class="functionBtn"
           @click="functionConfig.show(10)"
