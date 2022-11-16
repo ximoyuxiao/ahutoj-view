@@ -125,7 +125,7 @@ var config = reactive({
 //跳转到题目
 function goToProblem(PID: string) {
   proxy.$router.push({
-    name: "Problem",
+    name: "ContestProblem",
     params: {
       PID,
       //解决竞赛状态跳转

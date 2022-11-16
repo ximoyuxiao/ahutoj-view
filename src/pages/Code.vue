@@ -317,9 +317,10 @@ function rejudge() {
 
 //跳转到题目
 function goToProblem(PID: number | string) {
+  let routerName = proxy.$route.query.CID ? "ContestProblem" : "Problem";
   proxy.$router.push({
-    path: "/Problem",
-    query: {
+    name: routerName,
+    params: {
       PID,
       CID: proxy.$route.query.CID ? proxy.$route.query.CID : undefined,
     },
