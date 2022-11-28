@@ -119,7 +119,7 @@
       <el-input
         v-show="problem.Origin != -1"
         v-model="problem.OriginPID"
-        placeholder="输入题目来源OJ的PID"
+        :placeholder="problem.OriginPlaceHolder[problem.Origin]"
       />
     </div>
     <div>
@@ -228,6 +228,11 @@ var problem = reactive({
     },
     { label: "洛谷", value: constValStore.PROBLEM_ORIGIN_LUOGU },
   ],
+  //placehodler提示
+  OriginPlaceHolder: {
+    [constValStore.PROBLEM_ORIGIN_CF]: "竞赛ID + 题目编号 如：1069A",
+    [constValStore.PROBLEM_ORIGIN_ATCODER]: "竞赛ID + 题目编号 如：abc277_e",
+  },
   //题目
   Visibles: [
     { label: "可见", value: constValStore.PROBLEM_VISIBLE },

@@ -86,7 +86,7 @@ function getProblemsList() {
 }
 
 onMounted(() => {
-  //   getProblemsList();
+  getProblemsList();
 });
 </script>
 

@@ -21,9 +21,9 @@
         比赛
       </router-link>
       <router-link
-        id="problemList"
+        id="problemLists"
         active-class="selected"
-        to="/ProblemList"
+        to="/ProblemLists"
       >
         题单
       </router-link>

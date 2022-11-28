@@ -80,8 +80,8 @@ const router = createRouter({
 				import("../pages/ContestChildren/ContestStatus.vue"),
 		},
 		{
-			path: "/ProblemList",
-			component: () => import("../pages/ProblemList.vue"),
+			path: "/ProblemLists",
+			component: () => import("../pages/ProblemLists.vue"),
 		},
 		{
 			path: "/Status",
