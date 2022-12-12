@@ -83,7 +83,7 @@ const CDN_ElementPlus = {
 
 export default ({ mode }) => {
 	const env = loadEnv(mode, process.cwd(), "ENV");
-	console.log(env);
+	// console.log(env);
 	return defineConfig({
 		server: {
 			hmr: true,
