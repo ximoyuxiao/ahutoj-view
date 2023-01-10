@@ -23,11 +23,11 @@
                 <div class="list">
                     <div
                         class="item"
-                        v-for="(item,index) in ProblemList.list"
+                        v-for="(item,index) in problemList.list"
                     >
                         <div class="left">
                             <div id="LID">#{{item.LID}}</div>
-                            <div id="Title">#{{item.Title}}</div>
+                            <div id="Title">{{item.Title}}</div>
                         </div>
                         <div id="cover"></div>
                         <div class="right">
@@ -35,6 +35,25 @@
                             <div id="UID">创建者：{{item.UID}}</div>
                         </div>
                     </div>
+                </div>
+                <div class="pagination">
+                    <el-pagination
+                        background
+                        layout="prev, pager, next"
+                        :page-size="config.limit"
+                        :total="config.Count"
+                        :current-page="config.currentPage"
+                        @current-change="config.changePage"
+                    />
+                    <el-radio-group
+                        v-model="config.limit"
+                        @change="config.changePage(1)"
+                        style="margin: 0 20px"
+                    >
+                        <el-radio-button :label="20" />
+                        <el-radio-button :label="30" />
+                        <el-radio-button :label="50" />
+                    </el-radio-group>
                 </div>
             </div>
         </div>
@@ -46,48 +65,68 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive } from "vue";
+import { reactive } from "vue";
 import { getCurrentInstance } from "vue";
 const { proxy } = getCurrentInstance() as any;
 
 var config = reactive({
     search: "",
+    Count: 0,
+    currentPage: 1,
+    limit: 20,
+    loading: null,
+    init() {
+        this.Count = 0;
+        this.currentPage = 1;
+        this.limit = 20;
+        this.loading = null;
+    },
+    //切换页面
+    changePage: (page: number): void => {
+        config.currentPage = page;
+        SyncUrl();
+        problemList.getData();
+    },
 });
 
-//页面数据
-var ProblemList = reactive({
-    //提单列表
-    list: [
-        {
-            LID: 1000,
-            UID: "11111",
-            Title: "测试题单1",
-            StartTime: 1688995545665,
-        },
-        {
-            LID: 1001,
-            UID: "11111",
-            Title: "测试题单2",
-            StartTime: 1688995545999,
-        },
-        {
-            LID: 1002,
-            UID: "11111",
-            Title: "测试题单3",
-            StartTime: 1688995559888,
-        },
-    ],
+var problemList = reactive({
+    list: [],
+    getData: () => {
+        proxy
+            .$get("api/training/list", {
+                Page: config.currentPage - 1,
+                Limit: config.limit,
+            })
+            .then((res) => {
+                let data = res.data;
+                if (data.code === 0) {
+                    console.log(data);
+                    config.Count = data.size;
+                    problemList.list = data.data;
+                }
+                proxy.codeProcessor(
+                    data?.code ?? 100001,
+                    data?.msg ?? "服务器错误\\\\error"
+                );
+            });
+    },
 });
 
-function getProblemsList() {
-    proxy.$get("api/training/list", { Page: 0, Limit: 20 }).then((res) => {
-        console.log(res);
+//用于同步浏览器url
+function SyncUrl() {
+    //仅用于展示实时url，可用于复制跳转
+    proxy.$router.replace({
+        path: "/ProblemLists",
+        query: {
+            Page: config.currentPage,
+            Limit: config.limit,
+        },
     });
 }
 
-onMounted(() => {
-    getProblemsList();
-});
+(() => {
+    problemList.getData();
+})();
 </script>
 
 <style  scoped lang="scss">
@@ -172,6 +211,7 @@ onMounted(() => {
                         height: 100%;
                         @include linear_gradient(to left, "fill2", "fill4");
                         transform: translateX(100%);
+                        opacity: 0.8;
                         transition-duration: 300ms;
                     }
 
@@ -194,6 +234,15 @@ onMounted(() => {
                         }
                     }
                 }
+            }
+
+            .pagination {
+                margin: 25px 0;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                justify-items: center;
             }
         }
     }
