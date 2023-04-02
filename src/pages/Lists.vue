@@ -12,6 +12,7 @@
                         <el-icon
                             size="18px"
                             style="margin: auto 15px;"
+                            @click="getListByLID()"
                         >
                             <Search />
                         </el-icon>
@@ -25,7 +26,9 @@
                         class="item"
                         v-for="(item,index) in problemList.list"
                     >
-                        <div class="left">
+                        <div class="left"
+                        @click="() => getListByLID(item.LID)"
+                        >
                             <div id="LID">#{{item.LID}}</div>
                             <div id="Title">{{item.Title}}</div>
                         </div>
@@ -112,11 +115,27 @@ var problemList = reactive({
     },
 });
 
+function getListByLID(LID?: string) {
+  config.search = LID ?? config.search;
+  if (!config.search) {
+    proxy.elMessage({
+      message: "请输入有效的题单ID！",
+      type: "warning",
+    });
+    return;
+  }
+  proxy.$router.push({
+    name: "List",
+    params: {
+      LID: config.search,
+    },
+  });
+}
 //用于同步浏览器url
 function SyncUrl() {
     //仅用于展示实时url，可用于复制跳转
     proxy.$router.replace({
-        path: "/ProblemLists",
+        path: "/Lists",
         query: {
             Page: config.currentPage,
             Limit: config.limit,
