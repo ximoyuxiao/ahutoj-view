@@ -79,6 +79,20 @@ const Admin = {
 							"../components/Admin/ProblemEditChildren/Rejudge.vue"
 						),
 				},
+				{
+					path:"UploadProblem",
+					component: () =>
+						import(
+							"../components/Admin/ProblemEditChildren/UploadProblem.vue"
+						),
+				},
+				{
+					path:"DownloadProblem",
+					component: () =>
+						import(
+							"../components/Admin/ProblemEditChildren/DownloadProblem.vue"
+						),
+				},
 			],
 		},
 		{

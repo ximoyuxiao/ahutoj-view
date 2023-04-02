@@ -23,10 +23,10 @@
         <div class="username">{{ userDataStore.UserName }}</div>
         <div class="acStatus">
           <div class="acCount">
-            AC&nbsp;&nbsp;&nbsp;<span>114514</span>
+            AC:&nbsp;&nbsp;&nbsp;<span>{{ userInfo.Solved }}</span>
           </div>
           <div class="submittedCount">
-            Sub&nbsp;&nbsp;&nbsp;<span>1919810</span>
+            Submit:&nbsp;&nbsp;&nbsp;<span>{{userInfo.Submited}}</span>
           </div>
         </div>
       </div>
@@ -182,6 +182,8 @@ type userInfoType = {
   CodeForceUser: string;
   Vjid: string;
   AdeptArray: Array<string>;
+  Submited:number;
+  Solved:number;
   copy: Function;
 };
 var userInfo = reactive<userInfoType>({
@@ -196,6 +198,8 @@ var userInfo = reactive<userInfoType>({
   CodeForceUser: "",
   Vjid: "",
   AdeptArray: [],
+  Solved:0,
+  Submited:0,
   copy: (data: any) => {
     console.log(data);
     userInfo.UID = data.UID;
@@ -208,7 +212,10 @@ var userInfo = reactive<userInfoType>({
     userInfo.Email = data.Email;
     userInfo.CodeForceUser = data.CodeForceUser;
     userInfo.Vjid = data.Vjid;
+    userInfo.Submited = data.Submited;
+    userInfo.Solved = data.Solved;
     userInfo.AdeptArray = userInfo.Adept == "" ? [] : userInfo.Adept.split(";");
+    console.log(userInfo)
   },
 });
 
@@ -218,6 +225,7 @@ function getUserInfo() {
     // proxy.$log(res);
     let data = res.data;
     if (data.code == 0) {
+      console.log(data)
       userInfo.copy(data);
       userDataStore.updateData(data);
     }

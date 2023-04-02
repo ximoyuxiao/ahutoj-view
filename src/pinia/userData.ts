@@ -14,6 +14,8 @@ type userInfo = {
 	CodeForceUser?: string;
 	Vjid?: string;
 	PermissionMap?: number;
+	Solved?:number;
+	Submited?:number;
 };
 
 export const useUserDataStore = defineStore(PiniaNameSpace.UserData, {
@@ -30,6 +32,8 @@ export const useUserDataStore = defineStore(PiniaNameSpace.UserData, {
 			CodeForceUser: "",
 			Vjid: "",
 			PermissionMap: 0, //十进制，使用时用二进制运算
+			Solved:0,
+			Submited:0,
 		};
 	},
 	actions: {
@@ -45,6 +49,8 @@ export const useUserDataStore = defineStore(PiniaNameSpace.UserData, {
 			this.CodeForceUser = data.CodeForceUser;
 			this.Vjid = data.Vjid;
 			this.isLogin = true;
+			this.Solved = data.Solved;
+			this.Submited = data.Submited;
 		},
 
 		//同步permission信息
@@ -63,6 +69,8 @@ export const useUserDataStore = defineStore(PiniaNameSpace.UserData, {
 			if (data.Email) this.Email = data.Email;
 			if (data.CodeForceUser) this.CodeForceUser = data.CodeForceUser;
 			if (data.Vjid) this.Vjid = data.Vjid;
+			if (data.Submited) this.Submited = data.Submited;
+			if (data.Solved) this.Solved = data.Solved;
 			this.sessionUserInfo();
 		},
 
@@ -79,6 +87,8 @@ export const useUserDataStore = defineStore(PiniaNameSpace.UserData, {
 			data.CodeForceUser = this.CodeForceUser;
 			data.Vjid = this.Vjid;
 			data.PermissionMap = this.PermissionMap;
+			data.Solved = this.Solved;
+			data.Submited = this.Submited;
 			UserData.userInfo(data);
 		},
 
@@ -93,6 +103,8 @@ export const useUserDataStore = defineStore(PiniaNameSpace.UserData, {
 			this.Adapt = "";
 			this.Email = "";
 			this.PermissionMap = 0;
+			this.Submited = 0;
+			this.Solved = 0;
 			Config.clearStore();
 		},
 	},

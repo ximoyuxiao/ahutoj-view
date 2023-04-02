@@ -28,6 +28,18 @@
       >
         重判
       </router-link>
+      <router-link
+        active-class="selected"
+        to="/Admin/ProblemEdit/UploadProblem"
+      >
+        上传题目
+      </router-link>
+      <router-link
+        active-class="selected"
+        to="/Admin/ProblemEdit/DownloadProblem"
+      >
+        下载题目
+      </router-link>
     </div>
 
     <div class="content">

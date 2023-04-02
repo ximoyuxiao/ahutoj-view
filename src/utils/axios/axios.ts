@@ -4,14 +4,14 @@ import httpErrorHandler from "./httpErrorHandler";
 
 // export var baseURL = "http://81.68.182.68/";
 export var staticSourceBaseURL = "";
-export var server1 = "https://channelcz.top/";
+export var server1 = "http://127.0.0.1/";
 // export var server1 = "http://81.68.182.68/";
-export var server2 = "http://127.0.0.1:4077/";
+export var server2 = "http://127.0.0.1/";
 
 if (import.meta.env.MODE === "production") {
-	staticSourceBaseURL = "/";
+	staticSourceBaseURL = "http://127.0.0.1/";
 } else {
-	staticSourceBaseURL = "https://channelcz.top/";
+	staticSourceBaseURL = "http://127.0.0.1/";
 	// staticSourceBaseURL = "http://81.68.182.68/";
 }
 
