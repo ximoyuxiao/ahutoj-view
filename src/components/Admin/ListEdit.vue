@@ -33,7 +33,7 @@ const { proxy } = getCurrentInstance() as any;
 
 function getProblemsList() {
   proxy
-    .$post("api/training/add/", { UID: "11111", Title: "123" })
+    .$get("api/training/list")
     .then((res) => {
       console.log(res);
     });

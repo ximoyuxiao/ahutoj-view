@@ -34,9 +34,9 @@
       >
         状态
       </router-link>
-      <router-link to="/">
+      <!-- <router-link to="/">
         论坛
-      </router-link>
+      </router-link> -->
     </div>
     <div class="right">
       <el-icon

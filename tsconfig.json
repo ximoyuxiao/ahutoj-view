@@ -10,6 +10,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true, 
+    "ignoreDeprecations": "5.0",
     "suppressImplicitAnyIndexErrors": true,
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true

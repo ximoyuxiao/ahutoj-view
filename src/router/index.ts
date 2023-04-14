@@ -89,6 +89,11 @@ const router = createRouter({
 			component: () => import("../pages/List.vue"),
 		},
 		{
+			path:"/ListRank/:LID",
+			name:"ListRank",
+			component: () => import("../pages/ListChildren/ListRank.vue"),
+		},
+		{
 			path: "/Status",
 			component: () => import("../pages/Status.vue"),
 		},

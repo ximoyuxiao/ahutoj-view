@@ -133,14 +133,14 @@
       </div>
     </div>
 
-    <div class="flag">
+    <!-- <div class="flag">
       其他
     </div>
     <div id="hint">
       题解、论坛、互动功能正在路上，敬请期待AhutOj二期计划!
       <br>
       <a href="https://github.com/cz2542079957/AhutOjForum.git">跟踪二期工程动态</a>
-    </div>
+    </div> -->
   </div>
 </template>
 
