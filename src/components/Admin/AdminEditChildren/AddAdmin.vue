@@ -65,6 +65,7 @@ type searchType = {
   getInfo: Function;
   [item: string]: any;
 };
+
 var search = reactive<searchType>({
   UID: "",
   Adept: "",
@@ -227,7 +228,6 @@ function confirm() {
         line-height: 40px;
         text-align: center;
       }
-
       .select {
         display: flex;
         align-items: center;
