@@ -215,7 +215,7 @@ var problem = reactive({
     Label: "",
     Origin: -1,
     OriginPID: "",
-    ContentType: -1,
+    ContentType: 1,
     Visible: 1,
     //题目描述 文本类型
     ContentTypes: [

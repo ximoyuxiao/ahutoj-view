@@ -102,9 +102,9 @@ var fileList = ref<{ Filename: string; FileType: string; FileSize: number }[]>(
 
 var search = reactive({
     PID: "",
-    isSearched: false,
+    isSearched: true,
     onFocus() {
-        search.isSearched = false;
+        search.isSearched = true;
     },
     getProblem(PID: string | null) {
         if (PID) {

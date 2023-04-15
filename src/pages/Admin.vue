@@ -13,35 +13,35 @@
           active-class="selected"
           to="/Admin/ProblemEdit"
         >
-          题目编辑
+          题目管理
         </router-link>
         <router-link
           v-if="config.ContestAdmin"
           active-class="selected"
           to="/Admin/ContestEdit"
         >
-          竞赛编辑
+          竞赛管理
         </router-link>
         <router-link
           v-if="config.ListAdmin"
           active-class="selected"
           to="/Admin/ListEdit"
         >
-          题单编辑
+          题单管理
         </router-link>
         <router-link
           v-if="config.Administrator"
           active-class="selected"
           to="/Admin/UserEdit"
         >
-          用户信息
+          用户管理
         </router-link>
         <router-link
           v-if="config.SuperAdmin"
           active-class="selected"
           to="/Admin/AdminEdit"
         >
-          管理权限
+          权限管理
         </router-link>
       </div>
     </transition>

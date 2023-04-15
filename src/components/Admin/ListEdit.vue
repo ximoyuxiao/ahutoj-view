@@ -5,14 +5,14 @@
         active-class="selected"
         to="/Admin/ListEdit/AddList"
       >
-        添加题目
+      添加题单
       </router-link>
       <el-divider direction="vertical" />
       <router-link
         active-class="selected"
         to="/Admin/ListEdit/UpdateList"
       >
-        修改题目
+      修改题单
       </router-link>
     </div>
 
