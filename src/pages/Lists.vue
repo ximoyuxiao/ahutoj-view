@@ -23,7 +23,7 @@
             <div class="content">
                 <div class="list">
                     <div
-                        class="item"
+                        class="item cursor_pointer"
                         v-for="(item,index) in problemList.list"
                     >
                         <div class="left"
