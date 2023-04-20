@@ -119,10 +119,12 @@
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance, reactive, ref } from "vue";
+import { getCurrentInstance, reactive, ref,onMounted} from "vue";
 import { ElMessageBox } from "element-plus";
 import { useUserDataStore } from "../../../pinia/userData";
 import { useConstValStore } from "../../../pinia/constVal";
+import router from "../../../router";
+import { Search } from "@element-plus/icons-vue";
 const { proxy } = getCurrentInstance() as any;
 const userDataStore = useUserDataStore();
 const constValStore = useConstValStore();
@@ -344,6 +346,13 @@ function complete() {
       );
     });
 }
+onMounted(() => {
+  var CID = proxy.$route.query.CID
+  if(CID){
+    contest.searchCid = CID;
+    contest.search();
+  }
+});
 </script>
 
 <style scoped lang="scss">

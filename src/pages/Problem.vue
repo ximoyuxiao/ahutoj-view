@@ -23,6 +23,12 @@
           </div>
           <div class="PID">#{{ problem.PID }}</div>
           <div class="title">{{ problem.Title }}</div>
+          <div class="adminButton" v-if="admin">
+            <el-button 
+            v-on:click="goToProblemAdmin()">题目编辑</el-button>
+            <el-button
+            v-on:click="goToProblemTestDataAdmin()">测试数据管理</el-button>
+          </div>
           <template v-if="problem.ContentType == 1">
             <div class="markdown">
               <div
@@ -56,6 +62,7 @@
                 <pre class="text">{{ problem.Input }}</pre>
               </div>
               <div class="output">
+         
                 <div class="label">输出</div>
                 <pre class="text">{{ problem.Output }}</pre>
               </div>
@@ -258,10 +265,10 @@ const configStore = useConfigStore();
 const constValStore = useConstValStore();
 const userDataStore = useUserDataStore();
 const pageBufferedDataStore = usePageBufferedDataStore();
-
 var needPass = ref(false); //是否需要验证
 var inputPass = ref(""); //检验密码
 var notFound = ref(true); //未找到
+var admin = ref(false);
 
 //页面加载效果维护
 var loading = reactive({
@@ -383,6 +390,7 @@ type problemType = {
   ContentType: number;
   [item: string]: any;
 };
+
 var problem = reactive<problemType>({
   PID: null,
   Description: "",
@@ -485,8 +493,16 @@ async function init() {
     contest.isContestProblem = false;
     getProblemInfo();
   }
+  admin.value =  getProblemAdmin();
 }
-
+function getProblemAdmin():boolean{
+    if (!userDataStore.isLogin) {
+    return false;
+  }
+  if((userDataStore.PermissionMap & constValStore.ProblemAdminBit)!=0 || (userDataStore.PermissionMap&constValStore.SuperAdminBit)!=0)
+    return true;
+  return false;
+  }
 //获取题目信息
 async function getProblemInfo() {
   //获取题目
@@ -747,6 +763,24 @@ var submit = reactive({
   },
 });
 
+function goToProblemAdmin():void{
+    let PID = problem.PID;
+    proxy.$router.push({
+      path:"/Admin/ProblemEdit/UpdateProblem",
+      query:{
+        PID,
+      }
+    })
+  }
+  function goToProblemTestDataAdmin():void{
+    let PID = problem.PID;
+    proxy.$router.push({
+      path:"/Admin/ProblemEdit/EditProblemJudgeFile",
+      query:{
+        PID,
+      }
+    })
+  }
 onMounted(() => {
   window.scrollTo(0, 0);
   //检查题目url:id是否存在
@@ -1130,5 +1164,14 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.adminButton{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  >button{
+    width: 100px;
+    text-align: center;
+  }
 }
 </style>

@@ -144,11 +144,10 @@
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance, reactive } from "vue";
+import { getCurrentInstance, reactive,onMounted } from "vue";
 import { ElMessageBox } from "element-plus";
 import elMessage from "../../../utils/elMessageFactory";
 import "md-editor-v3/lib/style.css";
-import { title } from "process";
 const { proxy } = getCurrentInstance() as any;
 const maxListProblemLength = 200;
 type SearchType = {
@@ -424,6 +423,14 @@ var searchList = reactive({
             searchList.isShowed = false;
         });
     },
+});
+
+onMounted(() => {
+  var LID = proxy.$route.query.LID
+  if(LID){
+    search.LID = LID;
+    search.getListInfo(LID);
+  }
 });
 </script>
 

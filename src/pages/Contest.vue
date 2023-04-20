@@ -79,6 +79,10 @@
             >
               比赛状态
             </div>
+            <div v-if="admin" 
+              class="contestRank cursor_pointer"
+              v-on:click="goToContestAdmin()">
+            竞赛编辑</div>
           </div>
           <div class="nav">
             <div style="width: 90px">序号</div>
@@ -152,13 +156,17 @@
 import { onMounted, getCurrentInstance, reactive, ref, onUnmounted } from "vue";
 import { usePageBufferedDataStore } from "../pinia/pageBufferdData";
 import Input from "../components/MyComponents/Input.vue";
+import { useConstValStore } from "../pinia/constVal";
+import { useUserDataStore } from "../pinia/userData";
 const { proxy } = getCurrentInstance() as any;
 const pageBufferedDataStore = usePageBufferedDataStore();
+const userDataStore = useUserDataStore();
+const constValStore = useConstValStore();
 
 var needPass = ref(false); //是否需要验证
 var inputPass = ref(""); //检验密码
 var notFound = ref(true); //未找到
-
+var admin  = ref(false);  // 是否具有管理权限
 //加载
 var loading = reactive({
   contestInfo: null,
@@ -319,8 +327,18 @@ async function init() {
     //公开
     getContestById(CID, Pass);
   }
+  // 判断管理员权限
+  admin.value = getContestAdmin();
 }
 
+function getContestAdmin():boolean{
+  if (!userDataStore.isLogin) {
+    return false;
+  }
+  if((userDataStore.PermissionMap & constValStore.ContestAdminBit)!=0 || (userDataStore.PermissionMap&constValStore.SuperAdminBit)!=0)
+    return true;
+  return false;
+}
 //验证密码
 async function checkContestPass(CID: number, Pass: string) {
   if (Pass) {
@@ -417,6 +435,15 @@ function goToStatus(): void {
   });
 }
 
+function goToContestAdmin():void{
+  let CID = contest.CID;
+  proxy.$router.push({
+    path:"/Admin/ContestEdit/UpdateContest",
+    query:{
+      CID,
+    }
+  })
+}
 onMounted(() => {
   init();
 });

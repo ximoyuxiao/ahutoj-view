@@ -49,6 +49,10 @@
                 >
                 查看排名
               </div>
+              <div v-if="admin" 
+              class="contestRank cursor_pointer"
+              v-on:click="goToListAdmin()">
+                题单编辑</div>
               </div>
             <div class="nav">
               <div style="width: 90px">序号</div>
@@ -92,11 +96,14 @@
   <script lang="ts" setup>
   import { onMounted, getCurrentInstance, reactive, ref, onUnmounted } from "vue";
   import {useUserDataStore} from "../pinia/userData"
+  import { useConstValStore } from "../pinia/constVal";
   const { proxy } = getCurrentInstance() as any;
   // const pageBufferedDataStore = usePageBufferedDataStore();
   const userDataStore = useUserDataStore();
+  const constValStore = useConstValStore();
   var notFound = ref(true); //未找到
   var addlist  = ref(true);
+  var admin  =ref(false);
   //加载
   var loading = reactive({
     contestInfo: null,
@@ -172,9 +179,16 @@
     }
       getListUserInfo(LID);
       getListById(LID);
-      
+      admin.value = CheckListAdmin();
   }
-
+  function CheckListAdmin():boolean{
+    if (!userDataStore.isLogin) {
+    return false;
+  }
+  if((userDataStore.PermissionMap & constValStore.ListAdminBit)!=0 || (userDataStore.PermissionMap&constValStore.SuperAdminBit)!=0)
+    return true;
+  return false;
+  }
   type ListUserType = {
     LID:number;
     UID:string;
@@ -287,20 +301,15 @@
       },
     });
   }
-  
-//   //跳转到当前比赛的状态
-//   function goToStatus(): void {
-//     let CID = contest.CID;
-//     let Pass: string;
-//     if (proxy.$route.params.Pass) Pass = proxy.$route.params.Pass;
-//     proxy.$router.push({
-//       path: "/ContestStatus",
-//       query: {
-//         CID,
-//         Pass,
-//       },
-//     });
-//   }
+  function goToListAdmin():void{
+    let LID = list.LID;
+    proxy.$router.push({
+      path:"/Admin/ListEdit/UpdateList",
+      query:{
+        LID,
+      }
+    })
+  }
   
   onMounted(() => {
     init();

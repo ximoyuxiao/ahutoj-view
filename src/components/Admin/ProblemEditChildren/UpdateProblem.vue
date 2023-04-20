@@ -241,7 +241,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance, reactive } from "vue";
+import { getCurrentInstance, reactive,onMounted } from "vue";
 import { ElMessageBox } from "element-plus";
 import { useConstValStore } from "../../../pinia/constVal";
 import MdEditor, { ToolbarNames } from "md-editor-v3";
@@ -633,6 +633,14 @@ function complete() {
             }
         });
 }
+
+onMounted(() => {
+  var PID = proxy.$route.query.PID
+  if(PID){
+    search.PID = PID;
+    search.getProblem(PID);
+  }
+});
 </script>
 
 <style scoped lang="scss">

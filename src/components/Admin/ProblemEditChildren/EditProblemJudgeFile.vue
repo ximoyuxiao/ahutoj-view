@@ -256,7 +256,12 @@ function deleteFile(index: number) {
     });
 }
 
-onMounted(() => {});
+onMounted(() => {
+  var PID = proxy.$route.query.PID
+  if(PID){
+    search.getProblem(PID);
+  }
+});
 </script>
 
 <style scoped lang="scss">
