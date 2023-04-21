@@ -441,7 +441,7 @@ var aceConfig = reactive({
     { name: "CPP", disabled: false },
     { name: "CPP11", disabled: false },
     { name: "CPP17", disabled: false },
-    { name: "JAVA", disabled: false },
+    { name: "JAVA", disabled: true },
     { name: "PYTHON3", disabled: false },
     { name: "JavaScript", disabled: true },
     { name: "C#", disabled: true },
