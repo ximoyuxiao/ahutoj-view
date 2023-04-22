@@ -23,10 +23,13 @@
         <div class="username">{{ userDataStore.UserName }}</div>
         <div class="acStatus">
           <div class="acCount">
-            AC:&nbsp;&nbsp;&nbsp;<span>{{ userInfo.Solved }}</span>
+            AC:&nbsp;&nbsp;&nbsp;<span style="color:#00CC00">{{ userInfo.Solved }}</span>
           </div>
           <div class="submittedCount">
-            Submit:&nbsp;&nbsp;&nbsp;<span>{{userInfo.Submited}}</span>
+            Submit:&nbsp;&nbsp;&nbsp;<span style="color:#0000FF">{{userInfo.Submited}}</span>
+          </div>
+          <div class="rating">
+            Rating:&nbsp;&nbsp;&nbsp;<span :style="getRatingColor(userInfo.Rating?userInfo.Rating:0)">{{ userInfo.Rating?userInfo.Rating:0 }}</span>
           </div>
         </div>
       </div>
@@ -172,6 +175,7 @@ const themeSwitch = useThemeSwitchStore();
 //用户资料
 type userInfoType = {
   UID: string;
+  Rating:null|number;
   HeadURL: string;
   UserName: string;
   School: string;
@@ -200,6 +204,7 @@ var userInfo = reactive<userInfoType>({
   AdeptArray: [],
   Solved:0,
   Submited:0,
+  Rating:0,
   copy: (data: any) => {
     console.log(data);
     userInfo.UID = data.UID;
@@ -214,6 +219,7 @@ var userInfo = reactive<userInfoType>({
     userInfo.Vjid = data.Vjid;
     userInfo.Submited = data.Submited;
     userInfo.Solved = data.Solved;
+    userInfo.Rating = data.Rating;
     userInfo.AdeptArray = userInfo.Adept == "" ? [] : userInfo.Adept.split(";");
     console.log(userInfo)
   },
@@ -404,6 +410,35 @@ var functionConfig = reactive({
   },
 });
 
+function getRatingColor(rating:number){
+  if(rating == 0){
+    return "color:#000000;"
+  }
+  if(rating < 1200){
+    return "color:#C0C0C0;";
+  }
+  if( rating >= 1200 && rating < 1400){
+    return "color:#00FF00;";
+  }
+  if(rating >= 1400 && rating < 1600){
+    return "color:#00FFFF;";
+  }
+  if(rating >= 1600 && rating < 1900){
+    return "color:#0000FF;";
+  }
+  if(rating >=1900 && rating < 2100){
+    return "color:#FF00FF;";
+  }
+  if(rating >= 2100 && rating < 2400){
+    return "color:#FF8000;";
+  }
+  if(rating >= 2400 && rating < 2600){
+    return "color:#FF0000;";
+  }
+  if(rating >= 2600){
+    return "color:FFFF00;";
+  }
+}
 onMounted(() => {
   if (!userDataStore.isLogin) {
     proxy.$router.replace({ path: "/" });
@@ -515,9 +550,10 @@ onMounted(() => {
         flex-direction: column;
         align-items: flex-end;
         justify-content: flex-end;
-
         > div {
-          font-weight: 500;
+          width:100px;
+          text-align:left;
+          font-weight: 525;
           margin-bottom: 5px;
         }
       }
