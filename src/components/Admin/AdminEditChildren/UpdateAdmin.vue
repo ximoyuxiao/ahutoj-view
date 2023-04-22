@@ -60,7 +60,7 @@ var adminList = reactive({
   list: [] as PermissionType[],
   Count:0,
   gatAdminList:()=>{
-      proxy.$get("/api/admin/permission/list?Page=" + page + "&Limit="+Limit).then((res :any)=>{
+      proxy.$get("/api/admin/permission/list/?Page=" + page + "&Limit="+Limit).then((res :any)=>{
       var data = res.data;
       if(data.code === 0){
         console.log(res.data);
