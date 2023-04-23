@@ -155,14 +155,12 @@ var adminList = reactive({
   },
 });
 
-onMounted(()=>{
-  adminList.gatAdminList();
-});
+(() => {
+    adminList.gatAdminList()
+})();
 </script>
 
 <style scoped lang="scss">
-.UpdateAdmim {
-}
 .userInfo {
   
   display: flex;

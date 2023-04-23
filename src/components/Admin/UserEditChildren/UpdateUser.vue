@@ -1,15 +1,12 @@
 <template>
   <div class="UpdateUser">
     <div class="uid">
-      <label
-        class="loginLabel"
-        for="uid"
-      >
+      <label class="loginLabel">
         账号
       </label>
       <input
         class="loginInput"
-        name="uid"
+        name="UID"
         type="text"
         autocomplete="off"
         maxlength="20"
@@ -21,17 +18,21 @@
         class="loginLabel"
         for="username"
       >
-        账号
+        密码
       </label>
       <input
         class="loginInput"
-        name="username"
+        name="password"
         type="text"
         autocomplete="off"
         maxlength="20"
-        v-model="userInfo.Pass"
+        v-model="userInfo.Password"
       />
     </div>
+    <el-button class="button"
+    v-on:click="changeUserPass()">
+    重置密码
+    </el-button>
   </div>
 </template>
 
@@ -41,7 +42,7 @@ const { proxy } = getCurrentInstance() as any;
 
 var userInfo = reactive({
   UID: "",
-  Pass: "",
+  Password: "",
   init() {
     this.UID = "";
     this.Pass = "";
@@ -49,24 +50,25 @@ var userInfo = reactive({
 });
 
 function changeUserPass() {
-  // proxy.$post("api/user/edit/pass/", { userInfo.UID}).then((res: any) => {
-  //   let data = res.data;
-  //   if (data.code == 0) {
-  //     userInfo.hasSearched = true;
-  //     userInfo.copy(data);
-  //     proxy.elMessage({
-  //       message: "查询成功!",
-  //       type: "success",
-  //     });
-  //   }
-  //   proxy.codeProcessor(data.code,data.msg);
-  // });
+  proxy.$post("api/admin/user/edit/password/",{UID:userInfo.UID,Password:userInfo.Password}).then((res: any) => {
+    let data = res.data;
+    if (data.code == 0) {
+      proxy.elMessage({
+        message: "修改成功!",
+        type: "success",
+      });
+    }
+    proxy.codeProcessor(data.code,data.msg);
+  });
 }
-
-function sendForm() {}
 </script>
 
 <style scoped lang="scss">
+.button{
+  width: 100px;
+  margin-left: 60px;
+  margin-top: 5px;
+}
 .UpdateUser {
   display: flex;
   flex-direction: column;
