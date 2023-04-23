@@ -508,7 +508,7 @@ function DownLoadRankList(){
   console.log(file);
   blob =  new Blob([s2ab(file)], { type: 'application/octet-stream' });
   console.log(blob);
-  downloadFile(contest.CID + ":" + contest.Title + "的排名. ",blob)
+  downloadFile(contest.CID + ":" + contest.Title + "的排名.xlsx",blob)
 }
 function s2ab(s) {
     const buf = new ArrayBuffer(s.length);
