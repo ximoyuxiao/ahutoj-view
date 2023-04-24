@@ -74,7 +74,7 @@
             >
               <el-icon>
                 <Operation />
-              </el-icon>&nbsp;Admin
+              </el-icon>&nbsp;管理
             </div>
             <el-divider style="margin: 2px" />
             <div @click.stop="initLoginCredentials()">

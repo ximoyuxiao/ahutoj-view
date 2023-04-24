@@ -207,6 +207,27 @@ const Admin = {
 				},
 			],
 		},
+		{
+			path: "NoticeEdit",
+			component: () => import("../components/Admin/NoticeEdit.vue"),
+			redirect: "/Admin/NoticeEdit/AddNotice",
+			children: [
+				{
+					path: "AddNotice",
+					component: () =>
+						import(
+							"../components/Admin/NoticeEditChildren/AddNotice.vue"
+						),
+				},
+				{
+					path: "UpdateNotice",
+					component: () =>
+						import(
+							"../components/Admin/NoticeEditChildren/UpdateNotice.vue"
+						),
+				},
+			],
+		},
 	],
 };
 

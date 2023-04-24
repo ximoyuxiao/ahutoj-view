@@ -7,6 +7,50 @@
       <el-empty description="数据同步失败,可能是网络问题，请稍后重试，或者联系网站运维人员。" />
     </div>
     <div class="flag">
+      AHUTOJ公告列表
+    </div>
+    <div class="notice">
+      <div class="left">
+        <div class="noticeItem">
+          <div
+                :class="item.Title != '' ? 'item' : 'nothing'"
+                class="cursor_pointer"
+                v-for="(item,index) in notices.noticeList"
+                :key="index"
+                @click="notices.SelectIdx(index)"
+          >
+          <div>{{item.Title}}<span class="rightTime">{{  item.CreateTime ?( proxy.Utils.TimeTools.timestampToTime(item.CreateTime)): ""  }}</span></div>
+        </div>
+      </div>
+      </div>
+      <div class="right">
+          <div
+            class="noticeItem"
+          >
+            <div
+              class="item"
+              v-if="notices.noticeList[notices.Selected]"
+            >
+            <div style="display: inline;">
+              <h3 style="display: inline-block;" class="title">
+                {{notices.noticeList[notices.Selected].Title}}
+              </h3>
+              <span  class="rightTime">{{ notices.noticeList[notices.Selected].CreateTime ?( proxy.Utils.TimeTools.timestampToTime(notices.noticeList[notices.Selected].CreateTime)): ""  }}</span>
+          </div>
+              <hr>
+              <br>
+              <md-editor
+                class="markDown"
+                v-model="notices.noticeList[notices.Selected].Content"
+                :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'"
+                preview-only
+              />
+            </div>
+            <div v-else class="nothing"></div>
+          </div>
+      </div>
+    </div>
+    <div class="flag">
       AHUTOJ比赛列表
     </div>
     <div
@@ -147,9 +191,13 @@
 <script lang="ts" setup>
 import { onMounted, reactive, getCurrentInstance } from "vue";
 import { usePageBufferedDataStore } from "../pinia/pageBufferdData";
+import { relative } from "path";
+import MdEditor from "md-editor-v3";
+import "md-editor-v3/lib/style.css";
+import { useThemeSwitchStore } from "../pinia/themeSwitch";
 const { proxy } = getCurrentInstance() as any;
+const themeSwitchStore = useThemeSwitchStore();
 const pageBufferedDataStore = usePageBufferedDataStore();
-
 //页面配置
 var config = reactive({
   time: 0,
@@ -166,7 +214,6 @@ var config = reactive({
     },
   },
 });
-
 //首页ahutoj竞赛信息
 type contestsType = {
   waitingList: any[] | null;
@@ -174,6 +221,7 @@ type contestsType = {
   overList: any[] | null;
   [item: string]: any;
 };
+
 var contests = reactive<contestsType>({
   liveList: [],
   waitingList: [],
@@ -189,13 +237,53 @@ var contests = reactive<contestsType>({
     contests.showListIndex = index;
   },
 });
+type noticeType={
+  ID:number;
+  UID:string;
+  Title:string;
+  Content:string;
+  CreateTime:number;
+  UpdateTime:number;
+}
 
+type noticeListType={
+  noticeList:noticeType[]|null;
+  Selected:number;
+  [item: string]: any;
+}
+var notices = reactive<noticeListType>({
+  noticeList: [],
+  Selected:0,
+  init(){
+    notices.noticeList = [];
+    notices.Selected = 0;
+  },
+  copy(data:any){
+    notices.Selected = 0;
+    for(let i in data){
+      let item: noticeType ={
+        ID:data[i].ID,
+        UID : data[i].UID,
+        Title : data[i].Title,
+        Content : data[i].Content,
+        CreateTime : data[i].CreatedTime,
+        UpdateTime : data[i].UpdatedTime,
+      }
+      notices.noticeList.push(item);
+    }
+    console.log(notices.noticeList);
+  },
+  SelectIdx(idx:number){
+    notices.Selected = idx;
+  }
+});
 //初始化
 async function init() {
   config.loads.init();
   await syncSystemTime();
   recentContestsProcessor();
   getContestsInfo();
+  getNoticeInfo();
 }
 
 //同步系统时间
@@ -258,6 +346,15 @@ function getContestsInfo() {
   });
 }
 
+function getNoticeInfo(){
+  proxy.$get("/api/notices").then((res: any) => {
+    let data = res.data;
+    if(data.code == 0){
+      console.log(data);
+      notices.copy(data.data);
+    }
+  })
+}
 //列表数据处理
 function recentContestsProcessor() {
   //在获取到数据后
@@ -281,6 +378,7 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+
 .Home {
   position: relative;
   width: 100%;
@@ -290,11 +388,126 @@ onMounted(() => {
   box-sizing: border-box;
   padding: $home_outerPaddingTop $home_outerPaddingLeft;
 
+  .markDown {
+    background-color: transparent !important;
+  }
   .error {
     width: 100%;
     @include font_color("font1");
   }
+  .notice{
+  width: 100%;
+  height: 200px;
+  display: flex;
+  @include fill_color("fill1");
+  
+  .left {
+    width: 30%;
+    z-index: 2;
+    overflow-y: auto;
+    > div {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+      transition-duration: 200ms;
+      flex-direction: column;
+      justify-content: space-around;
+      box-sizing: border-box;
+      padding: 15px 20px;
+      animation-duration: 600ms;
+      .noticeItem{
+      }
+      .item{
+        height: 20px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        border-radius: 8px;
+        box-sizing: border-box;
+        padding: 4px 12px;
+        margin: 2px;
+        @include fill_color("fill3");
+        @include box_shadow(0, 0, 5px, 1px, "fill54");
+        font-size: $fontSize2;
+        .rightTime{
+          margin: 0;
+          position: relative;
+          float: right;
+          text-align: right;
+        }
+      }
+      > div {
+        // writing-mode: vertical-lr;
+        @include font_color("font1");
+        font-size: $fontSize5;
+      }
+    }
+  }
+  .right {
+      position:relative;
+      width: 70%;
+      height: auto;
+      @include fill_color("fill1");
+      border-start-end-radius: 12px;
+      border-end-end-radius: 12px;
+      overflow-y: auto;
+      .rightTime{
+          margin: 0;
+          position: relative;
+          float: right;
+          text-align: right;
+      }
+      > div {
+        position: absolute;
+        overflow: auto;
+        height: auto;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        box-sizing: border-box;
+        padding: 15px 20px;
+        animation-duration: 600ms;
 
+        .item {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          border-radius: 8px;
+          box-sizing: border-box;
+          padding: 4px 12px;
+          @include fill_color("fill3");
+          @include box_shadow(0, 0, 5px, 1px, "fill54");
+          font-size: $fontSize8;
+
+          .title {
+            width: fit-content;
+            display: flex;
+            align-items: center;
+
+            i {
+              box-sizing: border-box;
+              margin: 0 5px;
+            }
+          }
+
+          .time {
+            font-size: $fontSize6;
+          }
+        }
+
+        .nothing {
+          height: 70px;
+          border-radius: 8px;
+          box-sizing: border-box;
+          padding: 4px 12px;
+          @include fill_color("fill2");
+        }
+      }
+  }
+}
   .flag {
     width: fit-content;
     @include fill_color("fill33");

@@ -43,6 +43,13 @@
         >
           权限管理
         </router-link>
+        <router-link
+          v-if="config.Administrator"
+          active-class="selected"
+          to="/Admin/NoticeEdit"
+        >
+          公告管理
+        </router-link>
       </div>
     </transition>
 
