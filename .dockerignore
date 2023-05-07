@@ -17,12 +17,11 @@ dist.rar
 # Editor directories and files
 .VSCodeCounter
 .vscode/*
-!.vscode/extensions.json
 .idea
+!.vscode/extensions.json
 .DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-tmp
