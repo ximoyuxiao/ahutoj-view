@@ -342,6 +342,16 @@ function complete() {
             let data = res.data;
             if (data.code == 0) {
                 proxy.elMessage({ message: "添加成功!", type: "success" });
+                let PID = data.PID;
+                if(problem.Origin == -1){
+                    proxy.$router.push({
+                    path:"/Admin/ProblemEdit/EditProblemJudgeFile",
+                    query:{
+                        PID,
+                    }
+                    })
+                }
+                return ;
             }
             proxy.codeProcessor(
                 data?.code ?? 100001,
