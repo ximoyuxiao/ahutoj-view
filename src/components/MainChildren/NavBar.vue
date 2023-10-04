@@ -133,11 +133,11 @@ function initLoginCredentials() {
 <style scoped lang="scss">
 .navBox {
   top: 0;
-  position: fixed;
+  position: relative;
   width: 100%;
-  min-width: 800px;
+  min-width: 100%;
+  border: 2px solid black;
   height: 55px;
-  display: flex;
   justify-content: space-between;
   z-index: $navBar_zindex;
   transition-duration: 200ms;

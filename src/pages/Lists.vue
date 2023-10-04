@@ -73,7 +73,7 @@ import { getCurrentInstance } from "vue";
 const { proxy } = getCurrentInstance() as any;
 
 var config = reactive({
-    search: "",
+    search:1000,
     Count: 0,
     currentPage: 1,
     limit: 20,
@@ -115,7 +115,7 @@ var problemList = reactive({
     },
 });
 
-function getListByLID(LID?: string) {
+function getListByLID(LID?: number) {
   config.search = LID ?? config.search;
   if (!config.search) {
     proxy.elMessage({

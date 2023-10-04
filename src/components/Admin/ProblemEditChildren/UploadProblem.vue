@@ -121,7 +121,7 @@ function uploadFileList() {
             let formData = new FormData();
             formData.append("file", f as Blob);
             proxy
-            .$post("api/file/problem/upfile/",formData, 1)
+            .$post("api/file/problem/",formData, 1)
             .then((res: any) => {
                 let data = res.data
                 if(data.code == 0){

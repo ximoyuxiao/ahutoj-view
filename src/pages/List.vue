@@ -53,6 +53,11 @@
               class="contestRank cursor_pointer"
               v-on:click="goToListAdmin()">
                 题单编辑</div>
+
+              <div v-if="admin" 
+              class="contestRank cursor_pointer"
+              v-on:click="CloneList()">
+                克隆题单</div>
               </div>
             <div class="nav">
               <div style="width: 90px">序号</div>
@@ -310,7 +315,34 @@
       }
     })
   }
-  
+  function CloneList():void{
+    if(userDataStore.UID == ""){
+      proxy.codeProcessor(
+        100001,
+        "用户未登录，请先登录\\\\error"
+      );
+      return
+    }
+    proxy.$post("/api/training/clone/",{
+      UID: userDataStore.UID,
+      LID:list.LID,
+    }).then((res:any) =>{
+      let data = res.data;
+      if(data.code == 0){
+        // 跳转页面 到新提单
+        proxy.$router.push({
+        name: "List",
+        params: {
+          LID: data.LID,
+        }
+		});
+      }
+      proxy.codeProcessor(
+        data?.code ?? 100001,
+        data?.msg ?? "服务器错误\\\\error"
+      );
+    });
+  }
   onMounted(() => {
     init();
   });
