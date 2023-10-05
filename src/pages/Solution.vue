@@ -116,9 +116,9 @@
               <div class="
                   right">
                 <div class="userName">
-                  {{comment.UserName}}
+                  {{comment.UID}}
                 </div>
-                <div class="content">{{comment.Content}}</div>
+                <div class="content">{{comment.Text}}</div>
                 <div class="buttom">
                   <div
                     class="delete cursor_pointer"
@@ -127,7 +127,7 @@
                   >
                     删除
                   </div>
-                  <div class="time">{{ proxy.Utils.TimeTools.timestampToDate(comment.CreateTime,2) }}</div>
+                  <div class="time">{{ proxy.Utils.TimeTools.timestampToDate(comment.UpdateTime,2) }}</div>
                 </div>
               </div>
             </div>
@@ -247,6 +247,7 @@ import MdEditor, { ToolbarNames } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 import { staticSourceBaseURL } from "../utils/axios/axios";
 import { useUserDataStore } from "../pinia/userData";
+import elMessage from "../utils/elMessageFactory";
 const userDataStore = useUserDataStore();
 
 const themeSwitchStore = useThemeSwitchStore();
@@ -328,7 +329,7 @@ var solutions = reactive({
       .then((res: any) => {
         let data = res.data;
         if (data?.code == 0) {
-          solutions.data = data.solution_list;
+          solutions.data = data.SolutionList;
           config.Count = data.count;
           //初始状态为折叠
           for (let item of solutions.data) {
@@ -345,10 +346,13 @@ var solutions = reactive({
             item["count"] = 0;
             item["Comments"] = [];
             item["ShowComments"] = false;
+            item["ThumbsUp"] = 0;
+            item["CommentCount"] =0;
             item["CommentChangePage"] = (Page: number) => {
               item["Page"] = Page;
               solutions.getComments(item);
             };
+            solutions.getComments(item);
           }
           notFound.value = solutions.data.length == 0 ? true : false;
         }
@@ -369,24 +373,28 @@ var solutions = reactive({
       return;
     }
     let UID = userDataStore.UID;
-    proxy
-      .$post("forum/solution/thumbup/" + SLTID, { UID, State }, 0, 2)
-      .then((res: any) => {
-        let data = res.data;
-        if (data?.code == 0) {
-          let result = data.data;
-          solutions.data[index].IThumbsUp = result; //更新点赞状态
-          solutions.data[index].ThumbsUp += result; //更新点赞数
-          proxy.elNotification({
-            message: result == 1 ? "成功点赞" : "取消点赞",
-            type: "success",
-          });
-        }
-        proxy.codeProcessor(
-          data?.code ?? 100001,
-          data?.msg ?? "服务器错误\\\\error"
-        );
-      });
+    elMessage({
+      message:"功能未实现",
+      type:"warning",
+    })
+    // proxy
+    //   .$post("forum/solution/thumbup/" + SLTID, { UID, State }, 0, 2)
+    //   .then((res: any) => {
+    //     let data = res.data;
+    //     if (data?.code == 0) {
+    //       let result = data.data;
+    //       solutions.data[index].IThumbsUp = result; //更新点赞状态
+    //       solutions.data[index].ThumbsUp += result; //更新点赞数
+    //       proxy.elNotification({
+    //         message: result == 1 ? "成功点赞" : "取消点赞",
+    //         type: "success",
+    //       });
+    //     }
+    //     proxy.codeProcessor(
+    //       data?.code ?? 100001,
+    //       data?.msg ?? "服务器错误\\\\error"
+    //     );
+    //   });
   },
   //打开评论
   openComment: (index: number) => {
@@ -403,8 +411,9 @@ var solutions = reactive({
     //传入题解对象
     proxy
       .$get(
-        "forum/solution/comment/" + item.SLTID,
+        "api/comment/comments" ,
         {
+          SID:item.SID,
           Page: item.Page - 1,
           Limit: item.Limit,
         },
@@ -416,7 +425,7 @@ var solutions = reactive({
         let data = res.data;
         if (data?.code == 0) {
           item["Count"] = data.Count; //实时的评论数
-          item["Comments"] = data.data;
+          item["Comments"] = data.Data;
           item.CommentCount = data.Count; //改变一下评论数
         }
 
@@ -443,10 +452,13 @@ var solutions = reactive({
     let Content = solutions.myComment;
     proxy
       .$post(
-        "forum/solution/comment/add/" + solutions.data[index].SLTID,
+        "/api/comment/",
         {
-          UID: userDataStore.UID,
-          Content,
+          "SID":solutions.data[index].SID,
+          "ActionType":1,
+          "UID": userDataStore.UID,
+          "Text":Content,
+          "FCID":-1,
         },
         0,
         2
