@@ -21,17 +21,21 @@
             </div>
             <div class="info">
               <div class="userName">
-                {{item.UserName}}
+                {{item.UID}}
               </div>
               <div class="updateTime">
                 最后更新时间：{{ proxy.Utils.TimeTools.timestampToTime(item.UpdateTime) }}
               </div>
+              <div class="updateTime">
+                创建时间:{{ proxy.Utils.TimeTools.timestampToTime(item.CreateTime) }}
+              </div>
             </div>
           </div>
           <div :class=" (item?.Fold ?? true) ? 'contentFold' : 'content'">
+            <h3>{{item.Title}}</h3>
             <md-editor
               class="mdEditor"
-              v-model="item.Content"
+              v-model="item.Text"
               :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'"
               preview-only
             />
@@ -199,6 +203,12 @@
         </div>
       </template>
       <div class="publish">
+        <h1>标题</h1>
+        <el-input
+        v-model="solutions.title"
+        placeholder="Please input"
+        clearable
+    />
         <md-editor
           class="mdEditor"
           v-model="solutions.mySolution"
@@ -298,35 +308,41 @@ var solutions = reactive({
   //暂存我的评论
   myComment: "",
   //暂存我的题解
+  title:"",
   mySolution: "",
   getSolutions: (PID: string) => {
     notFound.value = true;
     let UID = userDataStore.isLogin ? userDataStore.UID : null;
     proxy
       .$get(
-        "forum/solution/list/pid/" + PID,
-        { UID, Page: config.currentPage - 1, Limit: config.Limit },
+        "api/solution/solutions",
+        {
+           "PID":PID,
+           "UID":UID, 
+           Page: config.currentPage - 1,
+            Limit: config.Limit 
+        },
         0,
         2
       )
       .then((res: any) => {
         let data = res.data;
         if (data?.code == 0) {
-          solutions.data = data.data;
-          config.Count = data.Count;
+          solutions.data = data.solution_list;
+          config.Count = data.count;
           //初始状态为折叠
           for (let item of solutions.data) {
-            if (item.Content.split("\n").length > 4) {
-              item["CanFold"] = true;
-              item["Fold"] = true;
-            } else {
+            // if (item.Content.split("\n").length > 4) {
+            //   item["CanFold"] = true;
+            //   item["Fold"] = true;
+            // } else {
               item["CanFold"] = false;
               item["Fold"] = false;
-            }
+            // }
             //给每个数据增加评论相关的数据
             item["Page"] = 1;
             item["Limit"] = 10;
-            item["Count"] = 0;
+            item["count"] = 0;
             item["Comments"] = [];
             item["ShowComments"] = false;
             item["CommentChangePage"] = (Page: number) => {
@@ -499,10 +515,13 @@ var solutions = reactive({
     let UID = userDataStore.UID;
     proxy
       .$post(
-        "forum/solution/add/" + solutions.PID,
+        "api/solution/",
         {
-          UID,
-          Content: solutions.mySolution,
+          "ActionType":1,
+          "PID":solutions.PID,
+          "UID":UID,
+          "Title":solutions.title,
+          "Text": solutions.mySolution,
         },
         0,
         2
@@ -513,7 +532,7 @@ var solutions = reactive({
           solutions.mySolution = "";
           window.scroll(0, 0);
           proxy.elNotification({
-            message: "发布成功！请耐心等待审核。",
+            message: "发布成功！",
             type: "success",
           });
         }
@@ -522,6 +541,7 @@ var solutions = reactive({
           data?.msg ?? "服务器错误\\\\error"
         );
       });
+    solutions.getSolutions(solutions.PID)
   },
 });
 
