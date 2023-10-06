@@ -35,7 +35,7 @@
             <h3>{{item.Title}}</h3>
             <md-editor
               class="mdEditor"
-              v-model="item.Text"
+              v-model="item.text"
               :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'"
               preview-only
             />
@@ -59,15 +59,15 @@
                 <el-icon
                   class="iconThumbsUp cursor_pointer"
                   size="20px"
-                  @click="solutions.thumbUp(index, item.SLTID,-1)"
-                  v-if="item.IThumbsUp == 1"
+                  @click="solutions.thumbUp(index, item.SID,3)"
+                  v-if="item.IThumbsUp == true"
                 >
                   <StarFilled />
                 </el-icon>
                 <el-icon
                   class="icon cursor_pointer"
                   size="20px"
-                  @click="solutions.thumbUp(index,item.SLTID,1)"
+                  @click="solutions.thumbUp(index,item.SID,1)"
                   v-else
                 >
                   <Star />
@@ -346,7 +346,8 @@ var solutions = reactive({
             item["count"] = 0;
             item["Comments"] = [];
             item["ShowComments"] = false;
-            item["ThumbsUp"] = 0;
+            item["ThumbsUp"] = item.FavoriteCount;
+            item["IThumbsUp"] = item.isFavorite;
             item["CommentCount"] =0;
             item["CommentChangePage"] = (Page: number) => {
               item["Page"] = Page;
@@ -373,28 +374,28 @@ var solutions = reactive({
       return;
     }
     let UID = userDataStore.UID;
-    elMessage({
-      message:"功能未实现",
-      type:"warning",
-    })
-    // proxy
-    //   .$post("forum/solution/thumbup/" + SLTID, { UID, State }, 0, 2)
-    //   .then((res: any) => {
-    //     let data = res.data;
-    //     if (data?.code == 0) {
-    //       let result = data.data;
-    //       solutions.data[index].IThumbsUp = result; //更新点赞状态
-    //       solutions.data[index].ThumbsUp += result; //更新点赞数
-    //       proxy.elNotification({
-    //         message: result == 1 ? "成功点赞" : "取消点赞",
-    //         type: "success",
-    //       });
-    //     }
-    //     proxy.codeProcessor(
-    //       data?.code ?? 100001,
-    //       data?.msg ?? "服务器错误\\\\error"
-    //     );
-    //   });
+    proxy
+      .$post("api/favorite/", {
+        "SID":SLTID, 
+        "UID":UID,
+        "ActionType":State,
+         }, 0, 2)
+      .then((res: any) => {
+        let data = res.data;
+        if (data?.code == 0) {
+          let result = data.data;
+          solutions.data[index].IThumbsUp = data.IsFavorite; //更新点赞状态
+          solutions.data[index].ThumbsUp = data.Count; //更新点赞数
+          proxy.elNotification({
+            message: data.IsFavorite == true ? "成功点赞" : "取消点赞",
+            type: "success",
+          });
+        }
+        proxy.codeProcessor(
+          data?.code ?? 100001,
+          data?.msg ?? "服务器错误\\\\error"
+        );
+      });
   },
   //打开评论
   openComment: (index: number) => {
