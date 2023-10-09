@@ -7,7 +7,7 @@
       <el-empty description="数据同步失败,可能是网络问题，请稍后重试，或者联系网站运维人员。" />
     </div>
     <div class="flag">
-      AHUTOJ公告列表
+      公告列表
     </div>
     <div class="notice">
       <div class="left">
@@ -51,7 +51,7 @@
       </div>
     </div>
     <div class="flag">
-      AHUTOJ比赛列表
+      比赛列表
     </div>
     <div
       class="contestsPreview"
@@ -62,19 +62,19 @@
           :class="(contests.showListIndex == 1 ? 'selected ' : '') + 'liveContests cursor_pointer'"
           @click="contests.show(1)"
         >
-          <div>正在进行</div>
+          <div>正 进 行</div>
         </div>
         <div
           :class="(contests.showListIndex == 2 ? 'selected ' : '') + 'waitingContests cursor_pointer'"
           @click="contests.show(2)"
         >
-          <div>等待中</div>
+          <div>等 待 中</div>
         </div>
         <div
           :class="(contests.showListIndex == 3 ? 'selected ' : '') + 'overContests cursor_pointer'"
           @click="contests.show(3)"
         >
-          <div>已经结束</div>
+          <div>已 结 束</div>
         </div>
       </div>
       <div class="right">
@@ -179,12 +179,12 @@
 
     <!-- <div class="flag">
       其他
-    </div>
-    <div id="hint">
-      题解、论坛、互动功能正在路上，敬请期待AhutOj二期计划!
-      <br>
-      <a href="https://github.com/cz2542079957/AhutOjForum.git">跟踪二期工程动态</a>
     </div> -->
+    <br>
+    <div id="hint" style="text-align: center;">
+      AHUT-OJ 新功能提案/BUG反馈/修改建议
+      <a href="https://docs.qq.com/form/page/DY0FDckZ3RlB0Uktq">点此前往</a>
+    </div>
   </div>
 </template>
 
@@ -511,23 +511,25 @@ onMounted(() => {
   .flag {
     width: fit-content;
     @include fill_color("fill33");
+    // background: #79BBFF;
     font-size: $fontSize6;
     margin: 30px 0 15px 0;
     box-sizing: border-box;
-    padding: 5px;
+    padding: 6px 10px 6px 10px;
     border-radius: 10px;
     transition-duration: 300ms;
+    letter-spacing: 2px;
 
-    &::before {
-      content: "— ";
-    }
+    // &::before {
+    //   content: "— ";
+    // }
 
-    &::after {
-      content: " —";
-    }
+    // &::after {
+    //   content: " —";
+    // }
 
     &:hover {
-      letter-spacing: 4px;
+      letter-spacing: 3px;
       filter: drop-shadow(0 0 2px #cdcdcd);
     }
   }
