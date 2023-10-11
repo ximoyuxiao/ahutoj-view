@@ -73,7 +73,6 @@
     <el-button class="confirm" type="primary" round
       @click="login"
     >登 录</el-button>
-
   </form>
 </template>
 
