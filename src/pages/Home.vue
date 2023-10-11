@@ -6,9 +6,9 @@
     >
       <el-empty description="数据同步失败,可能是网络问题，请稍后重试，或者联系网站运维人员。" />
     </div>
-    <div class="flag">
+    <!-- <div class="flag">
       公告列表
-    </div>
+    </div> -->
     <div class="notice">
       <div class="left">
         <div class="noticeItem">
@@ -19,7 +19,7 @@
                 :key="index"
                 @click="notices.SelectIdx(index)"
           >
-          <div>{{item.Title}}<span class="rightTime">{{  item.CreateTime ?( proxy.Utils.TimeTools.timestampToTime(item.CreateTime)): ""  }}</span></div>
+          <div>{{item.Title}}<span class="rightTime">{{ item.CreateTime ?( proxy.Utils.TimeTools.timestampToTime(item.CreateTime)): ""  }}</span></div>
         </div>
       </div>
       </div>
@@ -50,9 +50,9 @@
           </div>
       </div>
     </div>
-    <div class="flag">
+    <!-- <div class="flag">
       比赛列表
-    </div>
+    </div> -->
     <div
       class="contestsPreview"
       v-show="!config.isError"
@@ -78,10 +78,10 @@
         </div>
       </div>
       <div class="right">
-        <transition
+        <!-- <transition
           enter-active-class="animate__animated animate__backInLeft"
           leave-active-class="animate__animated animate__backOutRight"
-        >
+        > -->
           <div
             class="liveContests"
             v-show="contests.showListIndex == 1"
@@ -110,11 +110,11 @@
               </div>
             </div>
           </div>
-        </transition>
+        <!-- </transition>
         <transition
           enter-active-class="animate__animated animate__backInLeft"
           leave-active-class="animate__animated animate__backOutRight"
-        >
+        > -->
           <div
             class="waitingContests"
             v-show="contests.showListIndex == 2"
@@ -140,11 +140,11 @@
               </div>
             </div>
           </div>
-        </transition>
+        <!-- </transition>
         <transition
           enter-active-class="animate__animated animate__backInLeft"
           leave-active-class="animate__animated animate__backOutRight"
-        >
+        > -->
           <div
             class="overContests"
             v-show="contests.showListIndex == 3"
@@ -173,7 +173,7 @@
               </div>
             </div>
           </div>
-        </transition>
+        <!-- </transition> -->
       </div>
     </div>
 
@@ -397,8 +397,10 @@ onMounted(() => {
   }
   .notice{
   width: 100%;
-  height: 200px;
+  height: 270px;
   display: flex;
+  border-radius: 16px;
+  margin: 20px 0;
   @include fill_color("fill1");
   
   .left {
@@ -414,20 +416,20 @@ onMounted(() => {
       flex-direction: column;
       justify-content: space-around;
       box-sizing: border-box;
-      padding: 15px 20px;
+      padding: 10px 10px;
       animation-duration: 600ms;
       .noticeItem{
       }
       .item{
-        height: 20px;
+        height: 35px;
         width: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-        border-radius: 8px;
+        border-radius: 12px;
         box-sizing: border-box;
-        padding: 4px 12px;
-        margin: 2px;
+        padding: 0px 12px;
+        margin: 0 0 8px;
         @include fill_color("fill3");
         @include box_shadow(0, 0, 5px, 1px, "fill54");
         font-size: $fontSize2;
@@ -446,7 +448,7 @@ onMounted(() => {
     }
   }
   .right {
-      position:relative;
+      position: relative;
       width: 70%;
       height: auto;
       @include fill_color("fill1");
@@ -468,7 +470,7 @@ onMounted(() => {
         flex-direction: column;
         justify-content: space-around;
         box-sizing: border-box;
-        padding: 15px 20px;
+        padding: 10px 10px;
         animation-duration: 600ms;
 
         .item {
@@ -546,6 +548,7 @@ onMounted(() => {
   .contestsPreview {
     width: 100%;
     display: flex;
+    margin: 20px 0;
 
     .left {
       width: 50px;

@@ -36,36 +36,51 @@
         autocomplete="off"
         @keyup.enter="login"
       />
+      <!-- <template>
+        <el-input v-model="input" placeholder="Please input" />
+      </template> -->
+
+
+
       <label class="loginLabel">密码</label>
     </div>
     <div
       class="save"
       style="display: flex; justify-items: center; margin: 0 40px"
     >
+      <!-- <el-input v-model="input" placeholder="Please input"
+        type="checkbox"
+        name="save"
+      /> -->
+      <!-- <el-checkbox v-model="Checked" label="3 天内自动登录" size="large" for="save"/>  -->
       <input
         type="checkbox"
         name="save"
         v-model="loginInfo.save"
       />
-      <label for="save">3天内自动登录</label>
+      <label>3 天内自动登录</label>
     </div>
     <div class="redirect">
-      您是否<span
+      <span
         class="lostPassword cursor_pointer"
         @click="null"
-      >忘记密码 </span>？或者您需要<span
+      >忘记密码</span> | 
+      <span
         class="toSignin cursor_pointer"
         @click="props.signin"
-      >注册</span>一个新的账户
+      >注册账户</span>
     </div>
-    <div
-      class="confirm cursor_pointer"
+    <el-button class="confirm" type="primary" round shoudAddSpace
       @click="login"
-    >
-      确 认
-    </div>
+    >登录</el-button>
+
   </form>
 </template>
+
+<!-- <script lang="ts" setup>
+import { ref } from 'vue'
+const input = ref('')
+</script> -->
 
 <script lang="ts" setup>
 import { reactive, getCurrentInstance, computed, watch } from "vue";
@@ -151,10 +166,10 @@ watch(propsChange, (nv, ov) => {}, {
   position: fixed;
   top: calc(50vh - 200px);
   left: calc(50vw - 250px);
-  height: 400px;
-  width: 500px;
+  height: 380px;
+  width: 440px;
   @include fill_color("fill2");
-  border-radius: 25px;
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
   align-content: center;
@@ -174,10 +189,10 @@ watch(propsChange, (nv, ov) => {}, {
 
     .ahutFlag {
       padding: 5px 20px;
-      width: 180px;
+      width: 160px;
       border-top-right-radius: 10px;
       border-bottom-right-radius: 10px;
-      font-size: $fontSize6;
+      font-size: $fontSize8;
       @include font_color("font1");
       @include fill_color("fill12");
     }
@@ -185,12 +200,12 @@ watch(propsChange, (nv, ov) => {}, {
 
   .loginLabel {
     position: absolute;
-    font-size: $fontSize8;
-    @include font_color("font3");
+    font-size: $fontSize6;
+    // @include font_color("font3");
     transition-duration: 600ms;
-    top: 9px;
-    left: 50px;
-    border-radius: 4px;
+    top: 12px;
+    left: 52px;
+    // border-radius: 2px;
 
     &:focus {
       @include border_color("fill12");
@@ -202,31 +217,31 @@ watch(propsChange, (nv, ov) => {}, {
     width: 100%;
     padding: 5px 55px;
     box-sizing: border-box;
-    border-radius: 10px;
+    border-radius: 6px;
     font-size: $fontSize8;
-    @include font_color("font1");
-    @include fill_color("fill4");
+    // @include font_color("font1");
+    // @include fill_color("fill4");
     transition-duration: 300ms;
 
-    &:focus + .loginLabel {
-      @include font_color("fill11");
-    }
+    // &:focus + .loginLabel {
+    //   @include font_color("fill11");
+    // }
 
-    &:focus {
-      @include outline_color("fill13");
-    }
+    // &:focus {
+    //   @include outline_color("fill13");
+    // }
   }
 
   .save {
     display: flex;
     justify-items: center;
-    margin: 0 40px;
+    margin: 0 30px;
     @include font_color("font1");
 
     input {
-      margin: 0 5px;
-      height: 20px;
-      width: 20px;
+      margin: 3px 5px 0px 2px;
+      height: 18px;
+      width: 18px;
     }
   }
 
@@ -244,21 +259,23 @@ watch(propsChange, (nv, ov) => {}, {
   }
 
   .confirm {
-    width: 100px;
-    font-size: $fontSize9;
-    text-align: center;
+    width: 360px;
+    height: 40px;
+    font-size: $fontSize7;
+    // align-self: center;
+    align-content: center;
     box-sizing: border-box;
     padding: 5px 0;
-    margin: 0 0 20px 40px;
-    border-radius: 10px;
-    @include font_color("font6");
-    @include fill_color("fill12");
+    margin: 0 40px 16px 40px;
+    // border-radius: 10px;
+    // @include font_color("font6");
+    // @include fill_color("fill12");
     transition-duration: 100ms;
 
-    &:hover {
-      @include fill_color("fill13");
-      @include box_shadow(0, 0, 2px, 2px, "fill12");
-    }
+    // &:hover {
+    //   @include fill_color("fill13");
+    //   @include box_shadow(0, 0, 2px, 2px, "fill12");
+    // }
   }
 }
 </style>

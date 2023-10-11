@@ -5,7 +5,7 @@
         <!-- 根据pid -->
         <IconInput
           v-model="search.PID"
-          placeholder="题目ID"
+          placeholder="题目 ID"
           type="text"
         >
           <template v-slot:icon>
@@ -50,7 +50,7 @@
         </div>
       </div>
       <div class="info">
-        <div class="count">已为你搜索到{{config.Count}}个题目</div>
+        <div class="count">搜索到 {{ config.Count }} 个题目</div>
       </div>
     </div>
     <div
@@ -230,7 +230,7 @@ function getProblemById(PID?: string) {
   search.PID = PID ?? search.PID;
   if (!search.PID) {
     proxy.elMessage({
-      message: "请输入有效的题目ID！",
+      message: "题目 ID 无效",
       type: "warning",
     });
     return;

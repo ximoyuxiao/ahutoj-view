@@ -153,7 +153,7 @@ function initLoginCredentials() {
     top: 0;
     left: 0;
     @include fill_color("fill1");
-    @include box_shadow(0, -4px, 3px, 5px, "fill13");
+    // @include box_shadow(0, -4px, 3px, 5px, "fill13");
     opacity: 0.9;
   }
 
