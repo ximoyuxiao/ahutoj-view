@@ -4,7 +4,7 @@
       <div class="ahutFlag">
         AHUT OJ&nbsp;&nbsp;登录
       </div>
-      <img
+      <!-- <img
         class="cursor_pointer"
         @click="props.close"
         src="../../assets/image/global/close.svg"
@@ -15,10 +15,23 @@
             width: 35px;
             height: 35px;
           "
-      />
+      /> -->
+      <svg xmlns="http://www.w3.org/2000/svg"
+      width="1em" height="1em" viewBox="0 0 24 24"
+      class="cursor_pointer"
+      @click="props.close"
+      style="
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+          ">
+      <path fill="currentColor" d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"/>
+      </svg>
     </div>
     <div class="username">
-      <input
+      <el-input placeholder=""
         class="loginInput"
         type="text"
         autocomplete="off"
@@ -29,36 +42,23 @@
       </label>
     </div>
     <div class="password">
-      <input
+      <el-input placeholder=""
         class="loginInput"
         type="password"
         v-model="loginInfo.Pass"
         autocomplete="off"
+        show-password
         @keyup.enter="login"
       />
-      <!-- <template>
-        <el-input v-model="input" placeholder="Please input" />
-      </template> -->
-
-
-
       <label class="loginLabel">密码</label>
     </div>
     <div
       class="save"
       style="display: flex; justify-items: center; margin: 0 40px"
     >
-      <!-- <el-input v-model="input" placeholder="Please input"
-        type="checkbox"
-        name="save"
-      /> -->
-      <!-- <el-checkbox v-model="Checked" label="3 天内自动登录" size="large" for="save"/>  -->
-      <input
-        type="checkbox"
-        name="save"
-        v-model="loginInfo.save"
+      <el-checkbox label="3 天内自动登录" size="large" name="save"
+        v-model="loginInfo.save" type="checkbox" style="margin: 10px 0;"
       />
-      <label>3 天内自动登录</label>
     </div>
     <div class="redirect">
       <span
@@ -70,17 +70,12 @@
         @click="props.signin"
       >注册账户</span>
     </div>
-    <el-button class="confirm" type="primary" round shoudAddSpace
+    <el-button class="confirm" type="primary" round
       @click="login"
-    >登录</el-button>
+    >登 录</el-button>
 
   </form>
 </template>
-
-<!-- <script lang="ts" setup>
-import { ref } from 'vue'
-const input = ref('')
-</script> -->
 
 <script lang="ts" setup>
 import { reactive, getCurrentInstance, computed, watch } from "vue";
@@ -180,15 +175,15 @@ watch(propsChange, (nv, ov) => {}, {
   .password {
     position: relative;
     width: 100%;
-    padding: 5px 40px;
+    padding: 15px 40px;
     box-sizing: border-box;
   }
 
   .close {
-    padding: 15px 0;
+    padding: 10px 0;
 
     .ahutFlag {
-      padding: 5px 20px;
+      padding: 7px 20px;
       width: 160px;
       border-top-right-radius: 10px;
       border-bottom-right-radius: 10px;
@@ -203,33 +198,35 @@ watch(propsChange, (nv, ov) => {}, {
     font-size: $fontSize6;
     // @include font_color("font3");
     transition-duration: 600ms;
-    top: 12px;
-    left: 52px;
-    // border-radius: 2px;
-
-    &:focus {
-      @include border_color("fill12");
-      @include outline_color("fill12");
-    }
+    top: 23px;
+    left: 40px;
+    border-radius: 2px;
+    // &:focus {
+    //   @include border_color("fill12");
+    //   @include outline_color("fill12");
+    // }
   }
 
   .loginInput {
-    width: 100%;
-    padding: 5px 55px;
-    box-sizing: border-box;
-    border-radius: 6px;
-    font-size: $fontSize8;
+    // width: 100%;
+    position: absolute;
+    width: 380px;
+    padding: 5px 50px;
+    margin: 0 0 10px 0;
+    // box-sizing: border-box;
+    // border-radius: 6px;
+    font-size: $fontSize5;
     // @include font_color("font1");
     // @include fill_color("fill4");
-    transition-duration: 300ms;
+    // transition-duration: 300ms;
 
-    // &:focus + .loginLabel {
-    //   @include font_color("fill11");
-    // }
+    &:focus + .loginLabel {
+      @include font_color("fill11");
+    }
 
-    // &:focus {
-    //   @include outline_color("fill13");
-    // }
+    &:focus {
+      @include outline_color("fill13");
+    }
   }
 
   .save {
@@ -237,12 +234,6 @@ watch(propsChange, (nv, ov) => {}, {
     justify-items: center;
     margin: 0 30px;
     @include font_color("font1");
-
-    input {
-      margin: 3px 5px 0px 2px;
-      height: 18px;
-      width: 18px;
-    }
   }
 
   .redirect {

@@ -4,21 +4,48 @@
       <div class="ahutFlag">
         AHUT OJ&nbsp;&nbsp;注册
       </div>
-      <img
-        class="cursor_pointer"
-        @click="props.close"
+      <Icon icon="ic:baseline-close" />
+      <!-- <img
         src="../../assets/image/global/close.svg"
-        style="
+      /> -->
+      <svg xmlns="http://www.w3.org/2000/svg"
+      width="1em" height="1em" viewBox="0 0 24 24"
+      class="cursor_pointer"
+      @click="props.close"
+      style="
             position: absolute;
             top: 15px;
             right: 15px;
             width: 35px;
             height: 35px;
-          "
-      />
+          ">
+      <path fill="currentColor" d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"/>
+      </svg>
     </div>
+    <!-- <div class="username">
+      <el-input placeholder=""
+        class="loginInput"
+        type="text"
+        autocomplete="off"
+        v-model="loginInfo.UID"
+      />
+      <label class="loginLabel">
+        账号
+      </label>
+    </div>
+    <div class="password">
+      <el-input placeholder=""
+        class="loginInput"
+        type="password"
+        v-model="loginInfo.Pass"
+        autocomplete="off"
+        show-password
+        @keyup.enter="login"
+      />
+      <label class="loginLabel">密码</label>
+    </div> -->
     <div class="username">
-      <input
+      <el-input placeholder=""
         class="loginInput"
         name="UID"
         type="text"
@@ -35,8 +62,8 @@
       </label>
     </div>
     <div class="nickname">
-      <input
-        class="loginInput"
+      <el-input placeholder=""
+      class="loginInput"
         name="nickname"
         type="text"
         autocomplete="off"
@@ -52,14 +79,15 @@
       </label>
     </div>
     <div class="password">
-      <input
-        class="loginInput"
+      <el-input placeholder=""
+      class="loginInput"
         name="password"
         type="password"
         :onkeyup="signinInfo.PassChecker"
         maxlength="30"
         autocomplete="off"
         v-model="signinInfo.Pass"
+        show-password
       />
       <label
         class="loginLabel"
@@ -69,14 +97,15 @@
       </label>
     </div>
     <div class="password">
-      <input
-        class="loginInput"
+      <el-input placeholder=""
+      class="loginInput"
         name="password"
         type="password"
         :onkeyup="signinInfo.PassChecker"
         autocomplete="off"
         maxlength="30"
         v-model="signinInfo.PassAgain"
+        show-password
       />
       <label
         class="loginLabel"
@@ -86,8 +115,8 @@
       </label>
     </div>
     <div class="email">
-      <input
-        class="loginInput"
+      <el-input placeholder=""
+      class="loginInput"
         name="email"
         type="text"
         autocomplete="off"
@@ -102,25 +131,18 @@
       class="save"
       name="save"
     >
-      <input
-        type="checkbox"
-        name="save"
-        v-model="signinInfo.save"
-      />
-      <label for="save">3天内自动登录</label>
+    <el-checkbox label="3 天内自动登录" size="large" name="save" v-model="signinInfo.save" type="checkbox" 
+    style="margin: 10px 0;"/>      
     </div>
     <div class="redirect">
-      已经有账号了？前往<span
+      <span
         class="toLogin cursor_pointer"
         @click="props.login"
-      >登录</span>
+      >登录账号</span>
     </div>
-    <div
-      class="confirm cursor_pointer"
+    <el-button class="confirm" type="primary" round shoudAddSpace
       @click="signin"
-    >
-      确 认
-    </div>
+    >注册</el-button>
   </form>
 </template>
 
@@ -264,7 +286,7 @@ function signin() {
   top: calc(50vh - 250px);
   left: calc(50vw - 250px);
   height: 500px;
-  width: 500px;
+  width: 440px;
   @include fill_color("fill2");
   border-radius: 25px;
   display: flex;
@@ -279,7 +301,7 @@ function signin() {
   .email {
     position: relative;
     width: 100%;
-    padding: 5px 40px;
+    padding: 15px 40px;
     box-sizing: border-box;
   }
 
@@ -287,11 +309,11 @@ function signin() {
     padding: 15px 0;
 
     .ahutFlag {
-      padding: 5px 20px;
-      width: 180px;
+      padding: 7px 20px;
+      width: 160px;
       border-top-right-radius: 10px;
       border-bottom-right-radius: 10px;
-      font-size: $fontSize6;
+      font-size: $fontSize8;
       @include font_color("font1");
       @include fill_color("fill12");
     }
@@ -299,12 +321,12 @@ function signin() {
 
   .loginLabel {
     position: absolute;
-    font-size: $fontSize8;
-    @include font_color("font3");
-    transition-duration: 400ms;
-    top: 9px;
-    left: 50px;
-    border-radius: 10px;
+    font-size: $fontSize6;
+    // @include font_color("font3");
+    transition-duration: 600ms;
+    top: 23px;
+    left: 40px;
+    // border-radius: 2px;
 
     &:focus {
       @include border_color("fill12");
@@ -313,13 +335,15 @@ function signin() {
   }
 
   .loginInput {
-    width: 100%;
+    position: absolute;
+    width: 380px;
     padding: 5px 55px;
     box-sizing: border-box;
+    margin: 0 0 10px 0;
     border-radius: 10px;
-    font-size: $fontSize8;
-    @include font_color("font1");
-    @include fill_color("fill4");
+    font-size: $fontSize5;
+    // @include font_color("font1");
+    // @include fill_color("fill4");
     transition-duration: 300ms;
 
     &:focus + .loginLabel {
@@ -336,12 +360,6 @@ function signin() {
     justify-items: center;
     margin: 0 40px;
     @include font_color("font1");
-
-    input {
-      margin: 0 5px;
-      height: 20px;
-      width: 20px;
-    }
   }
 
   .redirect {
@@ -358,21 +376,23 @@ function signin() {
   }
 
   .confirm {
-    width: 100px;
-    font-size: $fontSize9;
-    text-align: center;
+    width: 360px;
+    height: 40px;
+    font-size: $fontSize7;
+    // align-self: center;
+    align-content: center;
     box-sizing: border-box;
     padding: 5px 0;
-    margin: 0 0 20px 40px;
-    border-radius: 10px;
-    @include font_color("font6");
-    @include fill_color("fill12");
+    margin: 0 40px 16px 40px;
+    // border-radius: 10px;
+    // @include font_color("font6");
+    // @include fill_color("fill12");
     transition-duration: 100ms;
 
-    &:hover {
-      @include fill_color("fill13");
-      @include box_shadow(0, 0, 2px, 2px, "fill12");
-    }
+    // &:hover {
+    //   @include fill_color("fill13");
+    //   @include box_shadow(0, 0, 2px, 2px, "fill12");
+    // }
   }
 }
 </style>
