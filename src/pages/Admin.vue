@@ -1,58 +1,39 @@
 <template>
-  <div class="admin">
-    <transition
-      enter-active-class="animate__animated animate__fadeInLeft"
-      leave-active-class="animate__animated animate__fadeOutLeft"
-    >
-      <div
-        class="nav"
-        v-if="config.Administrator"
-      >
-        <router-link
-          v-if="config.ProblemAdmin"
-          active-class="selected"
-          to="/Admin/ProblemEdit"
-        >
-          题目管理
-        </router-link>
-        <router-link
-          v-if="config.ContestAdmin"
-          active-class="selected"
-          to="/Admin/ContestEdit"
-        >
-          竞赛管理
-        </router-link>
-        <router-link
-          v-if="config.ListAdmin"
-          active-class="selected"
-          to="/Admin/ListEdit"
-        >
-          题单管理
-        </router-link>
-        <router-link
-          v-if="config.Administrator"
-          active-class="selected"
-          to="/Admin/UserEdit"
-        >
-          用户管理
-        </router-link>
-        <router-link
-          v-if="config.SuperAdmin"
-          active-class="selected"
-          to="/Admin/AdminEdit"
-        >
-          权限管理
-        </router-link>
-        <router-link
-          v-if="config.Administrator"
-          active-class="selected"
-          to="/Admin/NoticeEdit"
-        >
-          公告管理
-        </router-link>
-      </div>
-    </transition>
+  <el-menu class="adminHeader" mode="horizontal" v-if="config.Administrator">
+    <el-row class="adminPageFlag">AHUT OJ 管理</el-row>
+    <router-link active-class="selected" to="/Admin/ProblemEdit">
+      <el-menu-item index="1" v-if="config.ProblemAdmin">
+        题目管理
+      </el-menu-item>
+    </router-link>
+    <router-link active-class="selected" to="/Admin/ContestEdit">
+      <el-menu-item index="2" v-if="config.ContestAdmin">
+        竞赛管理
+      </el-menu-item>
+    </router-link>
+    <router-link v-if="config.ListAdmin" active-class="selected" to="/Admin/ListEdit">
+      <el-menu-item index="3">
+        题单管理
+      </el-menu-item>
+    </router-link>
+    <router-link v-if="config.Administrator" active-class="selected" to="/Admin/UserEdit">
+      <el-menu-item index="4">
+        用户管理
+      </el-menu-item>
+    </router-link>
+    <router-link v-if="config.SuperAdmin" active-class="selected" to="/Admin/AdminEdit">
+      <el-menu-item index="5">
+        权限管理
+      </el-menu-item>
+    </router-link>
+    <router-link v-if="config.Administrator" active-class="selected" to="/Admin/NoticeEdit">
+      <el-menu-item index="6">
+        公告管理
+      </el-menu-item>
+    </router-link>
+  </el-menu>
 
+  <div class="admin">
     <div class="content">
       <router-view v-slot="{ Component }">
         <transition enter-active-class="animate__animated animate__fadeInUp">
@@ -203,6 +184,19 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+.adminHeader {
+  height: 55px;
+  .el-menu-item {
+    font-size: $fontSize5;
+  }
+}
+
+.adminPageFlag {
+  font-size: $fontSize5;
+  align-self: center;
+  margin: 0 18px 0 18px;
+}
+
 .admin {
   width: 100%;
   position: relative;
@@ -211,32 +205,6 @@ onMounted(() => {
   box-sizing: border-box;
   z-index: 1;
 
-  .nav {
-    width: 260px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    padding: 20px 0;
-    @include fill_color("fill51");
-
-    a {
-      width: 100%;
-      @include font_color("font6");
-      font-size: 28px;
-      text-align: center;
-      margin: 5px 0;
-
-      &:hover {
-        @include fill_color("fill52");
-        color: #cdcdcd;
-      }
-    }
-
-    .selected {
-      @include fill_color("fill53");
-      color: #cdcdcd;
-    }
-  }
 
   .content {
     width: calc(100% - 260px);
