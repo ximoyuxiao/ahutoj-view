@@ -6,7 +6,7 @@
       size="74%"
     >
       <template #header>
-        <h4>你的主题，你做主~</h4>
+        <h4>自定义主题</h4>
       </template>
       <template #default>
         <div class="text">为每一类页面组件选择两个颜色，它会作为渐变色两端的颜色值</div>
