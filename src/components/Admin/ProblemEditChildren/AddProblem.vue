@@ -1,154 +1,130 @@
 <template>
+    <!-- <el-form :model="form" label-width="120px">
+        <el-form-item label="Activity name">
+            <el-input v-model="form.name" />
+        </el-form-item>
+        <el-form-item label="Activity zone">
+            <el-select v-model="form.region" placeholder="please select your zone">
+                <el-option label="Zone one" value="shanghai" />
+                <el-option label="Zone two" value="beijing" />
+            </el-select>
+        </el-form-item>
+        <el-form-item label="Activity time">
+            <el-col :span="11">
+                <el-date-picker v-model="form.date1" type="date" placeholder="Pick a date" style="width: 100%" />
+            </el-col>
+            <el-col :span="2" class="text-center">
+                <span class="text-gray-500">-</span>
+            </el-col>
+            <el-col :span="11">
+                <el-time-picker v-model="form.date2" placeholder="Pick a time" style="width: 100%" />
+            </el-col>
+        </el-form-item>
+        <el-form-item label="Instant delivery">
+            <el-switch v-model="form.delivery" />
+        </el-form-item>
+        <el-form-item label="Activity type">
+            <el-checkbox-group v-model="form.type">
+                <el-checkbox label="Online activities" name="type" />
+                <el-checkbox label="Promotion activities" name="type" />
+                <el-checkbox label="Offline activities" name="type" />
+                <el-checkbox label="Simple brand exposure" name="type" />
+            </el-checkbox-group>
+        </el-form-item>
+        <el-form-item label="Resources">
+            <el-radio-group v-model="form.resource">
+                <el-radio label="Sponsor" />
+                <el-radio label="Venue" />
+            </el-radio-group>
+        </el-form-item>
+        <el-form-item label="Activity form">
+            <el-input v-model="form.desc" type="textarea" />
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @click="onSubmit">Create</el-button>
+            <el-button>Cancel</el-button>
+        </el-form-item>
+    </el-form> -->
     <div class="addProblem">
-        <div><span>标题：</span>
+        <div><span>标题</span>
             <el-input v-model="problem.Title" />
         </div>
         <div>
-            <span>文本类型：</span>
-            <el-select
-                v-model="problem.ContentType"
-                class="m-2"
-                placeholder="Select"
-            >
-                <el-option
-                    v-for="(item,index) in problem.ContentTypes"
-                    :key="item.label"
-                    :label="item.label"
-                    :value="item.value"
-                />
+            <span>时间限制</span>
+            <el-input-number v-model="problem.LimitTime" :min="1" />
+            <span>&nbsp;毫秒</span>
+        </div>
+        <div>
+            <span>内存限制</span>
+            <el-input-number v-model="problem.LimitMemory" :min="1" />
+            <span>&nbsp;MB</span>
+        </div>
+        <div>
+            <span>来源</span>
+            <el-select v-model="problem.Origin" class="m-2" placeholder="Select">
+                <el-option v-for="(item, index) in problem.Origins" :key="item.label" :label="item.label"
+                    :value="item.value" />
+            </el-select>
+            <el-input v-show="problem.Origin != -1" v-model="problem.OriginPID"
+                :placeholder="problem.OriginPlaceHolder[problem.Origin]" />
+        </div>
+        <div>
+            <span>可见</span>
+            <el-select v-model="problem.Visible" class="m-2" placeholder="Select">
+                <el-option v-for="(item, index) in problem.Visibles" :key="item.label" :label="item.label"
+                    :value="item.value" />
+            </el-select>
+        </div>
+        <div>
+            <span>文本类型</span>
+            <el-select v-model="problem.ContentType" class="m-2" placeholder="Select">
+                <el-option v-for="(item, index) in problem.ContentTypes" :key="item.label" :label="item.label"
+                    :value="item.value" />
             </el-select>
         </div>
         <template v-if="problem.ContentType == 1">
             <div class="markdown">
-                <md-editor
-                    v-model="problem.Description"
-                    :toolbars="markdown.toolbar"
-                    :on-upload-img="problem.updateImg"
-                />
+                <md-editor v-model="problem.Description" :toolbars="markdown.toolbar" :on-upload-img="problem.updateImg" />
             </div>
             <div>
-                <span>标签：</span>
-                <el-input
-                    v-model="problem.Label"
-                    placeholder="请输入的每个标签之间用';'隔开"
-                />
+                <span>标签</span>
+                <el-input v-model="problem.Label" placeholder="请输入的每个标签之间用';'隔开" />
             </div>
         </template>
         <template v-else>
             <div class="normal">
                 <div>
-                    <span>题目描述：</span>
-                    <el-input
-                        v-model="problem.Description"
-                        type="textarea"
-                        autosize
-                    />
+                    <span>题目描述</span>
+                    <el-input v-model="problem.Description" type="textarea" autosize />
                 </div>
                 <div>
-                    <span>输入描述：</span>
-                    <el-input
-                        v-model="problem.Input"
-                        type="textarea"
-                        autosize
-                    />
+                    <span>输入描述</span>
+                    <el-input v-model="problem.Input" type="textarea" autosize />
                 </div>
                 <div>
-                    <span>输出描述：</span>
-                    <el-input
-                        v-model="problem.Output"
-                        type="textarea"
-                        autosize
-                    />
+                    <span>输出描述</span>
+                    <el-input v-model="problem.Output" type="textarea" autosize />
                 </div>
                 <div>
-                    <span>输入样例：</span>
-                    <el-input
-                        v-model="problem.SampleInput"
-                        type="textarea"
-                        autosize
-                    />
+                    <span>输入样例</span>
+                    <el-input v-model="problem.SampleInput" type="textarea" autosize />
                 </div>
                 <div>
-                    <span>输出样例：</span>
-                    <el-input
-                        v-model="problem.SampleOutput"
-                        type="textarea"
-                        autosize
-                    />
+                    <span>输出样例</span>
+                    <el-input v-model="problem.SampleOutput" type="textarea" autosize />
                 </div>
                 <div>
-                    <span>提示：</span>
-                    <el-input
-                        v-model="problem.Hit"
-                        type="textarea"
-                        autosize
-                    />
+                    <span>提示</span>
+                    <el-input v-model="problem.Hit" type="textarea" autosize />
                 </div>
                 <div>
-                    <span>标签：</span>
-                    <el-input
-                        v-model="problem.Label"
-                        placeholder="请输入的每个标签之间用';'隔开"
-                    />
+                    <span>标签</span>
+                    <el-input v-model="problem.Label" placeholder="请输入的每个标签之间用';'隔开" />
                 </div>
             </div>
         </template>
-        <div>
-            <span>时间限制：</span>
-            <el-input-number
-                v-model="problem.LimitTime"
-                :min="1"
-            />
-            <span>&nbsp;毫秒</span>
-        </div>
-        <div>
-            <span>内存限制：</span>
-            <el-input-number
-                v-model="problem.LimitMemory"
-                :min="1"
-            />
-            <span>&nbsp;MB</span>
-        </div>
-        <div>
-            <span>来源：</span>
-            <el-select
-                v-model="problem.Origin"
-                class="m-2"
-                placeholder="Select"
-            >
-                <el-option
-                    v-for="(item,index) in problem.Origins"
-                    :key="item.label"
-                    :label="item.label"
-                    :value="item.value"
-                />
-            </el-select>
-            <el-input
-                v-show="problem.Origin != -1"
-                v-model="problem.OriginPID"
-                :placeholder="problem.OriginPlaceHolder[problem.Origin]"
-            />
-        </div>
-        <div>
-            <span>可见：</span>
-            <el-select
-                v-model="problem.Visible"
-                class="m-2"
-                placeholder="Select"
-            >
-                <el-option
-                    v-for="(item,index) in problem.Visibles"
-                    :key="item.label"
-                    :label="item.label"
-                    :value="item.value"
-                />
-            </el-select>
-        </div>
         <div style="display: flex; justify-content: flex-end; padding: 10px 0">
-            <el-button
-                plain
-                v-on:click="complete()"
-            >
+            <el-button plain v-on:click="complete()">
                 添加
             </el-button>
         </div>
@@ -220,7 +196,7 @@ var problem = reactive({
     Visible: 1,
     //题目描述 文本类型
     ContentTypes: [
-        { label: "普通", value: constValStore.PROBLEM_CONTENTTYPE_NORMAL },
+        { label: "PlainText", value: constValStore.PROBLEM_CONTENTTYPE_NORMAL },
         {
             label: "MarkDown",
             value: constValStore.PROBLEM_CONTENTTYPE_MARKDOWN,
@@ -228,7 +204,7 @@ var problem = reactive({
     ],
     //选项列表
     Origins: [
-        { label: "本地", value: constValStore.PROBLEM_ORIGIN_LOCAL },
+        { label: "Local", value: constValStore.PROBLEM_ORIGIN_LOCAL },
         { label: "CodeForce", value: constValStore.PROBLEM_ORIGIN_CF },
         {
             label: "AtCoder",
@@ -301,8 +277,8 @@ function uploadF(f: any) {
                             message: `
               <strong>${f.name}上传成功</strong><br/>
               <span>已压缩:${(f.size / 1024).toFixed(2)}KB->${(
-                                response.data.size / 1024
-                            ).toFixed(2)}KB</span>
+                                    response.data.size / 1024
+                                ).toFixed(2)}KB</span>
             `,
                             type: "success",
                             duration: 5000,
@@ -343,15 +319,15 @@ function complete() {
             if (data.code == 0) {
                 proxy.elMessage({ message: "添加成功!", type: "success" });
                 let PID = data.PID;
-                if(problem.Origin == -1){
+                if (problem.Origin == -1) {
                     proxy.$router.push({
-                    path:"/Admin/ProblemEdit/EditProblemJudgeFile",
-                    query:{
-                        PID,
-                    }
+                        path: "/Admin/ProblemEdit/EditProblemJudgeFile",
+                        query: {
+                            PID,
+                        }
                     })
                 }
-                return ;
+                return;
             }
             proxy.codeProcessor(
                 data?.code ?? 100001,
@@ -363,7 +339,7 @@ function complete() {
 
 <style scoped lang="scss">
 .addProblem {
-    width: 100%;
+    // width: 100%;
     display: flex;
     flex-direction: column;
 
@@ -372,14 +348,14 @@ function complete() {
         display: flex;
         flex-direction: column;
 
-        > div {
+        >div {
             display: flex;
             align-content: center;
             justify-content: flex-start;
             box-sizing: border-box;
             margin: 5px 0;
 
-            > span {
+            >span {
                 display: block;
                 font-size: 22px;
                 width: 150px;
@@ -388,14 +364,14 @@ function complete() {
         }
     }
 
-    > div {
+    >div {
         display: flex;
         align-content: center;
         justify-content: flex-start;
         box-sizing: border-box;
         margin: 5px 0;
 
-        > span {
+        >span {
             display: block;
             font-size: 22px;
             width: 150px;
