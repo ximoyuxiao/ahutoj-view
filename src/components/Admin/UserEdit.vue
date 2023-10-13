@@ -1,28 +1,22 @@
 <template>
+  <el-menu class="UserEdit" mode="horizontal">
+    <router-link active-class="selected" to="/Admin/UserEdit/AddUser">
+      <el-menu-item index="1">
+        新增
+      </el-menu-item>
+    </router-link>
+    <router-link active-class="selected" to="/Admin/UserEdit/UpdateUser">
+      <el-menu-item index="2">
+        编辑
+      </el-menu-item>
+    </router-link>
+    <router-link active-class="selected" to="/Admin/UserEdit/BatchAddUser">
+      <el-menu-item index="3">
+        批量导入
+      </el-menu-item>
+    </router-link>
+  </el-menu>
   <div class="UserEdit">
-    <div class="nav">
-      <router-link
-        active-class="selected"
-        to="/Admin/UserEdit/AddUser"
-      >
-        添加用户
-      </router-link>
-      <el-divider direction="vertical" />
-      <router-link
-        active-class="selected"
-        to="/Admin/UserEdit/BatchAddUser"
-      >
-        批量添加用户
-      </router-link>
-      <el-divider direction="vertical" />
-      <router-link
-        active-class="selected"
-        to="/Admin/UserEdit/UpdateUser"
-      >
-        修改用户
-      </router-link>
-    </div>
-
     <div class="content">
       <router-view v-slot="{ Component }">
         <transition enter-active-class="animate__animated animate__fadeInRight">
@@ -51,7 +45,7 @@ export default {
     justify-content: centers;
     @include fill_color('fill3');
 
-    > a {
+    >a {
       box-sizing: border-box;
       padding: 5px 15px;
       font-size: $fontSize7;
@@ -64,7 +58,7 @@ export default {
       }
     }
 
-    > .selected {
+    >.selected {
       border-bottom: 2px solid;
       @include border_color('fill21');
     }

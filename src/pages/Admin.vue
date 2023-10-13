@@ -8,7 +8,7 @@
     </router-link>
     <router-link active-class="selected" to="/Admin/ContestEdit">
       <el-menu-item index="2" v-if="config.ContestAdmin">
-        竞赛管理
+        竞赛管理  
       </el-menu-item>
     </router-link>
     <router-link v-if="config.ListAdmin" active-class="selected" to="/Admin/ListEdit">
@@ -207,7 +207,8 @@ onMounted(() => {
 
 
   .content {
-    width: calc(100% - 260px);
+    // width: calc(100% - 260px);
+    width: calc(min(100%, 1200px));
   }
 }
 </style>

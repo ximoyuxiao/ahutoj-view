@@ -1,21 +1,17 @@
 <template>
+  <el-menu class="ListEdit" mode="horizontal">
+    <router-link active-class="selected" to="/Admin/ListEdit/AddList">
+      <el-menu-item index="1">
+        新增
+      </el-menu-item>
+    </router-link>
+    <router-link active-class="selected" to="/Admin/ListEdit/UpdateList">
+      <el-menu-item index="2">
+        编辑
+      </el-menu-item>
+    </router-link>
+  </el-menu>
   <div class="ListEdit">
-    <div class="nav">
-      <router-link
-        active-class="selected"
-        to="/Admin/ListEdit/AddList"
-      >
-      添加题单
-      </router-link>
-      <el-divider direction="vertical" />
-      <router-link
-        active-class="selected"
-        to="/Admin/ListEdit/UpdateList"
-      >
-      修改题单
-      </router-link>
-    </div>
-
     <div class="content">
       <router-view v-slot="{ Component }">
         <transition enter-active-class="animate__animated animate__fadeInRight">

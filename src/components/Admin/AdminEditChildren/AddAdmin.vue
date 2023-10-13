@@ -13,7 +13,6 @@
       class="userInfo"
       v-show="search.isSearched"
     >
-      <div>《身份确认》</div>
       <div>用户名：{{search.UID}}</div>
       <div>昵称：{{search.UserName}}</div>
       <div>学校：{{search.School}}</div>
@@ -22,7 +21,7 @@
       <div class="permissionTabel">
         <div
           class="header"
-          v-for="(item,index) in ['超级管理员','资源管理员','竞赛管理员','题单管理员','题目管理员','管理员']"
+          v-for="(item,index) in ['超管','资源','竞赛','题单','题目','管理员']"
         >
           {{item}}
         </div>
@@ -39,7 +38,7 @@
           />
         </div>
       </div>
-      <el-button @click="confirm">确认</el-button>
+      <el-button @click="confirm">修改</el-button>
     </div>
   </div>
 

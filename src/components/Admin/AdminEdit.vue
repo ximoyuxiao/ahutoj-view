@@ -1,21 +1,17 @@
 <template>
+  <el-menu class="contestEdit" mode="horizontal">
+    <router-link active-class="selected" to="/Admin/AdminEdit/AddAdmin">
+      <el-menu-item index="1">
+        新增权限
+      </el-menu-item>
+    </router-link>
+    <router-link active-class="selected" to="/Admin/AdminEdit/UpdateAdmin">
+      <el-menu-item index="2">
+        权限列表
+      </el-menu-item>
+    </router-link>
+  </el-menu>
   <div class="AdminEdit">
-    <div class="nav">
-      <router-link
-        active-class="selected"
-        to="/Admin/AdminEdit/AddAdmin"
-      >
-        添加权限
-      </router-link>
-      <el-divider direction="vertical" />
-      <router-link
-        active-class="selected"
-        to="/Admin/AdminEdit/UpdateAdmin"
-      >
-        当前权限列表
-      </router-link>
-    </div>
-
     <div class="content">
       <router-view v-slot="{ Component }">
         <transition enter-active-class="animate__animated animate__fadeInRight">
@@ -44,7 +40,7 @@ const { proxy } = getCurrentInstance() as any;
     justify-content: centers;
     @include fill_color("fill3");
 
-    > a {
+    >a {
       box-sizing: border-box;
       padding: 5px 15px;
       font-size: $fontSize7;
@@ -57,7 +53,7 @@ const { proxy } = getCurrentInstance() as any;
       }
     }
 
-    > .selected {
+    >.selected {
       border-bottom: 2px solid;
       @include border_color("fill21");
     }

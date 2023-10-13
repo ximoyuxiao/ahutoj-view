@@ -1,64 +1,107 @@
 <template>
-  <div class="navBox">
+  <!-- <el-menu class="contestEdit" mode="horizontal" style="margin: 55px 0px;"> -->
+  <el-menu class="contestEdit" mode="horizontal">
+    <router-link to="/Home">
+      <el-menu-item>
+        AHUT OJ
+      </el-menu-item>
+    </router-link>
+    <router-link active-class="selected" id="problems" to="/Problems">
+      <el-menu-item index="1">
+        题库
+      </el-menu-item>
+    </router-link>
+    <router-link active-class="selected" id="contests" to="/Contests">
+      <el-menu-item index="2">
+        比赛
+      </el-menu-item>
+    </router-link>
+    <router-link active-class="selected" id="Lists" to="/Lists">
+      <el-menu-item index="3">
+        题单
+      </el-menu-item>
+    </router-link>
+    <router-link active-class="selected" id="status" to="/Contests">
+      <el-menu-item index="4">
+        状态
+      </el-menu-item>
+    </router-link>
+    <div class="flex-grow" />
+    <!--<router-link active-class="selected" id="status" to="/Contests">
+      <el-menu-item index="1">
+        状态
+      </el-menu-item>
+    </router-link> -->
+    <el-menu-item>
+      <el-icon size="55px" class="config" @click="props.config">
+        <Setting />
+      </el-icon>
+    </el-menu-item>
+    <el-menu-item>
+
+      <!-- <div class="right"> -->
+        <div class="cursor_pointer" v-if="userDataStore.UserName == ''" @click.stop="props.login">
+          <span>登录</span>
+        </div>
+        <div class="username cursor_pointer" v-else>
+          <span style="font-weight: 600">
+            {{ userDataStore.UserName }}
+          </span>
+          <div class="infoCard">
+            <div style="height: 10px"></div>
+            <div class="list">
+              <div @click.stop="intoUserCenter()">
+                <el-icon>
+                  <User />
+                </el-icon>&nbsp;个人中心
+              </div>
+              <div v-if="userDataStore.PermissionMap > 3" @click.stop="intoAdminCenter()">
+                <el-icon>
+                  <Operation />
+                </el-icon>&nbsp;管理
+              </div>
+              <el-divider style="margin: 2px" />
+              <div @click.stop="initLoginCredentials()">
+                <el-icon>
+                  <SwitchButton />
+                </el-icon>&nbsp;退出登录
+              </div>
+            </div>
+          </div>
+        </div>
+      <!-- </div> -->
+    </el-menu-item>
+  </el-menu>
+  <!-- <div class="navBox">
     <div id="cover"></div>
     <div class="left">
-
       <div id="name">
         <router-link to="/Home">AHUT OJ</router-link>
       </div>
-      <router-link
-        id="problems"
-        active-class="selected"
-        to="/Problems"
-      >
+      <router-link id="problems" active-class="selected" to="/Problems">
         题库
       </router-link>
-      <router-link
-        id="contests"
-        active-class="selected"
-        to="/Contests"
-      >
+      <router-link id="contests" active-class="selected" to="/Contests">
         比赛
       </router-link>
-      <router-link
-        id="Lists"
-        active-class="selected"
-        to="/Lists"
-      >
+      <router-link id="Lists" active-class="selected" to="/Lists">
         题单
       </router-link>
-      <router-link
-        id="status"
-        active-class="selected"
-        to="/Status"
-      >
+      <router-link id="status" active-class="selected" to="/Status">
         状态
       </router-link>
-      <!-- <router-link to="/">
-        论坛
-      </router-link> -->
     </div>
+
     <div class="right">
-      <el-icon
-        size="32px"
-        class="config"
-        @click="props.config"
-      >
+      <el-icon size="32px" class="config" @click="props.config">
         <Setting />
       </el-icon>
-      <div
-        class="cursor_pointer"
-        v-if="userDataStore.UserName == ''"
-        @click.stop="props.login"
-      >
+      <div class="cursor_pointer" v-if="userDataStore.UserName == ''" @click.stop="props.login">
         <span>登录</span>
       </div>
-      <div
-        class="username cursor_pointer"
-        v-else
-      >
+      <div class="username cursor_pointer" v-else>
         <span style="font-weight: 600">
-          {{ userDataStore.UserName  }}
+          {{ userDataStore.UserName }}
         </span>
         <div class="infoCard">
           <div style="height: 10px"></div>
@@ -68,10 +111,7 @@
                 <User />
               </el-icon>&nbsp;个人中心
             </div>
-            <div
-              v-if="userDataStore.PermissionMap > 3"
-              @click.stop="intoAdminCenter()"
-            >
+            <div v-if="userDataStore.PermissionMap > 3" @click.stop="intoAdminCenter()">
               <el-icon>
                 <Operation />
               </el-icon>&nbsp;管理
@@ -86,7 +126,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script lang="ts" setup>
@@ -100,8 +140,8 @@ type propsType = {
   config?: Function;
 };
 var props = withDefaults(defineProps<propsType>(), {
-  login: () => {},
-  config: () => {},
+  login: () => { },
+  config: () => { },
 });
 
 //为了解决props异步响应式丢失的问题
@@ -109,7 +149,7 @@ var propsChange = computed(() => {
   return props;
 });
 
-watch(propsChange, (nv, ov) => {}, {
+watch(propsChange, (nv, ov) => { }, {
   deep: true,
 });
 
@@ -131,6 +171,11 @@ function initLoginCredentials() {
 </script>
 
 <style scoped lang="scss">
+
+.flex-grow {
+  flex-grow: 1;
+}
+
 .navBox {
   top: 0;
   position: fixed;
@@ -168,9 +213,11 @@ function initLoginCredentials() {
       box-sizing: border-box;
       transition-duration: 300ms;
       z-index: 100;
-      &:hover > a {
+
+      &:hover>a {
         @include font_color("fill12");
       }
+
       a {
         height: 100%;
         display: block;
@@ -194,10 +241,12 @@ function initLoginCredentials() {
       font-size: $fontSize5;
       line-height: 55px;
       transition-duration: 400ms;
+
       &:hover {
         @include font_color("fill11");
       }
     }
+
     .selected {
       border-bottom: 3px solid;
       @include border_color("fill13");
@@ -286,13 +335,14 @@ function initLoginCredentials() {
 
     .username {
       position: relative;
-      &:hover > .infoCard {
+
+      &:hover>.infoCard {
         visibility: visible;
         opacity: 1;
         transform: translateX(-30px);
       }
 
-      &:hover > span {
+      &:hover>span {
         @include font_color("fill12");
       }
 
