@@ -26,7 +26,7 @@
         状态
       </el-menu-item>
     </router-link>
-    <div class="flex-grow" />
+    <!-- <div class="flex-grow" /> -->
     <!--<router-link active-class="selected" id="status" to="/Contests">
       <el-menu-item index="1">
         状态
