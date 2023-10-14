@@ -2,32 +2,38 @@
   <el-menu class="ProblemEdit" mode="horizontal">
     <router-link active-class="selected" to="/Admin/ProblemEdit/AddProblem">
       <el-menu-item index="1">
+        <el-icon><Plus /></el-icon>
         新增
       </el-menu-item>
     </router-link>
     <router-link active-class="selected" to="/Admin/ProblemEdit/UpdateProblem">
       <el-menu-item index="2">
+        <el-icon><Edit /></el-icon>
         编辑
       </el-menu-item>
     </router-link>
     <router-link active-class="selected" to="/Admin/ProblemEdit/EditProblemJudgeFile">
       <el-menu-item index="3">
+        <el-icon><DocumentChecked /></el-icon>
         数据
       </el-menu-item>
     </router-link>
     <router-link active-class="selected" to="/Admin/ProblemEdit/Rejudge">
       <el-menu-item index="4">
+        <el-icon><RefreshRight /></el-icon>
         重判
       </el-menu-item>
     </router-link>
     <router-link active-class="selected" to="/Admin/ProblemEdit/UploadProblem">
       <el-menu-item index="5">
-        导入题目
+        <el-icon><Upload /></el-icon>
+        导入
       </el-menu-item>
     </router-link>
     <router-link active-class="selected" to="/Admin/ProblemEdit/DownloadProblem">
       <el-menu-item index="6">
-        导出题目
+        <el-icon><Download /></el-icon>
+        导出
       </el-menu-item>
     </router-link>
   </el-menu>

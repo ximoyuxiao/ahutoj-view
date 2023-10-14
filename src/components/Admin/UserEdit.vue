@@ -2,16 +2,19 @@
   <el-menu class="UserEdit" mode="horizontal">
     <router-link active-class="selected" to="/Admin/UserEdit/AddUser">
       <el-menu-item index="1">
+        <el-icon><Plus /></el-icon>
         新增
       </el-menu-item>
     </router-link>
     <router-link active-class="selected" to="/Admin/UserEdit/UpdateUser">
       <el-menu-item index="2">
+        <el-icon><Edit /></el-icon>
         编辑
       </el-menu-item>
     </router-link>
     <router-link active-class="selected" to="/Admin/UserEdit/BatchAddUser">
       <el-menu-item index="3">
+        <el-icon><Upload /></el-icon>
         批量导入
       </el-menu-item>
     </router-link>

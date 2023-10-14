@@ -186,6 +186,7 @@ onMounted(() => {
 <style scoped lang="scss">
 .adminHeader {
   height: 55px;
+  margin: 5px 0;
   .el-menu-item {
     font-size: $fontSize5;
   }

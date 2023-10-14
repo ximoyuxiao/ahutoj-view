@@ -2,11 +2,13 @@
   <el-menu class="ListEdit" mode="horizontal">
     <router-link active-class="selected" to="/Admin/NoticeEdit/AddNotice">
       <el-menu-item index="1">
+        <el-icon><Plus /></el-icon>
         新增
       </el-menu-item>
     </router-link>
     <router-link active-class="selected" to="/Admin/NoticeEdit/UpdateNotice">
       <el-menu-item index="2">
+        <el-icon><Edit /></el-icon>
         编辑
       </el-menu-item>
     </router-link>

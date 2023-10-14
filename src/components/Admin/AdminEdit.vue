@@ -2,11 +2,13 @@
   <el-menu class="contestEdit" mode="horizontal">
     <router-link active-class="selected" to="/Admin/AdminEdit/AddAdmin">
       <el-menu-item index="1">
+        <el-icon><Plus /></el-icon>
         新增权限
       </el-menu-item>
     </router-link>
     <router-link active-class="selected" to="/Admin/AdminEdit/UpdateAdmin">
       <el-menu-item index="2">
+        <el-icon><Tickets /></el-icon>
         权限列表
       </el-menu-item>
     </router-link>
