@@ -1,10 +1,6 @@
 <template>
   <div class="Config">
-    <el-drawer
-      v-model="customTheme.showConfig"
-      direction="ttb"
-      size="74%"
-    >
+    <el-drawer v-model="customTheme.showConfig" direction="ttb" size="74%">
       <template #header>
         <h4>自定义主题</h4>
       </template>
@@ -56,25 +52,14 @@
         </div>
         <div class="color">
           <div class="text">是否是亮色主题</div>
-          <el-select
-            v-model="customTheme.colors.type"
-            placeholder="Select"
-          >
-            <el-option
-              v-for="item in customTheme.themeType"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
+          <el-select v-model="customTheme.colors.type" placeholder="Select">
+            <el-option v-for="item in customTheme.themeType" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </div>
       </template>
       <template #footer>
         <div style="flex: auto">
-          <el-button
-            type="primary"
-            @click="customTheme.confirm"
-          >
+          <el-button type="primary" @click="customTheme.confirm">
             应用
           </el-button>
         </div>
@@ -90,48 +75,27 @@
         </div>
         <div class="options">
           <div :class="themeSwitchStore.theme == 1 ? 'img selected' : 'img'">
-            <img
-              src="../../assets/image/global/light.svg"
-              @click.stop="switchTheme(1)"
-            >
+            <img src="../../assets/image/global/light.svg" @click.stop="switchTheme(1)">
           </div>
           <div :class="themeSwitchStore.theme == -1 ? 'img selected' : 'img'">
-            <img
-              src="../../assets/image/global/dark.svg"
-              @click.stop="switchTheme(-1)"
-            >
+            <img src="../../assets/image/global/dark.svg" @click.stop="switchTheme(-1)">
           </div>
           <div :class="themeSwitchStore.theme == -2 ? 'img selected' : 'img'">
-            <img
-              src="../../assets/image/global/cyberpunk.svg"
-              @click.stop="switchTheme(-2)"
-            >
+            <img src="../../assets/image/global/cyberpunk.svg" @click.stop="switchTheme(-2)">
           </div>
           <div :class="themeSwitchStore.theme == 8 ? 'img selected' : 'img'">
-            <img
-              src="../../assets/image/global/chinese.svg"
-              @click.stop="switchTheme(8)"
-            >
+            <img src="../../assets/image/global/chinese.svg" @click.stop="switchTheme(8)">
           </div>
           <div :class="(themeSwitchStore.theme == 10 || themeSwitchStore.theme == -10) ? 'img selected' : 'img'">
-            <img
-              src="../../assets/image/global/custom.svg"
-              @click.stop="customTheme.useCustomTheme"
-            >
+            <img src="../../assets/image/global/custom.svg" @click.stop="customTheme.useCustomTheme">
           </div>
         </div>
       </div>
       <div class="submit">
         <div class="text">提交后跳转到提交状态页</div>
-        <el-switch
-          v-model="configStore.submitThenRedirectToCode"
-          size="large"
-        />
+        <el-switch v-model="configStore.submitThenRedirectToCode" size="large" />
       </div>
-      <div
-        class="close cursor_pointer"
-        @click="props.close"
-      >
+      <div class="close cursor_pointer" @click="props.close">
         关闭
       </div>
     </div>
@@ -152,14 +116,14 @@ type propsType = {
   close?: Function;
 };
 var props = withDefaults(defineProps<propsType>(), {
-  close: () => {},
+  close: () => { },
 });
 
 var propsChange = computed(() => {
   return props;
 });
 
-watch(propsChange, (nv, ov) => {}, {
+watch(propsChange, (nv, ov) => { }, {
   deep: true,
 });
 
@@ -240,7 +204,7 @@ function switchTheme(theme: number): void {
   themeSwitchStore.switchTheme(theme);
 }
 
-onMounted(() => { 
+onMounted(() => {
   customTheme.init();
 });
 </script>
@@ -269,7 +233,7 @@ onMounted(() => {
     }
   }
 
-  > .title {
+  >.title {
     font-size: $fontSize8;
     @include font_color("font1");
     letter-spacing: 2px;
@@ -278,7 +242,7 @@ onMounted(() => {
     padding-bottom: 15px;
   }
 
-  > .content {
+  >.content {
     width: 100%;
     font-size: $fontSize6;
     display: flex;

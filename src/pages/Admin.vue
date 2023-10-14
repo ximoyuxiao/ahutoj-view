@@ -8,7 +8,7 @@
     </router-link>
     <router-link active-class="selected" to="/Admin/ContestEdit">
       <el-menu-item index="2" v-if="config.ContestAdmin">
-        竞赛管理
+        竞赛管理  
       </el-menu-item>
     </router-link>
     <router-link v-if="config.ListAdmin" active-class="selected" to="/Admin/ListEdit">
@@ -186,6 +186,7 @@ onMounted(() => {
 <style scoped lang="scss">
 .adminHeader {
   height: 55px;
+  margin: 5px 0;
   .el-menu-item {
     font-size: $fontSize5;
   }
@@ -207,7 +208,8 @@ onMounted(() => {
 
 
   .content {
-    width: calc(100% - 260px);
+    // width: calc(100% - 260px);
+    width: calc(min(100%, 1200px));
   }
 }
 </style>

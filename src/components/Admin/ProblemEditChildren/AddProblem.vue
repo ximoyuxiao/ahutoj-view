@@ -1,19 +1,17 @@
 <template>
     <div class="addProblem">
-        <div>
+        <el-row>
             <span>标题</span>
-            <el-input v-model="problem.Title" />
-        </div>
-        <div>
+            <el-input v-model="problem.Title" class="problemTitle" />
+        </el-row>
+        <el-row>
             <span>时间限制</span>
-            <el-input-number v-model="problem.LimitTime" :min="100" :step="100" />
+            <el-input-number v-model="problem.LimitTime" :min="200" :max="10000" :step="200" controls-position="right" />
             <span>&nbsp;毫秒</span>
-        </div>
-        <div>
             <span>内存限制</span>
-            <el-input-number v-model="problem.LimitMemory" :min="64" :step="64" controls-position="right"/>
+            <el-input-number v-model="problem.LimitMemory" :min="64" :max="1024" :step="64" controls-position="right" />
             <span>&nbsp;MiB</span>
-        </div>
+        </el-row>
         <div>
             <span>来源</span>
             <el-select v-model="problem.Origin" class="m-2" placeholder="Select">
@@ -21,68 +19,63 @@
                     :value="item.value" />
             </el-select>
             <el-input v-show="problem.Origin != -1" v-model="problem.OriginPID"
-                :placeholder="problem.OriginPlaceHolder[problem.Origin]" />
+                :placeholder="problem.OriginPlaceHolder[problem.Origin]" class="originInfo" />
         </div>
-        <div>
+        <el-row>
             <span>可见</span>
             <el-select v-model="problem.Visible" class="m-2" placeholder="Select">
                 <el-option v-for="(item, index) in problem.Visibles" :key="item.label" :label="item.label"
                     :value="item.value" />
             </el-select>
-        </div>
-        <div>
+        </el-row>
+        <el-row>
+            <span>标签</span>
+            <el-input v-model="problem.Label" placeholder="请输入的每个标签之间用';'隔开" class="tagList" />
+        </el-row>
+        <br />
+        <el-row>
             <span>文本类型</span>
             <el-select v-model="problem.ContentType" class="m-2" placeholder="Select">
                 <el-option v-for="(item, index) in problem.ContentTypes" :key="item.label" :label="item.label"
                     :value="item.value" />
             </el-select>
-        </div>
+        </el-row>
         <template v-if="problem.ContentType == 1">
             <div class="markdown">
                 <md-editor v-model="problem.Description" :toolbars="markdown.toolbar" :on-upload-img="problem.updateImg" />
-            </div>
-            <div>
-                <span>标签</span>
-                <el-input v-model="problem.Label" placeholder="请输入的每个标签之间用';'隔开" />
             </div>
         </template>
         <template v-else>
             <div class="normal">
                 <div>
                     <span>题目描述</span>
-                    <el-input v-model="problem.Description" type="textarea" autosize />
+                    <el-input v-model="problem.Description" type="textarea" autosize class="plainText"/>
                 </div>
                 <div>
                     <span>输入描述</span>
-                    <el-input v-model="problem.Input" type="textarea" autosize />
+                    <el-input v-model="problem.Input" type="textarea" autosize class="plainText"/>
                 </div>
                 <div>
                     <span>输出描述</span>
-                    <el-input v-model="problem.Output" type="textarea" autosize />
+                    <el-input v-model="problem.Output" type="textarea" autosize class="plainText"/>
                 </div>
                 <div>
                     <span>输入样例</span>
-                    <el-input v-model="problem.SampleInput" type="textarea" autosize />
+                    <el-input v-model="problem.SampleInput" type="textarea" autosize class="plainText"/>
                 </div>
                 <div>
                     <span>输出样例</span>
-                    <el-input v-model="problem.SampleOutput" type="textarea" autosize />
+                    <el-input v-model="problem.SampleOutput" type="textarea" autosize class="plainText"/>
                 </div>
                 <div>
                     <span>提示</span>
-                    <el-input v-model="problem.Hit" type="textarea" autosize />
-                </div>
-                <div>
-                    <span>标签</span>
-                    <el-input v-model="problem.Label" placeholder="请输入的每个标签之间用';'隔开" />
+                    <el-input v-model="problem.Hit" type="textarea" autosize class="plainText"/>
                 </div>
             </div>
         </template>
-        <div style="display: flex; justify-content: flex-end; padding: 10px 0">
-            <el-button plain v-on:click="complete()">
-                添加
-            </el-button>
-        </div>
+        <el-button class="addProblemButton" type="primary" round v-on:click="complete()">
+            添 加
+        </el-button>
     </div>
 </template>
 
@@ -141,8 +134,8 @@ var problem = reactive({
     Output: "",
     SampleInput: "",
     SampleOutput: "",
-    LimitTime: 0,
-    LimitMemory: 0,
+    LimitTime: 1000,
+    LimitMemory: 128,
     Hit: "",
     Label: "",
     Origin: -1,
@@ -189,8 +182,8 @@ var problem = reactive({
         problem.Output = "";
         problem.SampleInput = "";
         problem.SampleOutput = "";
-        problem.LimitTime = 0;
-        problem.LimitMemory = 0;
+        problem.LimitTime = 1000;
+        problem.LimitMemory = 128;
         problem.Hit = "";
         problem.Label = "";
         problem.Origin = 0;
@@ -293,6 +286,43 @@ function complete() {
 </script>
 
 <style scoped lang="scss">
+.problemTitle {
+    width: 600px;
+}
+
+.tagList {
+    width: 600px;
+}
+
+.m-2 {
+    width: 160px;
+}
+
+.originInfo {
+    width: 440px;
+}
+
+span {
+    align-self: center;
+    display: flex;
+    font-size: $fontSize6;
+    @include font_color("font1");
+}
+
+.addProblemButton {
+    align-self: center;
+    width: 600px;
+    height: 50px;
+    margin: 20px 0;
+    border-radius: 25px;
+    font-size: $fontSize6;
+}
+
+.plainText {
+    width: 600px;
+    display: flex;
+}
+
 .addProblem {
     width: 100%;
     display: flex;
@@ -308,12 +338,12 @@ function complete() {
             align-content: center;
             justify-content: flex-start;
             box-sizing: border-box;
-            margin: 5px 0;
+            margin: 5px 0px;
 
             >span {
                 display: block;
-                font-size: 22px;
-                width: 150px;
+                font-size: $fontSize6;
+                width: 100px;
                 @include font_color("font1");
             }
         }
@@ -321,16 +351,14 @@ function complete() {
 
     >div {
         display: flex;
-        align-content: center;
+
         justify-content: flex-start;
         box-sizing: border-box;
         margin: 5px 0;
 
         >span {
             display: block;
-            font-size: 22px;
-            width: 150px;
-            @include font_color("font1");
+            width: 100px;
         }
     }
 }

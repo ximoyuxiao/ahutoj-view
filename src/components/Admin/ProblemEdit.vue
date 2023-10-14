@@ -1,47 +1,43 @@
 <template>
-  <div class="ProblemEdit">
-    <div class="nav">
-      <router-link
-        active-class="selected"
-        to="/Admin/ProblemEdit/AddProblem"
-      >
-        添加题目
-      </router-link>
-      <el-divider direction="vertical" />
-      <router-link
-        active-class="selected"
-        to="/Admin/ProblemEdit/UpdateProblem"
-      >
-        编辑题目
-      </router-link>
-      <el-divider direction="vertical" />
-      <router-link
-        active-class="selected"
-        to="/Admin/ProblemEdit/EditProblemJudgeFile"
-      >
-        判题数据
-      </router-link>
-      <el-divider direction="vertical" />
-      <router-link
-        active-class="selected"
-        to="/Admin/ProblemEdit/Rejudge"
-      >
+  <el-menu class="ProblemEdit" mode="horizontal">
+    <router-link active-class="selected" to="/Admin/ProblemEdit/AddProblem">
+      <el-menu-item index="1">
+        <el-icon><Plus /></el-icon>
+        新增
+      </el-menu-item>
+    </router-link>
+    <router-link active-class="selected" to="/Admin/ProblemEdit/UpdateProblem">
+      <el-menu-item index="2">
+        <el-icon><Edit /></el-icon>
+        编辑
+      </el-menu-item>
+    </router-link>
+    <router-link active-class="selected" to="/Admin/ProblemEdit/EditProblemJudgeFile">
+      <el-menu-item index="3">
+        <el-icon><DocumentChecked /></el-icon>
+        数据
+      </el-menu-item>
+    </router-link>
+    <router-link active-class="selected" to="/Admin/ProblemEdit/Rejudge">
+      <el-menu-item index="4">
+        <el-icon><RefreshRight /></el-icon>
         重判
-      </router-link>
-      <router-link
-        active-class="selected"
-        to="/Admin/ProblemEdit/UploadProblem"
-      >
-        上传题目
-      </router-link>
-      <router-link
-        active-class="selected"
-        to="/Admin/ProblemEdit/DownloadProblem"
-      >
-        下载题目
-      </router-link>
-    </div>
-
+      </el-menu-item>
+    </router-link>
+    <router-link active-class="selected" to="/Admin/ProblemEdit/UploadProblem">
+      <el-menu-item index="5">
+        <el-icon><Upload /></el-icon>
+        导入
+      </el-menu-item>
+    </router-link>
+    <router-link active-class="selected" to="/Admin/ProblemEdit/DownloadProblem">
+      <el-menu-item index="6">
+        <el-icon><Download /></el-icon>
+        导出
+      </el-menu-item>
+    </router-link>
+  </el-menu>
+  <div class="ProblemEdit">
     <div class="content">
       <router-view v-slot="{ Component }">
         <transition enter-active-class="animate__animated animate__fadeInRight">
@@ -71,7 +67,7 @@ export default {
     justify-content: centers;
     @include fill_color("fill3");
 
-    > a {
+    >a {
       box-sizing: border-box;
       padding: 5px 15px;
       font-size: $fontSize7;
@@ -84,7 +80,7 @@ export default {
       }
     }
 
-    > .selected {
+    >.selected {
       border-bottom: 2px solid;
       @include border_color("fill21");
     }

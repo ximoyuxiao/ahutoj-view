@@ -7,34 +7,22 @@
   </div>
   <div class="userInfo">
     <div class="permissionHead">
-      <div
-        class="header"
-        v-for="(item,_) in ['用户ID','超级管理员','资源管理员','竞赛管理员','题单管理员','题目管理员','管理员','修改权限']"
-      >
-        {{item}}
+      <div class="header" v-for="(item, _) in ['用户ID', '超管', '资源', '竞赛', '题单', '题目', '管理员', '修改权限']">
+        {{ item }}
       </div>
     </div>
     <div class="permissionBody">
-      <div class = "body"
-        v-for="(permission,_) in adminList.list"
-      >
+      <div class="body" v-for="(permission, _) in adminList.list">
         <div>
           {{ permission.UID }}
         </div>
-        <div
-          class="select"
-          v-for="(_,index) in permission.permissionTabel"
-        >
-          <el-switch
-            v-model="permission.permissionTabel[index]"
+        <div class="select" v-for="(_, index) in permission.permissionTabel">
+          <el-switch v-model="permission.permissionTabel[index]"
             style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
-            @change="adminList.select(permission,index)"
-            :active-value="true"
-            :inactive-value="false"
-          />
+            @change="adminList.select(permission, index)" :active-value="true" :inactive-value="false" />
         </div>
         <el-button class="botton" @click="adminList.ChangePermission(permission)">
-          确认修改
+          修改
         </el-button>
       </div>
     </div>
@@ -53,21 +41,21 @@ var page = 0
 var Limit = 20
 type PermissionType = {
   UID: string;
-  PermissionMap:Number;
+  PermissionMap: Number;
   permissionTabel: [boolean, boolean, boolean, boolean, boolean, boolean],
 };
 var adminList = reactive({
   list: [] as PermissionType[],
-  Count:0,
-  gatAdminList:()=>{
-      proxy.$get("/api/admin/permission/list/?Page=" + page + "&Limit="+Limit).then((res :any)=>{
+  Count: 0,
+  gatAdminList: () => {
+    proxy.$get("/api/admin/permission/list/?Page=" + page + "&Limit=" + Limit).then((res: any) => {
       var data = res.data;
-      if(data.code === 0){
+      if (data.code === 0) {
         console.log(res.data);
-        const parsedList = (data.Data as { UID: string, PermissionMap:Number }[]).map(item => {
+        const parsedList = (data.Data as { UID: string, PermissionMap: Number }[]).map(item => {
           const permission: PermissionType = {
             UID: item.UID,
-            PermissionMap:item.PermissionMap,
+            PermissionMap: item.PermissionMap,
             permissionTabel: [false, false, false, false, false, false],
           };
           // 进行权限解析并将权限表存入 permission.permissionTabel
@@ -79,32 +67,32 @@ var adminList = reactive({
       }
     });
   },
-  ParsePermission(permission:any){
+  ParsePermission(permission: any) {
     console.log(permission)
-      if ((permission.PermissionMap & constValStore.AdministratorBit) > 0)
+    if ((permission.PermissionMap & constValStore.AdministratorBit) > 0)
       permission.permissionTabel[5] = true;
-      else permission.permissionTabel[5] = false;
-      if ((permission.PermissionMap & constValStore.ProblemAdminBit) > 0)
+    else permission.permissionTabel[5] = false;
+    if ((permission.PermissionMap & constValStore.ProblemAdminBit) > 0)
       permission.permissionTabel[5] = permission.permissionTabel[4] = true;
-      else permission.permissionTabel[4] = false;
-      if ((permission.PermissionMap & constValStore.ListAdminBit) > 0)
+    else permission.permissionTabel[4] = false;
+    if ((permission.PermissionMap & constValStore.ListAdminBit) > 0)
       permission.permissionTabel[5] = permission.permissionTabel[3] = true;
-      else permission.permissionTabel[3] = false;
-      if ((permission.PermissionMap & constValStore.ContestAdminBit) > 0)
+    else permission.permissionTabel[3] = false;
+    if ((permission.PermissionMap & constValStore.ContestAdminBit) > 0)
       permission.permissionTabel[5] = permission.permissionTabel[2] = true;
-      else permission.permissionTabel[2] = false;
-      if ((permission.PermissionMap & constValStore.SourceBorwserBit) > 0)
+    else permission.permissionTabel[2] = false;
+    if ((permission.PermissionMap & constValStore.SourceBorwserBit) > 0)
       permission.permissionTabel[5] = permission.permissionTabel[1] = true;
-      else permission.permissionTabel[1] = false;
-      if ((permission.PermissionMap & constValStore.SuperAdminBit) > 0)
-        for (let i in permission.permissionTabel) {
-          permission.permissionTabel[i] = true;
-        }
-      else permission.permissionTabel[0] = false;
-      console.log(permission)
+    else permission.permissionTabel[1] = false;
+    if ((permission.PermissionMap & constValStore.SuperAdminBit) > 0)
+      for (let i in permission.permissionTabel) {
+        permission.permissionTabel[i] = true;
+      }
+    else permission.permissionTabel[0] = false;
+    console.log(permission)
   },
-  
-  select(permission: PermissionType,index: number) {
+
+  select(permission: PermissionType, index: number) {
     let result = permission.permissionTabel[index];
     if (index == 0 && result) {
       for (let i in permission.permissionTabel) {
@@ -128,45 +116,46 @@ var adminList = reactive({
       });
     }
   },
-  ChangePermission(permission: PermissionType){
+  ChangePermission(permission: PermissionType) {
     console.log(permission)
     proxy
-    .$post("api/admin/permission/edit/", {
-      UID: permission.UID,
-      SuperAdmin: permission.permissionTabel[0],
-      SourceAdmin: permission.permissionTabel[1],
-      ContestAdmin: permission.permissionTabel[2],
-      ListAdmin:permission.permissionTabel[3],
-      ProbelmAdmin: permission.permissionTabel[4],
-    })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.code == 0) {
-        proxy.elMessage({
-          message: "修改成功",
-          type: "success",
-        });
-      }
-      proxy.codeProcessor(
-        data?.code ?? 100001,
-        data?.msg ?? "服务器错误\\\\error"
-      );
-    });
+      .$post("api/admin/permission/edit/", {
+        UID: permission.UID,
+        SuperAdmin: permission.permissionTabel[0],
+        SourceAdmin: permission.permissionTabel[1],
+        ContestAdmin: permission.permissionTabel[2],
+        ListAdmin: permission.permissionTabel[3],
+        ProbelmAdmin: permission.permissionTabel[4],
+      })
+      .then((res: any) => {
+        let data = res.data;
+        if (data.code == 0) {
+          proxy.elMessage({
+            message: "修改成功",
+            type: "success",
+          });
+        }
+        proxy.codeProcessor(
+          data?.code ?? 100001,
+          data?.msg ?? "服务器错误\\\\error"
+        );
+      });
   },
 });
 
 (() => {
-    adminList.gatAdminList()
+  adminList.gatAdminList()
 })();
 </script>
 
 <style scoped lang="scss">
 .userInfo {
-  
+
   display: flex;
   flex-direction: column;
   font-size: $fontSize6;
   @include font_color("font1");
+
   .permissionHead {
     // margin: 20px 0;
     margin-top: 20px;
@@ -186,12 +175,14 @@ var adminList = reactive({
 
 
   }
-  .permissionBody{
+
+  .permissionBody {
     // overflow-y: scroll;
     margin-bottom: 20px;
     width: 100%;
     display: grid;
     @include fill_color("fill4");
+
     .body {
       font-size: $fontSize7;
       @include font_color("font1");
@@ -201,13 +192,14 @@ var adminList = reactive({
       line-height: 40px;
       text-align: center;
     }
- 
+
     .select {
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .botton{
+
+    .botton {
       display: flex;
       justify-content: center;
       align-items: center;

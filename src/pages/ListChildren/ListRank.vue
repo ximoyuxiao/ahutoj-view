@@ -1,101 +1,76 @@
 <template>
-    <div
-      class="ContestRank"
-      ref="ContestRank"
-    >
-      <div
-        class="contestID cursor_pointer"
-        @click="backToList()"
-      >
-        <el-icon size="32px">
-          <Back />
-        </el-icon>
-        <div>
-            {{ list.LID }}
-        </div>
+  <div class="ContestRank" ref="ContestRank">
+    <div class="contestID cursor_pointer" @click="backToList()">
+      <el-icon size="32px">
+        <Back />
+      </el-icon>
+      <div>
+        {{ list.LID }}
       </div>
-      <div class="contestInfo">
-        <div class="title">
-            {{list.Title}}
-        </div>
-        <div class="content">{{list.Description}}</div>
+    </div>
+    <div class="contestInfo">
+      <div class="title">
+        {{ list.Title }}
       </div>
-      <div class="header">
-        <div style="width:70px">排名</div>
-        <div style="width:360px">用户名</div>
-        <div style="width:70px">班级</div>
-        <div style="width:90px">AC数</div>
+      <div class="content">{{ list.Description }}</div>
+    </div>
+    <el-button style="margin: auto;" v-on:click="DownLoadRankList()">下载题单排名</el-button>
+    <br />
+    <div class="header">
+      <div style="width:70px">排名</div>
+      <div style="width:360px">用户</div>
+      <div style="width:70px">班级</div>
+      <div style="width:90px">AC数</div>
+      <div v-for="(item, index) in list.Data" :key="index" style="width:140px">
+        {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) + "(" + item.Solved + ")" }}
+      </div>
+    </div>
+    <div class="item" v-for="(item, index) in rank.rankList" :key="index">
+      <template v-if="item.medal != 0">
+        <div style="width:70px;">
+          <div class="medalIcon">
+            <el-icon size="36px" color="#fabd08" v-if="item.medal == 1">
+              <Medal />
+            </el-icon>
+            <el-icon size="36px" color="#d6d6d6" v-else-if="item.medal == 2">
+              <Medal />
+            </el-icon>
+            <el-icon size="36px" color="#c57120" v-else="item.medal == 3">
+              <Medal />
+            </el-icon>
+          </div>
+          {{ index + 1 }}
+        </div>
+      </template>
+      <template v-else>
+        <div style="width:70px;">{{ index + 1 }}</div>
+      </template>
+
+      <div style="width:360px;text-align: start;">{{ item.Uname }}({{ item.UID }})</div>
+      <div style="width:70px;">{{ item.Uclass }}</div>
+      <div style="width:90px">{{ item.Solved }}</div>
+      <!-- <div style="width:140px">{{proxy.Utils.TimeTools.timestampToInterval(item.TimePenalty*1000,2)}}</div> -->
+      <div class="problemStatus" v-for="(p, index) in list.Data" :key="index"
+        :style="'width:140px;' + getBackgroundColor(item.ProblemsMap[p.PID])">
+        <div v-if="item.ProblemsMap[p.PID] && item.ProblemsMap[p.PID].Status == 'AC'">
+          {{ item.ProblemsMap[p.PID].Status }}
+        </div>
         <div
-          v-for="(item,index) in list.Data"
-          :key="index"
-          style="width:140px"
-        >
-          {{proxy.Utils.TSBaseTools.numberToAlpha(index + 1) + "(" + item.Solved + ")"}}
-        </div>
-      </div>
-      <div
-        class="item"
-        v-for="(item,index) in rank.rankList"
-        :key="index"
-      >
-        <template v-if="item.medal != 0">
-          <div style="width:70px;">
-            <div class="medalIcon">
-              <el-icon
-                size="36px"
-                color="#fabd08"
-                v-if="item.medal == 1"
-              >
-                <Medal />
-              </el-icon>
-              <el-icon
-                size="36px"
-                color="#d6d6d6"
-                v-else-if="item.medal == 2"
-              >
-                <Medal />
-              </el-icon>
-              <el-icon
-                size="36px"
-                color="#c57120"
-                v-else="item.medal == 3"
-              >
-                <Medal />
-              </el-icon>
-            </div>
-            {{index + 1}}
-          </div>
-        </template>
-        <template v-else>
-          <div style="width:70px;">{{index + 1}}</div>
-        </template>
-  
-        <div style="width:360px;text-align: start;">{{item.Uname}}({{item.UID}})</div>
-        <div style="width:70px;">{{ item.Uclass }}</div>
-        <div style="width:90px">{{item.Solved}}</div>
-        <!-- <div style="width:140px">{{proxy.Utils.TimeTools.timestampToInterval(item.TimePenalty*1000,2)}}</div> -->
-        <div
-          class="problemStatus"
-          v-for="(p,index) in list.Data"
-          :key="index"
-          :style="'width:140px;' + getBackgroundColor(item.ProblemsMap[p.PID])"
-        >
-          <div v-if="item.ProblemsMap[p.PID] && item.ProblemsMap[p.PID].Status == 'AC'">
-            {{item.ProblemsMap[p.PID].Status}}
-          </div>
-          <div v-if="(item.ProblemsMap[p.PID] && (item.ProblemsMap[p.PID].SubmitNumber > 1)) 
-          ||  (item.ProblemsMap[p.PID] && (item.ProblemsMap[p.PID].SubmitNumber >= 1) && (item.ProblemsMap[p.PID].Status != 'AC'))">
-            {{item.ProblemsMap[p.PID].Status}}
-            (-{{item.ProblemsMap[p.PID].Status == 'AC' ? item.ProblemsMap[p.PID].SubmitNumber-1 : item.ProblemsMap[p.PID].SubmitNumber}})
-          </div>
+          v-if="(item.ProblemsMap[p.PID] && (item.ProblemsMap[p.PID].SubmitNumber > 1))
+            || (item.ProblemsMap[p.PID] && (item.ProblemsMap[p.PID].SubmitNumber >= 1) && (item.ProblemsMap[p.PID].Status != 'AC'))">
+          {{ item.ProblemsMap[p.PID].Status }}
+          (-{{ item.ProblemsMap[p.PID].Status == 'AC' ? item.ProblemsMap[p.PID].SubmitNumber - 1 :
+            item.ProblemsMap[p.PID].SubmitNumber }})
         </div>
       </div>
     </div>
-  </template>
+  </div>
+</template>
 
 <script  lang="ts" setup>
 import { getCurrentInstance, onMounted, reactive } from "vue";
 import { usePageBufferedDataStore } from "../../pinia/pageBufferdData";
+import { write, utils, WorkSheet } from "xlsx";
 const { proxy } = getCurrentInstance() as any;
 const pageBufferedDataStore = usePageBufferedDataStore();
 
@@ -109,7 +84,7 @@ type ProblemsMapType = {
 type listItemType = {
   UID: string;
   Uname: string;
-  Uclass:string;
+  Uclass: string;
   Solved: number;
   Problems: {
     PID: number;
@@ -117,7 +92,7 @@ type listItemType = {
     SubmitNumber: number;
     Status: string;
   }[];
-  TimePenalty:number;
+  TimePenalty: number;
   ProblemsMap?: Map<number, ProblemsMapType>;
   medal?: number;
 };
@@ -141,15 +116,15 @@ var rank = reactive<{
     }
     //遍历并封装数据
     for (let i in data) {
-      var user  = data[i];
+      var user = data[i];
       //暂存当期处理的行的数据
       let listItem: listItemType = {
-        TimePenalty:0,
+        TimePenalty: 0,
         Solved: 0,
         Problems: [],
         Uname: "",
         UID: "",
-        Uclass:"",
+        Uclass: "",
         ProblemsMap: new Map<number, ProblemsMapType>(),
         medal: 0,
       };
@@ -162,8 +137,8 @@ var rank = reactive<{
         if (problem.PID == 0) continue;
         if (problem.Status == "AC") {
           listItem.TimePenalty += problem.Time;
-          for(let k in list.Data){
-            if(problem.PID == list.Data[k].PID){
+          for (let k in list.Data) {
+            if (problem.PID == list.Data[k].PID) {
               list.Data[k].Solved++;
             }
           }
@@ -197,7 +172,7 @@ var rank = reactive<{
     rank.rankList.sort((a, b) => {
       if (a.Solved < b.Solved) return 1;
       else if (a.Solved == b.Solved) {
-        return a.TimePenalty < b.TimePenalty?1:-1;
+        return a.TimePenalty < b.TimePenalty ? 1 : -1;
       } else return -1;
     });
 
@@ -225,6 +200,71 @@ var rank = reactive<{
     // console.log(this.rankList);
   },
 });
+
+
+function DownLoadRankList() {
+  var blob;
+  const workbook = utils.book_new()
+  const sheetName = 'rank';
+  var worksheet: WorkSheet;
+  console.log(rank.rankList)
+  // 创建数据
+  var header = ["排名", "用户", "班级", "AC数"]
+  for (var i in list.Data) {
+    header.push(proxy.Utils.TSBaseTools.numberToAlpha(Number(i) + 1))
+  }
+  var datas = [];
+  console.log(header);
+  console.log(datas)
+  datas.push(header);
+  for (var i in rank.rankList) {
+    var user = rank.rankList[i];
+    var data = [];
+    data.push(Number(i) + 1);
+    data.push(user.Uname + "(" + user.UID + ")");
+    data.push(user.Uclass);
+    data.push(user.Solved);
+    // data.push(proxy.Utils.TimeTools.timestampToInterval(user.TimePenalty * 1000, 2));
+    for (var j in list.Data) {
+      var problem: ProblemsMapType = user.ProblemsMap[list.Data[j].PID];
+      if (!problem) {
+        data.push("");
+        continue;
+      }
+      if (problem.Status == "AC") {
+        // data.push(problem.Status + "(" + problem.Time + ")")
+        data.push(problem.Status)
+        continue;
+      }
+      data.push("(" + problem.SubmitNumber + ")")
+    }
+    datas.push(data);
+  }
+  console.log(datas)
+  worksheet = utils.aoa_to_sheet(datas)
+  console.log(worksheet)
+  utils.book_append_sheet(workbook, worksheet, sheetName);
+  const file = write(workbook, { bookType: 'xlsx', type: 'binary' });
+  console.log(file);
+  blob = new Blob([s2ab(file)], { type: 'application/octet-stream' });
+  console.log(blob);
+  // downloadFile(UID + ":" + Uname + "的排名.xlsx", blob)
+  downloadFile(list.LID + ":" + list.Title + "的排名.xlsx", blob)
+}
+function s2ab(s) {
+  const buf = new ArrayBuffer(s.length);
+  const view = new Uint8Array(buf);
+  for (let i = 0; i !== s.length; ++i) {
+    view[i] = s.charCodeAt(i) & 0xFF;
+  };
+  return buf;
+}
+function downloadFile(filename: string, blob: Blob) {
+  const link = document.createElement('a');
+  link.href = window.URL.createObjectURL(blob);
+  link.download = filename;
+  link.click();
+}
 
 //获取竞赛提交数据
 async function getRankList() {
@@ -278,12 +318,12 @@ type ListType = {
 
 var list = reactive<ListType>({
   //Data保存当前存在的题目
-  LID:0,
-  UID:"",
-  Title:"",
-  Description:"",
-  BeginTime:0,
-  Data:[],
+  LID: 0,
+  UID: "",
+  Title: "",
+  Description: "",
+  BeginTime: 0,
+  Data: [],
   copy(data: any) {
     let tempProblemSequence = data.Problems.split(",");
     for (let temp in tempProblemSequence) {
@@ -382,7 +422,7 @@ onMounted(() => {
       @include fill_color("fill2");
     }
 
-    > div {
+    >div {
       margin: 0 10px;
     }
   }
@@ -421,7 +461,7 @@ onMounted(() => {
     width: 100%;
     @include font_color("font1");
 
-    > div {
+    >div {
       box-sizing: border-box;
       height: 100%;
       line-height: $contestRank_headerHeight;
@@ -452,10 +492,11 @@ onMounted(() => {
     @include font_color("font2");
 
     &:last-child {
-      > div {
+      >div {
         &:first-child {
           border-end-start-radius: 10px;
         }
+
         &:last-child {
           border-end-end-radius: 10px;
         }
@@ -472,7 +513,7 @@ onMounted(() => {
       }
     }
 
-    > div {
+    >div {
       height: $contestRank_itemHeight;
       line-height: $contestRank_itemHeight;
       box-sizing: border-box;
@@ -502,6 +543,7 @@ onMounted(() => {
         &:first-child {
           font-size: $fontSize5;
         }
+
         &:last-child {
           font-size: $fontSize4;
         }

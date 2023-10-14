@@ -3,10 +3,7 @@
     <!-- 主界面 -->
     <Main v-if="config.serverActive"></Main>
     <!-- 服务器连接失败 -->
-    <div
-      class="heartbeat"
-      v-else
-    >
+    <div class="heartbeat" v-else>
       <div class="title">服务器异常</div>
       <div class="beat">正在自动发送心跳包</div>
       <div class="content">{{ config.nextHeartbeatTime }} 秒后自动尝试重连</div>
@@ -86,7 +83,7 @@ onMounted(() => {
   initStore();
 });
 
-() => {};
+() => { };
 </script>
 
 <style lang="scss" scoped>
@@ -115,9 +112,11 @@ onMounted(() => {
   0% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.05);
   }
+
   100% {
     transform: scale(1);
   }
@@ -129,11 +128,13 @@ onMounted(() => {
   margin: 0;
   padding: 0;
 }
+
 a:link,
 a:visited,
 a:active {
   text-decoration: none;
 }
+
 html {
   height: 100%;
   width: 100%;
@@ -143,12 +144,14 @@ html {
   position: relative;
   @include fill_color("base_page");
 }
+
 body {
   position: relative;
   width: 100%;
   height: 100%;
   @include fill_color("base_page");
 }
+
 pre {
   white-space: pre-wrap;
   white-space: -moz-pre-wrap;
@@ -157,6 +160,7 @@ pre {
   *word-wrap: break-word;
   *white-space: normal;
 }
+
 :root {
   --font1: #303133;
   --font2: #606266;
@@ -230,6 +234,7 @@ pre {
 .cursor_pointer {
   cursor: pointer;
 }
+
 /* 文字图片无选中、拖拽 */
 .cursor_noFocus {
   -moz-user-select: none;

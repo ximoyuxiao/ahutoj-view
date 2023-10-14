@@ -1,99 +1,69 @@
 <template>
-  <div
-    class="ContestRank"
-    ref="ContestRank"
-  >
-    <div
-      class="contestID cursor_pointer"
-      @click="backToContest"
-    >
+  <div class="ContestRank" ref="ContestRank">
+    <div class="contestID cursor_pointer" @click="backToContest">
       <el-icon size="32px">
         <Back />
       </el-icon>
       <div>
-        #{{contest.CID}}
+        #{{ contest.CID }}
       </div>
     </div>
     <div class="contestInfo">
       <div class="title">
-        {{contest.Title}}
+        {{ contest.Title }}
       </div>
-      <div class="content">{{contest.Description}}</div>
-      <div class="time">{{proxy.Utils.TimeTools.timestampToTime(contest.BeginTime)}} - {{proxy.Utils.TimeTools.timestampToTime(contest.EndTime)}}</div>
+      <div class="content">{{ contest.Description }}</div>
+      <div class="time">{{ proxy.Utils.TimeTools.timestampToTime(contest.BeginTime) }} -
+        {{ proxy.Utils.TimeTools.timestampToTime(contest.EndTime) }}</div>
     </div>
-    <el-button
-    style="margin: auto;"
-    v-on:click="DownLoadRankList()"
-    >下载竞赛排名</el-button>
+    <el-button style="margin: auto;" v-on:click="DownLoadRankList()">下载竞赛排名</el-button>
     <br>
     <template v-if="ACM == 1">
       <div class="header">
         <div style="width:70px">排名</div>
-        <div style="width:360px">用户名</div>
+        <div style="width:300px">用户名</div>
         <div style="width:120px">班级</div>
         <div style="width:90px">AC数</div>
-        <div style="width:140px">罚时</div>
-        <div
-          v-for="(item,index) in contest.Data"
-          :key="index"
-          style="width:140px"
-        >
-          {{proxy.Utils.TSBaseTools.numberToAlpha(index + 1)+ "(" + item.ACNum + "/" + item.SubmitNum + ")"}}
+        <div style="width:80px">罚时</div>
+        <div v-for="(item, index) in contest.Data" :key="index" style="width:80px">
+          {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) + "(" + item.ACNum + "/" + item.SubmitNum + ")" }}
         </div>
       </div>
-      <div
-        class="item"
-        v-for="(item,index) in rank.rankList"
-        :key="index"
-      >
+      <div class="item" v-for="(item, index) in rank.rankList" :key="index">
         <template v-if="item.medal != 0">
           <div style="width:70px;">
             <div class="medalIcon">
-              <el-icon
-                size="36px"
-                color="#fabd08"
-                v-if="item.medal == 1"
-              >
+              <el-icon size="36px" color="#fabd08" v-if="item.medal == 1">
                 <Medal />
               </el-icon>
-              <el-icon
-                size="36px"
-                color="#d6d6d6"
-                v-else-if="item.medal == 2"
-              >
+              <el-icon size="36px" color="#d6d6d6" v-else-if="item.medal == 2">
                 <Medal />
               </el-icon>
-              <el-icon
-                size="36px"
-                color="#c57120"
-                v-else="item.medal == 3"
-              >
+              <el-icon size="36px" color="#c57120" v-else="item.medal == 3">
                 <Medal />
               </el-icon>
             </div>
-            {{index + 1}}
+            {{ index + 1 }}
           </div>
         </template>
         <template v-else>
-          <div style="width:70px;">{{index + 1}}</div>
+          <div style="width:70px;">{{ index + 1 }}</div>
         </template>
 
-        <div style="width:360px;text-align: start;">{{item.Uname}}({{item.UserID}})</div>
-        <div style="width:120px">{{item.Uclass}}</div>
-        <div style="width:90px">{{item.ACNumber}}</div>
-        <div style="width:140px">{{proxy.Utils.TimeTools.timestampToInterval(item.TimePenalty*1000,2)}}</div>
-        <div
-          class="problemStatus"
-          v-for="(p,index) in contest.Data"
-          :key="index"
-          :style="'width:140px;' + getBackgroundColor(item.ProblemsMap[p.PID])"
-        >
+        <div style="width:300px;text-align: start;">{{ item.Uname }}({{ item.UserID }})</div>
+        <div style="width:120px">{{ item.Uclass }}</div>
+        <div style="width:90px">{{ item.ACNumber }}</div>
+        <div style="width:80px">{{ proxy.Utils.TimeTools.timestampToInterval(item.TimePenalty * 1000, 2) }}</div>
+        <div class="problemStatus" v-for="(p, index) in contest.Data" :key="index"
+          :style="'width:80px;' + getBackgroundColor(item.ProblemsMap[p.PID])">
           <div v-if="item.ProblemsMap[p.PID] && item.ProblemsMap[p.PID].Status == 'AC'">
-            {{(item.ProblemsMap[p.PID].Time/1000).toFixed(0)}}
+            {{ (item.ProblemsMap[p.PID].Time / 1000).toFixed(0) }}
           </div>
-          <div v-if="(item.ProblemsMap[p.PID] && (item.ProblemsMap[p.PID].SubmitNumber > 1)) 
-          ||  (item.ProblemsMap[p.PID] && (item.ProblemsMap[p.PID].SubmitNumber >= 1) && (item.ProblemsMap[p.PID].Status != 'AC'))">
-            (-{{item.ProblemsMap[p.PID].Status == 'AC' ? item.ProblemsMap[p.PID].SubmitNumber-1 : item.ProblemsMap[p.PID].SubmitNumber}})
+          <div
+            v-if="(item.ProblemsMap[p.PID] && (item.ProblemsMap[p.PID].SubmitNumber > 1))
+              || (item.ProblemsMap[p.PID] && (item.ProblemsMap[p.PID].SubmitNumber >= 1) && (item.ProblemsMap[p.PID].Status != 'AC'))">
+            (-{{ item.ProblemsMap[p.PID].Status == 'AC' ? item.ProblemsMap[p.PID].SubmitNumber - 1 :
+              item.ProblemsMap[p.PID].SubmitNumber }})
           </div>
         </div>
       </div>
@@ -101,67 +71,43 @@
     <template v-if="ACM == 2">
       <div class="header">
         <div style="width:70px">排名</div>
-        <div style="width:360px">用户名</div>
+        <div style="width:300px">用户名</div>
         <div style="width:120px">班级</div>
         <div style="width:90px">总得分</div>
-        <div style="width:140px">总用时</div>
-        <div
-          v-for="(item,index) in contest.Data"
-          :key="index"
-          style="width:140px"
-        >
-          {{proxy.Utils.TSBaseTools.numberToAlpha(index + 1)}}
+        <div style="width:80px">总用时</div>
+        <div v-for="(item, index) in contest.Data" :key="index" style="width:80px">
+          {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
         </div>
       </div>
-      <div
-        class="item"
-        v-for="(item,index) in rank.rankListOfOI"
-        :key="index"
-      >
+      <div class="item" v-for="(item, index) in rank.rankListOfOI" :key="index">
         <template v-if="item.medal != 0">
           <div style="width:70px;">
             <div class="medalIcon">
-              <el-icon
-                size="36px"
-                color="#fabd08"
-                v-if="item.medal == 1"
-              >
+              <el-icon size="36px" color="#fabd08" v-if="item.medal == 1">
                 <Medal />
               </el-icon>
-              <el-icon
-                size="36px"
-                color="#d6d6d6"
-                v-else-if="item.medal == 2"
-              >
+              <el-icon size="36px" color="#d6d6d6" v-else-if="item.medal == 2">
                 <Medal />
               </el-icon>
-              <el-icon
-                size="36px"
-                color="#c57120"
-                v-else="item.medal == 3"
-              >
+              <el-icon size="36px" color="#c57120" v-else="item.medal == 3">
                 <Medal />
               </el-icon>
             </div>
-            {{index + 1}}
+            {{ index + 1 }}
           </div>
         </template>
         <template v-else>
-          <div style="width:70px;">{{index + 1}}</div>
+          <div style="width:70px;">{{ index + 1 }}</div>
         </template>
 
-        <div style="width:360px;text-align: start;">{{item.Uname}}({{item.UserID}})</div>
-        <div style="width:120px">{{item.Uclass}}</div>
-        <div style="width:90px">{{item.Score}}</div>
-        <div style="width:140px">{{item.AllTime}}</div>
-        <div
-          class="problemStatus"
-          v-for="(p,index) in contest.Data"
-          :key="index"
-          :style="'width:140px;' + getBackgroundColorOfOI(item.ProblemsMap[p.PID])"
-        >
+        <div style="width:300px;text-align: start;">{{ item.Uname }}({{ item.UserID }})</div>
+        <div style="width:120px">{{ item.Uclass }}</div>
+        <div style="width:90px">{{ item.Score }}</div>
+        <div style="width:80px">{{ item.AllTime }}</div>
+        <div class="problemStatus" v-for="(p, index) in contest.Data" :key="index"
+          :style="'width:80px;' + getBackgroundColorOfOI(item.ProblemsMap[p.PID])">
           <div v-if="item.ProblemsMap[p.PID]">
-            {{item.ProblemsMap[p.PID].Score}} ({{(item.ProblemsMap[p.PID].Time)}}ms)
+            {{ item.ProblemsMap[p.PID].Score }} ({{ (item.ProblemsMap[p.PID].Time) }}ms)
           </div>
         </div>
       </div>
@@ -170,12 +116,12 @@
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance, onMounted, reactive,ref } from "vue";
+import { getCurrentInstance, onMounted, reactive, ref } from "vue";
 import { usePageBufferedDataStore } from "../../pinia/pageBufferdData";
-import { write,utils, WorkSheet } from "xlsx";
+import { write, utils, WorkSheet } from "xlsx";
 const { proxy } = getCurrentInstance() as any;
 const pageBufferedDataStore = usePageBufferedDataStore();
-var ACM  = ref(1);
+var ACM = ref(1);
 type ProblemsMapOfACMType = {
   PID?: string;
   Time?: number;
@@ -183,34 +129,34 @@ type ProblemsMapOfACMType = {
   Status: string;
   Pioneer: boolean;
 };
-type ProblemsMapOfOIType ={
-  PID?:string;
-  Score:number;
-  Submited:boolean;
-  Time?:number;
+type ProblemsMapOfOIType = {
+  PID?: string;
+  Score: number;
+  Submited: boolean;
+  Time?: number;
   Pioneer: boolean;
 }
 type listItemOfOItype = {
-  Solved:number;
-  Score:number;
-  Problems:{
-    PID:string;
-    Time:number;
-    Score:number;
-    Submited:boolean;
+  Solved: number;
+  Score: number;
+  Problems: {
+    PID: string;
+    Time: number;
+    Score: number;
+    Submited: boolean;
   }[];
-  Uname:string;
-  UserID:string;
-  Uclass:string;
-  AllTime:number;
+  Uname: string;
+  UserID: string;
+  Uclass: string;
+  AllTime: number;
   ProblemsMap?: Map<string, ProblemsMapOfOIType>;
-  medal?:number;
+  medal?: number;
 }
 type listItemOfACMType = {
   ACNumber: number;
   AllSubmit: number;
   CENumber: number;
-  Uclass:string;
+  Uclass: string;
   Problems: {
     PID: string;
     Time: number;
@@ -229,7 +175,7 @@ var rank = reactive<{
   [item: string]: any;
 }>({
   rankList: [],
-  rankListOfOI:[],
+  rankListOfOI: [],
   calculateOfACM(data: listItemOfACMType[]) {
     //保存题目PID 最先AC的人
     let tempPioneerFlags = new Map<number, any>();
@@ -249,7 +195,7 @@ var rank = reactive<{
         ACNumber: 0,
         AllSubmit: 0,
         CENumber: 0,
-        Uclass:"",
+        Uclass: "",
         Problems: [],
         Uname: "",
         UserID: "",
@@ -331,7 +277,7 @@ var rank = reactive<{
     proxy.Buffer.ContestRank.rankData(rank.rankList, contest.CID);
     // console.log(this.rankList);
   },
-  calculateOfOI(data: any[]){
+  calculateOfOI(data: any[]) {
     console.log(data);
     //保存题目PID 最先AK的人
     let tempPioneerFlags = new Map<number, any>();
@@ -349,12 +295,12 @@ var rank = reactive<{
       //暂存当期处理的行的数据
       let listItem: listItemOfOItype = {
         Solved: 0,
-        Score:0,
+        Score: 0,
         Problems: [],
         Uname: "",
         UserID: "",
-        Uclass:"",
-        AllTime:0,
+        Uclass: "",
+        AllTime: 0,
         ProblemsMap: new Map<string, ProblemsMapOfOIType>(),
         medal: 0,
       };
@@ -383,7 +329,7 @@ var rank = reactive<{
           Pioneer: false,
         };
         listItem.ProblemsMap[problem.PID] = tempProblem;
-        listItem.AllTime  += problem.Time;
+        listItem.AllTime += problem.Time;
         listItem.Score += problem.Score;
       }
       //计算罚时
@@ -430,37 +376,37 @@ var rank = reactive<{
   },
 });
 
-function DownLoadRankList(){
+function DownLoadRankList() {
   var blob;
   const workbook = utils.book_new()
   const sheetName = 'rank';
-  var worksheet:WorkSheet;
-  if(contest.Type == 1){
+  var worksheet: WorkSheet;
+  if (contest.Type == 1) {
     console.log(rank.rankList)
     // 创建数据
-    var header = ["排名","用户名","班级","AC数","罚时"]
-    for(var i in contest.Data){
+    var header = ["排名", "用户名", "班级", "AC数", "罚时"]
+    for (var i in contest.Data) {
       header.push(proxy.Utils.TSBaseTools.numberToAlpha(Number(i) + 1))
     }
     var datas = [];
     console.log(header);
     console.log(datas)
     datas.push(header);
-    for(var i in rank.rankList){
+    for (var i in rank.rankList) {
       var user = rank.rankList[i];
       var data = [];
-      data.push(Number(i)+1);
-      data.push(user.Uname + "(" +  user.UserID  +  ")");
+      data.push(Number(i) + 1);
+      data.push(user.Uname + "(" + user.UserID + ")");
       data.push(user.Uclass);
       data.push(user.ACNumber);
-      data.push(proxy.Utils.TimeTools.timestampToInterval(user.TimePenalty*1000,2));
-      for(var j in contest.Data){
-        var problem:ProblemsMapOfACMType = user.ProblemsMap[contest.Data[j].PID];
-        if(!problem){
+      data.push(proxy.Utils.TimeTools.timestampToInterval(user.TimePenalty * 1000, 2));
+      for (var j in contest.Data) {
+        var problem: ProblemsMapOfACMType = user.ProblemsMap[contest.Data[j].PID];
+        if (!problem) {
           data.push("");
           continue;
         }
-        if(problem.Status == "AC"){
+        if (problem.Status == "AC") {
           data.push(problem.Status + "(" + problem.Time + ")")
           continue;
         }
@@ -472,26 +418,26 @@ function DownLoadRankList(){
     worksheet = utils.aoa_to_sheet(datas)
     console.log(worksheet)
   }
-  if(contest.Type == 2){
+  if (contest.Type == 2) {
     console.log(rank.rankListOfOI)
     // 创建数据
-    var header = ["排名","用户名","班级","总得分","总用时"]
-    for(var i in contest.Data){
+    var header = ["排名", "用户名", "班级", "总得分", "总用时"]
+    for (var i in contest.Data) {
       header.push(proxy.Utils.TSBaseTools.numberToAlpha(Number(i) + 1))
     }
     var datas = [];
     datas.push(header);
-    for(var i in rank.rankListOfOI){
+    for (var i in rank.rankListOfOI) {
       var OIuser = rank.rankListOfOI[i];
       var data = [];
-      data.push(Number(i)+1);
-      data.push(OIuser.Uname + "(" +  OIuser.UserID  +  ")");
+      data.push(Number(i) + 1);
+      data.push(OIuser.Uname + "(" + OIuser.UserID + ")");
       data.push(OIuser.Uclass);
       data.push(OIuser.Score);
       data.push(OIuser.AllTime);
-      for(var j in contest.Data){
-        var OIproblem:ProblemsMapOfOIType = OIuser.ProblemsMap[contest.Data[j].PID];
-        if(!OIproblem){
+      for (var j in contest.Data) {
+        var OIproblem: ProblemsMapOfOIType = OIuser.ProblemsMap[contest.Data[j].PID];
+        if (!OIproblem) {
           data.push("");
           continue;
         }
@@ -506,23 +452,23 @@ function DownLoadRankList(){
   utils.book_append_sheet(workbook, worksheet, sheetName);
   const file = write(workbook, { bookType: 'xlsx', type: 'binary' });
   console.log(file);
-  blob =  new Blob([s2ab(file)], { type: 'application/octet-stream' });
+  blob = new Blob([s2ab(file)], { type: 'application/octet-stream' });
   console.log(blob);
-  downloadFile(contest.CID + ":" + contest.Title + "的排名.xlsx",blob)
+  downloadFile(contest.CID + ":" + contest.Title + "的排名.xlsx", blob)
 }
 function s2ab(s) {
-    const buf = new ArrayBuffer(s.length);
-    const view = new Uint8Array(buf);
-    for (let i = 0; i !== s.length; ++i) {
-        view[i] = s.charCodeAt(i) & 0xFF;
-    };
-    return buf;
+  const buf = new ArrayBuffer(s.length);
+  const view = new Uint8Array(buf);
+  for (let i = 0; i !== s.length; ++i) {
+    view[i] = s.charCodeAt(i) & 0xFF;
+  };
+  return buf;
 }
-function downloadFile(filename:string,blob:Blob){
-    const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.download = filename;
-    link.click();
+function downloadFile(filename: string, blob: Blob) {
+  const link = document.createElement('a');
+  link.href = window.URL.createObjectURL(blob);
+  link.download = filename;
+  link.click();
 }
 //获取竞赛提交数据
 async function getRankList() {
@@ -560,9 +506,9 @@ async function getRankList() {
   //请求数据
   proxy.$get("api/contest/" + CID + "/rank", { Pass }).then((res: any) => {
     proxy.$log(res.data);
-    if(contest.Type == 1){
+    if (contest.Type == 1) {
       rank.calculateOfACM(res.data.Data);
-    }else if(contest.Type == 2){
+    } else if (contest.Type == 2) {
       rank.calculateOfOI(res.data.Data);
     }
     loading.close();
@@ -655,7 +601,7 @@ async function getContest(CID: number, Pass: string) {
 }
 
 //获取背景色
-function getBackgroundColor(item: ProblemsMapOfACMType| null) {
+function getBackgroundColor(item: ProblemsMapOfACMType | null) {
   if (item) {
     if (item.Pioneer)
       return "background-color:#2f9e44 !important; color: #eaeaea;";
@@ -666,7 +612,7 @@ function getBackgroundColor(item: ProblemsMapOfACMType| null) {
     }
   }
 }
-function getBackgroundColorOfOI(item: ProblemsMapOfOIType| null) {
+function getBackgroundColorOfOI(item: ProblemsMapOfOIType | null) {
   if (item) {
     if (item.Pioneer)
       return "background-color:#2f9e44 !important; color: #eaeaea;";
@@ -724,7 +670,7 @@ onMounted(() => {
       @include fill_color("fill2");
     }
 
-    > div {
+    >div {
       margin: 0 10px;
     }
   }
@@ -748,7 +694,7 @@ onMounted(() => {
 
     .time {
       text-align: center;
-      font-size: $fontSize6;
+      font-size: $fontSize4;
       @include font_color("font2");
       padding: 0 40px 40px 40px;
       letter-spacing: 2px;
@@ -759,10 +705,10 @@ onMounted(() => {
     display: flex;
     align-items: center;
     height: $contestRank_headerHeight;
-    font-size: $fontSize7;
+    font-size: $fontSize4;
     @include font_color("font1");
 
-    > div {
+    >div {
       box-sizing: border-box;
       height: 100%;
       line-height: $contestRank_headerHeight;
@@ -789,14 +735,15 @@ onMounted(() => {
     height: $contestRank_itemHeight;
     display: flex;
     align-items: center;
-    font-size: $fontSize6;
+    font-size: $fontSize3;
     @include font_color("font2");
 
     &:last-child {
-      > div {
+      >div {
         &:first-child {
           border-end-start-radius: 10px;
         }
+
         &:last-child {
           border-end-end-radius: 10px;
         }
@@ -813,7 +760,7 @@ onMounted(() => {
       }
     }
 
-    > div {
+    >div {
       height: $contestRank_itemHeight;
       line-height: $contestRank_itemHeight;
       box-sizing: border-box;
@@ -841,10 +788,11 @@ onMounted(() => {
         line-height: 20px;
 
         &:first-child {
-          font-size: $fontSize5;
+          font-size: $fontSize3;
         }
+
         &:last-child {
-          font-size: $fontSize4;
+          font-size: $fontSize2;
         }
       }
     }
