@@ -4,35 +4,18 @@
       <label class="loginLabel">
         账号
       </label>
-      <input
-        class="loginInput"
-        name="UID"
-        type="text"
-        autocomplete="off"
-        maxlength="20"
-        v-model="userInfo.UID"
-      />
+      <input class="loginInput" name="UID" type="text" autocomplete="off" maxlength="20" v-model="userInfo.UID" />
     </div>
     <div class="password">
-      <label
-        class="loginLabel"
-        for="username"
-      >
+      <label class="loginLabel" for="username">
         密码
       </label>
-      <input
-        class="loginInput"
-        name="password"
-        type="text"
-        autocomplete="off"
-        maxlength="20"
-        v-model="userInfo.Password"
-      />
+      <input class="loginInput" name="password" type="text" autocomplete="off" maxlength="20"
+        v-model="userInfo.Password" />
     </div>
-    <el-button class="button"
-    v-on:click="changeUserPass()">
-    重置密码
-    </el-button>
+    <el-row>
+      <el-button class="confirm" type="primary" round shoudAddSpace @click="changeUserPass()">重置密码</el-button>
+    </el-row>
   </div>
 </template>
 
@@ -50,7 +33,7 @@ var userInfo = reactive({
 });
 
 function changeUserPass() {
-  proxy.$post("api/admin/user/edit/password/",{UID:userInfo.UID,Password:userInfo.Password}).then((res: any) => {
+  proxy.$post("api/admin/user/edit/password/", { UID: userInfo.UID, Password: userInfo.Password }).then((res: any) => {
     let data = res.data;
     if (data.code == 0) {
       proxy.elMessage({
@@ -58,27 +41,28 @@ function changeUserPass() {
         type: "success",
       });
     }
-    proxy.codeProcessor(data.code,data.msg);
+    proxy.codeProcessor(data.code, data.msg);
   });
 }
 </script>
 
 <style scoped lang="scss">
-.button{
+.button {
   width: 100px;
   margin-left: 60px;
   margin-top: 5px;
 }
+
 .UpdateUser {
   display: flex;
   flex-direction: column;
 
-  > div {
+  >div {
     font-size: $fontSize8;
     box-sizing: border-box;
     margin: 5px 0;
 
-    > input {
+    >input {
       font-size: $fontSize8;
     }
   }
@@ -93,7 +77,7 @@ function changeUserPass() {
     border-radius: 20px;
     @include box_shadow(0, 0, 8px, 1px, "fill53");
 
-    > div {
+    >div {
       color: #565656;
       font-size: $fontSize6;
       letter-spacing: 1px;
@@ -101,12 +85,12 @@ function changeUserPass() {
       min-width: 100%;
       margin: 5px 0;
 
-      > span {
+      >span {
         width: 60px;
       }
     }
 
-    > .btn {
+    >.btn {
       position: relative;
       overflow: hidden;
       margin: 8px 0;
@@ -131,11 +115,11 @@ function changeUserPass() {
 }
 
 .confirm {
-  width: 150px;
-  text-align: center;
-  box-sizing: border-box;
-  padding: 5px 10px;
-  background-color: #ededed;
-  border-radius: 10px;
-}
+    width: 330px;
+    height: 40px;
+    font-size: $fontSize7;
+    box-sizing: border-box;
+    padding: 5px 0;
+    margin: 20px 0px 16px 0px;
+  }
 </style>

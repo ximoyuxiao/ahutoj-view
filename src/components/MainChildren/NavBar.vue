@@ -1,5 +1,5 @@
 <template>
-  <el-menu class="navBar" mode="horizontal" :ellipsis="false">
+  <el-menu class="navBar" mode="horizontal" :ellipsis="false" :default-active="activeIndex" @select="handleSelect">
     <router-link to="/Home">
       <el-menu-item index="0" class="logoName navBarComponent">
         AHUT OJ
@@ -7,21 +7,25 @@
     </router-link>
     <router-link active-class="selected" id="problems" to="/Problems">
       <el-menu-item index="1" class="navBarComponent">
+        <el-icon><Files /></el-icon>
         题库
       </el-menu-item>
     </router-link>
     <router-link active-class="selected" id="contests" to="/Contests">
       <el-menu-item index="2" class="navBarComponent">
+        <el-icon><SwitchFilled /></el-icon>
         比赛
       </el-menu-item>
     </router-link>
     <router-link active-class="selected" id="Lists" to="/Lists">
       <el-menu-item index="3" class="navBarComponent">
+        <el-icon><Tickets /></el-icon>
         题单
       </el-menu-item>
     </router-link>
     <router-link active-class="selected" id="status" to="/Status">
       <el-menu-item index="4" class="navBarComponent">
+        <el-icon><DataAnalysis /></el-icon>
         状态
       </el-menu-item>
     </router-link>
@@ -73,6 +77,12 @@
 <script lang="ts" setup>
 import { computed, getCurrentInstance, onMounted, reactive, watch } from "vue";
 import { useUserDataStore } from "../../pinia/userData";
+import { ref } from 'vue'
+const activeIndex = ref('1')
+const activeIndex2 = ref('1')
+const handleSelect = (key: string, keyPath: string[]) => {
+  console.log(key, keyPath)
+}
 const { proxy } = getCurrentInstance() as any;
 const userDataStore = useUserDataStore();
 

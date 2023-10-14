@@ -35,9 +35,7 @@
                 class="copy cursor_pointer"
                 @click="copyText($event, 0)"
               >
-                <el-icon size="20px">
-                  <MagicStick />
-                </el-icon>
+              <el-icon><CopyDocument /></el-icon>
                 &nbsp;
                 复制MarkDown
                 &nbsp;
@@ -170,7 +168,7 @@
           >
             <div>时间限制: {{ problem.LimitTime }} ms</div>
             <div>内存限制: {{ problem.LimitMemory }} MB</div>
-            <div>通过数:</div>
+            <div>通过数量:</div>
           </div>
           <div
             class="tags"
@@ -205,9 +203,7 @@
               class="solutions cursor_pointer"
               @click="goToSolution(problem.PID)"
             >
-              <el-icon size="26px">
-                <Document />
-              </el-icon>
+            <el-icon size="26px"><DataAnalysis /></el-icon>
               &nbsp;题解
             </div>
           </div>
@@ -443,10 +439,10 @@ var aceConfig = reactive({
     { name: "CPP17", disabled: false },
     { name: "JAVA", disabled: true },
     { name: "PYTHON3", disabled: false },
-    { name: "JavaScript", disabled: true },
-    { name: "C#", disabled: true },
-    { name: "Ruby", disabled: true },
-    { name: "Rust", disabled: true },
+    // { name: "JavaScript", disabled: true },
+    // { name: "C#", disabled: true },
+    // { name: "Ruby", disabled: true },
+    // { name: "Rust", disabled: true },
   ],
   themeNow: "eclipse",
   theme: ["eclipse", "one_dark"],
@@ -843,7 +839,7 @@ onMounted(() => {
       flex-direction: column;
       width: calc(100% - $problem_rightWidth - $modelDistance);
       @include fill_color("fill2");
-      border-radius: 15px;
+      border-radius: 10px;
 
       .contestID {
         margin: 10px;
@@ -917,7 +913,7 @@ onMounted(() => {
           @include font_color("font1");
           @include fill_color("fill3");
           resize: none;
-          border-radius: 12px;
+          border-radius: 10px;
           overflow: visible;
         }
       }
@@ -962,7 +958,7 @@ onMounted(() => {
         font-size: $fontSize6;
         height: auto !important;
         overflow: hidden;
-        border-radius: 8px;
+        border-radius: 10px;
         outline: 2px solid;
         @include outline_color("border2");
         box-sizing: border-box;
@@ -988,7 +984,7 @@ onMounted(() => {
         flex-direction: column;
         align-items: center;
         @include fill_color("fill2");
-        border-radius: 15px;
+        border-radius: 10px;
       }
 
       .contestInfo {
@@ -1045,7 +1041,7 @@ onMounted(() => {
       .tags {
         margin-bottom: $modelDistance;
         @include fill_color("fill2");
-        border-radius: 15px;
+        border-radius: 10px;
         padding: 10px 15px;
 
         > span {
@@ -1068,7 +1064,7 @@ onMounted(() => {
           margin: 8px 0;
           width: 220px;
           height: 40px;
-          border-radius: 15px;
+          border-radius: 10px;
           font-size: $fontSize8;
           letter-spacing: 4px;
           display: flex;
@@ -1089,7 +1085,7 @@ onMounted(() => {
           margin: 8px 0;
           width: 220px;
           height: 40px;
-          border-radius: 15px;
+          border-radius: 10px;
           font-size: $fontSize8;
           letter-spacing: 4px;
           display: flex;
@@ -1109,7 +1105,7 @@ onMounted(() => {
     position: absolute;
     width: 400px;
     @include fill_color("fill2");
-    border-radius: 14px;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1141,7 +1137,7 @@ onMounted(() => {
       margin: 8px 0;
       width: 220px;
       height: 40px;
-      border-radius: 15px;
+      border-radius: 10px;
       font-size: $fontSize5;
       @include font_color("font1");
       letter-spacing: 4px;

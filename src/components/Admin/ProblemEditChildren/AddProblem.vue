@@ -12,7 +12,7 @@
             <el-input-number v-model="problem.LimitMemory" :min="64" :max="1024" :step="64" controls-position="right" />
             <span>&nbsp;MiB</span>
         </el-row>
-        <div>
+        <el-row>
             <span>来源</span>
             <el-select v-model="problem.Origin" class="m-2" placeholder="Select">
                 <el-option v-for="(item, index) in problem.Origins" :key="item.label" :label="item.label"
@@ -20,7 +20,8 @@
             </el-select>
             <el-input v-show="problem.Origin != -1" v-model="problem.OriginPID"
                 :placeholder="problem.OriginPlaceHolder[problem.Origin]" class="originInfo" />
-        </div>
+
+        </el-row>
         <el-row>
             <span>可见</span>
             <el-select v-model="problem.Visible" class="m-2" placeholder="Select">
@@ -49,27 +50,27 @@
             <div class="normal">
                 <div>
                     <span>题目描述</span>
-                    <el-input v-model="problem.Description" type="textarea" autosize class="plainText"/>
+                    <el-input v-model="problem.Description" type="textarea" autosize class="plainText" />
                 </div>
                 <div>
                     <span>输入描述</span>
-                    <el-input v-model="problem.Input" type="textarea" autosize class="plainText"/>
+                    <el-input v-model="problem.Input" type="textarea" autosize class="plainText" />
                 </div>
                 <div>
                     <span>输出描述</span>
-                    <el-input v-model="problem.Output" type="textarea" autosize class="plainText"/>
+                    <el-input v-model="problem.Output" type="textarea" autosize class="plainText" />
                 </div>
                 <div>
                     <span>输入样例</span>
-                    <el-input v-model="problem.SampleInput" type="textarea" autosize class="plainText"/>
+                    <el-input v-model="problem.SampleInput" type="textarea" autosize class="plainText" />
                 </div>
                 <div>
                     <span>输出样例</span>
-                    <el-input v-model="problem.SampleOutput" type="textarea" autosize class="plainText"/>
+                    <el-input v-model="problem.SampleOutput" type="textarea" autosize class="plainText" />
                 </div>
                 <div>
                     <span>提示</span>
-                    <el-input v-model="problem.Hit" type="textarea" autosize class="plainText"/>
+                    <el-input v-model="problem.Hit" type="textarea" autosize class="plainText" />
                 </div>
             </div>
         </template>
@@ -338,7 +339,7 @@ span {
             align-content: center;
             justify-content: flex-start;
             box-sizing: border-box;
-            margin: 5px 0px;
+            margin: 5px 0;
 
             >span {
                 display: block;
