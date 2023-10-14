@@ -1,58 +1,27 @@
 <template>
-  <div class="AddUser">
-    <div class="username">
-      <label
-        class="loginLabel"
-        for="username"
-      >
+  <div class="addUser">
+    <el-row>
+      <label class="loginLabel" for="username">
         账号
       </label>
-      <input
-        class="loginInput"
-        name="username"
-        type="text"
-        autocomplete="off"
-        maxlength="20"
-        v-model="userInfo.UID"
-      />
-    </div>
-    <div class="nickname">
-      <label
-        class="loginLabel"
-        for="nickname"
-      >
+      <el-input class="loginInput" name="username" type="text" autocomplete="off" maxlength="20" v-model="userInfo.UID" />
+    </el-row>
+    <el-row>
+      <label class="loginLabel" for="nickname">
         昵称
       </label>
-      <input
-        class="loginInput"
-        name="nickname"
-        type="text"
-        autocomplete="off"
-        maxlength="20"
-        v-model="userInfo.UserName"
-      />
-    </div>
-    <div class="password">
-      <label
-        class="loginLabel"
-        for="password"
-      >
+      <el-input class="loginInput" name="nickname" type="text" autocomplete="off" maxlength="20"
+        v-model="userInfo.UserName" />
+    </el-row>
+    <el-row>
+      <label class="loginLabel" for="password">
         密码
       </label>
-      <input
-        class="loginInput"
-        name="password"
-        type="password"
-        maxlength="30"
-        v-model="userInfo.Pass"
-      />
-    </div>
-    <div
-      class="confirm cursor_pointer"
-      @click="signin"
-    >
-      确 认
-    </div>
+      <el-input class="loginInput" name="password" type="password" v-model="userInfo.Pass" maxlength="30" show-password />
+    </el-row>
+    <el-row>
+      <el-button class="confirm" type="primary" round shoudAddSpace @click="signin">注 册</el-button>
+    </el-row>
   </div>
 </template>
 
@@ -124,34 +93,18 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.AddUser {
-  display: flex;
-  flex-direction: column;
-
-  div {
-    font-size: $fontSize8;
-    box-sizing: border-box;
-    margin: 5px 0;
-
-    input {
-      font-size: $fontSize8;
-      border-radius: 5px;
-    }
-  }
+.addUser {
+  width: 250px;
+  font-size: $fontSize6;
 }
 
 .confirm {
-  width: 150px;
-  text-align: center;
-  box-sizing: border-box;
-  padding: 5px 10px;
-  background-color: #e1e1e1;
-  border-radius: 10px;
-
-  &:hover {
-    background-color: #3299ff;
-    color: #ffffff;
+    width: 330px;
+    height: 40px;
+    font-size: $fontSize7;
+    box-sizing: border-box;
+    padding: 5px 0;
+    margin: 20px 0px 16px 0px;
   }
-}
+
 </style>
- 

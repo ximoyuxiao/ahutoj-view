@@ -31,7 +31,6 @@
         >
           <el-switch
             v-model="search.permissionTabel[index]"
-            style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
             @change="search.select(index)"
             :active-value="true"
             :inactive-value="false"

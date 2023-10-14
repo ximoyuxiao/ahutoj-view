@@ -1,247 +1,132 @@
 <template>
     <div class="updateProblem">
-        <div class="search">
-            <span style="width: 70px">题号：</span>
-            <el-input
-                v-model="search.PID"
-                style="width:200px;"
-                v-on:focus="search.onFocus()"
-            />
-            <el-button
-                plain
-                v-on:click="search.getProblem(null)"
-            >搜索</el-button>
-        </div>
+        <br />
+        <el-row class="search">
+            <span>题号</span>
+            <el-input v-model="search.PID" style="width:200px;" v-on:focus="search.onFocus()" />
+            <el-button plain v-on:click="search.getProblem(null)">搜索</el-button>
+        </el-row>
         <el-divider></el-divider>
-        <div
-            class="table"
-            v-if="search.isSearched"
-        >
-            <div><span>标题：</span>
-                <el-input v-model="problem.Title" />
-            </div>
-
-            <div>
-                <span>文本类型：</span>
-                <el-select
-                    v-model="problem.ContentType"
-                    class="m-2"
-                    placeholder="Select"
-                >
-                    <el-option
-                        v-for="(item,index) in problem.ContentTypes"
-                        :key="item.label"
-                        :label="item.label"
-                        :value="item.value"
-                    />
-                </el-select>
-            </div>
-            <template v-if="problem.ContentType == 1">
+        <div class="table" v-if="search.isSearched">
+            <el-row>
+                <span>标题</span>
+                <el-input v-model="problem.Title" class="problemTitle" />
+            </el-row>
+            <el-row>
+                <span>时间限制</span>
+                <el-input-number v-model="problem.LimitTime" :min="200" :max="10000" :step="200"
+                controls-position="right" />
+                <span>&nbsp;毫秒</span>
+                <span>内存限制</span>
+                <el-input-number v-model="problem.LimitMemory" :min="64" :max="1024" :step="64" controls-position="right" />
+                <span>&nbsp;MiB</span>
+            </el-row>
+            <el-row>
+                <span>来源</span>
+                <el-select v-model="problem.Origin" class="m-2" placeholder="Select">
+                    <el-option v-for="(item, index) in problem.Origins" :key="item.label" :label="item.label"
+                        :value="item.value" />
+                    </el-select>
+                    <el-input v-show="problem.Origin != -1" v-model="problem.OriginPID"
+                    :placeholder="problem.OriginPlaceHolder[problem.Origin]" class="originInfo" />
+                    
+                </el-row>
+                <el-row>
+                    <span>可见</span>
+                    <el-select v-model="problem.Visible" class="m-2" placeholder="Select">
+                        <el-option v-for="(item, index) in problem.Visibles" :key="item.label" :label="item.label"
+                        :value="item.value" />
+                    </el-select>
+                </el-row>
+                <el-row>
+                    <span>标签</span>
+                    <el-input v-model="problem.Label" placeholder="请输入的每个标签之间用';'隔开" class="tagList" />
+                </el-row>
+                <br />
+                <el-row>
+                    <span>文本类型</span>
+                    <el-select v-model="problem.ContentType" class="m-2" placeholder="Select">
+                        <el-option v-for="(item, index) in problem.ContentTypes" :key="item.label" :label="item.label"
+                            :value="item.value" />
+                    </el-select>
+                </el-row>
+                <template v-if="problem.ContentType == 1">
                 <div class="markdown">
-                    <md-editor
-                        v-model="problem.Description"
-                        :toolbars="markdown.toolbar"
-                        :on-upload-img="problem.updateImg"
-                    />
+                    <md-editor v-model="problem.Description" :toolbars="markdown.toolbar"
+                    :on-upload-img="problem.updateImg" />
                 </div>
                 <div>
                     <span>标签：</span>
-                    <el-input
-                        v-model="problem.Label"
-                        placeholder="请输入的每个标签之间用';'隔开"
-                    />
+                    <el-input v-model="problem.Label" placeholder="请输入的每个标签之间用';'隔开" />
                 </div>
             </template>
             <template v-else>
                 <div class="normal">
                     <div>
-                        <span>题目描述：</span>
-                        <el-input
-                            v-model="problem.Description"
-                            type="textarea"
-                            autosize
-                        />
+                        <span>题目描述</span>
+                        <el-input v-model="problem.Description" type="textarea" autosize class="plainText" />
                     </div>
                     <div>
-                        <span>输入描述：</span>
-                        <el-input
-                            v-model="problem.Input"
-                            type="textarea"
-                            autosize
-                        />
+                        <span>输入描述</span>
+                        <el-input v-model="problem.Input" type="textarea" autosize class="plainText" />
                     </div>
                     <div>
-                        <span>输出描述：</span>
-                        <el-input
-                            v-model="problem.Output"
-                            type="textarea"
-                            autosize
-                        />
+                        <span>输出描述</span>
+                        <el-input v-model="problem.Output" type="textarea" autosize class="plainText" />
                     </div>
                     <div>
-                        <span>输入样例：</span>
-                        <el-input
-                            v-model="problem.SampleInput"
-                            type="textarea"
-                            autosize
-                        />
+                        <span>输入样例</span>
+                        <el-input v-model="problem.SampleInput" type="textarea" autosize class="plainText" />
                     </div>
                     <div>
-                        <span>输出样例：</span>
-                        <el-input
-                            v-model="problem.SampleOutput"
-                            type="textarea"
-                            autosize
-                        />
+                        <span>输出样例</span>
+                        <el-input v-model="problem.SampleOutput" type="textarea" autosize class="plainText" />
                     </div>
                     <div>
-                        <span>提示：</span>
-                        <el-input
-                            v-model="problem.Hit"
-                            type="textarea"
-                            autosize
-                        />
-                    </div>
-                    <div>
-                        <span>标签：</span>
-                        <el-input
-                            v-model="problem.Label"
-                            placeholder="请输入的每个标签之间用';'隔开"
-                        />
+                        <span>提示</span>
+                        <el-input v-model="problem.Hit" type="textarea" autosize class="plainText" />
                     </div>
                 </div>
             </template>
-            <div>
-                <span>时间限制：</span>
-                <el-input-number
-                    v-model="problem.LimitTime"
-                    :min="1"
-                />
-                <span>&nbsp;毫秒</span>
-            </div>
-            <div>
-                <span>内存限制：</span>
-                <el-input-number
-                    v-model="problem.LimitMemory"
-                    :min="1"
-                />
-                <span>&nbsp;MB</span>
-            </div>
-            <div>
-                <span>来源：</span>
-                <el-select
-                    v-model="problem.Origin"
-                    class="m-2"
-                    placeholder="Select"
-                >
-                    <el-option
-                        v-for="(item,index) in problem.Origins"
-                        :key="item.label"
-                        :label="item.label"
-                        :value="item.value"
-                    />
-                </el-select>
-                <el-input
-                    v-show="problem.Origin != 0"
-                    v-model="problem.OriginPID"
-                    :placeholder="problem.OriginPlaceHolder[problem.Origin]"
-                />
-            </div>
-            <div>
-                <span>可见：</span>
-                <el-select
-                    v-model="problem.Visible"
-                    class="m-2"
-                    placeholder="Select"
-                >
-                    <el-option
-                        v-for="(item,index) in problem.Visibles"
-                        :key="item.label"
-                        :label="item.label"
-                        :value="item.value"
-                    />
-                </el-select>
-            </div>
             <div style="display: flex; justify-content: flex-end; padding: 10px 0">
-                <el-button
-                    type="warning"
-                    plain
-                    v-on:click="deleteProblem()"
-                >
+                <el-button type="danger" plain v-on:click="deleteProblem()">
                     删除
                 </el-button>
-                <el-button
-                    plain
-                    v-on:click="complete()"
-                >
+                <el-button plain v-on:click="complete()">
                     修改
                 </el-button>
             </div>
         </div>
         <div class="showList">
-            <el-button
-                plain
-                v-on:click="searchList.showList()"
-            >
-                {{searchList.isShowed ? "关闭列表" : "显示列表" }}
+            <el-button plain v-on:click="searchList.showList()">
+                {{ searchList.isShowed ? "关闭列表" : "显示列表" }}
             </el-button>
-            <el-button
-                plain
-                v-show="searchList.isShowed"
-                v-on:click="searchList.selectAll()"
-            >
+            <el-button plain v-show="searchList.isShowed" v-on:click="searchList.selectAll()">
                 当页全选
             </el-button>
-            <el-button
-                plain
-                v-show="searchList.isShowed"
-                type="warning"
-                v-on:click="searchList.batchDelete()"
-            >
+            <el-button plain v-show="searchList.isShowed" type="danger" v-on:click="searchList.batchDelete()">
                 批量删除
             </el-button>
         </div>
-        <div
-            v-show="searchList.isShowed"
-            class="list"
-        >
-            <div
-                v-for="(item, index) in searchList.Data"
-                :class="item.selected ? 'item itemSelected' : 'item'"
-                :key="index"
-            >
-                <input
-                    type="checkbox"
-                    :checked="item.selected"
-                    @change.stop="searchList.selectProblem(index)"
-                >
-                <div
-                    class="title cursor_pointer"
-                    @click.stop="search.getProblem(item.PID)"
-                >
+        <div v-show="searchList.isShowed" class="list">
+            <div v-for="(item, index) in searchList.Data" :class="item.selected ? 'item itemSelected' : 'item'"
+                :key="index">
+                <input type="checkbox" :checked="item.selected" @change.stop="searchList.selectProblem(index)">
+                <div class="title cursor_pointer" @click.stop="search.getProblem(item.PID)">
                     {{ item.PID }}&nbsp;-&nbsp;{{ item.Title }}
                 </div>
 
             </div>
         </div>
-        <div
-            v-show="searchList.isShowed"
-            class="pagination"
-        >
-            <el-pagination
-                background
-                layout="prev, pager, next"
-                :page-size="configList.limit"
-                :total="configList.Count"
-                :current-page="configList.currentPage"
-                @current-change="searchList.changePage"
-            />
+        <div v-show="searchList.isShowed" class="pagination">
+            <el-pagination background layout="prev, pager, next" :page-size="configList.limit" :total="configList.Count"
+                :current-page="configList.currentPage" @current-change="searchList.changePage" />
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance, reactive,onMounted } from "vue";
+import { getCurrentInstance, reactive, onMounted } from "vue";
 import { ElMessageBox } from "element-plus";
 import { useConstValStore } from "../../../pinia/constVal";
 import MdEditor, { ToolbarNames } from "md-editor-v3";
@@ -450,9 +335,9 @@ var searchList = reactive({
         proxy
             .$get(
                 "api/problem/list?Page=" +
-                    (configList.currentPage - 1) +
-                    "&Limit=" +
-                    configList.limit
+                (configList.currentPage - 1) +
+                "&Limit=" +
+                configList.limit
             )
             .then((res: any) => {
                 let data = res.data;
@@ -549,8 +434,8 @@ function uploadF(f: any) {
                             message: `
               <strong>${f.name}上传成功</strong><br/>
               <span>已压缩:${(f.size / 1024).toFixed(2)}KB->${(
-                                response.data.size / 1024
-                            ).toFixed(2)}KB</span>
+                                    response.data.size / 1024
+                                ).toFixed(2)}KB</span>
             `,
                             type: "success",
                             duration: 5000,
@@ -635,20 +520,41 @@ function complete() {
 }
 
 onMounted(() => {
-  var PID = proxy.$route.query.PID
-  if(PID){
-    search.PID = PID;
-    search.getProblem(PID);
-  }
+    var PID = proxy.$route.query.PID
+    if (PID) {
+        search.PID = PID;
+        search.getProblem(PID);
+    }
 });
 </script>
 
 <style scoped lang="scss">
-.search {
+
+.plainText {
+    width: 600px;
+}
+
+.problemTitle {
+    width: 600px;
+}
+
+.tagList {
+    width: 600px;
+}
+
+.m-2 {
+    width: 160px;
+}
+
+.originInfo {
+    width: 440px;
+}
+
+span {
+    align-self: center;
     display: flex;
-    justify-items: center;
-    align-content: center;
-    margin-bottom: 40px;
+    font-size: $fontSize6;
+    @include font_color("font1");
 }
 
 .table {
@@ -661,41 +567,41 @@ onMounted(() => {
         display: flex;
         flex-direction: column;
 
-        > div {
+        >div {
             display: flex;
             align-content: center;
             justify-content: flex-start;
             box-sizing: border-box;
             margin: 5px 0;
 
-            > span {
+            >span {
                 display: block;
-                font-size: 22px;
-                width: 150px;
+                font-size: $fontSize6;
+                width: 100px;
                 @include font_color("font1");
             }
         }
     }
 
-    > div {
+    >div {
         display: flex;
         align-content: center;
         justify-content: flex-start;
         box-sizing: border-box;
         margin: 5px 0;
 
-        > span {
+        >span {
             display: block;
-            font-size: 22px;
-            width: 150px;
+            font-size: $fontSize6;
+            width: 100px;
             @include font_color("font1");
         }
     }
 }
 
 span {
-    font-size: 22px;
-    width: 150px;
+    font-size: $fontSize6;
+    width: 100px;
     @include font_color("font1");
 }
 
@@ -733,7 +639,7 @@ span {
 
         .title {
             width: fit-content;
-            font-size: $fontSize7;
+            font-size: $fontSize6;
             @include font_color("font1");
         }
     }

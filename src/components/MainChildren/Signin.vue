@@ -302,15 +302,7 @@ function signin() {
     box-sizing: border-box;
     padding: 5px 0;
     margin: 0 40px 16px 40px;
-    // border-radius: 10px;
-    // @include font_color("font6");
-    // @include fill_color("fill12");
     transition-duration: 100ms;
-
-    // &:hover {
-    //   @include fill_color("fill13");
-    //   @include box_shadow(0, 0, 2px, 2px, "fill12");
-    // }
   }
 }
 </style>

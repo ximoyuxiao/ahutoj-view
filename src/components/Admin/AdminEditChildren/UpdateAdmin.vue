@@ -18,7 +18,6 @@
         </div>
         <div class="select" v-for="(_, index) in permission.permissionTabel">
           <el-switch v-model="permission.permissionTabel[index]"
-            style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
             @change="adminList.select(permission, index)" :active-value="true" :inactive-value="false" />
         </div>
         <el-button class="botton" @click="adminList.ChangePermission(permission)">
