@@ -622,16 +622,17 @@ onUnmounted(() => {
   }
 
   .needPass {
-    top: calc(50vh - 200px);
-    position: absolute;
+    // top: calc(50vh - 200px);
+    // position: absolute;
     width: 400px;
-    @include fill_color("fill2");
+    // height: 400px;
+    // @include fill_color("fill2");
     border-radius: 14px;
     display: flex;
     flex-direction: column;
     align-items: center;
     @include font_color("font1");
-    @include box_shadow(0, 0, 3px, 1px, "border1");
+    // @include box_shadow(0, 0, 3px, 1px, "border1");
     box-sizing: border-box;
     padding: 16px;
 
