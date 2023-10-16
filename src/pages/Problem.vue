@@ -1,247 +1,219 @@
 <template>
-  <div class="problem">
-    <template v-if="!needPass">
-      <div
-        class="content"
-        v-show="!notFound"
-      >
-        <div
-          class="left"
-          ref="left"
-        >
-          <div
-            class="contestID cursor_pointer"
-            @click="backToContest"
-            v-if="contest.isContestProblem"
-          >
-            <el-icon size="32px">
-              <Back />
-            </el-icon>
-            <div>
-              #{{contest.CID}}
-            </div>
-          </div>
-          <div class="PID">#{{ problem.PID }}</div>
-          <div class="title">{{ problem.Title }}</div>
-          <div class="adminButton" v-if="admin">
-            <el-button 
-            v-on:click="goToProblemAdmin()">题目编辑</el-button>
-            <el-button
-            v-on:click="goToProblemTestDataAdmin()">测试数据管理</el-button>
-          </div>
-          <template v-if="problem.ContentType == 1">
-            <div class="markdown">
-              <div
-                class="copy cursor_pointer"
-                @click="copyText($event, 0)"
-              >
-              <el-icon><CopyDocument /></el-icon>
-                &nbsp;
-                复制MarkDown
-                &nbsp;
+  <el-container>
+    <el-asider class="asider">
+      <container>
+        <el-header class="left" v-if="contest.isContestProblem">
+          <div class="unit leftUnit unit1">
+            <el-row class="artFont contestHeader bold">
+              <div class="cursor_pointer" @click="backToContest">
+                <el-icon size="22px">
+                  <Back />
+                </el-icon>
               </div>
-              <md-editor
-                class="mdEditor"
-                v-model="problem.Description"
-                :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'"
-                preview-only
-              />
-            </div>
-          </template>
-          <template v-else>
-            <div class="normal">
-              <div class="description">
-                <div class="label">描述</div>
-                <pre class="text">{{ problem.Description }}</pre>
+              &nbsp;#{{ contest.CID }}
+              <div class="title" ref="contestInfo">
+                <div>
+                  &nbsp;{{ contest.info.Title }}
+                </div>
               </div>
-
-              <div class="input">
-                <div class="label">输入</div>
-                <pre class="text">{{ problem.Input }}</pre>
-              </div>
-              <div class="output">
-         
-                <div class="label">输出</div>
-                <pre class="text">{{ problem.Output }}</pre>
-              </div>
-              <div class="sampleInput">
-                <div class="label">输入样例</div>
-                <el-popover
-                  placement="top-start"
-                  content="复制成功"
-                  :width="50"
-                  trigger="focus"
-                >
-                  <template #reference>
-                    <textarea
-                      class="textarea"
-                      v-model="problem.SampleInput"
-                      :rows="problem.SampleInputRows"
-                      :readonly="true"
-                      @click="copyText($event, 1)"
-                    />
-                  </template>
-                </el-popover>
-              </div>
-              <div class="sampleOutput">
-                <div class="label">输出样例</div>
-                <el-popover
-                  placement="top-start"
-                  content="复制成功"
-                  :width="50"
-                  trigger="focus"
-                >
-                  <template #reference>
-                    <textarea
-                      class="textarea"
-                      v-model="problem.SampleOutput"
-                      :rows="problem.SampleOutputRows"
-                      :readonly="true"
-                      @click="copyText($event, 2)"
-                    />
-                  </template>
-                </el-popover>
-              </div>
-              <div
-                class="hit"
-                v-if="problem.Hit.length > 0"
-              >
-                <div class="label">提示</div>
-                <pre class="text">{{ problem.Hit }}</pre>
-              </div>
-            </div>
-          </template>
-          <div class="ace">
-            <div>
-              <el-select
-                style="margin: 15px 5px"
-                v-model="aceConfig.modeNow"
-                class="m-2"
-                placeholder="Select"
-                @change="changeMode(aceConfig.modeNow)"
-              >
-                <el-option
-                  v-for="item in aceConfig.modeSelect"
-                  :key="item.name"
-                  :label="item.name"
-                  :value="item.name"
-                  :disabled="item.disabled"
-                />
-              </el-select>
-              <el-button
-                v-on:click="aceConfig.save()"
-                type="primary"
-                :plain="themeSwitchStore.theme >  0 ? true : false"
-              >暂存</el-button>
-            </div>
-            <div id="aceEditor" />
-          </div>
-        </div>
-        <div class="right">
-          <div
-            class="contestInfo"
-            v-if="contest.isContestProblem"
-            ref="contestInfo"
-          >
-            <div
-              class="title cursor_pointer"
-              @click="backToContest"
-            >
-              {{ contest.info.Title }}
-            </div>
-            <div class="problemBox">
-              <div
-                :class="
-            'cursor_pointer ' + (item.PID == problem.PID ? 'nowProblem' : '')
-          "
-                v-for="(item, index) in contest.info.Data"
-                :key="index"
-                v-on:click="goToProblem(item.PID)"
-              >
+            </el-row>
+            <div class="problemBox" ref="contestInfo">
+              <div :class="'cursor_pointer ' + (item.PID == problem.PID ? 'nowProblem' : '')
+                " v-for="(item, index) in contest.info.Data" :key="index" v-on:click="goToProblem(item.PID)">
                 {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
               </div>
             </div>
           </div>
-          <div
-            class="demand"
-            ref="demand"
-          >
-            <div>时间限制: {{ problem.LimitTime }} ms</div>
-            <div>内存限制: {{ problem.LimitMemory }} MB</div>
-            <div>通过数量:</div>
-          </div>
-          <div
-            class="tags"
-            v-if="problem.Label.length != 0"
-          >
-            <el-tag
-              v-for="tag in problem.Label.split(';')"
-              :key="tag"
-            >
-              {{ tag }}
-            </el-tag>
-          </div>
-          <div class="function">
-            <span class="modeNow">
+        </el-header>
+        <el-header v-else>
+          <div class="unit leftUnit unit1">
+            <el-row class="artFont contestHeader bold">
+              <div class="cursor_pointer" @click="backToContest">
+                <el-icon size="22px">
+                  <Back />
+                </el-icon>
+              </div>
+              &nbsp;#{{ contest.CID }}
+              <div class="title" ref="contestInfo">
+                <div>
+                  &nbsp;{{ contest.info.Title }}
+                </div>
+              </div>
+            </el-row>
+            <div class="problemBox" ref="contestInfo">
+              <div :class="'cursor_pointer ' + (item.PID == problem.PID ? 'nowProblem' : '')
+                " v-for="(item, index) in contest.info.Data" :key="index" v-on:click="goToProblem(item.PID)">
+                {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
+              </div>
+            </div>
+          </div>     
+        </el-header>
+        <el-main class="">
+          <div class="unit leftUnit unit2">
+            <el-row class="bold artFont">
+              <div class="PID">{{ problem.PID }}</div>
+              <div class="title">&nbsp;{{ problem.Title }}</div>
+            </el-row>
+            <div ref="demand" class="artFont interval">
+              <el-row class="demandComponent">
+                时间限制: {{ problem.LimitTime }} ms
+              </el-row>
+              <el-row class="demandComponent">
+                内存限制: {{ problem.LimitMemory }} MiB
+              </el-row>
+            </div>
+            <el-collapse class="interval">
+              <el-collapse-item title="Tag" name="1">
+                <div class="tags" v-if="problem.Label.length != 0">
+                  <el-tag v-for="tag in problem.Label.split(';')" :key="tag">
+                    {{ tag }}
+                  </el-tag>
+                </div>
+              </el-collapse-item>
+            </el-collapse>
+            <!-- <span class="modeNow">
               当前模式：{{ aceConfig.modeNow }}
             </span>
-            <div
-              :class="submit.enabled ? 'submit cursor_pointer cursor_noFocus': 'submitNotEnable cursor_pointer'"
-              @click="submit.submit()"
-            >
-              <template v-if="submit.enabled">
-                <el-icon size="26px">
-                  <Check />
-                </el-icon>
-                &nbsp;提交
-              </template>
-              <template v-else>
-                {{(submit.process / 1000).toFixed(2)}}S
-              </template>
+            <br /> -->
+            <div class="function interval">
+              <el-row v-if="admin" justify="center" class="interval">
+                <el-button v-on:click="goToProblemAdmin()" class="adminButton">题目编辑</el-button>
+                <el-button v-on:click="goToProblemTestDataAdmin()" class="adminButton">数据管理</el-button>
+              </el-row>
+              <el-row justify="center">
+                <div class="solutions cursor_pointer" @click="goToSolution(problem.PID)">
+                  <el-row>
+                    <el-icon size="22px">
+                      <DataAnalysis />
+                    </el-icon>
+                    &nbsp;&nbsp;题&nbsp;解
+                  </el-row>
+                </div>
+              </el-row>
+              <el-row justify="center">
+                <div :class="submit.enabled ? 'submit cursor_pointer cursor_noFocus' : 'submitNotEnable cursor_pointer'"
+                  @click="submit.submit()">
+                  <template v-if="submit.enabled">
+                    <el-row>
+                      <el-icon size="22px">
+                        <Check />
+                      </el-icon>
+                      &nbsp;&nbsp;提&nbsp;交
+                    </el-row>
+                  </template>
+                  <template v-else> {{ (submit.process / 1000).toFixed(2) }}S</template>
+                </div>
+              </el-row>
             </div>
-            <div
-              class="solutions cursor_pointer"
-              @click="goToSolution(problem.PID)"
-            >
-            <el-icon size="26px"><DataAnalysis /></el-icon>
-              &nbsp;题解
+          </div>
+        </el-main>
+      </container>
+    </el-asider>
+    <el-container class="right">
+      <el-main class="main">
+        <div class="mainUnit unit">
+          <template v-if="!needPass">
+            <div class="" v-show="!notFound">
+              <div ref="left">
+                <template v-if="problem.ContentType == 1">
+                  <div class="markdown">
+                    <div class="copy cursor_pointer" @click="copyText($event, 0)">
+                      <el-icon>
+                        <CopyDocument />
+                      </el-icon>
+                      &nbsp;复制&nbsp;MarkDown
+                    </div>
+                    <md-editor class="mdEditor" v-model="problem.Description"
+                      :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'" preview-only />
+                  </div>
+                </template>
+                <template v-else>
+                  <div class="normal">
+                    <div class="description">
+                      <div class="label">描述</div>
+                      <pre class="text">{{ problem.Description }}</pre>
+                    </div>
+
+                    <div class="input">
+                      <div class="label">输入</div>
+                      <pre class="text">{{ problem.Input }}</pre>
+                    </div>
+                    <div class="output">
+
+                      <div class="label">输出</div>
+                      <pre class="text">{{ problem.Output }}</pre>
+                    </div>
+                    <div class="sampleInput">
+                      <div class="label">输入样例</div>
+                      <el-popover placement="top-start" content="复制成功" :width="50" trigger="focus">
+                        <template #reference>
+                          <textarea class="textarea" v-model="problem.SampleInput" :rows="problem.SampleInputRows"
+                            :readonly="true" @click="copyText($event, 1)" />
+                        </template>
+                      </el-popover>
+                    </div>
+                    <div class="sampleOutput">
+                      <div class="label">输出样例</div>
+                      <el-popover placement="top-start" content="复制成功" :width="50" trigger="focus">
+                        <template #reference>
+                          <textarea class="textarea" v-model="problem.SampleOutput" :rows="problem.SampleOutputRows"
+                            :readonly="true" @click="copyText($event, 2)" />
+                        </template>
+                      </el-popover>
+                    </div>
+                    <div class="hit" v-if="problem.Hit.length > 0">
+                      <div class="label">提示</div>
+                      <pre class="text">{{ problem.Hit }}</pre>
+                    </div>
+                  </div>
+                </template>
+                <el-divider />
+                <div class="ace">
+                  <div>
+                    <el-select style="margin: 15px 0" v-model="aceConfig.modeNow" class="m-2" placeholder="Select"
+                      @change="changeMode(aceConfig.modeNow)">
+                      <el-option v-for="item in aceConfig.modeSelect" :key="item.name" :label="item.name"
+                        :value="item.name" :disabled="item.disabled" />
+                    </el-select>
+                    <el-button v-on:click="aceConfig.save()" type="primary" style="margin: 0px 0 0 10px"
+                      :plain="themeSwitchStore.theme > 0 ? true : false">暂存</el-button>
+                  </div>
+                  <div id="aceEditor" />
+                </div>
+              </div>
+
+            </div>
+            <div class="notFound" v-show="notFound">
+              <el-empty description="肥肠抱歉，木有找到该题，返回重试吧。" />
+            </div>
+          </template>
+          <!-- 密码验证 -->
+          <div v-show="needPass" class="needPass">
+            <div class="title">验证</div>
+            <div class="input">
+              <div class="label">密码</div>
+              <Input v-model="inputPass" @click="checkContest(contest.CID, inputPass)" type="text"></Input>
+            </div>
+
+            <div class="btn cursor_pointer" @click="checkContest(contest.CID, inputPass)">
+              <el-icon>
+                <Unlock />
+              </el-icon>
+              &nbsp;确定
             </div>
           </div>
         </div>
-      </div>
-      <div
-        class="notFound"
-        v-show="notFound"
-      >
-        <el-empty description="肥肠抱歉，木有找到该题，返回重试吧。" />
-      </div>
-    </template>
-    <!-- 密码验证 -->
-    <div
-      v-show="needPass"
-      class="needPass"
-    >
-      <div class="title">验证</div>
-      <div class="input">
-        <div class="label">密码</div>
-        <Input
-          v-model="inputPass"
-          @click="checkContest(contest.CID,inputPass)"
-          type="text"
-        ></Input>
-      </div>
-
-      <div
-        class="btn cursor_pointer"
-        @click="checkContest(contest.CID,inputPass)"
-      >
-        <el-icon>
-          <Unlock />
-        </el-icon>
-        &nbsp;确定
-      </div>
-    </div>
-  </div>
+      </el-main>
+      <el-footer class="footerEle">
+        <el-row>
+          Anhui University of Technology
+        </el-row>
+        <el-row>
+          Online Judge &copy; 2019 - 2023
+        </el-row>
+      </el-footer>
+    </el-container>
+  </el-container>
 </template>
 
 <script lang="ts" setup>
@@ -418,7 +390,7 @@ var problem = reactive<problemType>({
     problem.Title = data.Title;
     problem.Label = data.Label;
     this.ContentType = data.ContentType;
-    //题目来源不显示
+    // 题目来源不显示
     // this.Origin = data.Origin;
     // this.OriginPID = data.OriginPID;
   },
@@ -489,16 +461,17 @@ async function init() {
     contest.isContestProblem = false;
     getProblemInfo();
   }
-  admin.value =  getProblemAdmin();
+  admin.value = getProblemAdmin();
 }
-function getProblemAdmin():boolean{
-    if (!userDataStore.isLogin) {
+function getProblemAdmin(): boolean {
+  if (!userDataStore.isLogin) {
     return false;
   }
-  if((userDataStore.PermissionMap & constValStore.ProblemAdminBit)!=0 || (userDataStore.PermissionMap&constValStore.SuperAdminBit)!=0)
+  if ((userDataStore.PermissionMap & constValStore.ProblemAdminBit) != 0 || (userDataStore.PermissionMap & constValStore.SuperAdminBit) != 0)
     return true;
   return false;
-  }
+}
+
 //获取题目信息
 async function getProblemInfo() {
   //获取题目
@@ -677,10 +650,10 @@ function copyText(e: any, i: number): void {
       });
       break;
     case 1:
-      navigator.clipboard.writeText(problem.SampleInput).then(() => {});
+      navigator.clipboard.writeText(problem.SampleInput).then(() => { });
       break;
     case 2:
-      navigator.clipboard.writeText(problem.SampleOutput).then(() => {});
+      navigator.clipboard.writeText(problem.SampleOutput).then(() => { });
       break;
   }
 }
@@ -759,24 +732,24 @@ var submit = reactive({
   },
 });
 
-function goToProblemAdmin():void{
-    let PID = problem.PID;
-    proxy.$router.push({
-      path:"/Admin/ProblemEdit/UpdateProblem",
-      query:{
-        PID,
-      }
-    })
-  }
-  function goToProblemTestDataAdmin():void{
-    let PID = problem.PID;
-    proxy.$router.push({
-      path:"/Admin/ProblemEdit/EditProblemJudgeFile",
-      query:{
-        PID,
-      }
-    })
-  }
+function goToProblemAdmin(): void {
+  let PID = problem.PID;
+  proxy.$router.push({
+    path: "/Admin/ProblemEdit/UpdateProblem",
+    query: {
+      PID,
+    }
+  })
+}
+function goToProblemTestDataAdmin(): void {
+  let PID = problem.PID;
+  proxy.$router.push({
+    path: "/Admin/ProblemEdit/EditProblemJudgeFile",
+    query: {
+      PID,
+    }
+  })
+}
 onMounted(() => {
   window.scrollTo(0, 0);
   //检查题目url:id是否存在
@@ -820,340 +793,105 @@ onMounted(() => {
   touch-action: none;
 }
 
-.problem {
-  position: relative;
+.asider {}
+
+.artFont {
+  font-family: Merriweather, 'PingFang SC', 'Microsoft Yahei', 'Times New Roman', serif;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.left {
+  width: 230px;
+}
+
+.leftUnit {
   width: 100%;
+}
+
+.main {
+  width: min(1200px, 100%);
+}
+
+.unit {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 16px;
+  border-radius: 8px;
+  // margin: -4px 0 0 0px;
+  float: left;
+}
+
+.unit1 {
+  width: 253px;
+  margin-top: 18px;
+  margin-left: -6px;
+  // margin: 16px 0 0 -8px;
+}
+
+.unit2 {
+  width: 253px;
+  margin-top: -8px;
+  margin-left: -6px;
+  // margin: 12px 0 0 12px;
+}
+
+.mainUnit {
+  margin: -2px 0 0 -20px;
+}
+
+.interval {
+  margin-top: 16px;
+}
+
+.contestHeader {
+  font-size: $fontSize6;
+}
+
+// position: fixed;
+// display: flex;
+// flex-direction: column;
+// width: $problem_rightWidth;
+// top: calc($page_outerPaddingTop + 60px);
+// right: $page_outerPaddingLeft;
+
+.problemBox {
+  padding: 10px 2px 0 2px;
   box-sizing: border-box;
-  padding: $page_outerPaddingTop $page_outerPaddingLeft;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(7, calc(100% / 7 - 2px));
+  grid-template-rows: 40px;
+  grid-gap: 2px;
 
-  > .content {
+  >div {
     width: 100%;
+    text-align: center;
+    line-height: 30px;
+    @include font_color("font1");
 
-    .left {
-      margin-bottom: $modelDistanceLarge;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      width: calc(100% - $problem_rightWidth - $modelDistance);
-      @include fill_color("fill2");
-      border-radius: 10px;
+    font-size: $fontSize4;
+    border-radius: 2px;
 
-      .contestID {
-        margin: 10px;
-        font-size: $fontSize14;
-        @include font_color("font5");
-        display: flex;
-        align-items: center;
-        border-radius: 10px;
-        width: fit-content;
-        box-sizing: border-box;
-        padding: 4px 16px;
-
-        &:hover {
-          @include fill_color("fill4");
-          @include font_color("font2");
-        }
-
-        > div {
-          margin: 0 10px;
-        }
-      }
-
-      .PID {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        font-size: $fontSize10;
-        @include font_color("font5");
-        transition-duration: 200ms;
-
-        &:hover {
-          @include font_color("fill11");
-        }
-      }
-
-      .title {
-        font-size: $fontSize12;
-        @include font_color("font1");
-        text-align: center;
-        padding: $modelDistanceLarge 0;
-      }
-
-      .normal {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-
-        > div {
-          > .label {
-            box-sizing: border-box;
-            padding: $modelDistance 0 $modelDistanceMini 20px;
-            font-size: $fontSize7;
-            @include font_color("font1");
-          }
-
-          > .text {
-            box-sizing: border-box;
-            padding: 0 30px;
-            font-size: $fontSize6;
-            @include font_color("font2");
-          }
-        }
-
-        .textarea {
-          width: calc(100% - 60px);
-          box-sizing: border-box;
-          margin: 0 30px;
-          padding: 15px;
-          line-height: $fontSize6;
-          font-size: $fontSize6;
-          @include font_color("font1");
-          @include fill_color("fill3");
-          resize: none;
-          border-radius: 10px;
-          overflow: visible;
-        }
-      }
-
-      .markdown {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-
-        > .copy {
-          width: fit-content;
-          @include font_color("font3");
-          display: flex;
-          align-items: center;
-          font-size: $fontSize5;
-
-          &:hover {
-            @include font_color("fill11");
-            text-decoration: underline;
-          }
-        }
-
-        > div {
-          box-sizing: border-box;
-          padding: 16px;
-          background: none;
-        }
-
-        > span {
-          display: inline-block;
-          width: 100%;
-          text-align: right;
-          box-sizing: border-box;
-          padding: 5px;
-          @include font_color("font3");
-          font-size: $fontSize4;
-        }
-      }
-
-      > .ace {
-        margin-top: $modelDistanceLarge;
-        font-size: $fontSize6;
-        height: auto !important;
-        overflow: hidden;
-        border-radius: 10px;
-        outline: 2px solid;
-        @include outline_color("border2");
-        box-sizing: border-box;
-        scrollbar-base-color: #fefefe;
-      }
-    }
-
-    .right {
-      position: fixed;
-      display: flex;
-      flex-direction: column;
-      width: $problem_rightWidth;
-      top: calc($page_outerPaddingTop + 60px);
-      right: $page_outerPaddingLeft;
-      height: 200px;
-
-      .demand,
-      .function,
-      .contestInfo {
-        margin-bottom: $modelDistance;
-        padding: 10px 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        @include fill_color("fill2");
-        border-radius: 10px;
-      }
-
-      .contestInfo {
-        > .title {
-          @include font_color("font1");
-          font-size: $fontSize6;
-
-          &:hover {
-            @include font_color("fill12");
-          }
-        }
-
-        .problemBox {
-          padding: 15px;
-          box-sizing: border-box;
-          width: 100%;
-          display: grid;
-          grid-template-columns: repeat(5, calc(100% / 5 - 4px));
-          grid-template-rows: 40px;
-          grid-gap: 2px;
-
-          > div {
-            width: 100%;
-            text-align: center;
-            line-height: 36px;
-            @include font_color("font1");
-
-            font-size: $fontSize4;
-            border-radius: 10px;
-
-            &:hover {
-              @include font_color("fill12");
-              @include fill_color("fill16");
-            }
-          }
-
-          .nowProblem {
-            @include fill_color("fill15");
-            @include outline(2px, dotted, "fill11");
-          }
-        }
-      }
-
-      .demand > div {
-        margin: 4px 0;
-        font-size: $fontSize5;
-        @include font_color("font1");
-        letter-spacing: 1px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .tags {
-        margin-bottom: $modelDistance;
-        @include fill_color("fill2");
-        border-radius: 10px;
-        padding: 10px 15px;
-
-        > span {
-          margin: 3px 3px;
-        }
-      }
-
-      .function {
-        @include font_color("font1");
-
-        > .modeNow {
-          font-size: $fontSize6;
-          margin: 10px 0;
-        }
-
-        > .submit,
-        > .solutions {
-          position: relative;
-          overflow: hidden;
-          margin: 8px 0;
-          width: 220px;
-          height: 40px;
-          border-radius: 10px;
-          font-size: $fontSize8;
-          letter-spacing: 4px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          @include box_shadow(0, 0, 2px, 1px, "border2");
-          transition-duration: 200ms;
-
-          &:hover {
-            @include box_shadow(0, 0, 2px, 1px, "fill12");
-            @include fill_color("fill16");
-          }
-        }
-
-        > .submitNotEnable {
-          position: relative;
-          overflow: hidden;
-          margin: 8px 0;
-          width: 220px;
-          height: 40px;
-          border-radius: 10px;
-          font-size: $fontSize8;
-          letter-spacing: 4px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          @include box_shadow(0, 0, 2px, 1px, "border2");
-          @include fill_color("fill54");
-          cursor: not-allowed;
-        }
-      }
+    &:hover {
+      @include font_color("fill12");
+      @include fill_color("fill16");
     }
   }
 
-  > .needPass {
-    top: calc(50vh - 100px);
-    left: calc(50vw - 200px);
-    position: absolute;
-    width: 400px;
-    @include fill_color("fill2");
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    @include font_color("font1");
-    @include box_shadow(0, 0, 3px, 1px, "border1");
-    box-sizing: border-box;
-    padding: 16px;
-
-    > .title {
-      font-size: $fontSize8;
-    }
-
-    > .input {
-      display: flex;
-      align-items: center;
-      margin: 20px 0;
-
-      > .label {
-        width: 100px;
-        font-size: $fontSize6;
-        padding: 0 10px;
-        text-align: right;
-      }
-    }
-
-    .btn {
-      position: relative;
-      overflow: hidden;
-      margin: 8px 0;
-      width: 220px;
-      height: 40px;
-      border-radius: 10px;
-      font-size: $fontSize5;
-      @include font_color("font1");
-      letter-spacing: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      @include box_shadow(0, 0, 2px, 1px, "border2");
-      transition-duration: 200ms;
-
-      &:hover {
-        @include box_shadow(0, 0, 2px, 1px, "fill12");
-        @include fill_color("fill15");
-      }
-    }
+  .nowProblem {
+    @include fill_color("fill15");
+    @include outline(1px, solid, "fill11");
   }
 }
+
+// .right {
+//   top: calc($page_outerPaddingTop + 50px);
+//   margin: 0 10px 0 0;
+// }
+
 .notFound {
   width: 100%;
   height: 400px;
@@ -1161,13 +899,129 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
 }
-.adminButton{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  >button{
-    width: 100px;
-    text-align: center;
+
+.problemBox .cursor_pointer {
+  margin-bottom: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.tags {
+  // margin-top: 10px;
+}
+
+.el-tag {
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.footerEle {
+  margin: 0 0 0 0px;
+  font-family: Merriweather, 'PingFang SC', 'Microsoft Yahei', 'Times New Roman', serif;
+  // align-self: center;
+}
+
+.submit,
+.submitNotEnable,
+.solutions {
+  margin-top: 10px;
+  padding: 10px 95px 10px 85px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.adminButton {
+  margin-top: 10px;
+  padding: 10px 30px 10px 30px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.submit {
+  background-color: #4caf50;
+  /* Green */
+  color: white;
+}
+
+.submitNotEnable {
+  padding: 10px 103px 10px 103px;
+  background-color: #ccc;
+  /* Gray */
+  color: #666;
+  cursor: not-allowed;
+}
+
+.solutions {
+  background-color: #2196F3;
+  /* Blue */
+  color: white;
+}
+
+.copy {
+  font-size: $fontSize3;
+  width: 130px;
+  border-radius: 4px;
+  padding: 6px;
+
+  &:hover {
+    @include font_color("fill12");
+    @include fill_color("fill16");
   }
+}
+
+.text {
+  white-space: pre-wrap;
+}
+
+.textarea {
+  width: 100%;
+  height: 200px;
+}
+
+// .ace {
+//   margin-top: 20px;
+// }
+
+#aceEditor {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Password validation container */
+.needPass {
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.needPass,
+.title {
+  font-size: $fontSize7;
+  font-weight: bold;
+  // margin-bottom: 20px;
+}
+
+.input {
+  margin-bottom: 20px;
+}
+
+
+/* Footer styling */
+.el-footer {
+  text-align: left;
+  // background-color: #333;
+  // color: #fff;
+  // padding: 10px 0;
+}
+
+.el-footer el-row {
+  text-align: left;
+  margin-bottom: 10px;
 }
 </style>

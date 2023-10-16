@@ -98,6 +98,10 @@ const router = createRouter({
 			component: () => import("../pages/Status.vue"),
 		},
 		{
+			path: "/About",
+			component: () => import("../pages/About.vue"),
+		},
+		{
 			path: "/UserCenter",
 			component: () => import("../pages/UserCenter.vue"),
 			beforeEnter: (

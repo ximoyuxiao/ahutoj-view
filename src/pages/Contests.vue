@@ -1,135 +1,84 @@
 <template>
-  <div class="contest">
-    <div
-      class="top"
-      ref="searchResult"
-      v-show="contests.list.length != 0"
-    >
-      <div class="list">
-        <div
-          class="item"
-          v-for="(item, index) in contests.list"
-          :key="index"
-        >
-          <div class="goingFlag">
-            <!-- 未开始 -->
-            <template v-if="item.BeginTime > config.serverTime">
-              <div
-                class="waiting"
-                style="background-color: #009acd"
-              >
+  <el-container class="mainContainer">
+    <el-main class="main">
+      <div class="contest">
+        <div class="top" ref="searchResult" v-show="contests.list.length != 0">
+          <div class="list">
+            <div class="item" v-for="(item, index) in contests.list" :key="index">
+              <div class="goingFlag">
+                <!-- 未开始 -->
+                <template v-if="item.BeginTime > config.serverTime">
+                  <div class="waiting" style="background-color: #009acd">
+                  </div>
+                </template>
+                <!-- 已开始 -->
+                <template v-else>
+                  <div v-if="item.EndTime > config.serverTime" class="going" style="background-color: #5ebd00">
+                  </div>
+                  <div v-else class="finish" style="background-color: #969696">
+                  </div>
+                </template>
               </div>
-            </template>
-            <!-- 已开始 -->
-            <template v-else>
-              <div
-                v-if="item.EndTime > config.serverTime"
-                class="going"
-                style="background-color: #5ebd00"
-              >
+              <!-- <div class="publicFlag">
+                <template v-if="item.BeginTime > config.serverTime">
+                  <div v-if="item.IsPublic == 1" style="color: #009acd">
+                    <el-icon color="#009acd" size="22px">
+                      <Timer />
+                    </el-icon>等待
+                  </div>
+                </template>
+              </div> -->
+              <div class="content cursor_pointer intervalVertical" @click="() => getContestById(item)">
+                <el-row>
+                  <div class="cidFlag artFont bold">&nbsp;#{{ item.CID }}&nbsp;</div>
+                  <div class="title artFont bold">
+                    {{ item.Title }}
+                  </div>
+                  <div class="ctype ctypeICPC bold" v-if="item.Type == 1">
+                    ICPC
+                  </div>
+                  <div class="ctype ctypeOI bold" v-else>
+                    OI
+                  </div>
+                  <row v-if="item.IsPublic == 1" class="openType openTypeEnabled bold">
+                    <el-icon>
+                      <Unlock />
+                    </el-icon> 公开
+                  </row>
+                  <row v-else class="openType openTypedisabled bold">
+                    <el-icon>
+                      <Lock />
+                    </el-icon> 加密
+                  </row>
+                </el-row>
+                <div class="contestInfo interval">
+                  创建者：{{ item.UID }}
+                  <el-divider direction="vertical" />
+                </div>
+                {{ proxy.Utils.TimeTools.timestampToTime(item.BeginTime) }}
+                - {{ proxy.Utils.TimeTools.timestampToTime(item.EndTime) }}
+                <el-divider direction="vertical" />
+                时长：
+                {{ proxy.Utils.TimeTools.timeIntervalToTime(item.EndTime, item.BeginTime) }}
               </div>
-              <div
-                v-else
-                class="finish"
-                style="background-color: #969696"
-              >
-              </div>
-            </template>
-          </div>
-          <div class="publicFlag">
-            <!-- 未开始 -->
-            <template v-if="item.BeginTime > config.serverTime">
-              <div
-                v-if="item.IsPublic == 1"
-                style="color: #009acd"
-              >
-                <el-icon
-                  color="#009acd"
-                  size="22px"
-                >
-                  <Timer />
-                </el-icon>等待
-              </div>
-            </template>
-            <!-- 已开始 -->
-            <template v-else>
-              <div
-                v-if="item.IsPublic == 1"
-                style="color: #5ebd00"
-              >
-                <el-icon
-                  color="#5ebd00"
-                  size="22px"
-                >
-                  <Unlock />
-                </el-icon>公开
-              </div>
-              <div
-                v-else
-                style="color: #ff3300"
-              >
-                <el-icon
-                  color="#ff3300"
-                  size="22px"
-                >
-                  <Lock />
-                </el-icon>私有
-              </div>
-            </template>
-
-          </div>
-          <div class="cidFlag">&nbsp;#{{ item.CID }}&nbsp;</div>
-          <div
-            class="content cursor_pointer"
-            @click="() => getContestById(item)"
-          >
-            <div class="title">
-              {{ item.Title }}
-            </div>
-            <div class="contestInfo">
-              创建者：{{ item.UID }}
-              <el-divider direction="vertical" />
-              类型：{{ item.Type == 1 ? "ACM" : "OI" }}
-            </div>
-            <div class="timeInfo">
-              开始时间：{{ proxy.Utils.TimeTools.timestampToTime(item.BeginTime) }}
-              <el-divider direction="vertical" />
-              结束时间：{{ proxy.Utils.TimeTools.timestampToTime(item.EndTime) }}
-              <el-divider direction="vertical" />
-              时长：
-              {{ proxy.Utils.TimeTools.timeIntervalToTime(item.EndTime, item.BeginTime) }}
             </div>
           </div>
-          <div class=""></div>
+          <div class="pagination">
+            <el-pagination background layout="prev, pager, next" :page-size="config.limit" :total="config.Count"
+              :current-page="config.currentPage" @current-change="config.changePage" />
+            <!-- <el-radio-group v-model="config.limit" @change="config.changePage(1)" style="margin: 0 20px">
+              <el-radio-button :label="20" />
+              <el-radio-button :label="30" />
+              <el-radio-button :label="50" />
+            </el-radio-group> -->
+          </div>
+        </div>
+        <div class="notFound" v-show="contests.list.length == 0">
+          <el-empty description="未找到结果" />
         </div>
       </div>
-      <div class="pagination">
-        <el-pagination
-          background
-          layout="prev, pager, next"
-          :page-size="config.limit"
-          :total="config.Count"
-          :current-page="config.currentPage"
-          @current-change="config.changePage"
-        />
-        <el-radio-group
-          v-model="config.limit"
-          @change="config.changePage(1)"
-          style="margin: 0 20px"
-        >
-          <el-radio-button :label="20" />
-          <el-radio-button :label="30" />
-          <el-radio-button :label="50" />
-        </el-radio-group>
-      </div>
-    </div>
-    <div
-      class="notFound"
-      v-show="contests.list.length == 0"
-    >
-      <el-empty description="未找到结果" />
-    </div>
-  </div>
+    </el-main>
+  </el-container>
 </template>
 
 <script lang="ts" setup name="Contests">
@@ -192,9 +141,9 @@ function getContests() {
   proxy
     .$get(
       "api/contest/list?Page=" +
-        (config.currentPage - 1) +
-        "&Limit=" +
-        config.limit
+      (config.currentPage - 1) +
+      "&Limit=" +
+      config.limit
     )
     .then((res: any) => {
       let data = res.data;
@@ -262,17 +211,96 @@ onMounted(() => {
 </script>
 
 <style  scoped lang="scss">
+.mainContainer {
+  align-self: center;
+  width: min(90%, 900px);
+}
+
+.artFont {
+  font-family: Merriweather, 'PingFang SC', 'Microsoft Yahei', 'Times New Roman', serif;
+}
+
+.title {
+  font-size: $fontSize8;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.interval {
+  margin: 16px 0 0 0;
+}
+
+.intervalVertical {
+  margin: 0 0 0 10px;
+}
+
+.ctype {
+  padding: 3px 7px 0px 7px;
+  margin: 2px 2px 2px 10px;
+  border-radius: 6px;
+  color: #fff;
+}
+
+.ctypeICPC {
+  background-color: #E67E22;
+}
+
+.ctypeOI {
+  background-color: #9D3DCF;
+}
+
+.openType {
+  padding: 3px 7px 0px 7px;
+  margin: 2px 2px 2px 10px;
+  border-radius: 6px;
+  color: #fff;
+}
+
+.openTypeEnabled {
+  background-color: rgb(0, 184, 0);
+}
+
+.openTypedisabled {
+  background-color: rgb(255, 49, 49);
+}
+
+.main {
+  width: 100%;
+  // height: 1200px;
+  margin: 20px 0 0 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 16px;
+  border-radius: 8px;
+  // float: left;
+  // display: flex;
+  // justify-content: space-between;
+  box-sizing: border-box;
+  font-size: $fontSize3;
+}
+
+#LID {
+  font-size: $fontSize6;
+}
+
+#Title {
+  font-size: $fontSize8;
+}
+
+
 .contest {
   width: 100%;
   box-sizing: border-box;
-  padding: $page_outerPaddingTop $page_outerPaddingLeft;
+  padding: 16px;
+  // padding: $page_outerPaddingTop $page_outerPaddingLeft;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
 
   .top {
     width: 100%;
-    @include fill_color(fill2);
     border-radius: 10px;
 
     .list {
@@ -281,57 +309,28 @@ onMounted(() => {
       flex-direction: column;
       align-items: flex-start;
       box-sizing: border-box;
-      padding: 8px;
+      padding: 0px;
 
       .item {
+        background-color: #F2F3F5;
         width: 100%;
-        height: 70px;
+        height: 110px;
         box-sizing: border-box;
-        padding: 3px 10px;
+        padding: 0 10px 0 0;
         margin: 5px 0;
         border-radius: 8px;
-        @include border(1px, solid, "border3");
+        // @include border(2px, solid, "border3");
         display: flex;
         align-items: center;
-        transition-duration: 300ms;
+        transition-duration: 100ms;
 
         &:hover {
           @include fill_color("fill15");
-          @include border(1px, solid, "fill12");
+          @include border(2px, solid, "fill12");
         }
 
-        &:hover > .goingFlag {
+        &:hover>.goingFlag {
           width: 22px;
-        }
-
-        &:hover > .publicFlag {
-          width: 80px;
-          opacity: 1;
-        }
-
-        &:hover > .cidFlag {
-          width: 100px;
-          font-size: $fontSize8;
-          @include font_color("font3");
-          opacity: 1;
-        }
-
-        .content {
-          width: fit-content;
-          font-size: $fontSize7;
-          @include font_color("font1");
-
-          .contestInfo {
-            width: fit-content;
-            font-size: $fontSize3;
-            @include font_color("font2");
-          }
-
-          .timeInfo {
-            width: fit-content;
-            font-size: $fontSize2;
-            @include font_color("font3");
-          }
         }
 
         .goingFlag {
@@ -348,30 +347,11 @@ onMounted(() => {
             border-bottom-left-radius: 5px;
           }
         }
-
-        .publicFlag,
-        .cidFlag {
-          width: 15px;
-          opacity: 0;
-          transition-duration: 300ms;
-          overflow: hidden;
-          text-align: center;
-          font-size: $fontSize8;
-
-          > div {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-          }
-        }
       }
     }
 
     .pagination {
-      margin: 25px 0;
+      margin: 25px 0 0 0;
       width: 100%;
       display: flex;
       align-items: center;

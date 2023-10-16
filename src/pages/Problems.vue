@@ -3,16 +3,9 @@
     <div class="left">
       <div class="search">
         <!-- 根据pid -->
-        <IconInput
-          v-model="search.PID"
-          placeholder="题目 ID"
-          type="text"
-        >
+        <IconInput v-model="search.PID" placeholder="题目 ID" type="text">
           <template v-slot:icon>
-            <el-icon
-              size="22px"
-              @click="getProblemById()"
-            >
+            <el-icon size="22px" @click="getProblemById()">
               <Aim />
             </el-icon>
           </template>
@@ -27,18 +20,8 @@
         <!-- 根据平台PType -->
         <div class="option">
           <div class="label">平台</div>
-          <el-select
-            v-model="search.PType"
-            class="m-2"
-            placeholder="Select"
-            @change="getProblems()"
-          >
-            <el-option
-              v-for="item in search.PTypeOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
+          <el-select v-model="search.PType" class="m-2" placeholder="Select" @change="getProblems()">
+            <el-option v-for="item in search.PTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </div>
         <!-- 根据标签 -->
@@ -53,43 +36,21 @@
         <div class="count">搜索到 {{ config.Count }} 个题目</div>
       </div>
     </div>
-    <div
-      class="right"
-      ref="searchResult"
-    >
-      <div
-        class="notFound"
-        v-if="search.Data.length == 0"
-      >
+    <div class="right" ref="searchResult">
+      <div class="notFound" v-if="search.Data.length == 0">
         <el-empty description="未找到结果" />
       </div>
       <div class="list">
-        <div
-          class="item"
-          v-for="(item ,index) in search.Data"
-          :key="index"
-        >
-          <div
-            class="title cursor_pointer"
-            @click="() => getProblemById(item.PID)"
-          >
+        <div class="item" v-for="(item, index) in search.Data" :key="index">
+          <div class="title cursor_pointer" @click="() => getProblemById(item.PID)">
             {{ item.PID }}&nbsp;-&nbsp;{{ item.Title }}
           </div>
-          <div
-            class="tag"
-            v-if="item.Label.length > 0"
-          >
-            <el-tag
-              v-for="major in item.Label.split(';')"
-              :key="major"
-            >
+          <div class="tag" v-if="item.Label.length > 0">
+            <el-tag v-for="major in item.Label.split(';')" :key="major">
               {{ major }}
             </el-tag>
           </div>
-          <div
-            class="tag"
-            v-else
-          >
+          <div class="tag" v-else>
             <el-tag type="info">
               暂无标签
             </el-tag>
@@ -97,19 +58,9 @@
         </div>
       </div>
       <div class="pagination">
-        <el-pagination
-          background
-          layout="prev, pager, next"
-          :page-size="config.limit"
-          :total="config.Count"
-          :current-page="config.currentPage"
-          @current-change="config.changePage"
-        />
-        <el-radio-group
-          v-model="config.limit"
-          @change="config.changePage(1)"
-          style="margin: 0 20px"
-        >
+        <el-pagination background layout="prev, pager, next" :page-size="config.limit" :total="config.Count"
+          :current-page="config.currentPage" @current-change="config.changePage" />
+        <el-radio-group v-model="config.limit" @change="config.changePage(1)" style="margin: 0 20px">
           <el-radio-button :label="20" />
           <el-radio-button :label="30" />
           <el-radio-button :label="50" />
@@ -276,7 +227,7 @@ onMounted(() => {
   .left {
     width: $problems_leftWidth;
 
-    > div {
+    >div {
       &:hover {
         @include fill_color("fill14");
         @include box_shadow(0, 0, 3px, 1px, "fill12");
@@ -292,7 +243,7 @@ onMounted(() => {
       align-items: center;
       justify-content: center;
 
-      > .option {
+      >.option {
         width: 100%;
         box-sizing: border-box;
         padding: 8px;
@@ -329,9 +280,7 @@ onMounted(() => {
   }
 
   .right {
-    width: calc(
-      100% - $problems_leftWidth - $modelDistanceMini - $modelDistanceMini
-    );
+    width: calc(100% - $problems_leftWidth - $modelDistanceMini - $modelDistanceMini );
     @include fill_color("fill2");
     border-radius: 10px;
 
@@ -376,7 +325,7 @@ onMounted(() => {
         .tag {
           margin: 5px 0;
 
-          > span {
+          >span {
             margin: 1px 1px;
           }
         }

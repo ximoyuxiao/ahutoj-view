@@ -26,3 +26,4 @@ dist.rar
 *.sln
 *.sw?
 node-v16.3.0-linux-x64
+test.vue

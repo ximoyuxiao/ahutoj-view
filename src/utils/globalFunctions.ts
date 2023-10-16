@@ -82,7 +82,7 @@ export class TimeTools {
 		let m = Math.floor(t / 60000);
 		t %= 60000;
 		let s = Math.floor(t / 1000);
-		if (mode == 1) return h + "时" + m + "分" + s + "秒";
+		if (mode == 1) return h + "h " + m + "m " + s + "s ";
 		else
 			return (
 				h +
