@@ -18,10 +18,10 @@
     <br />
     <div class="header">
       <div style="width:70px">排名</div>
-      <div style="width:360px">用户</div>
-      <div style="width:70px">班级</div>
-      <div style="width:90px">AC数</div>
-      <div v-for="(item, index) in list.Data" :key="index" style="width:140px">
+      <div style="width:300px">用户</div>
+      <div style="width:80px">班级</div>
+      <div style="width:80px">总分</div>
+      <div v-for="(item, index) in list.Data" :key="index" style="width:80px">
         {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) + "(" + item.Solved + ")" }}
       </div>
     </div>
@@ -45,23 +45,25 @@
       <template v-else>
         <div style="width:70px;">{{ index + 1 }}</div>
       </template>
-
-      <div style="width:360px;text-align: start;">{{ item.Uname }}({{ item.UID }})</div>
-      <div style="width:70px;">{{ item.Uclass }}</div>
-      <div style="width:90px">{{ item.Solved }}</div>
-      <!-- <div style="width:140px">{{proxy.Utils.TimeTools.timestampToInterval(item.TimePenalty*1000,2)}}</div> -->
+      <div style="width:300px;">{{ item.Uname }}({{ item.UID }})</div>
+      <div style="width:80px;">{{ item.Uclass }}</div>
+      <div style="width:80px">{{ item.Solved }}</div>
       <div class="problemStatus" v-for="(p, index) in list.Data" :key="index"
-        :style="'width:140px;' + getBackgroundColor(item.ProblemsMap[p.PID])">
-        <div v-if="item.ProblemsMap[p.PID] && item.ProblemsMap[p.PID].Status == 'AC'">
-          {{ item.ProblemsMap[p.PID].Status }}
-        </div>
-        <div
-          v-if="(item.ProblemsMap[p.PID] && (item.ProblemsMap[p.PID].SubmitNumber > 1))
-            || (item.ProblemsMap[p.PID] && (item.ProblemsMap[p.PID].SubmitNumber >= 1) && (item.ProblemsMap[p.PID].Status != 'AC'))">
-          {{ item.ProblemsMap[p.PID].Status }}
-          (-{{ item.ProblemsMap[p.PID].Status == 'AC' ? item.ProblemsMap[p.PID].SubmitNumber - 1 :
-            item.ProblemsMap[p.PID].SubmitNumber }})
-        </div>
+        :style="'width:80px;' + getBackgroundColor(item.ProblemsMap[p.PID])">
+        <el-row>
+          <div
+            v-if="((item.ProblemsMap[p.PID] && (item.ProblemsMap[p.PID].SubmitNumber > 1))
+              || (item.ProblemsMap[p.PID] && (item.ProblemsMap[p.PID].SubmitNumber >= 1) && (item.ProblemsMap[p.PID].Status != 'AC'))) && (item.ProblemsMap[p.PID].Status != 'AC')">
+            {{ item.ProblemsMap[p.PID].Status }}
+          </div>
+          &nbsp;
+          <div
+            v-if="(item.ProblemsMap[p.PID] && (item.ProblemsMap[p.PID].SubmitNumber > 1))
+              || (item.ProblemsMap[p.PID] && (item.ProblemsMap[p.PID].SubmitNumber >= 1) && (item.ProblemsMap[p.PID].Status != 'AC'))">
+            (-{{ item.ProblemsMap[p.PID].Status == 'AC' ? item.ProblemsMap[p.PID].SubmitNumber - 1 :
+              item.ProblemsMap[p.PID].SubmitNumber }})
+          </div>
+        </el-row>
       </div>
     </div>
   </div>
@@ -364,13 +366,13 @@ async function getList(LID: number) {
 function getBackgroundColor(item: ProblemsMapType | null) {
   if (item) {
     if (item.Pioneer)
-      return "background-color:#2f9e44 !important; color: #eaeaea;";
+      return "background-color:#3DB03D !important; color: #eaeaea;";
     if (item.SubmitNumber > 0) {
       if (item.Status == "AC")
-        return "background-color:#7ace27 !important; color: #FEFEFE;";
+        return "background-color:#E1FFB5 !important; color: #FEFEFE;";
       if (item.Status == "CE")
-        return "background-color:gray !important; color: #FEFEFE;"
-      return "background-color:#e74a23 !important; color: #eaeaea;";
+        return "background-color:#FFD0D0 !important; color: #FEFEFE;"
+      return "background-color:#FFD0D0 !important; color: #eaeaea;";
     }
   }
 }
@@ -410,7 +412,7 @@ onMounted(() => {
 
   .contestID {
     font-size: $fontSize14;
-    @include font_color("font5");
+    @include font_color("font2");
     display: flex;
     align-items: center;
     border-radius: 10px;
@@ -438,7 +440,7 @@ onMounted(() => {
 
     .content {
       text-align: center;
-      font-size: $fontSize5;
+      font-size: $fontSize4;
       @include font_color("font3");
       box-sizing: border-box;
       padding: 10px 40px;
@@ -446,7 +448,7 @@ onMounted(() => {
 
     .time {
       text-align: center;
-      font-size: $fontSize6;
+      font-size: $fontSize4;
       @include font_color("font2");
       padding: 0 40px 40px 40px;
       letter-spacing: 2px;
@@ -457,7 +459,7 @@ onMounted(() => {
     display: flex;
     align-items: center;
     height: $contestRank_headerHeight;
-    font-size: $fontSize7;
+    font-size: $fontSize5;
     width: 100%;
     @include font_color("font1");
 
@@ -466,19 +468,24 @@ onMounted(() => {
       height: 100%;
       line-height: $contestRank_headerHeight;
       text-align: center;
-      border-right: 1px solid;
+      border-top: 1px solid;
+      // border-right: 1px solid;
       border-bottom: 1px solid;
+      border-left: 1px solid;
+    // border-right: 1px solid;
       @include fill_color("fill14");
-      @include border_color("border1");
+      // @include border_color("border1");
       flex-shrink: 0;
+      border-color: black;
+      border-width: 2px;
 
       &:last-child {
         border-right: none;
-        border-start-end-radius: 10px;
+        border-start-end-radius: 0px;
       }
 
       &:first-child {
-        border-start-start-radius: 10px;
+        border-start-start-radius: 0px;
       }
     }
   }
@@ -488,24 +495,28 @@ onMounted(() => {
     height: $contestRank_itemHeight;
     display: flex;
     align-items: center;
-    font-size: $fontSize6;
-    @include font_color("font2");
+    font-size: $fontSize3;
+    border-left: 1px solid;
+    border-right: 1px solid;
+    border-right: 1px solid;
+    border-width: 2px;
+    // @include font_color("font2");
 
     &:last-child {
       >div {
         &:first-child {
-          border-end-start-radius: 10px;
+          border-end-start-radius: 0px;
         }
 
         &:last-child {
-          border-end-end-radius: 10px;
+          border-end-end-radius: 0px;
         }
       }
     }
 
     .medalIcon {
       position: absolute;
-      top: 8px;
+      top: 2px;
       left: -40px;
 
       svg {
@@ -523,7 +534,9 @@ onMounted(() => {
       border-bottom: 1px solid;
       flex-shrink: 0;
       @include fill_color("fill4");
-      @include border_color("border1");
+      @include border_color("border0");
+      border-color: black;
+      border-width: 2px;
 
       &:last-child {
         border-right: none;
@@ -539,13 +552,14 @@ onMounted(() => {
       div {
         height: 20px;
         line-height: 20px;
+        color: black;
 
         &:first-child {
-          font-size: $fontSize5;
+          font-size: $fontSize3;
         }
 
         &:last-child {
-          font-size: $fontSize4;
+          font-size: $fontSize3;
         }
       }
     }

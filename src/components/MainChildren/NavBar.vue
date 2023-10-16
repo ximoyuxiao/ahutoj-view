@@ -29,19 +29,25 @@
         状态
       </el-menu-item>
     </router-link>
+    <router-link active-class="selected" id="status" to="/About">
+      <el-menu-item index="5" class="navBarComponent">
+        <el-icon><InfoFilled /></el-icon>
+        关于
+      </el-menu-item>
+    </router-link>
     <div class="flex-grow" />
-    <el-menu-item index="5" @click="props.config">
+    <el-menu-item index="6" @click="props.config">
       <el-icon size="55px">
         <Setting />
       </el-icon>
     </el-menu-item>
     <div v-if="userDataStore.UserName == ''">
-      <el-menu-item @click="props.login" index="6">
+      <el-menu-item @click="props.login" index="7">
         登录
       </el-menu-item>
     </div>
     <div v-else>
-      <el-sub-menu index="7">
+      <el-sub-menu index="8">
         <template #title>
           <div class="userName"> {{ userDataStore.UserName }}</div>
         </template>
