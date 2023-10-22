@@ -402,10 +402,10 @@ var ace = reactive({
 });
 
 var aceConfig = reactive({
-  modeNow: "C",
+  modeNow: "CPP17",
   lang: 1,
   modeSelect: [
-    { name: "C", disabled: false },
+    { name: "C", disabled: true },
     { name: "CPP", disabled: false },
     { name: "CPP11", disabled: false },
     { name: "CPP17", disabled: false },
@@ -792,17 +792,6 @@ onMounted(() => {
 * {
   touch-action: none;
 }
-
-.asider {}
-
-.artFont {
-  font-family: Merriweather, 'PingFang SC', 'Microsoft Yahei', 'Times New Roman', serif;
-}
-
-.bold {
-  font-weight: bold;
-}
-
 .left {
   width: 230px;
 }
