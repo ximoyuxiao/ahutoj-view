@@ -46,7 +46,7 @@
                 {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
               </div>
             </div>
-          </div>     
+          </div>
         </el-header>
         <el-main class="">
           <div class="unit leftUnit unit2">
@@ -65,7 +65,7 @@
             <el-collapse class="interval">
               <el-collapse-item title="Tag" name="1">
                 <div class="tags" v-if="problem.Label.length != 0">
-                  <el-tag v-for="tag in problem.Label.split(';')" :key="tag">
+                  <el-tag v-for="tag in problem.Label.split(/;| /)" :key="tag">
                     {{ tag }}
                   </el-tag>
                 </div>
@@ -626,7 +626,7 @@ function changeMode(val: string) {
       break;
     default:
       ace.aceEditor.session.setMode("ace/mode/c_cpp");
-      aceConfig.lang = constValStore.SUBMIT_LANG_C;
+      aceConfig.lang = constValStore.SUBMIT_LANG_CPP17;
       break;
   }
   //保存语言选择结果
@@ -792,6 +792,7 @@ onMounted(() => {
 * {
   touch-action: none;
 }
+
 .left {
   width: 230px;
 }

@@ -46,10 +46,11 @@
             {{ item.PID }}&nbsp;-&nbsp;{{ item.Title }}
           </div>
           <div class="tag" v-if="item.Label.length > 0">
-            <el-tag v-for="major in item.Label.split(';')" :key="major">
+            <el-tag v-for="major in item.Label.split(/;| /)" :key="major">
               {{ major }}
             </el-tag>
           </div>
+
           <div class="tag" v-else>
             <el-tag type="info">
               暂无标签
