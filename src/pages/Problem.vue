@@ -405,7 +405,7 @@ var aceConfig = reactive({
   modeNow: "CPP17",
   lang: 1,
   modeSelect: [
-    { name: "C", disabled: true },
+    // { name: "C", disabled: true },
     { name: "CPP", disabled: false },
     { name: "CPP11", disabled: false },
     { name: "CPP17", disabled: false },
@@ -600,10 +600,10 @@ function goToSolution(PID: string) {
 function changeMode(val: string) {
   aceConfig.modeNow = val;
   switch (val) {
-    case "C":
-      ace.aceEditor.session.setMode("ace/mode/c_cpp");
-      aceConfig.lang = constValStore.SUBMIT_LANG_C;
-      break;
+    // case "C":
+    //   ace.aceEditor.session.setMode("ace/mode/c_cpp");
+    //   aceConfig.lang = constValStore.SUBMIT_LANG_C;
+    //   break;
     case "CPP":
       ace.aceEditor.session.setMode("ace/mode/c_cpp");
       aceConfig.lang = constValStore.SUBMIT_LANG_CPP;
