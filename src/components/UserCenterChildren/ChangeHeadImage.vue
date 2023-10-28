@@ -1,66 +1,44 @@
 <template>
   <div class="changeHeadImage">
-    <div
-      class="title"
-      style="height: 30px"
-    >
+    <div class="title" style="height: 30px">
       修改头像
     </div>
-    <el-icon
-      class="close cursor_pointer"
-      size="30px"
-      @click="props.close(11)"
-    >
+    <el-icon class="close cursor_pointer" size="30px" @click="props.close(11)">
       <CircleClose />
     </el-icon>
     <div class="uploadImage">
       <div class="preview">
         <div class="originImage">
           <div class="img">
-            <img
-              v-if="headImage.originImageBlobURL"
-              :src="headImage.originImageBlobURL"
-            >
-            <el-icon
-              size="42px"
-              v-else
-            >
+            <img v-if="headImage.originImageBlobURL" :src="headImage.originImageBlobURL">
+            <el-icon size="42px" v-else>
               <SemiSelect />
             </el-icon>
           </div>
           <div class="hint">原始图片</div>
-          <div class="hint">{{headImage.originImageBlobURL ? (headImage.originImage?.size / 1024).toFixed(2) + "KB" : ""}}</div>
+          <div class="hint">{{ headImage.originImageBlobURL ? (headImage.originImage?.size / 1024).toFixed(2) + "KB" : "" }}
+          </div>
         </div>
         <div class="compressResult">
-          <div class="compressPercent">{{headImage.compressedImageBlobURL ? "压缩率：" +  headImage.compressPercent + "%" : ""}}</div>
+          <div class="compressPercent">{{ headImage.compressedImageBlobURL ? "压缩率：" + headImage.compressPercent + "%" :
+            "" }}</div>
           <el-divider />
           <div> 压缩后最大支持100KB大小图片</div>
         </div>
         <div class="compressedImage">
           <div class="img">
-            <img
-              v-if="headImage.compressedImageBlobURL"
-              :src="headImage.compressedImageBlobURL"
-            >
-            <el-icon
-              size="42px"
-              v-else
-            >
+            <img v-if="headImage.compressedImageBlobURL" :src="headImage.compressedImageBlobURL">
+            <el-icon size="42px" v-else>
               <SemiSelect />
             </el-icon>
           </div>
           <div class="hint">自动压缩</div>
-          <div class="hint">{{headImage.compressedImageBlobURL ? (headImage.compressedImage?.size / 1024).toFixed(2) + "KB" : ""}}</div>
+          <div class="hint">{{ headImage.compressedImageBlobURL ? (headImage.compressedImage?.size / 1024).toFixed(2) +
+            "KB" : "" }}</div>
         </div>
       </div>
-      <el-upload
-        ref="upload"
-        class="upload"
-        :limit="1"
-        :auto-upload="false"
-        :show-file-list="false"
-        :on-change="headImage.selectImage"
-      >
+      <el-upload ref="upload" class="upload" :limit="1" :auto-upload="false" :show-file-list="false"
+        :on-change="headImage.selectImage">
         <template #trigger>
           <div class="btn cursor_pointer">
             <el-icon>
@@ -69,10 +47,7 @@
             &nbsp;选择图片
           </div>
         </template>
-        <div
-          class="btn  cursor_pointer"
-          @click="headImage.uploadHeadImage"
-        >
+        <div class="btn  cursor_pointer" @click="headImage.uploadHeadImage">
           <el-icon>
             <Upload />
           </el-icon>
@@ -110,6 +85,12 @@ var headImage = reactive({
   newHeadURL: "",
   //选择图片后
   selectImage: (imageObject: any) => {
+    const allowedMimeTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+    if (!allowedMimeTypes.includes(imageObject.raw.type)) {
+      proxy.elMessage({ message: "请选择有效的图片文件", type: "error" });
+      proxy.$refs.upload.clearFiles();
+      return;
+    }
     headImage.loading = proxy.elLoading({
       node: document.getElementsByClassName("changeHeadImage")[0],
     });
@@ -134,7 +115,7 @@ var headImage = reactive({
   //点击上传
   uploadHeadImage: () => {
     if (!headImage.originImageBlobURL || !headImage.compressedImageBlobURL) {
-      proxy.elMessage({ message: "请选择图片后再确认修改", type: "warning" });
+      proxy.elMessage({ message: "请选择图片", type: "error" });
       return;
     }
     ImageFileUploadUtils.uploadUserHeadImage(headImage.compressedImage).then(
@@ -177,7 +158,7 @@ onMounted(() => {
     @include box_shadow(0, 0, 8px, 1px, "fill51");
   }
 
-  > .title {
+  >.title {
     @include font_color("font1");
     font-size: $fontSize6;
     letter-spacing: 1px;
@@ -190,7 +171,7 @@ onMounted(() => {
     }
   }
 
-  > .close {
+  >.close {
     position: absolute;
     right: 10px;
     top: 10px;
@@ -201,22 +182,22 @@ onMounted(() => {
     }
   }
 
-  > .uploadImage {
+  >.uploadImage {
     width: 100%;
     display: flex;
     flex-direction: column;
 
-    > .preview {
+    >.preview {
       display: flex;
       @include font_color("font2");
 
-      > div {
+      >div {
         margin: 15px;
         display: flex;
         flex-direction: column;
         align-items: center;
 
-        > .img {
+        >.img {
           height: $userCenter_UserHeadImageSide;
           width: $userCenter_UserHeadImageSide;
           border-radius: 20px;
@@ -226,7 +207,7 @@ onMounted(() => {
           align-items: center;
           justify-content: center;
 
-          > img {
+          >img {
             width: 100%;
             height: 100%;
             max-width: 100%;
@@ -235,7 +216,7 @@ onMounted(() => {
         }
       }
 
-      > .compressResult {
+      >.compressResult {
         margin: 0;
         height: inherit;
         display: flex;
@@ -243,20 +224,20 @@ onMounted(() => {
         align-items: center;
         justify-content: center;
 
-        > div {
+        >div {
           margin: 0;
         }
 
-        > .compressPercent {
+        >.compressPercent {
           @include font_color("fill21");
         }
       }
     }
 
-    > .upload {
+    >.upload {
       display: flex;
 
-      > div {
+      >div {
         margin: 12px;
       }
     }

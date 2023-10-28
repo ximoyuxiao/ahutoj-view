@@ -46,7 +46,7 @@
                 {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
               </div>
             </div>
-          </div>     
+          </div>
         </el-header>
         <el-main class="">
           <div class="unit leftUnit unit2">
@@ -65,7 +65,7 @@
             <el-collapse class="interval">
               <el-collapse-item title="Tag" name="1">
                 <div class="tags" v-if="problem.Label.length != 0">
-                  <el-tag v-for="tag in problem.Label.split(';')" :key="tag">
+                  <el-tag v-for="tag in problem.Label.split(/;| /)" :key="tag">
                     {{ tag }}
                   </el-tag>
                 </div>
@@ -402,10 +402,10 @@ var ace = reactive({
 });
 
 var aceConfig = reactive({
-  modeNow: "C",
+  modeNow: "CPP17",
   lang: 1,
   modeSelect: [
-    { name: "C", disabled: false },
+    // { name: "C", disabled: true },
     { name: "CPP", disabled: false },
     { name: "CPP11", disabled: false },
     { name: "CPP17", disabled: false },
@@ -600,10 +600,10 @@ function goToSolution(PID: string) {
 function changeMode(val: string) {
   aceConfig.modeNow = val;
   switch (val) {
-    case "C":
-      ace.aceEditor.session.setMode("ace/mode/c_cpp");
-      aceConfig.lang = constValStore.SUBMIT_LANG_C;
-      break;
+    // case "C":
+    //   ace.aceEditor.session.setMode("ace/mode/c_cpp");
+    //   aceConfig.lang = constValStore.SUBMIT_LANG_C;
+    //   break;
     case "CPP":
       ace.aceEditor.session.setMode("ace/mode/c_cpp");
       aceConfig.lang = constValStore.SUBMIT_LANG_CPP;
@@ -626,7 +626,7 @@ function changeMode(val: string) {
       break;
     default:
       ace.aceEditor.session.setMode("ace/mode/c_cpp");
-      aceConfig.lang = constValStore.SUBMIT_LANG_C;
+      aceConfig.lang = constValStore.SUBMIT_LANG_CPP17;
       break;
   }
   //保存语言选择结果
@@ -791,16 +791,6 @@ onMounted(() => {
 <style scoped lang="scss">
 * {
   touch-action: none;
-}
-
-.asider {}
-
-.artFont {
-  font-family: Merriweather, 'PingFang SC', 'Microsoft Yahei', 'Times New Roman', serif;
-}
-
-.bold {
-  font-weight: bold;
 }
 
 .left {

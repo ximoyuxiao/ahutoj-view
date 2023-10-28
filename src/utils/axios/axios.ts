@@ -9,9 +9,9 @@ export var server1 = "http://127.0.0.1/";
 export var server2 = "http://127.0.0.1/";
 
 if (import.meta.env.MODE === "production") {
-	staticSourceBaseURL = "/";
+	staticSourceBaseURL = "";
 } else {
-	staticSourceBaseURL = "/";
+	staticSourceBaseURL = "";
 	// staticSourceBaseURL = "http://81.68.182.68/";
 }
 
