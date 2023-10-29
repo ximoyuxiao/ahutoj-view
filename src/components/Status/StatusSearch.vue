@@ -30,12 +30,12 @@
         <div class="input">
           <el-radio-group v-model="query.Lang">
             <el-radio-button :label="-1">不限</el-radio-button>
-            <el-radio-button :label="1">C</el-radio-button>
-            <el-radio-button :label="2">CPP</el-radio-button>
-            <el-radio-button :label="3">CPP11</el-radio-button>
-            <el-radio-button :label="4">CPP17</el-radio-button>
-            <el-radio-button :label="5">JAVA</el-radio-button>
-            <el-radio-button :label="6">PYTHON3</el-radio-button>
+            <!-- <el-radio-button :label="1">C</el-radio-button> -->
+            <el-radio-button :label="2">C++</el-radio-button>
+            <el-radio-button :label="3">C++11</el-radio-button>
+            <el-radio-button :label="4">C++17</el-radio-button>
+            <el-radio-button :label="5">Java</el-radio-button>
+            <el-radio-button :label="6">Python3</el-radio-button>
           </el-radio-group>
         </div>
       </div>

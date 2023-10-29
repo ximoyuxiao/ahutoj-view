@@ -21,7 +21,7 @@ export const useConstValStore = defineStore(PiniaNameSpace.ConstVal, {
 
 			//提交代码语言
 			SUBMIT_LANG_C: 1,
-			SUBMIT_LANG_CPP: 2,
+			// SUBMIT_LANG_CPP: 2,
 			SUBMIT_LANG_CPP11: 3,
 			SUBMIT_LANG_CPP17: 4,
 			SUBMIT_LANG_JAVA: 5,
@@ -38,9 +38,9 @@ export const useConstValStore = defineStore(PiniaNameSpace.ConstVal, {
 			SUBMIT_STATUS_CE_COLOR: "#8c8c8c",
 			SUBMIT_STATUS_JUDGING_COLOR: "#ff9933",
 			SUBMIT_STATUS_REJUDGING_COLOR: "#ff9933",
-      SUBMIT_STATUS_PENDING_COLOR: "#ebcb8b",
-      SUBMIT_STATUS_DENIAL_JUDGE: "#9E1030",
-      SUBMIT_STATUS_JUDGE_TIMEOUT: "#bdbdbd", 
+			SUBMIT_STATUS_PENDING_COLOR: "#ebcb8b",
+			SUBMIT_STATUS_DENIAL_JUDGE: "#9E1030",
+			SUBMIT_STATUS_JUDGE_TIMEOUT: "#bdbdbd",
 			SUBMIT_STATUS_FAILED_COLOR: "#4d1700",
 
 			//题目来源

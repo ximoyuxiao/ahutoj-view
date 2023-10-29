@@ -1,5 +1,5 @@
 <template>
-  <el-container class="mainContainer">
+  <el-container class="mainContainer frameContainer">
     <el-main class="main">
       <div class="contest">
         <div class="top" ref="searchResult" v-show="contests.list.length != 0">
@@ -216,16 +216,8 @@ onMounted(() => {
   width: min(90%, 900px);
 }
 
-.artFont {
-  font-family: Merriweather, 'PingFang SC', 'Microsoft Yahei', 'Times New Roman', serif;
-}
-
 .title {
   font-size: $fontSize8;
-}
-
-.bold {
-  font-weight: bold;
 }
 
 .interval {
@@ -267,18 +259,18 @@ onMounted(() => {
 }
 
 .main {
-  width: 100%;
+  // width: 100%;
   // height: 1200px;
-  margin: 20px 0 0 0;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  padding: 16px;
-  border-radius: 8px;
-  // float: left;
-  // display: flex;
-  // justify-content: space-between;
-  box-sizing: border-box;
-  font-size: $fontSize3;
+  // margin: 20px 0 0 0;
+  // background-color: #fff;
+  // border: 1px solid #ddd;
+  // padding: 16px;
+  // border-radius: 8px;
+  // // float: left;
+  // // display: flex;
+  // // justify-content: space-between;
+  // box-sizing: border-box;
+  // font-size: $fontSize3;
 }
 
 #LID {

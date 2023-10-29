@@ -5,3 +5,16 @@
 .bold {
     font-weight: bold;
 }
+
+.frameContainer {
+    margin: 20px 0 0 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 16px;
+    border-radius: 8px;
+    // float: left;
+    // display: flex;
+    // justify-content: space-between;
+    box-sizing: border-box;
+    font-size: $fontSize3;
+}

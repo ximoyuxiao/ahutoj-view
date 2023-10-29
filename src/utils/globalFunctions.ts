@@ -188,11 +188,11 @@ export class StatusConstValManager {
 	public static getLangString(Lang: number): string {
 		const constValStore = useConstValStore();
 		if (Lang == constValStore.SUBMIT_LANG_C) return "C";
-		if (Lang == constValStore.SUBMIT_LANG_CPP) return "CPP";
-		if (Lang == constValStore.SUBMIT_LANG_CPP11) return "CPP11";
-		if (Lang == constValStore.SUBMIT_LANG_CPP17) return "CPP17";
-		if (Lang == constValStore.SUBMIT_LANG_JAVA) return "JAVA";
-		if (Lang == constValStore.SUBMIT_LANG_PYTHON3) return "PYTHON3";
+		// if (Lang == constValStore.SUBMIT_LANG_CPP) return "CPP";
+		if (Lang == constValStore.SUBMIT_LANG_CPP11) return "C++11";
+		if (Lang == constValStore.SUBMIT_LANG_CPP17) return "C++17";
+		if (Lang == constValStore.SUBMIT_LANG_JAVA) return "Java";
+		if (Lang == constValStore.SUBMIT_LANG_PYTHON3) return "Python3";
 		return "UNKNOWN";
 	}
 }
