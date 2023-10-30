@@ -32,7 +32,6 @@
       </el-menu-item>
     </router-link>
   </el-menu>
-
   <div class="admin">
     <div class="content">
       <router-view v-slot="{ Component }">

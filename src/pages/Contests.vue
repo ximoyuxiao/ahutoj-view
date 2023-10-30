@@ -1,6 +1,134 @@
+                <script lang="ts" setup name="Contests">
+                import { getCurrentInstance, onMounted, reactive } from "vue";
+                import { usePageBufferedDataStore } from "../pinia/pageBufferdData";
+                const { proxy } = getCurrentInstance() as any;
+                const pageBufferedDataStore = usePageBufferedDataStore();
+                
+                //页面数据
+                type contestsType = {
+                  list: {
+                    BeginTime: number;
+                    CID: number;
+                    EndTime: number;
+                    IsPublic: number;
+                    Title: string;
+                    Type: number;
+                    UID: string;
+                  }[];
+                };
+                var contests = reactive<contestsType>({
+                  list: [],
+                });
+                
+                //页面配置数据
+                type configType = {
+                  Count: number;
+                  currentPage: number;
+                  limit: number;
+                  loading: any;
+                  serverTime: number;
+                  [item: string]: any;
+                };
+                var config = reactive<configType>({
+                  Count: 0,
+                  currentPage: 1,
+                  limit: 20,
+                  loading: null,
+                  serverTime: Date.now(),
+                  init() {
+                    this.Count = 0;
+                    this.currentPage = 1;
+                    this.limit = 20;
+                    this.loading = null;
+                    this.serverTime = Date.now();
+                  },
+                  //切换页面
+                  changePage: (page: number): void => {
+                    config.currentPage = page;
+                    SyncUrl();
+                    getContests();
+                  },
+                });
+                
+                //获取竞赛列表
+                function getContests() {
+                  config.loading = proxy.elLoading({
+                    node: proxy.$refs.searchResult,
+                  });
+                  proxy
+                    .$get(
+                      "api/contest/list?Page=" +
+                      (config.currentPage - 1) +
+                      "&Limit=" +
+                      config.limit
+                    )
+                    .then((res: any) => {
+                      let data = res.data;
+                      if (data.code == 0) {
+                        // proxy.$log(data)
+                        config.Count = data.Size;
+                        contests.list = data.Data;
+                      }
+                      config.loading.close();
+                      proxy.codeProcessor(
+                        data?.code ?? 100001,
+                        data?.msg ?? "服务器错误\\\\error"
+                      );
+                    });
+                
+                  //同步服务器时间
+                  proxy.getServerTime().then((res: any) => {
+                    let now = Date.now();
+                    if (res.time == null || Math.abs(res.time - now) < 1500) {
+                      return;
+                    }
+                    config.serverTime = res.time;
+                  });
+                }
+                
+                //跳转竞赛
+                function getContestById(contest: any) {
+                  //竞赛未开始
+                  if (contest.BeginTime > config.serverTime) {
+                    proxy.elNotification({
+                      message: "竞赛还未开始哦",
+                      type: "warning",
+                      duration: 2500,
+                    });
+                    return;
+                  }
+                  //验证策略
+                  pageBufferedDataStore.setContestRouterData(contest.CID, contest.IsPublic);
+                  proxy.$router.push({
+                    name: "Contest",
+                    params: {
+                      CID: contest.CID,
+                    },
+                  });
+                }
+                
+                //用于同步浏览器url
+                function SyncUrl() {
+                  //仅用于展示实时url，可用于复制跳转
+                  proxy.$router.replace({
+                    path: "/Contests",
+                    query: {
+                      Page: config.currentPage,
+                      Limit: config.limit,
+                    },
+                  });
+                }
+                
+                onMounted(() => {
+                  //同步url参数
+                  if (proxy.$route.query.Page) config.currentPage = proxy.$route.query.Page - 0;
+                  if (proxy.$route.query.Limit) config.limit = proxy.$route.query.Limit - 0;
+                  getContests();
+                });
+                </script>
 <template>
-  <el-container class="mainContainer">
-    <el-main class="main">
+  <el-container class="Main">
+    <el-main class="Container">
       <div class="contest">
         <div class="top" ref="searchResult" v-show="contests.list.length != 0">
           <div class="list">
@@ -78,154 +206,22 @@
         </div>
       </div>
     </el-main>
+    <el-footer class="Container Footer ArtFont Bottom">
+      <el-row>
+        Anhui University of Technology
+      </el-row>
+      <el-row>
+        Online Judge &copy; 2019 - 2023
+      </el-row>
+    </el-footer>
   </el-container>
 </template>
 
-<script lang="ts" setup name="Contests">
-import { getCurrentInstance, onMounted, reactive } from "vue";
-import { usePageBufferedDataStore } from "../pinia/pageBufferdData";
-const { proxy } = getCurrentInstance() as any;
-const pageBufferedDataStore = usePageBufferedDataStore();
-
-//页面数据
-type contestsType = {
-  list: {
-    BeginTime: number;
-    CID: number;
-    EndTime: number;
-    IsPublic: number;
-    Title: string;
-    Type: number;
-    UID: string;
-  }[];
-};
-var contests = reactive<contestsType>({
-  list: [],
-});
-
-//页面配置数据
-type configType = {
-  Count: number;
-  currentPage: number;
-  limit: number;
-  loading: any;
-  serverTime: number;
-  [item: string]: any;
-};
-var config = reactive<configType>({
-  Count: 0,
-  currentPage: 1,
-  limit: 20,
-  loading: null,
-  serverTime: Date.now(),
-  init() {
-    this.Count = 0;
-    this.currentPage = 1;
-    this.limit = 20;
-    this.loading = null;
-    this.serverTime = Date.now();
-  },
-  //切换页面
-  changePage: (page: number): void => {
-    config.currentPage = page;
-    SyncUrl();
-    getContests();
-  },
-});
-
-//获取竞赛列表
-function getContests() {
-  config.loading = proxy.elLoading({
-    node: proxy.$refs.searchResult,
-  });
-  proxy
-    .$get(
-      "api/contest/list?Page=" +
-      (config.currentPage - 1) +
-      "&Limit=" +
-      config.limit
-    )
-    .then((res: any) => {
-      let data = res.data;
-      if (data.code == 0) {
-        // proxy.$log(data)
-        config.Count = data.Size;
-        contests.list = data.Data;
-      }
-      config.loading.close();
-      proxy.codeProcessor(
-        data?.code ?? 100001,
-        data?.msg ?? "服务器错误\\\\error"
-      );
-    });
-
-  //同步服务器时间
-  proxy.getServerTime().then((res: any) => {
-    let now = Date.now();
-    if (res.time == null || Math.abs(res.time - now) < 1500) {
-      return;
-    }
-    config.serverTime = res.time;
-  });
-}
-
-//跳转竞赛
-function getContestById(contest: any) {
-  //竞赛未开始
-  if (contest.BeginTime > config.serverTime) {
-    proxy.elNotification({
-      message: "竞赛还未开始哦",
-      type: "warning",
-      duration: 2500,
-    });
-    return;
-  }
-  //验证策略
-  pageBufferedDataStore.setContestRouterData(contest.CID, contest.IsPublic);
-  proxy.$router.push({
-    name: "Contest",
-    params: {
-      CID: contest.CID,
-    },
-  });
-}
-
-//用于同步浏览器url
-function SyncUrl() {
-  //仅用于展示实时url，可用于复制跳转
-  proxy.$router.replace({
-    path: "/Contests",
-    query: {
-      Page: config.currentPage,
-      Limit: config.limit,
-    },
-  });
-}
-
-onMounted(() => {
-  //同步url参数
-  if (proxy.$route.query.Page) config.currentPage = proxy.$route.query.Page - 0;
-  if (proxy.$route.query.Limit) config.limit = proxy.$route.query.Limit - 0;
-  getContests();
-});
-</script>
 
 <style  scoped lang="scss">
-.mainContainer {
-  align-self: center;
-  width: min(90%, 900px);
-}
-
-.artFont {
-  font-family: Merriweather, 'PingFang SC', 'Microsoft Yahei', 'Times New Roman', serif;
-}
 
 .title {
   font-size: $fontSize8;
-}
-
-.bold {
-  font-weight: bold;
 }
 
 .interval {
@@ -267,18 +263,18 @@ onMounted(() => {
 }
 
 .main {
-  width: 100%;
+  // width: 100%;
   // height: 1200px;
-  margin: 20px 0 0 0;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  padding: 16px;
-  border-radius: 8px;
-  // float: left;
-  // display: flex;
-  // justify-content: space-between;
-  box-sizing: border-box;
-  font-size: $fontSize3;
+  // margin: 20px 0 0 0;
+  // background-color: #fff;
+  // border: 1px solid #ddd;
+  // padding: 16px;
+  // border-radius: 8px;
+  // // float: left;
+  // // display: flex;
+  // // justify-content: space-between;
+  // box-sizing: border-box;
+  // font-size: $fontSize3;
 }
 
 #LID {

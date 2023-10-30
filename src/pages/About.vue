@@ -1,22 +1,31 @@
-<template>
-    <el-container class="mainContainer">
-        <el-main class="main">
-            <div class="title">
-                ...
-            </div>
-        </el-main>
-    </el-container>
-</template>
-
 <script lang="ts" setup>
 import { ref } from 'vue'
 const tabPosition = ref('left')
 </script>
 
+<template>
+    <el-container class="main">
+        <el-header class="Container">
+
+        </el-header>
+        <el-main class="Container mainContainer">
+            <div class="title">
+
+            </div>
+        </el-main>
+        <el-footer class="Container Footer ArtFont Bottom">
+            <el-row>
+                Anhui University of Technology
+            </el-row>
+            <el-row>
+                Online Judge &copy; 2019 - 2023
+            </el-row>
+        </el-footer>
+    </el-container>
+</template>
+
 <style scoped lang="scss">
-
-
-.mainContainer {
+.main {
     align-self: center;
 }
 
@@ -28,14 +37,9 @@ const tabPosition = ref('left')
     font-weight: bold;
 }
 
-.main {
-    // width: 800px;
-    // height: 1200px;
-    margin: 20px 0 0 0;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 16px;
-    border-radius: 8px;
-    float: left;
+.mainContainer {
+    width: 800px;
+    height: 100%;
+    // float: left;
 }
 </style>

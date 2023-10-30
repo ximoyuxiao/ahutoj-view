@@ -1,3 +1,55 @@
+                        <script lang="ts" setup>
+                        import { getCurrentInstance, inject, onMounted, reactive } from "vue";
+                        const { proxy } = getCurrentInstance() as any;
+                        const props = defineProps(["data", "isContestStatus"]);
+                        //传入的参数
+                        var query = inject("query") as any;
+                        var functions = inject("config") as any;
+                        
+                        //本地配置项
+                        var config = reactive({
+                            loading: null,
+                            //切换页面
+                            changePage: (Page: number) => {
+                                query.Page = Page;
+                                //更新数据
+                                functions.update(query);
+                            },
+                        });
+                        
+                        //跳转到题目
+                        function goToProblem(PID: string) {
+                            if (props.isContestStatus) {
+                                proxy.$router.push({
+                                    name: "ContestProblem",
+                                    params: {
+                                        PID,
+                                        //解决竞赛状态跳转
+                                        CID: functions.CID,
+                                    },
+                                });
+                            } else {
+                                proxy.$router.push({
+                                    name: "Problem",
+                                    params: {
+                                        PID,
+                                    },
+                                });
+                            }
+                        }
+                        
+                        //跳转到自己提交的代码
+                        function goToSeeCode(SID: number | string) {
+                            proxy.$router.push({
+                                path: "/Code",
+                                query: {
+                                    SID,
+                                    //竞赛跳转
+                                    CID: props.isContestStatus ? functions.CID : undefined,
+                                },
+                            });
+                        }
+                        </script>
  
 <template>
     <div class="statusList">
@@ -59,58 +111,6 @@
     </div>
 </template>
 
-<script lang="ts" setup>
-import { getCurrentInstance, inject, onMounted, reactive } from "vue";
-const { proxy } = getCurrentInstance() as any;
-const props = defineProps(["data", "isContestStatus"]);
-//传入的参数
-var query = inject("query") as any;
-var functions = inject("config") as any;
-
-//本地配置项
-var config = reactive({
-    loading: null,
-    //切换页面
-    changePage: (Page: number) => {
-        query.Page = Page;
-        //更新数据
-        functions.update(query);
-    },
-});
-
-//跳转到题目
-function goToProblem(PID: string) {
-    if (props.isContestStatus) {
-        proxy.$router.push({
-            name: "ContestProblem",
-            params: {
-                PID,
-                //解决竞赛状态跳转
-                CID: functions.CID,
-            },
-        });
-    } else {
-        proxy.$router.push({
-            name: "Problem",
-            params: {
-                PID,
-            },
-        });
-    }
-}
-
-//跳转到自己提交的代码
-function goToSeeCode(SID: number | string) {
-    proxy.$router.push({
-        path: "/Code",
-        query: {
-            SID,
-            //竞赛跳转
-            CID: props.isContestStatus ? functions.CID : undefined,
-        },
-    });
-}
-</script>
 
 <style lang="scss" scoped>
 .statusList {
@@ -125,10 +125,9 @@ function goToSeeCode(SID: number | string) {
     }
 
     .list {
-        @include fill_color("fill2");
+        // @include fill_color("fill2");
         border-radius: 10px;
         box-sizing: border-box;
-        padding: $status_listPadding;
 
         .header {
             display: flex;
@@ -150,7 +149,7 @@ function goToSeeCode(SID: number | string) {
             align-items: center;
             font-size: $fontSize5;
             @include font_color("font2");
-            @include fill_color("fill3");
+            // @include fill_color("fill3");
             justify-content: space-between;
             border-bottom: 2px solid;
             box-sizing: border-box;

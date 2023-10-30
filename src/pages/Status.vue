@@ -1,12 +1,3 @@
-<template>
-  <div class="status">
-    <StatusSearch :query="query">
-    </StatusSearch>
-    <StatusList :data="status.list">
-    </StatusList>
-  </div>
-</template>
-
 <script lang="ts" setup name="Status" >
 import {
   getCurrentInstance,
@@ -157,10 +148,32 @@ onMounted(() => {
 });
 </script>
 
+<template>
+  <el-container class="Main">
+    <el-header class="Container">
+      <StatusSearch :query="query">
+      </StatusSearch>
+    </el-header>
+    <el-main class="Container">
+      <StatusList :data="status.list">
+      </StatusList>
+    </el-main>
+    <el-footer class="Container Footer ArtFont Bottom">
+      <el-row>
+        Anhui University of Technology
+      </el-row>
+      <el-row>
+        Online Judge &copy; 2019 - 2023
+      </el-row>
+    </el-footer>
+  </el-container>
+</template>
+
+
 <style  scoped lang="scss">
-.status {
-  width: 100%;
-  box-sizing: border-box;
-  padding: $status_outerPaddingTop $status_outerPaddingLeft;
-}
+// .status {
+//   width: 100%;
+//   box-sizing: border-box;
+//   padding: $status_outerPaddingTop $status_outerPaddingLeft;
+// }
 </style>

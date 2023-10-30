@@ -139,7 +139,8 @@ html {
   height: 100%;
   width: 100%;
   min-height: 100vh;
-  min-width: 800px;
+  // min-width: 100vh;
+  // min-width: 800px;
   overflow-y: scroll;
   position: relative;
   @include fill_color("base_page");
