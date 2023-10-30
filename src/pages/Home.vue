@@ -1,193 +1,3 @@
-<template>
-  <div class="Home">
-    <div
-      class="error"
-      v-show="config.isError"
-    >
-      <el-empty description="数据同步失败,可能是网络问题，请稍后重试，或者联系网站运维人员。" />
-    </div>
-    <!-- <div class="flag">
-      公告列表
-    </div> -->
-    <div class="notice">
-      <div class="left">
-        <div class="noticeItem">
-          <div
-                :class="item.Title != '' ? 'item' : 'nothing'"
-                class="cursor_pointer"
-                v-for="(item,index) in notices.noticeList"
-                :key="index"
-                @click="notices.SelectIdx(index)"
-          >
-          <div>{{item.Title}}<span class="rightTime">{{ item.CreateTime ?( proxy.Utils.TimeTools.timestampToTime(item.CreateTime)): ""  }}</span></div>
-        </div>
-      </div>
-      </div>
-      <div class="right">
-          <div
-            class="noticeItem"
-          >
-            <div
-              class="item"
-              v-if="notices.noticeList[notices.Selected]"
-            >
-            <div style="display: inline;">
-              <h3 style="display: inline-block;" class="title">
-                {{notices.noticeList[notices.Selected].Title}}
-              </h3>
-              <span  class="rightTime">{{ notices.noticeList[notices.Selected].CreateTime ?( proxy.Utils.TimeTools.timestampToTime(notices.noticeList[notices.Selected].CreateTime)): ""  }}</span>
-          </div>
-              <hr>
-              <br>
-              <md-editor
-                class="markDown"
-                v-model="notices.noticeList[notices.Selected].Content"
-                :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'"
-                preview-only
-              />
-            </div>
-            <div v-else class="nothing"></div>
-          </div>
-      </div>
-    </div>
-    <!-- <div class="flag">
-      比赛列表
-    </div> -->
-    <div
-      class="contestsPreview"
-      v-show="!config.isError"
-    >
-      <div class="left">
-        <div
-          :class="(contests.showListIndex == 1 ? 'selected ' : '') + 'liveContests cursor_pointer'"
-          @click="contests.show(1)"
-        >
-          <div>正 进 行</div>
-        </div>
-        <div
-          :class="(contests.showListIndex == 2 ? 'selected ' : '') + 'waitingContests cursor_pointer'"
-          @click="contests.show(2)"
-        >
-          <div>等 待 中</div>
-        </div>
-        <div
-          :class="(contests.showListIndex == 3 ? 'selected ' : '') + 'overContests cursor_pointer'"
-          @click="contests.show(3)"
-        >
-          <div>已 结 束</div>
-        </div>
-      </div>
-      <div class="right">
-        <!-- <transition
-          enter-active-class="animate__animated animate__backInLeft"
-          leave-active-class="animate__animated animate__backOutRight"
-        > -->
-          <div
-            class="liveContests"
-            v-show="contests.showListIndex == 1"
-          >
-            <div
-              :class="item.Title != '' ? 'item' : 'nothing'"
-              v-for="(item,index) in contests.liveList"
-              :key="index"
-            >
-              <div
-                class="title cursor_pointer"
-                @click="goto.contest(item);"
-              >
-                <el-icon
-                  v-if="item.IsPublic == -1 && item.Title"
-                  color="#ff3300"
-                  size="22px"
-                >
-                  <Lock />
-                </el-icon>
-                {{item.Title}}
-              </div>
-              <div class="time">
-                {{ item.BeginTime ?( proxy.Utils.TimeTools.timestampToTime(item.BeginTime) + " - "): ""  }}
-                {{ item.EndTime ? proxy.Utils.TimeTools.timestampToTime(item.EndTime) : ""}}
-              </div>
-            </div>
-          </div>
-        <!-- </transition>
-        <transition
-          enter-active-class="animate__animated animate__backInLeft"
-          leave-active-class="animate__animated animate__backOutRight"
-        > -->
-          <div
-            class="waitingContests"
-            v-show="contests.showListIndex == 2"
-          >
-            <div
-              :class="item.Title != '' ? 'item' : 'nothing'"
-              v-for="(item,index) in contests.waitingList"
-              :key="index"
-            >
-              <div class="title cursor_pointer">
-                <el-icon
-                  v-if="item.IsPublic == -1 && item.Title"
-                  color="#ff3300"
-                  size="22px"
-                >
-                  <Lock />
-                </el-icon>
-                {{item.Title}}
-              </div>
-              <div class="time">
-                {{ item.BeginTime ?( proxy.Utils.TimeTools.timestampToTime(item.BeginTime) + " - "): ""  }}
-                {{ item.EndTime ? proxy.Utils.TimeTools.timestampToTime(item.EndTime) : ""}}
-              </div>
-            </div>
-          </div>
-        <!-- </transition>
-        <transition
-          enter-active-class="animate__animated animate__backInLeft"
-          leave-active-class="animate__animated animate__backOutRight"
-        > -->
-          <div
-            class="overContests"
-            v-show="contests.showListIndex == 3"
-          >
-            <div
-              :class="item.Title != '' ? 'item' : 'nothing'"
-              v-for="(item,index) in contests.overList"
-              :key="index"
-            >
-              <div
-                class="title cursor_pointer"
-                @click="goto.contest(item);"
-              >
-                <el-icon
-                  v-if="item.IsPublic == -1 && item.Title"
-                  color="#ff3300"
-                  size="22px"
-                >
-                  <Lock />
-                </el-icon>
-                {{item.Title}}
-              </div>
-              <div class="time">
-                {{ item.BeginTime ?( proxy.Utils.TimeTools.timestampToTime(item.BeginTime) + " - "): ""  }}
-                {{ item.EndTime ? proxy.Utils.TimeTools.timestampToTime(item.EndTime) : ""}}
-              </div>
-            </div>
-          </div>
-        <!-- </transition> -->
-      </div>
-    </div>
-
-    <!-- <div class="flag">
-      其他
-    </div> -->
-    <br>
-    <div id="hint" style="text-align: center;">
-      AHUT-OJ 新功能提案/BUG反馈/修改建议
-      <a href="https://docs.qq.com/form/page/DY0FDckZ3RlB0Uktq">点此前往</a>
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { onMounted, reactive, getCurrentInstance } from "vue";
 import { usePageBufferedDataStore } from "../pinia/pageBufferdData";
@@ -237,43 +47,43 @@ var contests = reactive<contestsType>({
     contests.showListIndex = index;
   },
 });
-type noticeType={
-  ID:number;
-  UID:string;
-  Title:string;
-  Content:string;
-  CreateTime:number;
-  UpdateTime:number;
+type noticeType = {
+  ID: number;
+  UID: string;
+  Title: string;
+  Content: string;
+  CreateTime: number;
+  UpdateTime: number;
 }
 
-type noticeListType={
-  noticeList:noticeType[]|null;
-  Selected:number;
+type noticeListType = {
+  noticeList: noticeType[] | null;
+  Selected: number;
   [item: string]: any;
 }
 var notices = reactive<noticeListType>({
   noticeList: [],
-  Selected:0,
-  init(){
+  Selected: 0,
+  init() {
     notices.noticeList = [];
     notices.Selected = 0;
   },
-  copy(data:any){
+  copy(data: any) {
     notices.Selected = 0;
-    for(let i in data){
-      let item: noticeType ={
-        ID:data[i].ID,
-        UID : data[i].UID,
-        Title : data[i].Title,
-        Content : data[i].Content,
-        CreateTime : data[i].CreatedTime,
-        UpdateTime : data[i].UpdatedTime,
+    for (let i in data) {
+      let item: noticeType = {
+        ID: data[i].ID,
+        UID: data[i].UID,
+        Title: data[i].Title,
+        Content: data[i].Content,
+        CreateTime: data[i].CreatedTime,
+        UpdateTime: data[i].UpdatedTime,
       }
       notices.noticeList.push(item);
     }
     console.log(notices.noticeList);
   },
-  SelectIdx(idx:number){
+  SelectIdx(idx: number) {
     notices.Selected = idx;
   }
 });
@@ -346,10 +156,10 @@ function getContestsInfo() {
   });
 }
 
-function getNoticeInfo(){
+function getNoticeInfo() {
   proxy.$get("/api/notices").then((res: any) => {
     let data = res.data;
-    if(data.code == 0){
+    if (data.code == 0) {
       console.log(data);
       notices.copy(data.data);
     }
@@ -377,37 +187,171 @@ onMounted(() => {
 });
 </script>
 
+
+<template>
+  <div class="error" v-show="config.isError">
+    <el-empty description="数据同步失败,可能是网络问题，请稍后重试，或者联系网站运维人员。" />
+  </div>
+  <el-container class="Main">
+    <el-header class="Container">
+      <div class="notice">
+        <div class="left">
+          <div class="noticeItem">
+            <div :class="item.Title != '' ? 'item' : 'nothing'" class="cursor_pointer"
+              v-for="(item, index) in notices.noticeList" :key="index" @click="notices.SelectIdx(index)">
+              <div>{{ item.Title }}<span class="rightTime">{{ item.CreateTime ? (
+                proxy.Utils.TimeTools.timestampToTime(item.CreateTime)) : "" }}</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="right">
+          <div class="noticeItem">
+            <div class="item" v-if="notices.noticeList[notices.Selected]">
+              <div style="display: inline;">
+                <h3 style="display: inline-block;" class="title">
+                  {{ notices.noticeList[notices.Selected].Title }}
+                </h3>
+                <span class="rightTime">{{ notices.noticeList[notices.Selected].CreateTime ? (
+                  proxy.Utils.TimeTools.timestampToTime(notices.noticeList[notices.Selected].CreateTime)) : "" }}</span>
+              </div>
+              <hr>
+              <br>
+              <md-editor class="markDown" v-model="notices.noticeList[notices.Selected].Content"
+                :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'" preview-only />
+            </div>
+            <div v-else class="nothing"></div>
+          </div>
+        </div>
+      </div>
+
+    </el-header>
+    <el-main class="Container">
+      <div class="contestsPreview" v-show="!config.isError">
+        <div class="left">
+          <div :class="(contests.showListIndex == 1 ? 'selected ' : '') + 'liveContests cursor_pointer'"
+            @click="contests.show(1)">
+            <div>正 进 行</div>
+          </div>
+          <div :class="(contests.showListIndex == 2 ? 'selected ' : '') + 'waitingContests cursor_pointer'"
+            @click="contests.show(2)">
+            <div>等 待 中</div>
+          </div>
+          <div :class="(contests.showListIndex == 3 ? 'selected ' : '') + 'overContests cursor_pointer'"
+            @click="contests.show(3)">
+            <div>已 结 束</div>
+          </div>
+        </div>
+        <div class="right">
+          <!-- <transition
+            enter-active-class="animate__animated animate__backInLeft"
+            leave-active-class="animate__animated animate__backOutRight"
+          > -->
+          <div class="liveContests" v-show="contests.showListIndex == 1">
+            <div :class="item.Title != '' ? 'item' : 'nothing'" v-for="(item, index) in contests.liveList" :key="index">
+              <div class="title cursor_pointer" @click="goto.contest(item);">
+                <el-icon v-if="item.IsPublic == -1 && item.Title" color="#ff3300" size="22px">
+                  <Lock />
+                </el-icon>
+                {{ item.Title }}
+              </div>
+              <div class="time">
+                {{ item.BeginTime ? (proxy.Utils.TimeTools.timestampToTime(item.BeginTime) + " - ") : "" }}
+                {{ item.EndTime ? proxy.Utils.TimeTools.timestampToTime(item.EndTime) : "" }}
+              </div>
+            </div>
+          </div>
+          <!-- </transition>
+          <transition
+            enter-active-class="animate__animated animate__backInLeft"
+            leave-active-class="animate__animated animate__backOutRight"
+          > -->
+          <div class="waitingContests" v-show="contests.showListIndex == 2">
+            <div :class="item.Title != '' ? 'item' : 'nothing'" v-for="(item, index) in contests.waitingList"
+              :key="index">
+              <div class="title cursor_pointer">
+                <el-icon v-if="item.IsPublic == -1 && item.Title" color="#ff3300" size="22px">
+                  <Lock />
+                </el-icon>
+                {{ item.Title }}
+              </div>
+              <div class="time">
+                {{ item.BeginTime ? (proxy.Utils.TimeTools.timestampToTime(item.BeginTime) + " - ") : "" }}
+                {{ item.EndTime ? proxy.Utils.TimeTools.timestampToTime(item.EndTime) : "" }}
+              </div>
+            </div>
+          </div>
+          <!-- </transition>
+          <transition
+            enter-active-class="animate__animated animate__backInLeft"
+            leave-active-class="animate__animated animate__backOutRight"
+          > -->
+          <div class="overContests" v-show="contests.showListIndex == 3">
+            <div :class="item.Title != '' ? 'item' : 'nothing'" v-for="(item, index) in contests.overList" :key="index">
+              <div class="title cursor_pointer" @click="goto.contest(item);">
+                <el-icon v-if="item.IsPublic == -1 && item.Title" color="#ff3300" size="22px">
+                  <Lock />
+                </el-icon>
+                {{ item.Title }}
+              </div>
+              <div class="time">
+                {{ item.BeginTime ? (proxy.Utils.TimeTools.timestampToTime(item.BeginTime) + " - ") : "" }}
+                {{ item.EndTime ? proxy.Utils.TimeTools.timestampToTime(item.EndTime) : "" }}
+              </div>
+            </div>
+          </div>
+          <!-- </transition> -->
+        </div>
+      </div>
+
+      <!-- <div class="flag">
+        其他
+      </div> -->
+      <br>
+    </el-main>
+    <el-footer class="Container">
+
+      <div id="hint" style="text-align: center;">
+        AHUT-OJ 新功能提案/BUG反馈/修改建议
+        <a href="https://docs.qq.com/form/page/DY0FDckZ3RlB0Uktq">点此前往</a>
+      </div>
+    </el-footer>
+    <el-footer class="Container Footer ArtFont Bottom">
+      <el-row>
+        Anhui University of Technology
+      </el-row>
+      <el-row>
+        Online Judge &copy; 2019 - 2023
+      </el-row>
+    </el-footer>
+  </el-container>
+  <div class="Home">
+  </div>
+</template>
+
+
 <style scoped lang="scss">
+.markDown {
+  background-color: transparent !important;
+}
 
-.Home {
-  position: relative;
+.error {
   width: 100%;
-  min-height: 600px;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  padding: $home_outerPaddingTop $home_outerPaddingLeft;
+  @include font_color("font1");
+}
 
-  .markDown {
-    background-color: transparent !important;
-  }
-  .error {
-    width: 100%;
-    @include font_color("font1");
-  }
-  .notice{
+.notice {
   width: 100%;
-  height: 270px;
+  height: 300px;
   display: flex;
-  border-radius: 16px;
-  margin: 20px 0;
-  @include fill_color("fill1");
-  
+  border-radius: 8px;
+  // @include fill_color("fill1");
+
   .left {
     width: 30%;
     z-index: 2;
     overflow-y: auto;
-    > div {
+
+    >div {
       width: 100%;
       display: flex;
       align-items: center;
@@ -418,277 +362,258 @@ onMounted(() => {
       box-sizing: border-box;
       padding: 10px 10px;
       animation-duration: 600ms;
-      .noticeItem{
-      }
-      .item{
+
+      .noticeItem {}
+
+      .item {
         height: 35px;
         width: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-        border-radius: 12px;
+        border-radius: 8px;
         box-sizing: border-box;
         padding: 0px 12px;
         margin: 0 0 8px;
         @include fill_color("fill3");
         @include box_shadow(0, 0, 5px, 1px, "fill54");
         font-size: $fontSize2;
-        .rightTime{
+
+        .rightTime {
           margin: 0;
           position: relative;
           float: right;
           text-align: right;
         }
       }
-      > div {
+
+      >div {
         // writing-mode: vertical-lr;
         @include font_color("font1");
         font-size: $fontSize5;
       }
     }
   }
+
   .right {
+    position: relative;
+    width: 70%;
+    height: auto;
+    // @include fill_color("fill1");
+    border-start-end-radius: 8px;
+    border-end-end-radius: 8px;
+    overflow-y: auto;
+
+    .rightTime {
+      margin: 0;
       position: relative;
-      width: 70%;
+      float: right;
+      text-align: right;
+    }
+
+    >div {
+      position: absolute;
+      overflow: auto;
       height: auto;
-      @include fill_color("fill1");
-      border-start-end-radius: 12px;
-      border-end-end-radius: 12px;
-      overflow-y: auto;
-      .rightTime{
-          margin: 0;
-          position: relative;
-          float: right;
-          text-align: right;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      box-sizing: border-box;
+      padding: 10px 10px;
+      animation-duration: 600ms;
+
+      .item {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        border-radius: 8px;
+        box-sizing: border-box;
+        padding: 4px 12px;
+        @include fill_color("fill3");
+        @include box_shadow(0, 0, 5px, 1px, "fill54");
+        font-size: $fontSize8;
+
+        .title {
+          width: fit-content;
+          display: flex;
+          align-items: center;
+
+          i {
+            box-sizing: border-box;
+            margin: 0 5px;
+          }
+        }
+
+        .time {
+          font-size: $fontSize6;
+        }
       }
-      > div {
-        position: absolute;
-        overflow: auto;
-        height: auto;
-        width: 100%;
+
+      .nothing {
+        height: 70px;
+        border-radius: 8px;
+        box-sizing: border-box;
+        padding: 4px 12px;
+        @include fill_color("fill2");
+      }
+    }
+  }
+}
+
+#hint {
+  @include font_color("font1");
+  font-size: $fontSize6;
+
+  &>a {
+    @include font_color("fill11");
+  }
+}
+
+.contestsPreview {
+  width: 100%;
+  display: flex;
+  // margin: 20px 0;
+
+  .left {
+    width: 50px;
+    z-index: 2;
+
+    >div {
+      height: 160px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      transition-duration: 200ms;
+
+      &:hover {
+        @include fill_color("fill15");
+      }
+
+      >div {
+        writing-mode: vertical-lr;
+        @include font_color("font1");
+        font-size: $fontSize5;
+      }
+    }
+
+    .liveContests {
+      @include fill_color("fill1");
+      border-start-start-radius: 8px;
+    }
+
+    .waitingContests {
+      @include fill_color("fill1");
+    }
+
+    .overContests {
+      @include fill_color("fill1");
+      border-end-start-radius: 8px;
+    }
+
+    .selected {
+      @include fill_color("fill14");
+      border-left: 6px solid;
+      @include border_color("fill12");
+
+      >div {
+        @include font_color("fill11");
+      }
+    }
+  }
+
+  .right {
+    position: relative;
+    width: calc(100% - 30px);
+    height: 480px;
+    z-index: 1;
+    @include fill_color("fill1");
+    border-start-end-radius: 8px;
+    border-end-end-radius: 8px;
+    overflow: hidden;
+
+    >div {
+      position: absolute;
+      height: 480px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      box-sizing: border-box;
+      padding: 15px 20px;
+      animation-duration: 600ms;
+
+      .item {
+        height: 70px;
         display: flex;
         flex-direction: column;
         justify-content: space-around;
+        border-radius: 8px;
         box-sizing: border-box;
-        padding: 10px 10px;
-        animation-duration: 600ms;
+        padding: 4px 12px;
+        @include fill_color("fill3");
+        @include box_shadow(0, 0, 5px, 1px, "fill54");
+        font-size: $fontSize8;
 
-        .item {
-          height: 100%;
+        .title {
+          width: fit-content;
           display: flex;
-          flex-direction: column;
-          border-radius: 8px;
-          box-sizing: border-box;
-          padding: 4px 12px;
-          @include fill_color("fill3");
-          @include box_shadow(0, 0, 5px, 1px, "fill54");
-          font-size: $fontSize8;
+          align-items: center;
 
-          .title {
-            width: fit-content;
-            display: flex;
-            align-items: center;
-
-            i {
-              box-sizing: border-box;
-              margin: 0 5px;
-            }
-          }
-
-          .time {
-            font-size: $fontSize6;
+          i {
+            box-sizing: border-box;
+            margin: 0 5px;
           }
         }
 
-        .nothing {
-          height: 70px;
-          border-radius: 8px;
-          box-sizing: border-box;
-          padding: 4px 12px;
-          @include fill_color("fill2");
+        .time {
+          font-size: $fontSize4;
         }
       }
-  }
-}
-  .flag {
-    width: fit-content;
-    @include fill_color("fill33");
-    // background: #79BBFF;
-    font-size: $fontSize6;
-    margin: 30px 0 15px 0;
-    box-sizing: border-box;
-    padding: 6px 10px 6px 10px;
-    border-radius: 10px;
-    transition-duration: 300ms;
-    letter-spacing: 2px;
 
-    // &::before {
-    //   content: "— ";
-    // }
-
-    // &::after {
-    //   content: " —";
-    // }
-
-    &:hover {
-      letter-spacing: 3px;
-      filter: drop-shadow(0 0 2px #cdcdcd);
-    }
-  }
-
-  #hint {
-    @include font_color("font1");
-    font-size: $fontSize6;
-
-    & > a {
-      @include font_color("fill11");
-    }
-  }
-
-  .contestsPreview {
-    width: 100%;
-    display: flex;
-    margin: 20px 0;
-
-    .left {
-      width: 50px;
-      z-index: 2;
-
-      > div {
-        height: 160px;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      .nothing {
+        height: 70px;
+        border-radius: 8px;
         box-sizing: border-box;
-        transition-duration: 200ms;
+        padding: 4px 12px;
+        @include fill_color("fill2");
+      }
+    }
 
-        &:hover {
-          @include fill_color("fill15");
+    .liveContests {
+      .item {
+        .title {
+          @include font_color("fill21");
         }
 
-        > div {
-          writing-mode: vertical-lr;
-          @include font_color("font1");
-          font-size: $fontSize5;
-        }
-      }
-      .liveContests {
-        @include fill_color("fill1");
-        border-start-start-radius: 12px;
-      }
-
-      .waitingContests {
-        @include fill_color("fill1");
-      }
-
-      .overContests {
-        @include fill_color("fill1");
-        border-end-start-radius: 12px;
-      }
-
-      .selected {
-        @include fill_color("fill14");
-        border-left: 6px solid;
-        @include border_color("fill12");
-
-        > div {
+        .time {
           @include font_color("fill11");
         }
       }
     }
 
-    .right {
-      position: relative;
-      width: calc(100% - 30px);
-      height: 480px;
-      z-index: 1;
-      @include fill_color("fill1");
-      border-start-end-radius: 12px;
-      border-end-end-radius: 12px;
-      overflow: hidden;
-
-      > div {
-        position: absolute;
-        height: 480px;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        box-sizing: border-box;
-        padding: 15px 20px;
-        animation-duration: 600ms;
-
-        .item {
-          height: 70px;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-around;
-          border-radius: 8px;
-          box-sizing: border-box;
-          padding: 4px 12px;
-          @include fill_color("fill3");
-          @include box_shadow(0, 0, 5px, 1px, "fill54");
-          font-size: $fontSize8;
-
-          .title {
-            width: fit-content;
-            display: flex;
-            align-items: center;
-
-            i {
-              box-sizing: border-box;
-              margin: 0 5px;
-            }
-          }
-
-          .time {
-            font-size: $fontSize4;
-          }
+    .waitingContests {
+      .item {
+        .title {
+          @include font_color("fill11");
         }
 
-        .nothing {
-          height: 70px;
-          border-radius: 8px;
-          box-sizing: border-box;
-          padding: 4px 12px;
-          @include fill_color("fill2");
+        .time {
+          @include font_color("fill31");
         }
       }
+    }
 
-      .liveContests {
-        .item {
-          .title {
-            @include font_color("fill21");
-          }
-
-          .time {
-            @include font_color("fill11");
-          }
+    .overContests {
+      .item {
+        .title {
+          @include font_color("fill51");
         }
-      }
 
-      .waitingContests {
-        .item {
-          .title {
-            @include font_color("fill11");
-          }
-
-          .time {
-            @include font_color("fill31");
-          }
-        }
-      }
-
-      .overContests {
-        .item {
-          .title {
-            @include font_color("fill51");
-          }
-
-          .time {
-            @include font_color("fill53");
-          }
+        .time {
+          @include font_color("fill53");
         }
       }
     }

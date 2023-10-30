@@ -1,20 +1,46 @@
-.artFont {
+.ArtFont {
     font-family: Merriweather, 'PingFang SC', 'Microsoft Yahei', 'Times New Roman', serif;
 }
 
-.bold {
+.Bold {
     font-weight: bold;
 }
 
-.frameContainer {
-    margin: 20px 0 0 0;
+.Container {
     background-color: #fff;
     border: 1px solid #ddd;
-    padding: 16px;
     border-radius: 8px;
+    margin: 16px 0 0 0;
+    padding: 16px;
+    height: auto;
+    box-sizing: border-box;
     // float: left;
     // display: flex;
     // justify-content: space-between;
-    box-sizing: border-box;
     font-size: $fontSize3;
+}
+
+.Bottom {
+    margin-bottom: 16px;
+}
+
+.Footer {
+    font-size: $fontSize5;
+}
+
+.Interval {
+    margin: 16px 0 0 0;
+}
+
+.Title {
+    font-size: $fontSize8;
+}
+
+.Main {
+    align-self: center;
+    width: min(100% - 32px, 800px);
+}
+
+.Input {
+    width: 300px;
 }

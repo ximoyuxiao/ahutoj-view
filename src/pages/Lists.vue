@@ -1,50 +1,3 @@
-<template>
-    <el-container class="mainContainer">
-        <el-main class="main">
-            <div class="ProblemList">
-                <div class="left">
-                    <div class="top">
-                        <div class="search">
-                            <el-input v-model="config.search" placeholder="Please input" clearable />
-                            <el-button>
-                                <el-icon size="18px" style="margin: auto 15px;" @click="getListByLID()">
-                                    <Search />
-                                </el-icon>
-                            </el-button>
-                        </div>
-                    </div>
-                    <el-divider />
-                    <div class="content">
-                        <div class="list">
-                            <div class="item cursor_pointer" v-for="(item, index) in problemList.list">
-                                <div class="left" @click="() => getListByLID(item.LID)">
-                                    <el-row class="bold artFont">
-                                        <div id="LID">#{{ item.LID }}</div>&nbsp;
-                                        <div id="Title">{{ item.Title }}</div>
-                                    </el-row>
-                                    <div class="interval"></div>
-                                    <div id="UID">创建者：{{ item.UID }}</div>
-                                    <div id="Time">创建时间：{{ proxy.Utils.TimeTools.timestampToTime(item.StartTime) }}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="pagination">
-                            <el-pagination background layout="prev, pager, next" :page-size="config.limit"
-                                :total="config.Count" :current-page="config.currentPage"
-                                @current-change="config.changePage" />
-                            <!-- <el-radio-group v-model="config.limit" @change="config.changePage(1)" style="margin: 0 20px">
-                            <el-radio-button :label="20" />
-                            <el-radio-button :label="30" />
-                            <el-radio-button :label="50" />
-                        </el-radio-group> -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </el-main>
-    </el-container>
-</template>
-
 <script lang="ts" setup>
 import { reactive } from "vue";
 import { getCurrentInstance } from "vue";
@@ -126,49 +79,64 @@ function SyncUrl() {
 })();
 </script>
 
+<template>
+    <el-container class="Main">
+        <el-main class="Container">
+            <div class="ProblemList">
+                <div class="left">
+                    <div class="top">
+                        <div class="search">
+                            <el-input v-model="config.search" placeholder="Please input" clearable />
+                            <el-button>
+                                <el-icon size="18px" style="margin: auto 15px;" @click="getListByLID()">
+                                    <Search />
+                                </el-icon>
+                            </el-button>
+                        </div>
+                    </div>
+                    <el-divider />
+                    <div class="content">
+                        <div class="list">
+                            <div class="item cursor_pointer" v-for="(item, index) in problemList.list">
+                                <div class="left" @click="() => getListByLID(item.LID)">
+                                    <el-row class="Bold ArtFont">
+                                        <div id="LID">#{{ item.LID }}</div>&nbsp;
+                                        <div id="Title" class="Title">{{ item.Title }}</div>
+                                    </el-row>
+                                    <div class="Interval"></div>
+                                    <div id="UID">创建者：{{ item.UID }}</div>
+                                    <div id="Time">创建时间：{{ proxy.Utils.TimeTools.timestampToTime(item.StartTime) }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pagination">
+                            <el-pagination background layout="prev, pager, next" :page-size="config.limit"
+                                :total="config.Count" :current-page="config.currentPage"
+                                @current-change="config.changePage" />
+                            <!-- <el-radio-group v-model="config.limit" @change="config.changePage(1)" style="margin: 0 20px">
+                <el-radio-button :label="20" />
+                <el-radio-button :label="30" />
+                <el-radio-button :label="50" />
+            </el-radio-group> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </el-main>
+        <el-footer class="Container Footer ArtFont Bottom">
+            <el-row>
+                Anhui University of Technology
+            </el-row>
+            <el-row>
+                Online Judge &copy; 2019 - 2023
+            </el-row>
+        </el-footer>
+    </el-container>
+</template>
+
 <style  scoped lang="scss">
-.mainContainer {
-    align-self: center;
-    width: min(90%, 900px);
-}
-
-.artFont {
-    font-family: Merriweather, 'PingFang SC', 'Microsoft Yahei', 'Times New Roman', serif;
-}
-
-.title {
-    font-size: $fontSize8;
-}
-
-.bold {
-    font-weight: bold;
-}
-
-.interval {
-    margin: 16px 0 0 0;
-}
-
-.main {
-    width: 100%;
-    // height: 1200px;
-    margin: 20px 0 0 0;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 16px;
-    border-radius: 8px;
-    // float: left;
-    // display: flex;
-    // justify-content: space-between;
-    box-sizing: border-box;
-    font-size: $fontSize3;
-}
-
 #LID {
     font-size: $fontSize6;
-}
-
-#Title {
-    font-size: $fontSize8;
 }
 
 .ProblemList {

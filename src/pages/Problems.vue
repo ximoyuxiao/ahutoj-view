@@ -1,76 +1,3 @@
-<template>
-  <div class="problems">
-    <div class="left">
-      <div class="search">
-        <!-- 根据pid -->
-        <IconInput v-model="search.PID" placeholder="题目 ID" type="text">
-          <template v-slot:icon>
-            <el-icon size="22px" @click="getProblemById()">
-              <Aim />
-            </el-icon>
-          </template>
-        </IconInput>
-        <!-- 根据title -->
-        <!-- <Input
-          v-model="search.Title"
-          placeholder="题目标题"
-          type="text"
-        > -->
-        <!-- </Input> -->
-        <!-- 根据平台PType -->
-        <div class="option">
-          <div class="label">平台</div>
-          <el-select v-model="search.PType" class="m-2" placeholder="Select" @change="getProblems()">
-            <el-option v-for="item in search.PTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
-        </div>
-        <!-- 根据标签 -->
-        <div class="option">
-          <div class="label">标签</div>
-          <div>
-
-          </div>
-        </div>
-      </div>
-      <div class="info">
-        <div class="count">搜索到 {{ config.Count }} 个题目</div>
-      </div>
-    </div>
-    <div class="right" ref="searchResult">
-      <div class="notFound" v-if="search.Data.length == 0">
-        <el-empty description="未找到结果" />
-      </div>
-      <div class="list">
-        <div class="item" v-for="(item, index) in search.Data" :key="index">
-          <div class="title cursor_pointer" @click="() => getProblemById(item.PID)">
-            {{ item.PID }}&nbsp;-&nbsp;{{ item.Title }}
-          </div>
-          <div class="tag" v-if="item.Label.length > 0">
-            <el-tag v-for="major in item.Label.split(/;| /)" :key="major">
-              {{ major }}
-            </el-tag>
-          </div>
-
-          <div class="tag" v-else>
-            <el-tag type="info">
-              暂无标签
-            </el-tag>
-          </div>
-        </div>
-      </div>
-      <div class="pagination">
-        <el-pagination background layout="prev, pager, next" :page-size="config.limit" :total="config.Count"
-          :current-page="config.currentPage" @current-change="config.changePage" />
-        <el-radio-group v-model="config.limit" @change="config.changePage(1)" style="margin: 0 20px">
-          <el-radio-button :label="20" />
-          <el-radio-button :label="30" />
-          <el-radio-button :label="50" />
-        </el-radio-group>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup name = "Problems">
 import { onMounted, getCurrentInstance, reactive } from "vue";
 import IconInput from "../components/MyComponents/IconInput.vue";
@@ -119,9 +46,9 @@ var search = reactive<searchType>({
   PType: "",
   PTypeOptions: [
     { label: "全部", value: "" },
-    { label: "AHUT", value: "LOCAL" },
+    { label: "Local", value: "LOCAL" },
     { label: "CodeForce", value: "CODEFORCES" },
-    { label: "ATCoder", value: "ATCODERTYPE" },
+    { label: "AtCoder", value: "ATCODERTYPE" },
   ],
   Title: "",
   Label: null,
@@ -216,34 +143,107 @@ onMounted(() => {
 });
 </script>
 
+<template>
+  <el-container class="Main">
+    <el-header class="Container">
+      <div class="search">
+        <div class="option">
+          <div class="label">题目 ID</div>
+          <el-input v-model="search.PID" placeholder="题目 ID" type="text" class="Input">
+          </el-input>
+          <el-icon @click="getProblemById()" class="searchButton">
+            <Search />
+          </el-icon>
+        </div>
+        <!-- <el-row class="option">
+          题目 ID
+          <el-input v-model="search.PID" placeholder="题目 ID" type="text">
+          </el-input>
+          <el-icon @click="getProblemById()">
+            <Search />
+          </el-icon>
+        </el-row> -->
+        <!-- <el-row>
+          题目标题
+          <el-input v-model="search.Title" placeholder="题目标题" type="text">
+          </el-input>
+        </el-row> -->
+        <div class="option">
+          <div class="label">平台</div>
+          <el-select v-model="search.PType" class="m-2" placeholder="Select" @change="getProblems()">
+            <el-option v-for="item in search.PTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </div>
+        <div class="option">
+          <div class="label">标签</div>
+          <div>
+            <el-select v-model="search.PType" class="m-2" placeholder="Select" @change="getProblems()">
+              <!-- <el-option v-for="item in search.PTypeOptions" :key="item.value" :label="item.label" :value="item.value" /> -->
+            </el-select>
+          </div>
+        </div>
+      </div>
+
+    </el-header>
+    <el-main class="Container">
+      <div class="notFound" v-if="search.Data.length == 0">
+        <el-empty description="未找到结果" />
+      </div>
+      <div class="info" v-else>
+        <div class="count">搜索到 {{ config.Count }} 个题目</div>
+      </div>
+      <div class="list">
+        <div class="item cursor_pointer" v-for="(item, index) in search.Data" :key="index" @click="() => getProblemById(item.PID)">
+          <div class="title">
+            {{ item.PID }}&nbsp;-&nbsp;{{ item.Title }}
+          </div>
+          <div class="tag" v-if="item.Label.length > 0">
+            <el-tag v-for="major in item.Label.split(/;| /)" :key="major">
+              {{ major }}
+            </el-tag>
+          </div>
+
+          <div class="tag" v-else>
+            <el-tag type="info">
+              暂无标签
+            </el-tag>
+          </div>
+        </div>
+      </div>
+      <div class="pagination">
+        <el-pagination background layout="prev, pager, next" :page-size="config.limit" :total="config.Count"
+          :current-page="config.currentPage" @current-change="config.changePage" />
+        <el-radio-group v-model="config.limit" @change="config.changePage(1)" style="margin: 0 20px">
+          <el-radio-button :label="20" />
+          <el-radio-button :label="30" />
+          <el-radio-button :label="50" />
+        </el-radio-group>
+      </div>
+    </el-main>
+    <el-footer class="Container Footer ArtFont Bottom">
+      <el-row>
+        Anhui University of Technology
+      </el-row>
+      <el-row>
+        Online Judge &copy; 2019 - 2023
+      </el-row>
+    </el-footer>
+  </el-container>
+</template>
+
+
 <style  scoped lang="scss">
-.problems {
-  width: 100%;
-  box-sizing: border-box;
-  padding: $page_outerPaddingTop $page_outerPaddingLeft;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+.searchButton {
+  @include border(2px, solid, "border3");
+  padding: 6px;
+  border-radius: 4px;
+  margin: 0 0 0 10px;
+}
 
-  .left {
-    width: $problems_leftWidth;
-
-    >div {
-      &:hover {
-        @include fill_color("fill14");
-        @include box_shadow(0, 0, 3px, 1px, "fill12");
-      }
-    }
+.Main {
+  .Container {
 
     .search {
-      width: 100%;
-      @include fill_color("fill2");
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
       >.option {
         width: 100%;
         box-sizing: border-box;
@@ -254,7 +254,7 @@ onMounted(() => {
         @include font_color("font1");
 
         .label {
-          width: fit-content;
+          width: 90px;
           box-sizing: border-box;
           padding: 0 4px;
         }
@@ -263,9 +263,11 @@ onMounted(() => {
 
     .info {
       margin-top: $modelDistance;
-      width: 100%;
-      @include fill_color("fill2");
-      border-radius: 10px;
+      // width: 100%;
+      margin: 0 5px;
+      // @include fill_color("fill2");
+      @include border(1px, solid, "border3");
+      border-radius: 8px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -280,72 +282,68 @@ onMounted(() => {
     }
   }
 
-  .right {
-    width: calc(100% - $problems_leftWidth - $modelDistanceMini - $modelDistanceMini );
-    @include fill_color("fill2");
-    border-radius: 10px;
+  .notFound {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-    .notFound {
-      width: 100%;
-      height: 300px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+  .list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-sizing: border-box;
+    padding: 5px;
 
-    .list {
+    .item {
       width: 100%;
+      box-sizing: border-box;
+      padding: 3px 10px;
+      margin: 5px 0;
+      border-radius: 8px;
+      @include border(1px, solid, "border3");
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      box-sizing: border-box;
-      padding: 5px;
+      transition-duration: 200ms;
 
-      .item {
-        width: 100%;
-        box-sizing: border-box;
-        padding: 3px 10px;
+      &:hover {
+        @include fill_color("fill15");
+        @include border(1px, solid, "fill12");
+      }
+
+      .title {
+        width: fit-content;
+        font-size: $fontSize7;
+        @include font_color("font1");
+      }
+
+      .tag {
         margin: 5px 0;
-        border-radius: 8px;
-        @include border(2px, solid, "border3");
-        display: flex;
-        flex-direction: column;
-        transition-duration: 300ms;
 
-        &:hover {
-          @include fill_color("fill15");
-          @include border(2px, solid, "fill12");
-        }
-
-        .title {
-          width: fit-content;
-          font-size: $fontSize7;
-          @include font_color("font1");
-        }
-
-        .tag {
-          margin: 5px 0;
-
-          >span {
-            margin: 1px 1px;
-          }
-        }
-
-        .acCount {
-          font-size: $fontSize5;
-          @include font_color("font2");
+        >span {
+          margin: 1px 1px;
         }
       }
-    }
 
-    .pagination {
-      margin: 25px 0;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      justify-items: center;
+      .acCount {
+        font-size: $fontSize5;
+        @include font_color("font2");
+      }
     }
   }
+
+  .pagination {
+    margin: 25px 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+  }
+
+  // }
 }
 </style>

@@ -777,14 +777,14 @@ onMounted(() => {
           </div>
         </div>
       </el-main>
-      <el-footer class="footerEle">
-        <el-row>
-          Anhui University of Technology
-        </el-row>
-        <el-row>
-          Online Judge &copy; 2019 - 2023
-        </el-row>
-      </el-footer>
+      <el-footer class="Container Footer ArtFont Bottom">
+            <el-row>
+                Anhui University of Technology
+            </el-row>
+            <el-row>
+                Online Judge &copy; 2019 - 2023
+            </el-row>
+        </el-footer>
     </el-container>
   </el-container>
 </template>
@@ -924,12 +924,6 @@ onMounted(() => {
 .el-tag {
   margin-right: 5px;
   margin-bottom: 5px;
-}
-
-.footerEle {
-  margin: 0 0 0 0px;
-  font-family: Merriweather, 'PingFang SC', 'Microsoft Yahei', 'Times New Roman', serif;
-  // align-self: center;
 }
 
 .submit,
