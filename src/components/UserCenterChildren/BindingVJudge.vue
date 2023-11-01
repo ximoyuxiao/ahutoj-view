@@ -3,7 +3,7 @@
     class="BindingVJ"
     data-type="form"
   >
-    <div class="title">绑定VJ账号</div>
+    <div class="title">绑定 Virtual Judge</div>
     <el-icon
       class="close cursor_pointer"
       size="30px"
@@ -18,14 +18,14 @@
       当前已绑定：{{props.Vjid}}
     </div>
     <div>
-      <span>VJ ID:&nbsp;</span>
+      <span>ID:&nbsp;</span>
       <el-input
         v-model="bindingVJ.Vjid"
         placeholder="输入VJudge账号"
       />
     </div>
     <div>
-      <span>VJ 密码:&nbsp;</span>
+      <span>密码:&nbsp;</span>
       <el-input
         v-model="bindingVJ.Vjpwd"
         placeholder="输入VJudge密码"
@@ -112,13 +112,13 @@ var bindingVJ = reactive({
   position: relative;
   margin-bottom: $modelDistanceMini;
   width: 100%;
-  padding: 10px 80px;
+  padding: 12px 50px 12px 40px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  border-radius: 20px;
+  border-radius: 12px;
   @include box_shadow(0, 0, 8px, 1px, "fill14");
   @include fill_color("fill3");
 

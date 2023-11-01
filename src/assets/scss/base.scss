@@ -2,6 +2,10 @@
     font-family: Merriweather, 'PingFang SC', 'Microsoft Yahei', 'Times New Roman', serif;
 }
 
+.Serif {
+    font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, \5fae\8f6f\96c5\9ed1, Arial, sans-serif;
+}
+
 .Bold {
     font-weight: bold;
 }
@@ -14,14 +18,15 @@
     padding: 16px;
     height: auto;
     box-sizing: border-box;
-    // float: left;
-    // display: flex;
-    // justify-content: space-between;
     font-size: $fontSize3;
 }
 
 .Bottom {
     margin-bottom: 16px;
+}
+
+.Left {
+    margin-left: 16px;
 }
 
 .Footer {
@@ -38,7 +43,8 @@
 
 .Main {
     align-self: center;
-    width: min(100% - 32px, 800px);
+    width: min(100% - 32px, 1200px);
+    font-size: $fontSize3;
 }
 
 .Input {

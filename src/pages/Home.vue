@@ -311,7 +311,7 @@ onMounted(() => {
     <el-footer class="Container">
 
       <div id="hint" style="text-align: center;">
-        AHUT-OJ 新功能提案/BUG反馈/修改建议
+        新功能提案/BUG反馈/修改建议
         <a href="https://docs.qq.com/form/page/DY0FDckZ3RlB0Uktq">点此前往</a>
       </div>
     </el-footer>
@@ -360,7 +360,7 @@ onMounted(() => {
       flex-direction: column;
       justify-content: space-around;
       box-sizing: border-box;
-      padding: 10px 10px;
+      padding: 2px 2px;
       animation-duration: 600ms;
 
       .noticeItem {}
@@ -373,7 +373,7 @@ onMounted(() => {
         justify-content: space-around;
         border-radius: 8px;
         box-sizing: border-box;
-        padding: 0px 12px;
+        padding: 0px 10px;
         margin: 0 0 8px;
         @include fill_color("fill3");
         @include box_shadow(0, 0, 5px, 1px, "fill54");
@@ -398,7 +398,7 @@ onMounted(() => {
   .right {
     position: relative;
     width: 70%;
-    height: auto;
+    height: 100%;
     // @include fill_color("fill1");
     border-start-end-radius: 8px;
     border-end-end-radius: 8px;
@@ -420,7 +420,7 @@ onMounted(() => {
       flex-direction: column;
       justify-content: space-around;
       box-sizing: border-box;
-      padding: 10px 10px;
+      padding: 2px 0 0 16px;
       animation-duration: 600ms;
 
       .item {

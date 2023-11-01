@@ -570,64 +570,59 @@ onMounted(() => {
 });
 </script>
 
-
 <template>
-  <el-container class="mobile">
-    <el-asider class="asider">
-      <container>
-        <el-header class="left" v-if="contest.isContestProblem">
-          <div class="unit leftUnit unit1">
-            <el-row class="artFont contestHeader bold">
-              <div class="cursor_pointer" @click="backToContest">
-                <el-icon size="22px">
-                  <Back />
-                </el-icon>
+  <el-container class="Main">
+    <el-asider class="" style="width: 300px;">
+      <el-container class="Left">
+        <el-header class="Container" v-if="contest.isContestProblem">
+          <el-row class="ArtFont contestHeader Bold">
+            <div class="cursor_pointer" @click="backToContest">
+              <el-icon size="22px">
+                <Back />
+              </el-icon>
+            </div>
+            &nbsp;#{{ contest.CID }}
+            <div class="Title" ref="contestInfo">
+              <div>
+                &nbsp;{{ contest.info.Title }}
               </div>
-              &nbsp;#{{ contest.CID }}
-              <div class="title" ref="contestInfo">
-                <div>
-                  &nbsp;{{ contest.info.Title }}
-                </div>
-              </div>
-            </el-row>
-            <div class="problemBox" ref="contestInfo">
-              <div :class="'cursor_pointer ' + (item.PID == problem.PID ? 'nowProblem' : '')
-                " v-for="(item, index) in contest.info.Data" :key="index" v-on:click="goToProblem(item.PID)">
-                {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
-              </div>
+            </div>
+          </el-row>
+          <div class="problemBox" ref="contestInfo">
+            <div :class="'cursor_pointer ' + (item.PID == problem.PID ? 'nowProblem' : '')
+              " v-for="(item, index) in contest.info.Data" :key="index" v-on:click="goToProblem(item.PID)">
+              {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
             </div>
           </div>
         </el-header>
-        <el-header v-else>
-          <div class="unit leftUnit unit1">
-            <el-row class="artFont contestHeader bold">
-              <div class="cursor_pointer" @click="backToContest">
-                <el-icon size="22px">
-                  <Back />
-                </el-icon>
-              </div>
-              &nbsp;#{{ contest.CID }}
-              <div class="title" ref="contestInfo">
-                <div>
-                  &nbsp;{{ contest.info.Title }}
-                </div>
-              </div>
-            </el-row>
-            <div class="problemBox" ref="contestInfo">
-              <div :class="'cursor_pointer ' + (item.PID == problem.PID ? 'nowProblem' : '')
-                " v-for="(item, index) in contest.info.Data" :key="index" v-on:click="goToProblem(item.PID)">
-                {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
+        <!-- <el-header class="Container" v-else>
+          <el-row class="ArtFont contestHeader Bold">
+            <div class="cursor_pointer" @click="null">
+              <el-icon size="22px">
+                <Back />
+              </el-icon>
+            </div>
+            &nbsp;#{{ contest.CID }}
+            <div class="title" ref="contestInfo">
+              <div>
+                &nbsp;{{ contest.info.Title }}
               </div>
             </div>
+          </el-row>
+          <div class="problemBox" ref="contestInfo">
+            <div :class="'cursor_pointer ' + (item.PID == problem.PID ? 'nowProblem' : '')
+              " v-for="(item, index) in contest.info.Data" :key="index" v-on:click="goToProblem(item.PID)">
+              {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
+            </div>
           </div>
-        </el-header>
-        <el-main class="">
-          <div class="unit leftUnit unit2">
-            <el-row class="bold artFont">
+        </el-header> -->
+        <el-main class="Container">
+          <div class="">
+            <el-row class="Bold ArtFont">
               <div class="PID">{{ problem.PID }}</div>
-              <div class="title">&nbsp;{{ problem.Title }}</div>
+              <div class="Title">&nbsp;{{ problem.Title }}</div>
             </el-row>
-            <div ref="demand" class="artFont interval">
+            <div ref="demand" class="ArtFont interval">
               <el-row class="demandComponent">
                 时间限制: {{ problem.LimitTime }} ms
               </el-row>
@@ -680,11 +675,11 @@ onMounted(() => {
             </div>
           </div>
         </el-main>
-      </container>
+      </el-container>
     </el-asider>
-    <el-container class="right">
-      <el-main class="main">
-        <div class="mainUnit unit">
+    <el-container class="Left">
+      <el-main class="Container">
+        <div class="">
           <template v-if="!needPass">
             <div class="" v-show="!notFound">
               <div ref="left">
@@ -778,95 +773,22 @@ onMounted(() => {
         </div>
       </el-main>
       <el-footer class="Container Footer ArtFont Bottom">
-            <el-row>
-                Anhui University of Technology
-            </el-row>
-            <el-row>
-                Online Judge &copy; 2019 - 2023
-            </el-row>
-        </el-footer>
+        <el-row>
+          Anhui University of Technology
+        </el-row>
+        <el-row>
+          Online Judge &copy; 2019 - 2023
+        </el-row>
+      </el-footer>
     </el-container>
   </el-container>
 </template>
 
 
 <style scoped lang="scss">
-// * {
-//   touch-action: none;
-// }
-
-
-@media screen and (max-width:600px) {
-  .main {
-    width: 800px;
-  }
-
-  .mainUnit {
-    margin: -2px 0 0 -20px;
-    // width: 600px;
-  }
-
-  .mobile {
-    width: 600px;
-  }
-}
-
-@media screen and (min-width:600px) {
-  .main {
-    width: min(100%, 1200px);
-  }
-
-  .mainUnit {
-    margin: -2px 0 0 -20px;
-    width: max(100%, 400px);
-  }
-}
-
-.left {
-  width: 230px;
-}
-
-.leftUnit {
-  width: 100%;
-}
-
-.unit {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  padding: 16px;
-  border-radius: 8px;
-  // margin: -4px 0 0 0px;
-  float: left;
-}
-
-.unit1 {
-  width: 253px;
-  margin-top: 18px;
-  margin-left: -6px;
-  // margin: 16px 0 0 -8px;
-}
-
-.unit2 {
-  width: 253px;
-  margin-top: -8px;
-  margin-left: -6px;
-  // margin: 12px 0 0 12px;
-}
-
-.interval {
-  margin-top: 16px;
-}
-
 .contestHeader {
   font-size: $fontSize6;
 }
-
-// position: fixed;
-// display: flex;
-// flex-direction: column;
-// width: $problem_rightWidth;
-// top: calc($page_outerPaddingTop + 60px);
-// right: $page_outerPaddingLeft;
 
 .problemBox {
   padding: 10px 2px 0 2px;
@@ -898,10 +820,9 @@ onMounted(() => {
   }
 }
 
-// .right {
-//   top: calc($page_outerPaddingTop + 50px);
-//   margin: 0 10px 0 0;
-// }
+.demandComponent {
+  font-size: $fontSize4;
+}
 
 .notFound {
   width: 100%;
@@ -915,10 +836,6 @@ onMounted(() => {
   margin-bottom: 10px;
   font-weight: bold;
   cursor: pointer;
-}
-
-.tags {
-  // margin-top: 10px;
 }
 
 .el-tag {
@@ -948,21 +865,18 @@ onMounted(() => {
 
 .submit {
   background-color: #4caf50;
-  /* Green */
   color: white;
 }
 
 .submitNotEnable {
   padding: 10px 103px 10px 103px;
   background-color: #ccc;
-  /* Gray */
   color: #666;
   cursor: not-allowed;
 }
 
 .solutions {
   background-color: #2196F3;
-  /* Blue */
   color: white;
 }
 
@@ -987,10 +901,6 @@ onMounted(() => {
   height: 200px;
 }
 
-// .ace {
-//   margin-top: 20px;
-// }
-
 #aceEditor {
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -1005,8 +915,7 @@ onMounted(() => {
   text-align: center;
 }
 
-.needPass,
-.title {
+.needPass {
   font-size: $fontSize7;
   font-weight: bold;
   // margin-bottom: 20px;
@@ -1014,19 +923,5 @@ onMounted(() => {
 
 .input {
   margin-bottom: 20px;
-}
-
-
-/* Footer styling */
-.el-footer {
-  text-align: left;
-  // background-color: #333;
-  // color: #fff;
-  // padding: 10px 0;
-}
-
-.el-footer el-row {
-  text-align: left;
-  margin-bottom: 10px;
 }
 </style>

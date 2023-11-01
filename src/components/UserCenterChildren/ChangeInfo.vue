@@ -1,7 +1,7 @@
 
 <template>
   <div class="ChangeInfo">
-    <div style="height: 30px">修改资料</div>
+    <div style="height: 30px; font-size: 22px;">修改资料</div>
     <el-icon
       class="close cursor_pointer"
       size="30px"
@@ -227,12 +227,12 @@ onMounted(() => {
 .ChangeInfo {
   position: relative;
   margin-top: $modelDistance;
-  padding: 10px 80px;
+  padding: 12px 50px 12px 40px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  border-radius: 20px;
+  border-radius: 12px;
   @include box_shadow(0, 0, 8px, 1px, "fill52");
 
   &:hover {

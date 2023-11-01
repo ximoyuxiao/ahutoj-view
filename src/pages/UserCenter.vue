@@ -1,161 +1,3 @@
-<template>
-  <div class="userCenter">
-    <div class="infoBox">
-      <!-- 头像背景效果 -->
-      <img
-        class="filter cursor_noFocus"
-        :src="userInfo.HeadURL ? (staticSourceBaseURL + userInfo.HeadURL) : proxy.Utils.DefaultHeadImage.show(userInfo.UID)"
-        alt=""
-      />
-      <div class="user">
-        <div
-          id="userImg"
-          class="cursor_noFocus cursor_pointer"
-          @click="functionConfig.show(11)"
-        >
-          <img :src="userInfo.HeadURL ? (staticSourceBaseURL + userInfo.HeadURL) : proxy.Utils.DefaultHeadImage.show(userInfo.UID)" />
-          <div class="changImage">
-            <el-icon size="42px">
-              <Upload />
-            </el-icon>
-          </div>
-        </div>
-        <div class="username">{{ userDataStore.UserName }}</div>
-        <div class="acStatus">
-          <div class="acCount">
-            AC:&nbsp;&nbsp;&nbsp;<span style="color:#00CC00">{{ userInfo.Solved }}</span>
-          </div>
-          <div class="submittedCount">
-            Submit:&nbsp;&nbsp;&nbsp;<span style="color:#0000FF">{{userInfo.Submited}}</span>
-          </div>
-          <div class="rating">
-            Rating:&nbsp;&nbsp;&nbsp;<span :style="getRatingColor(userInfo.Rating?userInfo.Rating:0)">{{ userInfo.Rating?userInfo.Rating:0 }}</span>
-          </div>
-        </div>
-      </div>
-      <el-divider style="margin: 2px;" />
-      <div class="userInfo">
-        <div>学校:&nbsp;{{ userInfo.School }}</div>
-        <div>班级:&nbsp;{{ userInfo.Classes }}</div>
-        <div>专业:&nbsp;{{ userInfo.Major }}</div>
-        <div>
-          擅长:&nbsp;
-          <el-tag
-            v-for="Adept in userInfo.AdeptArray"
-            :key="Adept"
-          >
-            {{ Adept }}
-          </el-tag>
-        </div>
-        <div>邮箱:&nbsp;{{ userInfo.Email }}</div>
-        <div
-          class="set cursor_pointer"
-          @click="functionConfig.show(0)"
-        >
-          <el-icon size="45px">
-            <Setting />
-          </el-icon>
-        </div>
-      </div>
-    </div>
-    <transition
-      enter-active-class="animate__animated animate__zoomIn"
-      leave-active-class="animate__animated animate__zoomOut"
-    >
-      <ChangeInfo
-        v-if="functionConfig.showChangeInfo"
-        :userInfo="userInfo"
-        :close="functionConfig.close"
-      >
-      </ChangeInfo>
-    </transition>
-    <transition
-      enter-active-class="animate__animated animate__zoomIn"
-      leave-active-class="animate__animated animate__zoomOut"
-    >
-      <ChangeHeadImage
-        v-if="functionConfig.showChangeHeadImage"
-        :userInfo="userInfo"
-        :close="functionConfig.close"
-      >
-      </ChangeHeadImage>
-    </transition>
-    <div class="contentBox">
-      <div class="leftBox">
-        <div
-          class="functionBtn"
-          @click="functionConfig.show(1)"
-        >
-          {{userInfo.CodeForceUser ?  "CodeForce:\n" + userInfo.CodeForceUser : "绑定CodeForce"}}
-        </div>
-        <div
-          class="functionBtn"
-          @click="functionConfig.show(2)"
-        >
-          {{userInfo.Vjid ?  "VJudge:\n" + userInfo.Vjid : "绑定VJudge"}}
-        </div>
-        <el-divider style="margin: 2px;" />
-        <div
-          class="functionBtn"
-          @click="functionConfig.show(10)"
-        >
-          修改密码
-        </div>
-      </div>
-      <div class="rightBox">
-        <transition
-          enter-active-class="animate__animated animate__zoomIn"
-          leave-active-class="animate__animated animate__zoomOut"
-        >
-          <BindingCodeForce
-            v-if="functionConfig.showBindingCodeForce"
-            :CodeForceUser="userInfo.CodeForceUser"
-            :close="functionConfig.close"
-          ></BindingCodeForce>
-        </transition>
-        <transition
-          enter-active-class="animate__animated animate__zoomIn"
-          leave-active-class="animate__animated animate__zoomOut"
-        >
-          <BindingVJudge
-            v-if="functionConfig.showBindingVJudge"
-            :Vjid="userInfo.Vjid"
-            :close="functionConfig.close"
-          ></BindingVJudge>
-        </transition>
-        <transition
-          enter-active-class="animate__animated animate__zoomIn"
-          leave-active-class="animate__animated animate__zoomOut"
-        >
-          <ChangePassword
-            v-if="functionConfig.showChangePassword"
-            :close="functionConfig.close"
-          ></ChangePassword>
-        </transition>
-
-        <div class="activityCalendarBox">
-          <ActivityCalendar
-            :data="activityCalendarConfig.data"
-            backgroundColor="#ffffff00"
-            :width="activityCalendarConfig.width"
-            :height="activityCalendarConfig.height"
-            :cellLength="activityCalendarConfig.cellLength"
-            :cellInterval="activityCalendarConfig.cellInterval"
-            :cellBorderRadius="activityCalendarConfig.cellBorderRadius"
-            :fontSize="activityCalendarConfig.fontSize"
-            :fontColor="activityCalendarConfig.fontColor"
-            :showLevelFlag="activityCalendarConfig.showLevelFlag"
-            :colors="activityCalendarConfig.colors"
-            :showWeekDayFlag="true"
-            :levelMapper="activityCalendarConfig.levelMapper"
-            :levelFlagText="activityCalendarConfig.levelFlagText"
-          />
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup >
 import { onMounted, getCurrentInstance, reactive } from "vue";
 import ActivityCalendar from "../components/MyComponents/ActivityCalendar.vue";
@@ -449,31 +291,176 @@ onMounted(() => {
 });
 </script>
 
+<template>
+  <el-container class="Main">
+    <el-header class="Container">
+      <div class="infoBox">
+        <!-- 头像背景效果 -->
+        <img
+          class="filter cursor_noFocus"
+          :src="userInfo.HeadURL ? (staticSourceBaseURL + userInfo.HeadURL) : proxy.Utils.DefaultHeadImage.show(userInfo.UID)"
+          alt=""
+        />
+        <div class="user">
+          <div
+            id="userImg"
+            class="cursor_noFocus cursor_pointer"
+            @click="functionConfig.show(11)"
+          >
+            <img :src="userInfo.HeadURL ? (staticSourceBaseURL + userInfo.HeadURL) : proxy.Utils.DefaultHeadImage.show(userInfo.UID)" />
+            <div class="changImage">
+              <el-icon size="42px">
+                <Upload />
+              </el-icon>
+            </div>
+          </div>
+          <div class="username">{{ userDataStore.UserName }}</div>
+          <div class="acStatus">
+            <div class="acCount">
+              AC:&nbsp;&nbsp;&nbsp;<span style="color:#00CC00">{{ userInfo.Solved }}</span>
+            </div>
+            <div class="submittedCount">
+              Submit:&nbsp;&nbsp;&nbsp;<span style="color:#0000FF">{{userInfo.Submited}}</span>
+            </div>
+            <div class="rating">
+              Rating:&nbsp;&nbsp;&nbsp;<span :style="getRatingColor(userInfo.Rating?userInfo.Rating:0)">{{ userInfo.Rating?userInfo.Rating:0 }}</span>
+            </div>
+          </div>
+        </div>
+        <el-divider style="margin: 2px;" />
+        <div class="userInfo">
+          <div>学校:&nbsp;{{ userInfo.School }}</div>
+          <div>班级:&nbsp;{{ userInfo.Classes }}</div>
+          <div>专业:&nbsp;{{ userInfo.Major }}</div>
+          <div>
+            擅长:&nbsp;
+            <el-tag
+              v-for="Adept in userInfo.AdeptArray"
+              :key="Adept"
+            >
+              {{ Adept }}
+            </el-tag>
+          </div>
+          <div>邮箱:&nbsp;{{ userInfo.Email }}</div>
+          <div
+            class="set cursor_pointer"
+            @click="functionConfig.show(0)"
+          >
+            <el-icon size="45px">
+              <Setting />
+            </el-icon>
+          </div>
+        </div>
+      </div>
+    </el-header>
+    <el-main class="Container">
+      <div class="activityCalendarBox">
+          <ActivityCalendar
+            :data="activityCalendarConfig.data"
+            backgroundColor="#ffffff00"
+            :width="activityCalendarConfig.width"
+            :height="activityCalendarConfig.height"
+            :cellLength="activityCalendarConfig.cellLength"
+            :cellInterval="activityCalendarConfig.cellInterval"
+            :cellBorderRadius="activityCalendarConfig.cellBorderRadius"
+            :fontSize="activityCalendarConfig.fontSize"
+            :fontColor="activityCalendarConfig.fontColor"
+            :showLevelFlag="activityCalendarConfig.showLevelFlag"
+            :colors="activityCalendarConfig.colors"
+            :showWeekDayFlag="true"
+            :levelMapper="activityCalendarConfig.levelMapper"
+            :levelFlagText="activityCalendarConfig.levelFlagText"
+            />
+          </div>
+        </el-main>
+        <el-container class="Bottom">
+          <el-asider class="Container">
+        <div class="leftBox">
+          <div
+            class="functionBtn"
+            @click="functionConfig.show(1)"
+          >
+            {{userInfo.CodeForceUser ?  "CodeForce:\n" + userInfo.CodeForceUser : "绑定CodeForce"}}
+          </div>
+          <div
+            class="functionBtn"
+            @click="functionConfig.show(2)"
+          >
+            {{userInfo.Vjid ?  "VJudge:\n" + userInfo.Vjid : "绑定VJudge"}}
+          </div>
+          <el-divider style="margin: 2px;" />
+          <div
+            class="functionBtn"
+            @click="functionConfig.show(10)"
+          >
+            修改密码
+          </div>
+        </div>
+
+      </el-asider>
+      <el-main class="Container Left">
+      <ChangeInfo
+        v-if="functionConfig.showChangeInfo"
+        :userInfo="userInfo"
+        :close="functionConfig.close"
+      >
+      </ChangeInfo>
+      <ChangeHeadImage
+        v-if="functionConfig.showChangeHeadImage"
+        :userInfo="userInfo"
+        :close="functionConfig.close"
+      >
+      </ChangeHeadImage>
+    <div class="contentBox">
+      <div class="rightBox">
+        <transition
+          enter-active-class="animate__animated animate__zoomIn"
+          leave-active-class="animate__animated animate__zoomOut"
+        >
+          <BindingCodeForce
+            v-if="functionConfig.showBindingCodeForce"
+            :CodeForceUser="userInfo.CodeForceUser"
+            :close="functionConfig.close"
+          ></BindingCodeForce>
+        </transition>
+        <transition
+          enter-active-class="animate__animated animate__zoomIn"
+          leave-active-class="animate__animated animate__zoomOut"
+        >
+          <BindingVJudge
+            v-if="functionConfig.showBindingVJudge"
+            :Vjid="userInfo.Vjid"
+            :close="functionConfig.close"
+          ></BindingVJudge>
+        </transition>
+        <transition
+          enter-active-class="animate__animated animate__zoomIn"
+          leave-active-class="animate__animated animate__zoomOut"
+        >
+          <ChangePassword
+            v-if="functionConfig.showChangePassword"
+            :close="functionConfig.close"
+          ></ChangePassword>
+        </transition>
+      </div>
+    </div>
+      </el-main>
+    </el-container>
+  </el-container>
+
+</template>
+
+
 <style  scoped lang="scss">
 * {
   transition-duration: 150ms;
 }
 
-.userCenter {
-  width: 100%;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  padding: $userCenter_outerPaddingTop $userCenter_outerPaddingLeft;
-  box-sizing: border-box;
-  z-index: 1;
-
   .infoBox {
     position: relative;
     height: 280px;
-    border-radius: 20px;
-    overflow: hidden;
-    @include box_shadow(0, 0, 8px, 1px, "fill52");
-
-    &:hover {
-      @include fill_color("fill2");
-      @include box_shadow(0, 0, 8px, 1px, "fill51");
-    }
+    // border-radius: 20px;
+    // overflow: hidden;
 
     .filter {
       position: absolute;
@@ -495,8 +482,8 @@ onMounted(() => {
         margin: 15px;
         height: $userCenter_UserHeadImageSide;
         width: $userCenter_UserHeadImageSide;
-        border-radius: 20px;
-        @include box_shadow(0, 0, 2px, 1px, "font2");
+        border-radius: 12px;
+        @include box_shadow(0, 0, 1px, 1px, "font2");
         overflow: hidden;
 
         &:hover > .changImage {
@@ -605,29 +592,29 @@ onMounted(() => {
     transition-duration: 500ms;
 
     .leftBox {
-      width: $userCenter_toolnavWidth;
+      width: 200px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 10px 15px;
+      // padding: 10px 15px;
       box-sizing: border-box;
       overflow: hidden;
       border-radius: 20px;
-      @include box_shadow(0, 0, 8px, 1px, "fill34");
+      // @include box_shadow(0, 0, 8px, 1px, "fill34");
 
-      &:hover {
-        @include box_shadow(0, 0, 8px, 1px, "fill32");
-      }
+      // &:hover {
+      //   @include box_shadow(0, 0, 8px, 1px, "fill32");
+      // }
 
       .functionBtn {
-        margin: 5px 0;
+        margin: 4px 0;
         width: 100%;
-        border-radius: 8px;
+        // border-radius: 8px;
         box-sizing: border-box;
         padding: 5px 0;
         @include font_color("font1");
         font-size: $fontSize7;
-        line-height: $fontSize8;
+        // line-height: $fontSize8;
         text-align: center;
         transition-duration: 260ms;
         white-space: pre;
@@ -638,34 +625,6 @@ onMounted(() => {
         }
       }
     }
-
-    .rightBox {
-      width: calc(100% - $userCenter_toolnavWidth - $modelDistance);
-      max-height: fit-content;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      box-sizing: border-box;
-      border-radius: 20px;
-      transition-duration: 5000ms;
-
-      .activityCalendarBox {
-        width: 100%;
-        box-sizing: border-box;
-        padding: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        @include box_shadow(0, 0, 8px, 1px, "fill14");
-        @include fill_color("fill3");
-        border-radius: 20px;
-        overflow: hidden;
-
-        &:hover {
-          @include box_shadow(0, 0, 8px, 1px, "fill12");
-        }
-      }
-    }
   }
-}
+// }
 </style>
