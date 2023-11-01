@@ -137,9 +137,9 @@ const config = reactive<propsType>({
   //单元格边长 px
   cellLength: 16,
   //单元格间隔 px
-  cellInterval: 6,
+  cellInterval: 4,
   //单元格border圆角效果 px
-  cellBorderRadius: 3,
+  cellBorderRadius: 2,
   //header 12个内容的数组，用于指定表头十二个月份显示的内容
   header: [
     "一月",
@@ -162,7 +162,7 @@ const config = reactive<propsType>({
   //calendar背景颜色
   backgroundColor: "#ffffff",
   //颜色数组，用于指定不同活跃level的颜色
-  colors: ["#f5f5f5", "#ebfaff", "#e5f9ff", "#c7f1ff", "#86e0fe", "#3ecefe"],
+  colors: ["#EBEDF0", "#ebfaff", "#e5f9ff", "#c7f1ff", "#86e0fe", "#3ecefe"],
   //是否显示左侧的星期标志
   showWeekDayFlag: true,
   //自定义左侧星期标志

@@ -4,7 +4,7 @@
     class="ChangePassword"
     data-type="form"
   >
-    <div style="height: 30px">修改密码</div>
+    <div style="height: 30px; font-size: 22px;">修改密码</div>
     <el-icon
       class="close cursor_pointer"
       size="30px"
@@ -124,13 +124,13 @@ var changePassword = reactive({
   position: relative;
   margin-bottom: $modelDistanceMini;
   width: 100%;
-  padding: 10px 80px;
+  padding: 12px 50px 12px 40px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  border-radius: 20px;
+  border-radius: 12px;
   @include box_shadow(0, 0, 8px, 1px, "fill14");
   @include fill_color("fill3");
 

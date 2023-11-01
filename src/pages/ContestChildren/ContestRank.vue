@@ -20,10 +20,10 @@
     <br>
     <template v-if="ACM == 1">
       <div class="header">
-        <div style="width:70px">排名</div>
-        <div style="width:300px">用户名</div>
+        <div style="width:70px">Rank</div>
+        <div style="width:300px">ID</div>
         <div style="width:120px">班级</div>
-        <div style="width:90px">AC数</div>
+        <div style="width:90px">总分</div>
         <div style="width:80px">罚时</div>
         <div v-for="(item, index) in contest.Data" :key="index" style="width:80px">
           {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) + "(" + item.ACNum + "/" + item.SubmitNum + ")" }}
@@ -50,7 +50,7 @@
           <div style="width:70px;">{{ index + 1 }}</div>
         </template>
 
-        <div style="width:300px;text-align: start;">{{ item.Uname }}({{ item.UserID }})</div>
+        <div style="width:300px;">{{ item.Uname }}({{ item.UserID }})</div>
         <div style="width:120px">{{ item.Uclass }}</div>
         <div style="width:90px">{{ item.ACNumber }}</div>
         <div style="width:80px">{{ proxy.Utils.TimeTools.timestampToInterval(item.TimePenalty * 1000, 2) }}</div>
@@ -608,7 +608,7 @@ function getBackgroundColor(item: ProblemsMapOfACMType | null) {
     if (item.SubmitNumber > 0) {
       if (item.Status == "AC")
         return "background-color:#7ace27 !important; color: #FEFEFE;";
-      else return "background-color:#e74a23 !important; color: #eaeaea;";
+      else return "background-color:#FFD0D0 !important; color: #eaeaea;";
     }
   }
 }
@@ -618,7 +618,7 @@ function getBackgroundColorOfOI(item: ProblemsMapOfOIType | null) {
       return "background-color:#2f9e44 !important; color: #eaeaea;";
     if (item.Submited) {
       if (item.Score == 100)
-        return "background-color:#7ace27 !important; color: #FEFEFE;";
+        return "background-color:#E1FFB5 !important; color: #FEFEFE;";
       else return "background-color:#e74a23 !important; color: #eaeaea;";
     }
   }
@@ -645,12 +645,13 @@ onMounted(() => {
   getRankList();
 });
 </script>
-
 <style lang="scss" scoped>
 .ContestRank {
   width: 100%;
+  height: 100%;
   box-sizing: border-box;
-  padding: $contestRank_outerPaddingTop $contestRank_outerPaddingLeft;
+  // padding: $contestRank_outerPaddingTop $contestRank_outerPaddingLeft;
+  padding: 10px 10px 0 50px;
   display: flex;
   flex-direction: column;
   overflow-x: scroll;
@@ -658,7 +659,7 @@ onMounted(() => {
 
   .contestID {
     font-size: $fontSize14;
-    @include font_color("font5");
+    @include font_color("font2");
     display: flex;
     align-items: center;
     border-radius: 10px;
@@ -686,7 +687,7 @@ onMounted(() => {
 
     .content {
       text-align: center;
-      font-size: $fontSize5;
+      font-size: $fontSize4;
       @include font_color("font3");
       box-sizing: border-box;
       padding: 10px 40px;
@@ -696,7 +697,7 @@ onMounted(() => {
       text-align: center;
       font-size: $fontSize4;
       @include font_color("font2");
-      padding: 0 40px 40px 40px;
+      padding: 0 40px 20px 40px;
       letter-spacing: 2px;
     }
   }
@@ -705,7 +706,8 @@ onMounted(() => {
     display: flex;
     align-items: center;
     height: $contestRank_headerHeight;
-    font-size: $fontSize4;
+    font-size: $fontSize5;
+    width: 100%;
     @include font_color("font1");
 
     >div {
@@ -713,19 +715,24 @@ onMounted(() => {
       height: 100%;
       line-height: $contestRank_headerHeight;
       text-align: center;
-      border-right: 1px solid;
+      border-top: 1px solid;
+      // border-right: 1px solid;
       border-bottom: 1px solid;
+      border-left: 1px solid;
+    // border-right: 1px solid;
       @include fill_color("fill14");
-      @include border_color("border1");
+      // @include border_color("border1");
       flex-shrink: 0;
+      border-color: black;
+      border-width: 2px;
 
       &:last-child {
         border-right: none;
-        border-start-end-radius: 10px;
+        border-start-end-radius: 0px;
       }
 
       &:first-child {
-        border-start-start-radius: 10px;
+        border-start-start-radius: 0px;
       }
     }
   }
@@ -736,23 +743,26 @@ onMounted(() => {
     display: flex;
     align-items: center;
     font-size: $fontSize3;
-    @include font_color("font2");
+    border-left: 1px solid;
+    // border-right: 1px solid;
+    border-width: 2px;
+    // @include font_color("font2");
 
     &:last-child {
       >div {
         &:first-child {
-          border-end-start-radius: 10px;
+          border-end-start-radius: 0px;
         }
 
         &:last-child {
-          border-end-end-radius: 10px;
+          border-end-end-radius: 0px;
         }
       }
     }
 
     .medalIcon {
       position: absolute;
-      top: 8px;
+      top: 2px;
       left: -40px;
 
       svg {
@@ -770,7 +780,9 @@ onMounted(() => {
       border-bottom: 1px solid;
       flex-shrink: 0;
       @include fill_color("fill4");
-      @include border_color("border1");
+      @include border_color("border0");
+      border-color: black;
+      border-width: 2px;
 
       &:last-child {
         border-right: none;
@@ -786,13 +798,14 @@ onMounted(() => {
       div {
         height: 20px;
         line-height: 20px;
+        color: black;
 
         &:first-child {
           font-size: $fontSize3;
         }
 
         &:last-child {
-          font-size: $fontSize2;
+          font-size: $fontSize3;
         }
       }
     }

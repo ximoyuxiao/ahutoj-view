@@ -145,12 +145,12 @@ onMounted(() => {
 .changeHeadImage {
   position: relative;
   margin-top: $modelDistance;
-  padding: 10px 80px;
+  padding: 12px 50px 12px 40px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  border-radius: 20px;
+  border-radius: 12px;
   @include box_shadow(0, 0, 8px, 1px, "fill52");
 
   &:hover {
@@ -160,7 +160,7 @@ onMounted(() => {
 
   >.title {
     @include font_color("font1");
-    font-size: $fontSize6;
+    font-size: $fontSize8;
     letter-spacing: 1px;
     display: flex;
     min-width: 100%;
@@ -200,7 +200,7 @@ onMounted(() => {
         >.img {
           height: $userCenter_UserHeadImageSide;
           width: $userCenter_UserHeadImageSide;
-          border-radius: 20px;
+          border-radius: 12px;
           @include box_shadow(0, 0, 2px, 1px, "font2");
           overflow: hidden;
           display: flex;
@@ -247,9 +247,9 @@ onMounted(() => {
     position: relative;
     overflow: hidden;
     margin: 8px 0;
-    width: 220px;
+    width: 200px;
     height: 40px;
-    border-radius: 15px;
+    border-radius: 12px;
     font-size: $fontSize5;
     @include font_color("font1");
     letter-spacing: 4px;

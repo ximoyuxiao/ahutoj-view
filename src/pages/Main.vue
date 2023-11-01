@@ -240,14 +240,13 @@ onMounted(() => {
 
 <style  scoped lang="scss">
 .main {
-  min-height: 90vh;
+  // min-height: 90vh;
   box-sizing: border-box;
 
   .contentBox {
     width: 100%;
     // min-width: 800px;
     box-sizing: border-box;
-    padding-top: $navBarHeight;
     display: flex;
     flex-direction: column;
     z-index: 1;
@@ -278,7 +277,7 @@ onMounted(() => {
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  // filter: blur(35px);
+  filter: blur(35px);
 }
 
 </style>
