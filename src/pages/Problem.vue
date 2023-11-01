@@ -572,9 +572,9 @@ onMounted(() => {
 
 <template>
   <el-container class="Main">
-    <el-asider class="" style="width: 300px;">
+    <el-asider class="">
       <el-container class="Left">
-        <el-header class="Container" v-if="contest.isContestProblem">
+        <el-header style="width: 300px;" class="Container" v-if="contest.isContestProblem">
           <el-row class="ArtFont contestHeader Bold">
             <div class="cursor_pointer" @click="backToContest">
               <el-icon size="22px">
@@ -616,7 +616,7 @@ onMounted(() => {
             </div>
           </div>
         </el-header> -->
-        <el-main class="Container">
+        <el-main class="Container" style="width: 300px;">
           <div class="">
             <el-row class="Bold ArtFont">
               <div class="PID">{{ problem.PID }}</div>
