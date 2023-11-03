@@ -574,107 +574,88 @@ onMounted(() => {
   <el-container class="Main">
     <el-asider class="">
       <el-container class="Left">
-        <el-header style="width: 300px;" class="Container" v-if="contest.isContestProblem">
-          <el-row class="ArtFont contestHeader Bold">
-            <div class="cursor_pointer" @click="backToContest">
-              <el-icon size="22px">
-                <Back />
-              </el-icon>
-            </div>
-            &nbsp;#{{ contest.CID }}
-            <div class="Title" ref="contestInfo">
-              <div>
-                &nbsp;{{ contest.info.Title }}
+        <el-affix>
+          <el-header style="width: 300px;" class="Container" v-if="contest.isContestProblem">
+            <el-row class="ArtFont contestHeader Bold">
+              <div class="cursor_pointer" @click="backToContest">
+                <el-icon size="22px">
+                  <Back />
+                </el-icon>
               </div>
-            </div>
-          </el-row>
-          <div class="problemBox" ref="contestInfo">
-            <div :class="'cursor_pointer ' + (item.PID == problem.PID ? 'nowProblem' : '')
-              " v-for="(item, index) in contest.info.Data" :key="index" v-on:click="goToProblem(item.PID)">
-              {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
-            </div>
-          </div>
-        </el-header>
-        <!-- <el-header class="Container" v-else>
-          <el-row class="ArtFont contestHeader Bold">
-            <div class="cursor_pointer" @click="null">
-              <el-icon size="22px">
-                <Back />
-              </el-icon>
-            </div>
-            &nbsp;#{{ contest.CID }}
-            <div class="title" ref="contestInfo">
-              <div>
-                &nbsp;{{ contest.info.Title }}
+              &nbsp;#{{ contest.CID }}
+              <div class="Title" ref="contestInfo">
+                <div>
+                  &nbsp;{{ contest.info.Title }}
+                </div>
               </div>
-            </div>
-          </el-row>
-          <div class="problemBox" ref="contestInfo">
-            <div :class="'cursor_pointer ' + (item.PID == problem.PID ? 'nowProblem' : '')
-              " v-for="(item, index) in contest.info.Data" :key="index" v-on:click="goToProblem(item.PID)">
-              {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
-            </div>
-          </div>
-        </el-header> -->
-        <el-main class="Container" style="width: 300px;">
-          <div class="">
-            <el-row class="Bold ArtFont">
-              <div class="PID">{{ problem.PID }}</div>
-              <div class="Title">&nbsp;{{ problem.Title }}</div>
             </el-row>
-            <div ref="demand" class="ArtFont interval">
-              <el-row class="demandComponent">
-                时间限制: {{ problem.LimitTime }} ms
-              </el-row>
-              <el-row class="demandComponent">
-                内存限制: {{ problem.LimitMemory }} MiB
-              </el-row>
+            <div class="problemBox" ref="contestInfo">
+              <div :class="'cursor_pointer ' + (item.PID == problem.PID ? 'nowProblem' : '')
+                " v-for="(item, index) in contest.info.Data" :key="index" v-on:click="goToProblem(item.PID)">
+                {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
+              </div>
             </div>
-            <el-collapse class="interval">
-              <el-collapse-item title="Tag" name="1">
-                <div class="tags" v-if="problem.Label.length != 0">
-                  <el-tag v-for="tag in problem.Label.split(/;| /)" :key="tag">
-                    {{ tag }}
-                  </el-tag>
-                </div>
-              </el-collapse-item>
-            </el-collapse>
-            <!-- <span class="modeNow">
-              当前模式：{{ aceConfig.modeNow }}
-            </span>
-            <br /> -->
-            <div class="function interval">
-              <el-row v-if="admin" justify="center" class="interval">
-                <el-button v-on:click="goToProblemAdmin()" class="adminButton">题目编辑</el-button>
-                <el-button v-on:click="goToProblemTestDataAdmin()" class="adminButton">数据管理</el-button>
+          </el-header>
+          <el-main class="Container" style="width: 300px;">
+            <div class="">
+              <el-row class="Bold ArtFont">
+                <div class="PID">{{ problem.PID }}</div>
+                <div class="Title">&nbsp;{{ problem.Title }}</div>
               </el-row>
-              <el-row justify="center">
-                <div class="solutions cursor_pointer" @click="goToSolution(problem.PID)">
-                  <el-row>
-                    <el-icon size="22px">
-                      <DataAnalysis />
-                    </el-icon>
-                    &nbsp;&nbsp;题&nbsp;解
-                  </el-row>
-                </div>
-              </el-row>
-              <el-row justify="center">
-                <div :class="submit.enabled ? 'submit cursor_pointer cursor_noFocus' : 'submitNotEnable cursor_pointer'"
-                  @click="submit.submit()">
-                  <template v-if="submit.enabled">
+              <div ref="demand" class="ArtFont interval">
+                <el-row class="demandComponent">
+                  时间限制: {{ problem.LimitTime }} ms
+                </el-row>
+                <el-row class="demandComponent">
+                  内存限制: {{ problem.LimitMemory }} MiB
+                </el-row>
+              </div>
+              <el-collapse class="interval">
+                <el-collapse-item title="Tag" name="1">
+                  <div class="tags" v-if="problem.Label.length != 0">
+                    <el-tag v-for="tag in problem.Label.split(/;| /)" :key="tag">
+                      {{ tag }}
+                    </el-tag>
+                  </div>
+                </el-collapse-item>
+              </el-collapse>
+              <!-- <span class="modeNow">
+                当前模式：{{ aceConfig.modeNow }}
+              </span>
+              <br /> -->
+              <div class="function interval">
+                <el-row v-if="admin" justify="center" class="interval">
+                  <el-button v-on:click="goToProblemAdmin()" class="adminButton">题目编辑</el-button>
+                  <el-button v-on:click="goToProblemTestDataAdmin()" class="adminButton">数据管理</el-button>
+                </el-row>
+                <el-row justify="center">
+                  <div class="solutions cursor_pointer" @click="goToSolution(problem.PID)">
                     <el-row>
                       <el-icon size="22px">
-                        <Check />
+                        <DataAnalysis />
                       </el-icon>
-                      &nbsp;&nbsp;提&nbsp;交
+                      &nbsp;&nbsp;题&nbsp;解
                     </el-row>
-                  </template>
-                  <template v-else> {{ (submit.process / 1000).toFixed(2) }}S</template>
-                </div>
-              </el-row>
+                  </div>
+                </el-row>
+                <el-row justify="center">
+                  <div :class="submit.enabled ? 'submit cursor_pointer cursor_noFocus' : 'submitNotEnable cursor_pointer'"
+                    @click="submit.submit()">
+                    <template v-if="submit.enabled">
+                      <el-row>
+                        <el-icon size="22px">
+                          <Check />
+                        </el-icon>
+                        &nbsp;&nbsp;提&nbsp;交
+                      </el-row>
+                    </template>
+                    <template v-else> {{ (submit.process / 1000).toFixed(2) }}S</template>
+                  </div>
+                </el-row>
+              </div>
             </div>
-          </div>
-        </el-main>
+          </el-main>
+        </el-affix>
       </el-container>
     </el-asider>
     <el-container class="Left">
@@ -782,6 +763,7 @@ onMounted(() => {
       </el-footer>
     </el-container>
   </el-container>
+  
 </template>
 
 

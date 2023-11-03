@@ -1,16 +1,28 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
+import { useThemeSwitchStore } from "../pinia/themeSwitch";
+import MdEditor from "md-editor-v3";
+import "md-editor-v3/lib/style.css";
 const tabPosition = ref('left')
+const themeSwitchStore = useThemeSwitchStore();
 </script>
 
 <template>
     <el-container class="main">
-        <el-header class="Container">
+        <!-- <el-header class="Container">
 
-        </el-header>
+        </el-header> -->
         <el-main class="Container mainContainer">
             <div class="title">
-
+                <el-tabs :tab-position="tabPosition" style="height: 200px" class="demo-tabs">
+                    <el-tab-pane label="OJ 信息">
+                        <!-- <md-editor class="mdEditor" v-model=""
+                            :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'" preview-only /> -->
+                    </el-tab-pane>
+                    <el-tab-pane label="比赛"></el-tab-pane>
+                    <el-tab-pane label="出题要求"></el-tab-pane>
+                    <el-tab-pane label="To-do"></el-tab-pane>
+                </el-tabs>
             </div>
         </el-main>
         <el-footer class="Container Footer ArtFont Bottom">
@@ -40,6 +52,7 @@ const tabPosition = ref('left')
 .mainContainer {
     width: 800px;
     height: 100%;
+    padding: 24px;
     // float: left;
 }
 </style>

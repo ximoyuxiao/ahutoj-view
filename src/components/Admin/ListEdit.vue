@@ -13,15 +13,19 @@
       </el-menu-item>
     </router-link>
   </el-menu>
-  <div class="ListEdit">
-    <div class="content">
-      <router-view v-slot="{ Component }">
-        <transition enter-active-class="animate__animated animate__fadeInRight">
-          <component :is="Component" />
-        </transition>
-      </router-view>
-    </div>
-  </div>
+  <el-container>
+        <el-main class="Container">
+          <div class="ListEdit">
+            <div class="content">
+              <router-view v-slot="{ Component }">
+                <transition enter-active-class="animate__animated animate__fadeInRight">
+                  <component :is="Component" />
+                </transition>
+              </router-view>
+            </div>
+          </div>
+        </el-main>
+    </el-container>
 </template>
 
 <script lang="ts" setup>
@@ -75,11 +79,12 @@ onMounted(() => {
   }
 
   .content {
-    @include fill_color("fill1");
+    // @include fill_color("fill1");
     box-sizing: border-box;
-    padding: $adminCenter_contentPadding;
+    padding: 12px;
+    // padding: $adminCenter_contentPadding;
     width: 100%;
-    min-height: 400px;
+    // min-height: 400px;
   }
 }
 </style>

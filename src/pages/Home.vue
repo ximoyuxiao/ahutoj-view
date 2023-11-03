@@ -363,8 +363,6 @@ onMounted(() => {
       padding: 2px 2px;
       animation-duration: 600ms;
 
-      .noticeItem {}
-
       .item {
         height: 35px;
         width: 100%;

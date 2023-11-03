@@ -240,7 +240,7 @@ onMounted(() => {
 
 <style  scoped lang="scss">
 .main {
-  // min-height: 90vh;
+  // min-height: 100vh;
   box-sizing: border-box;
 
   .contentBox {
