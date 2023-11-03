@@ -762,6 +762,7 @@ onMounted(() => {
         </el-row>
       </el-footer>
     </el-container>
+    <el-backtop style="height: 50px; width: 50px;" :right="80" :bottom="80" />
   </el-container>
   
 </template>
