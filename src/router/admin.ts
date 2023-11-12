@@ -1,21 +1,3 @@
-// import Admin from "../pages/Admin.vue";
-// import ProblemEdit from "../components/Admin/ProblemEdit.vue";
-// import AddProblem from "../components/Admin/ProblemEditChildren/AddProblem.vue";
-// import UpdateProblem from "../components/Admin/ProblemEditChildren/UpdateProblem.vue";
-// import EditProblemJudgeFile from "../components/Admin/ProblemEditChildren/EditProblemJudgeFile.vue";
-// import ContestEdit from "../components/Admin/ContestEdit.vue";
-// import AddContest from "../components/Admin/ContestEditChildren/AddContest.vue";
-// import UpdateContest from "../components/Admin/ContestEditChildren/UpdateContest.vue";
-// import ListEdit from "../components/Admin/ListEdit.vue";
-// import AddList from "../components/Admin/ListEditChildren/AddList.vue";
-// import UpdateList from "../components/Admin/ListEditChildren/UpdateList.vue";
-// import UserEdit from "../components/Admin/UserEdit.vue";
-// import AddUser from "../components/Admin/UserEditChildren/AddUser.vue";
-// import BatchAddUser from "../components/Admin/UserEditChildren/BatchAddUser.vue";
-// import UpdateUser from "../components/Admin/UserEditChildren/UpdateUser.vue";
-// import AdminEdit from "../components/Admin/AdminEdit.vue";
-// import AddAdmin from "../components/Admin/AdminEditChildren/AddAdmin.vue";
-// import UpdateAdmin from "../components/Admin/AdminEditChildren/UpdateAdmin.vue";
 import {
 	NavigationGuardNext,
 	RouteLocationNormalized,
@@ -23,7 +5,7 @@ import {
 import {
 	needAdminCertificate,
 	needContestAdminCertificate,
-	needListAdminCertificate, 
+	needListAdminCertificate,
 	needProblemAdminCertificate,
 	needSuperAdminCertificate,
 } from "./guard";
@@ -80,17 +62,52 @@ const Admin = {
 						),
 				},
 				{
-					path:"UploadProblem",
+					path: "UploadProblem",
 					component: () =>
 						import(
 							"../components/Admin/ProblemEditChildren/UploadProblem.vue"
 						),
 				},
 				{
-					path:"DownloadProblem",
+					path: "DownloadProblem",
 					component: () =>
 						import(
 							"../components/Admin/ProblemEditChildren/DownloadProblem.vue"
+						),
+				},
+			],
+		},
+		{
+			path: "DataGenerator",
+			component: () => import("../components/Admin/DataGenerator.vue"),
+			beforeEnter: (
+				to: RouteLocationNormalized,
+				from: RouteLocationNormalized,
+				next: NavigationGuardNext
+			) => {
+				if (needProblemAdminCertificate()) next();
+			},
+			redirect: "/Admin/DataGenerator/V1DataGenerator",
+			children: [
+				{
+					path: "V1DataGenerator",
+					component: () =>
+						import(
+							"../components/Admin/DataGeneratorChildren/V1DataGenerator.vue"
+						),
+				},
+				{
+					path: "V2DataGenerator",
+					component: () =>
+						import(
+							"../components/Admin/DataGeneratorChildren/V2DataGenerator.vue"
+						),
+				},
+				{
+					path: "V3DataGenerator",
+					component: () =>
+						import(
+							"../components/Admin/DataGeneratorChildren/V3DataGenerator.vue"
 						),
 				},
 			],
@@ -164,17 +181,17 @@ const Admin = {
 						),
 				},
 				{
-					path: "BatchAddUser",
-					component: () =>
-						import(
-							"../components/Admin/UserEditChildren/BatchAddUser.vue"
-						),
-				},
-				{
 					path: "UpdateUser",
 					component: () =>
 						import(
 							"../components/Admin/UserEditChildren/UpdateUser.vue"
+						),
+				},
+				{
+					path: "BatchAddUser",
+					component: () =>
+						import(
+							"../components/Admin/UserEditChildren/BatchAddUser.vue"
 						),
 				},
 			],

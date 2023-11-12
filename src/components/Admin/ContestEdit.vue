@@ -2,26 +2,34 @@
   <el-menu class="contestEdit" mode="horizontal">
     <router-link active-class="selected" to="/Admin/ContestEdit/AddContest">
       <el-menu-item index="1">
-        <el-icon><Plus /></el-icon>
+        <el-icon>
+          <Plus />
+        </el-icon>
         新增
       </el-menu-item>
     </router-link>
     <router-link active-class="selected" to="/Admin/ContestEdit/UpdateContest">
       <el-menu-item index="2">
-        <el-icon><Edit /></el-icon>
+        <el-icon>
+          <Edit />
+        </el-icon>
         编辑
       </el-menu-item>
     </router-link>
   </el-menu>
-  <div class="contestEdit">
-    <div class="content">
-      <router-view v-slot="{ Component }">
-        <transition enter-active-class="animate__animated animate__fadeInRight">
-          <component :is="Component" />
-        </transition>
-      </router-view>
-    </div>
-  </div>
+  <el-container>
+    <el-main class="Container">
+      <div class="contestEdit">
+        <div class="content">
+          <router-view v-slot="{ Component }">
+            <transition enter-active-class="animate__animated animate__fadeInRight">
+              <component :is="Component" />
+            </transition>
+          </router-view>
+        </div>
+      </div>
+    </el-main>
+  </el-container>
 </template>
 
 <script lang="ts">
@@ -63,11 +71,11 @@ export default {
   }
 
   .content {
-    @include fill_color('fill1');
+    // @include fill_color('fill1');
     box-sizing: border-box;
-    padding: $adminCenter_contentPadding;
+    padding: 12px;
+    // padding: $adminCenter_contentPadding;
     width: 100%;
-    min-height: 400px;
+    // min-height: 400px;
   }
-}
-</style>
+}</style>

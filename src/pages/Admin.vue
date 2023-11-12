@@ -1,48 +1,3 @@
-<template>
-  <el-menu class="adminHeader" mode="horizontal" v-if="config.Administrator">
-    <el-row class="adminPageFlag">AHUT OJ 管理</el-row>
-    <router-link active-class="selected" to="/Admin/ProblemEdit">
-      <el-menu-item index="1" v-if="config.ProblemAdmin">
-        题目管理
-      </el-menu-item>
-    </router-link>
-    <router-link active-class="selected" to="/Admin/ContestEdit">
-      <el-menu-item index="2" v-if="config.ContestAdmin">
-        竞赛管理  
-      </el-menu-item>
-    </router-link>
-    <router-link v-if="config.ListAdmin" active-class="selected" to="/Admin/ListEdit">
-      <el-menu-item index="3">
-        题单管理
-      </el-menu-item>
-    </router-link>
-    <router-link v-if="config.Administrator" active-class="selected" to="/Admin/UserEdit">
-      <el-menu-item index="4">
-        用户管理
-      </el-menu-item>
-    </router-link>
-    <router-link v-if="config.SuperAdmin" active-class="selected" to="/Admin/AdminEdit">
-      <el-menu-item index="5">
-        权限管理
-      </el-menu-item>
-    </router-link>
-    <router-link v-if="config.Administrator" active-class="selected" to="/Admin/NoticeEdit">
-      <el-menu-item index="6">
-        公告管理
-      </el-menu-item>
-    </router-link>
-  </el-menu>
-  <div class="admin">
-    <div class="content">
-      <router-view v-slot="{ Component }">
-        <transition enter-active-class="animate__animated animate__fadeInUp">
-          <component :is="Component" />
-        </transition>
-      </router-view>
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { getCurrentInstance, onMounted, reactive } from "vue";
 import { useConstValStore } from "../pinia/constVal";
@@ -182,6 +137,57 @@ onMounted(() => {
 });
 </script>
 
+<template>
+  <el-menu class="adminHeader" mode="horizontal" v-if="config.Administrator">
+    <el-row class="adminPageFlag">AHUT OJ 管理</el-row>
+    <router-link v-if="config.ProblemAdmin" active-class="selected" to="/Admin/ProblemEdit">
+      <el-menu-item index="1">
+        题目
+      </el-menu-item>
+    </router-link>
+    <router-link v-if="config.ContestAdmin" active-class="selected" to="/Admin/DataGenerator">
+      <el-menu-item index="2">
+        数据生成器
+      </el-menu-item>
+    </router-link>
+    <router-link v-if="config.ContestAdmin" active-class="selected" to="/Admin/ContestEdit">
+      <el-menu-item index="3">
+        竞赛
+      </el-menu-item>
+    </router-link>
+    <router-link v-if="config.ListAdmin" active-class="selected" to="/Admin/ListEdit">
+      <el-menu-item index="4">
+        题单
+      </el-menu-item>
+    </router-link>
+    <router-link v-if="config.Administrator" active-class="selected" to="/Admin/UserEdit">
+      <el-menu-item index="5">
+        用户
+      </el-menu-item>
+    </router-link>
+    <router-link v-if="config.SuperAdmin" active-class="selected" to="/Admin/AdminEdit">
+      <el-menu-item index="6">
+        权限
+      </el-menu-item>
+    </router-link>
+    <router-link v-if="config.Administrator" active-class="selected" to="/Admin/NoticeEdit">
+      <el-menu-item index="7">
+        公告
+      </el-menu-item>
+    </router-link>
+  </el-menu>
+  <div class="admin Bottom">
+    <div class="content">
+      <router-view v-slot="{ Component }">
+        <transition enter-active-class="animate__animated animate__fadeInUp">
+          <component :is="Component"/>
+        </transition>
+      </router-view>
+    </div>
+  </div>
+</template>
+
+
 <style scoped lang="scss">
 .adminHeader {
   height: 55px;
@@ -198,17 +204,21 @@ onMounted(() => {
 }
 
 .admin {
-  width: 100%;
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  box-sizing: border-box;
-  z-index: 1;
+  width: min(100% - 32px, 1200px);
+  // width: 100%;
+  // position: relative;
+  // // display: flex;
+  // // align-items: flex-start;
+  // box-sizing: border-box;
+  // z-index: 1;
+  align-self: center;
+  // align-items: center;
 
 
   .content {
+    align-self: center;
     // width: calc(100% - 260px);
-    width: calc(min(100%, 1200px));
+    // width: min(100% - 32px, 1200px);
   }
 }
 </style>
