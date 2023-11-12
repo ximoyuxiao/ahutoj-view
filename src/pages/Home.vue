@@ -351,7 +351,7 @@ onMounted(() => {
 
 .notice {
   width: 100%;
-  height: 300px;
+  height: 100%;
   display: flex;
   border-radius: 8px;
   // @include fill_color("fill1");
