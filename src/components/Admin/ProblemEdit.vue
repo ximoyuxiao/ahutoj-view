@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: "ProblemEdit",
+};
+</script>
+
 <template>
   <el-menu class="ProblemEdit" mode="horizontal">
     <router-link active-class="selected" to="/Admin/ProblemEdit/AddProblem">
@@ -49,26 +55,16 @@
       </el-menu-item>
     </router-link>
   </el-menu>
-  <el-container>
-    <el-main class="Container">
-      <div class="ProblemEdit">
-        <div class="content">
-          <router-view v-slot="{ Component }">
-            <transition enter-active-class="animate__animated animate__fadeInRight">
-              <component :is="Component" />
-            </transition>
-          </router-view>
-        </div>
-      </div>
-    </el-main>
-  </el-container>
+  <div class="ProblemEdit">
+    <div class="content">
+      <router-view v-slot="{ Component }">
+        <transition enter-active-class="animate__animated animate__fadeInRight">
+          <component :is="Component" />
+        </transition>
+      </router-view>
+    </div>
+  </div>
 </template>
-
-<script lang="ts">
-export default {
-  name: "ProblemEdit",
-};
-</script>
 
 <style scoped lang="scss">
 .ProblemEdit {
@@ -110,4 +106,5 @@ export default {
     width: 100%;
     // min-height: 400px;
   }
-}</style>
+}
+</style>

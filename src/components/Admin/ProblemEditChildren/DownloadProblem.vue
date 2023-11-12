@@ -1,81 +1,3 @@
-<template>
-    <div class="updateProblem">
-        <div class="search">
-            <span style="width: 70px">题号：</span>
-            <el-input
-                v-model="search.PID"
-                style="width:200px;"
-                v-on:focus="search.onFocus()"
-            />
-            <el-button
-                plain
-                v-on:click="search.DownloadProblem(null)"
-            >下载</el-button>
-            <div style="color: red;text-align: center; font-size:15px;">&nbsp&nbsp题目间以逗号隔开</div>
-        </div>
-        <el-divider></el-divider>
-        <div class="showList">
-            <el-button
-                plain
-                v-on:click="searchList.showList()"
-            >
-                {{searchList.isShowed ? "关闭列表" : "显示列表" }}
-            </el-button>
-            <el-button
-                plain
-                v-show="searchList.isShowed"
-                v-on:click="searchList.selectAll()"
-            >
-                当页全选
-            </el-button>
-            <el-button
-                plain
-                v-show="searchList.isShowed"
-                type="warning"
-                v-on:click="searchList.Downloads()"
-            >
-                批量下载
-            </el-button>
-        </div>
-        <div
-            v-show="searchList.isShowed"
-            class="list"
-        >
-            <div
-                v-for="(item, index) in searchList.Data"
-                :class="item.selected ? 'item itemSelected' : 'item'"
-                :key="index"
-            >
-                <input
-                    type="checkbox"
-                    :checked="item.selected"
-                    @change.stop="searchList.selectProblem(index)"
-                >
-                <div
-                    class="title cursor_pointer"
-                    @click.stop="search.DownloadProblem(item.PID)"
-                >
-                    {{ item.PID }}&nbsp;-&nbsp;{{ item.Title }}
-                </div>
-
-            </div>
-        </div>
-        <div
-            v-show="searchList.isShowed"
-            class="pagination"
-        >
-            <el-pagination
-                background
-                layout="prev, pager, next"
-                :page-size="configList.limit"
-                :total="configList.Count"
-                :current-page="configList.currentPage"
-                @current-change="searchList.changePage"
-            />
-        </div>
-    </div>
-</template>
-
 <script lang="ts" setup>
 import { getCurrentInstance, reactive } from "vue";
 import { ElMessageBox } from "element-plus";
@@ -141,14 +63,14 @@ var search = reactive({
             let data = res.data;
             console.log(data)
             res.downloa
-            if(typeof data.code != 'undefined'){
+            if (typeof data.code != 'undefined') {
                 proxy.codeProcessor(
                     data?.code ?? 100001,
                     data?.msg ?? "服务器错误\\\\error"
                 );
-            }else{
+            } else {
                 let fileName = Date.now() + ".json";
-                const blob = new Blob([JSON.stringify(data,null,"\t")]);
+                const blob = new Blob([JSON.stringify(data, null, "\t")]);
                 const url = window.URL.createObjectURL(blob);
                 console.log(blob);
                 console.log(url);
@@ -301,9 +223,9 @@ var searchList = reactive({
         proxy
             .$get(
                 "api/problem/list?Page=" +
-                    (configList.currentPage - 1) +
-                    "&Limit=" +
-                    configList.limit
+                (configList.currentPage - 1) +
+                "&Limit=" +
+                configList.limit
             )
             .then((res: any) => {
                 let data = res.data;
@@ -349,9 +271,9 @@ var searchList = reactive({
                 tempSelected.push(item.PID);
             }
         });
-        for(let i = 0;i<tempSelected.length;i++){
+        for (let i = 0; i < tempSelected.length; i++) {
             tempString += tempSelected[i];
-            if(i != tempSelected.length -1)
+            if (i != tempSelected.length - 1)
                 tempString += ",";
         }
         if (tempSelected.length <= 0) {
@@ -396,8 +318,8 @@ function uploadF(f: any) {
                             message: `
               <strong>${f.name}上传成功</strong><br/>
               <span>已压缩:${(f.size / 1024).toFixed(2)}KB->${(
-                                response.data.size / 1024
-                            ).toFixed(2)}KB</span>
+                                    response.data.size / 1024
+                                ).toFixed(2)}KB</span>
             `,
                             type: "success",
                             duration: 5000,
@@ -482,6 +404,46 @@ function complete() {
 }
 </script>
 
+
+<template>
+    <el-container>
+        <el-main class="Container">
+            <div class="search">
+                <span style="width: 70px">题号：</span>
+                <el-input v-model="search.PID" style="width:200px;" v-on:focus="search.onFocus()" />
+                <el-button plain v-on:click="search.DownloadProblem(null)">下载</el-button>
+                <div style="color: red;text-align: center; font-size:15px;">&nbsp&nbsp题目间以逗号隔开</div>
+            </div>
+            <el-divider></el-divider>
+            <div class="showList">
+                <el-button plain v-on:click="searchList.showList()">
+                    {{ searchList.isShowed ? "关闭列表" : "显示列表" }}
+                </el-button>
+                <el-button plain v-show="searchList.isShowed" v-on:click="searchList.selectAll()">
+                    当页全选
+                </el-button>
+                <el-button plain v-show="searchList.isShowed" type="warning" v-on:click="searchList.Downloads()">
+                    批量下载
+                </el-button>
+            </div>
+            <div v-show="searchList.isShowed" class="list">
+                <div v-for="(item, index) in searchList.Data" :class="item.selected ? 'item itemSelected' : 'item'"
+                    :key="index">
+                    <input type="checkbox" :checked="item.selected" @change.stop="searchList.selectProblem(index)">
+                    <div class="title cursor_pointer" @click.stop="search.DownloadProblem(item.PID)">
+                        {{ item.PID }}&nbsp;-&nbsp;{{ item.Title }}
+                    </div>
+
+                </div>
+            </div>
+            <div v-show="searchList.isShowed" class="pagination">
+                <el-pagination background layout="prev, pager, next" :page-size="configList.limit" :total="configList.Count"
+                    :current-page="configList.currentPage" @current-change="searchList.changePage" />
+            </div>
+        </el-main>
+    </el-container>
+</template>
+
 <style scoped lang="scss">
 .search {
     display: flex;
@@ -500,14 +462,14 @@ function complete() {
         display: flex;
         flex-direction: column;
 
-        > div {
+        >div {
             display: flex;
             align-content: center;
             justify-content: flex-start;
             box-sizing: border-box;
             margin: 5px 0;
 
-            > span {
+            >span {
                 display: block;
                 font-size: 22px;
                 width: 150px;
@@ -516,14 +478,14 @@ function complete() {
         }
     }
 
-    > div {
+    >div {
         display: flex;
         align-content: center;
         justify-content: flex-start;
         box-sizing: border-box;
         margin: 5px 0;
 
-        > span {
+        >span {
             display: block;
             font-size: 22px;
             width: 150px;

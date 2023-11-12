@@ -190,7 +190,7 @@ onMounted(() => {
 
 
 <template>
-  <el-dialog v-model="centerDialogVisible" :title=notices.noticeList[notices.Selected].Title show-close="false" center
+  <el-dialog v-model="centerDialogVisible" :title=notices.noticeList[notices.Selected].Title close-icon="false" center
     style="border-radius: 8px; width: min(80%, 700px);">
     <template #title>
       <div class="Title Bold ArtFont" style="font-size: 22px;">
@@ -201,8 +201,8 @@ onMounted(() => {
       :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'" preview-only />
     <template #footer>
       <span class="dialog-footer">
-        <el-button type="primary" @click="centerDialogVisible = false">
-          我已阅读，并同意
+        <el-button type="primary" @click="centerDialogVisible = false" style="width: 80px;">
+          <el-icon><Select /></el-icon>
         </el-button>
       </span>
     </template>
@@ -211,13 +211,13 @@ onMounted(() => {
     <el-empty description="数据同步失败,可能是网络问题，请稍后重试，或者联系网站运维人员。" />
   </div>
   <el-container class="Main">
-    <el-header class="Container">
+    <!-- <el-header class="Container">
       <div>
         <p><strong>安徽工业大学 Online Judge</strong> 欢迎各位<strong>安工大</strong>和<strong>皖江工</strong>新生老生参与本次招新赛</p>
         <p>招新赛时间：13:00 ~ 18:00</p>
         <p>请留意置顶公告，刷新即可获取最新公告</p>
       </div>
-    </el-header>
+    </el-header> -->
     <el-container>
       <el-main class="Container">
         <div class="Title ArtFont Bold">
@@ -357,7 +357,7 @@ onMounted(() => {
   // @include fill_color("fill1");
 
   .left {
-    margin-top: 8px;
+    // margin-top: 8px;
     width: 100%;
     z-index: 2;
     overflow-y: auto;
@@ -383,9 +383,9 @@ onMounted(() => {
         border-radius: 8px;
         box-sizing: border-box;
         padding: 0px 10px;
-        margin: 0 0 8px;
+        margin: 8px 0 0 0;
         @include fill_color("fill3");
-        @include box_shadow(0, 0, 5px, 1px, "fill54");
+        // @include box_shadow(0, 0, 5px, 1px, "fill54");
         font-size: $fontSize2;
 
         .rightTime {
