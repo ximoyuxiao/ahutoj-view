@@ -16,6 +16,9 @@ const themeSwitchStore = useThemeSwitchStore();
             <div class="title">
                 <el-tabs :tab-position="tabPosition" style="height: 200px" class="demo-tabs">
                     <el-tab-pane label="OJ 信息">
+                        <!-- <iframe :src="OJInfo" frameborder="0" style="width: 100%; height: 100%;">
+                        
+                        </iframe> -->
                         <!-- <md-editor class="mdEditor" v-model=""
                             :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'" preview-only /> -->
                     </el-tab-pane>

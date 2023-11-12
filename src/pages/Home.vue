@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import { onMounted, reactive, getCurrentInstance } from "vue";
+import { onMounted, reactive, getCurrentInstance, ref } from "vue";
 import { usePageBufferedDataStore } from "../pinia/pageBufferdData";
 import { relative } from "path";
 import MdEditor from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 import { useThemeSwitchStore } from "../pinia/themeSwitch";
 const { proxy } = getCurrentInstance() as any;
+const centerDialogVisible = ref(true);
 const themeSwitchStore = useThemeSwitchStore();
 const pageBufferedDataStore = usePageBufferedDataStore();
 //页面配置
@@ -189,22 +190,121 @@ onMounted(() => {
 
 
 <template>
+  <el-dialog v-model="centerDialogVisible" :title=notices.noticeList[notices.Selected].Title show-close="false" center
+    style="border-radius: 8px; width: min(80%, 700px);">
+    <template #title>
+      <div class="Title Bold ArtFont" style="font-size: 22px;">
+        {{ notices.noticeList[notices.Selected].Title }}
+      </div>
+    </template>
+    <md-editor class="markDown" v-model="notices.noticeList[notices.Selected].Content"
+      :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'" preview-only />
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button type="primary" @click="centerDialogVisible = false">
+          我已阅读，并同意
+        </el-button>
+      </span>
+    </template>
+  </el-dialog>
   <div class="error" v-show="config.isError">
     <el-empty description="数据同步失败,可能是网络问题，请稍后重试，或者联系网站运维人员。" />
   </div>
   <el-container class="Main">
     <el-header class="Container">
-      <div class="notice">
-        <div class="left">
-          <div class="noticeItem">
-            <div :class="item.Title != '' ? 'item' : 'nothing'" class="cursor_pointer"
-              v-for="(item, index) in notices.noticeList" :key="index" @click="notices.SelectIdx(index)">
-              <div>{{ item.Title }}<span class="rightTime">{{ item.CreateTime ? (
-                proxy.Utils.TimeTools.timestampToTime(item.CreateTime)) : "" }}</span></div>
+      <div>
+        <p><strong>安徽工业大学 Online Judge</strong> 欢迎各位<strong>安工大</strong>和<strong>皖江工</strong>新生老生参与本次招新赛</p>
+        <p>招新赛时间：13:00 ~ 18:00</p>
+        <p>请留意置顶公告，刷新即可获取最新公告</p>
+      </div>
+    </el-header>
+    <el-container>
+      <el-main class="Container">
+        <div class="Title ArtFont Bold">
+          近期比赛
+        </div>
+        <div class="contestsPreview" v-show="!config.isError">
+          <!-- <div class="left">
+            <div :class="(contests.showListIndex == 1 ? 'selected ' : '') + 'liveContests cursor_pointer'"
+              @click="contests.show(1)">
+              <div>正 进 行</div>
             </div>
+            <div :class="(contests.showListIndex == 2 ? 'selected ' : '') + 'waitingContests cursor_pointer'"
+              @click="contests.show(2)">
+              <div>等 待 中</div>
+            </div>
+            <div :class="(contests.showListIndex == 3 ? 'selected ' : '') + 'overContests cursor_pointer'"
+              @click="contests.show(3)">
+              <div>已 结 束</div>
+            </div>
+          </div> -->
+          <div class="right">
+            <div class="liveContests">
+              <!-- <div class="liveContests" v-show="contests.showListIndex == 1"> -->
+              <div :class="item.Title != '' ? 'item' : 'nothing'" v-for="(item, index) in contests.liveList" :key="index">
+                <div class="title cursor_pointer" @click="goto.contest(item);">
+                  <el-icon v-if="item.IsPublic == -1 && item.Title" color="#ff3300" size="22px">
+                    <Lock />
+                  </el-icon>
+                  {{ item.Title }}
+                </div>
+                <div class="time">
+                  {{ item.BeginTime ? (proxy.Utils.TimeTools.timestampToTime(item.BeginTime) + " - ") : "" }}
+                  {{ item.EndTime ? proxy.Utils.TimeTools.timestampToTime(item.EndTime) : "" }}
+                </div>
+              </div>
+            </div>
+            <div class="waitingContests">
+              <!-- <div class="waitingContests" v-show="contests.showListIndex == 2"> -->
+              <div :class="item.Title != '' ? 'item' : 'nothing'" v-for="(item, index) in contests.waitingList"
+                :key="index">
+                <div class="title cursor_pointer">
+                  <el-icon v-if="item.IsPublic == -1 && item.Title" color="#ff3300" size="22px">
+                    <Lock />
+                  </el-icon>
+                  {{ item.Title }}
+                </div>
+                <div class="time">
+                  {{ item.BeginTime ? (proxy.Utils.TimeTools.timestampToTime(item.BeginTime) + " - ") : "" }}
+                  {{ item.EndTime ? proxy.Utils.TimeTools.timestampToTime(item.EndTime) : "" }}
+                </div>
+              </div>
+            </div>
+            <div class="overContests">
+              <!-- <div class="overContests" v-show="contests.showListIndex == 3"> -->
+              <div :class="item.Title != '' ? 'item' : 'nothing'" v-for="(item, index) in contests.overList" :key="index">
+                <div class="title cursor_pointer" @click="goto.contest(item);">
+                  <el-icon v-if="item.IsPublic == -1 && item.Title" color="#ff3300" size="22px">
+                    <Lock />
+                  </el-icon>
+                  {{ item.Title }}
+                </div>
+                <div class="time">
+                  {{ item.BeginTime ? (proxy.Utils.TimeTools.timestampToTime(item.BeginTime) + " - ") : "" }}
+                  {{ item.EndTime ? proxy.Utils.TimeTools.timestampToTime(item.EndTime) : "" }}
+                </div>
+              </div>
+            </div>
+            <!-- </transition> -->
           </div>
         </div>
-        <div class="right">
+      </el-main>
+      <el-asider class="Container Left" style="width: min(40%, 400px);">
+        <div class="Title ArtFont Bold">
+          公告
+        </div>
+        <div class="notice">
+          <div class="left">
+            <div class="noticeItem">
+              <div :class="item.Title != '' ? 'item' : 'nothing'" class="cursor_pointer"
+                v-for="(item, index) in notices.noticeList" :key="index"
+                @click="notices.SelectIdx(index), centerDialogVisible = true">
+                <div>{{ item.Title }}<span class="rightTime">{{ item.CreateTime ? (
+                  proxy.Utils.TimeTools.timestampToTime(item.CreateTime)) : "" }}</span></div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="right">
           <div class="noticeItem">
             <div class="item" v-if="notices.noticeList[notices.Selected]">
               <div style="display: inline;">
@@ -221,100 +321,10 @@ onMounted(() => {
             </div>
             <div v-else class="nothing"></div>
           </div>
+        </div> -->
         </div>
-      </div>
-
-    </el-header>
-    <el-main class="Container">
-      <div class="contestsPreview" v-show="!config.isError">
-        <div class="left">
-          <div :class="(contests.showListIndex == 1 ? 'selected ' : '') + 'liveContests cursor_pointer'"
-            @click="contests.show(1)">
-            <div>正 进 行</div>
-          </div>
-          <div :class="(contests.showListIndex == 2 ? 'selected ' : '') + 'waitingContests cursor_pointer'"
-            @click="contests.show(2)">
-            <div>等 待 中</div>
-          </div>
-          <div :class="(contests.showListIndex == 3 ? 'selected ' : '') + 'overContests cursor_pointer'"
-            @click="contests.show(3)">
-            <div>已 结 束</div>
-          </div>
-        </div>
-        <div class="right">
-          <!-- <transition
-            enter-active-class="animate__animated animate__backInLeft"
-            leave-active-class="animate__animated animate__backOutRight"
-          > -->
-          <div class="liveContests" v-show="contests.showListIndex == 1">
-            <div :class="item.Title != '' ? 'item' : 'nothing'" v-for="(item, index) in contests.liveList" :key="index">
-              <div class="title cursor_pointer" @click="goto.contest(item);">
-                <el-icon v-if="item.IsPublic == -1 && item.Title" color="#ff3300" size="22px">
-                  <Lock />
-                </el-icon>
-                {{ item.Title }}
-              </div>
-              <div class="time">
-                {{ item.BeginTime ? (proxy.Utils.TimeTools.timestampToTime(item.BeginTime) + " - ") : "" }}
-                {{ item.EndTime ? proxy.Utils.TimeTools.timestampToTime(item.EndTime) : "" }}
-              </div>
-            </div>
-          </div>
-          <!-- </transition>
-          <transition
-            enter-active-class="animate__animated animate__backInLeft"
-            leave-active-class="animate__animated animate__backOutRight"
-          > -->
-          <div class="waitingContests" v-show="contests.showListIndex == 2">
-            <div :class="item.Title != '' ? 'item' : 'nothing'" v-for="(item, index) in contests.waitingList"
-              :key="index">
-              <div class="title cursor_pointer">
-                <el-icon v-if="item.IsPublic == -1 && item.Title" color="#ff3300" size="22px">
-                  <Lock />
-                </el-icon>
-                {{ item.Title }}
-              </div>
-              <div class="time">
-                {{ item.BeginTime ? (proxy.Utils.TimeTools.timestampToTime(item.BeginTime) + " - ") : "" }}
-                {{ item.EndTime ? proxy.Utils.TimeTools.timestampToTime(item.EndTime) : "" }}
-              </div>
-            </div>
-          </div>
-          <!-- </transition>
-          <transition
-            enter-active-class="animate__animated animate__backInLeft"
-            leave-active-class="animate__animated animate__backOutRight"
-          > -->
-          <div class="overContests" v-show="contests.showListIndex == 3">
-            <div :class="item.Title != '' ? 'item' : 'nothing'" v-for="(item, index) in contests.overList" :key="index">
-              <div class="title cursor_pointer" @click="goto.contest(item);">
-                <el-icon v-if="item.IsPublic == -1 && item.Title" color="#ff3300" size="22px">
-                  <Lock />
-                </el-icon>
-                {{ item.Title }}
-              </div>
-              <div class="time">
-                {{ item.BeginTime ? (proxy.Utils.TimeTools.timestampToTime(item.BeginTime) + " - ") : "" }}
-                {{ item.EndTime ? proxy.Utils.TimeTools.timestampToTime(item.EndTime) : "" }}
-              </div>
-            </div>
-          </div>
-          <!-- </transition> -->
-        </div>
-      </div>
-
-      <!-- <div class="flag">
-        其他
-      </div> -->
-      <br>
-    </el-main>
-    <el-footer class="Container">
-
-      <div id="hint" style="text-align: center;">
-        新功能提案/BUG反馈/修改建议
-        <a href="https://docs.qq.com/form/page/DY0FDckZ3RlB0Uktq">点此前往</a>
-      </div>
-    </el-footer>
+      </el-asider>
+    </el-container>
     <el-footer class="Container Footer ArtFont Bottom">
       <el-row>
         Anhui University of Technology
@@ -347,7 +357,8 @@ onMounted(() => {
   // @include fill_color("fill1");
 
   .left {
-    width: 30%;
+    margin-top: 8px;
+    width: 100%;
     z-index: 2;
     overflow-y: auto;
 
@@ -524,23 +535,24 @@ onMounted(() => {
 
   .right {
     position: relative;
-    width: calc(100% - 30px);
-    height: 480px;
+    width: calc(100% - 0px);
+    height: 420px;
     z-index: 1;
-    @include fill_color("fill1");
+    // @include fill_color("fill1");
     border-start-end-radius: 8px;
     border-end-end-radius: 8px;
     overflow: hidden;
 
     >div {
       position: absolute;
-      height: 480px;
+      // height: 480px;
+      height: 100%;
       width: 100%;
       display: flex;
       flex-direction: column;
       justify-content: space-around;
       box-sizing: border-box;
-      padding: 15px 20px;
+      padding: 4px 2px 0px 2px;
       animation-duration: 600ms;
 
       .item {
@@ -552,7 +564,7 @@ onMounted(() => {
         box-sizing: border-box;
         padding: 4px 12px;
         @include fill_color("fill3");
-        @include box_shadow(0, 0, 5px, 1px, "fill54");
+        // @include box_shadow(0, 0, 5px, 1px, "fill54");
         font-size: $fontSize8;
 
         .title {

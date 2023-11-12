@@ -181,17 +181,17 @@ const Admin = {
 						),
 				},
 				{
-					path: "BatchAddUser",
-					component: () =>
-						import(
-							"../components/Admin/UserEditChildren/BatchAddUser.vue"
-						),
-				},
-				{
 					path: "UpdateUser",
 					component: () =>
 						import(
 							"../components/Admin/UserEditChildren/UpdateUser.vue"
+						),
+				},
+				{
+					path: "BatchAddUser",
+					component: () =>
+						import(
+							"../components/Admin/UserEditChildren/BatchAddUser.vue"
 						),
 				},
 			],

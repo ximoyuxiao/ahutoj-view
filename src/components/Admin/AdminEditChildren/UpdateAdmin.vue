@@ -17,8 +17,8 @@
           {{ permission.UID }}
         </div>
         <div class="select" v-for="(_, index) in permission.permissionTabel">
-          <el-switch v-model="permission.permissionTabel[index]"
-            @change="adminList.select(permission, index)" :active-value="true" :inactive-value="false" />
+          <el-switch v-model="permission.permissionTabel[index]" @change="adminList.select(permission, index)"
+            :active-value="true" :inactive-value="false" />
         </div>
         <el-button class="botton" @click="adminList.ChangePermission(permission)">
           修改
@@ -26,6 +26,15 @@
       </div>
     </div>
   </div>
+  <!-- <div class="pagination">
+    <el-pagination background layout="prev, pager, next" :page-size="config.limit" :total="config.Count"
+      :current-page="config.currentPage" @current-change="config.changePage" />
+    <el-radio-group v-model="config.limit" @change="config.changePage(1)" style="margin: 0 20px">
+      <el-radio-button :label="20" />
+      <el-radio-button :label="30" />
+      <el-radio-button :label="50" />
+    </el-radio-group>
+  </div> -->
 </template>
 
 <script lang="ts" setup>
