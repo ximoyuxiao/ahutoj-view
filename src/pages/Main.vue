@@ -277,7 +277,7 @@ onMounted(() => {
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  filter: blur(35px);
+  filter: blur(3px);
 }
 
 </style>
