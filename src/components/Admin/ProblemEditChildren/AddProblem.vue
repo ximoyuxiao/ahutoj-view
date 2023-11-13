@@ -1,87 +1,5 @@
-<template>
-    <div class="addProblem">
-        <el-row>
-            <span>标题</span>
-            <el-input v-model="problem.Title" class="problemTitle" />
-        </el-row>
-        <el-row>
-            <span>时间限制</span>
-            <el-input-number v-model="problem.LimitTime" :min="200" :max="10000" :step="200" controls-position="right" />
-            <span>&nbsp;毫秒</span>
-            <span>内存限制</span>
-            <el-input-number v-model="problem.LimitMemory" :min="64" :max="1024" :step="64" controls-position="right" />
-            <span>&nbsp;MiB</span>
-        </el-row>
-        <el-row>
-            <span>来源</span>
-            <el-select v-model="problem.Origin" class="m-2" placeholder="Select">
-                <el-option v-for="(item, index) in problem.Origins" :key="item.label" :label="item.label"
-                    :value="item.value" />
-            </el-select>
-            <el-input v-show="problem.Origin != -1" v-model="problem.OriginPID"
-                :placeholder="problem.OriginPlaceHolder[problem.Origin]" class="originInfo" />
-
-        </el-row>
-        <el-row>
-            <span>可见</span>
-            <el-select v-model="problem.Visible" class="m-2" placeholder="Select">
-                <el-option v-for="(item, index) in problem.Visibles" :key="item.label" :label="item.label"
-                    :value="item.value" />
-            </el-select>
-        </el-row>
-        <el-row>
-            <span>标签</span>
-            <el-input v-model="problem.Label" placeholder="请输入的每个标签之间用';'隔开" class="tagList" />
-        </el-row>
-        <br />
-        <el-row>
-            <span>文本类型</span>
-            <el-select v-model="problem.ContentType" class="m-2" placeholder="Select">
-                <el-option v-for="(item, index) in problem.ContentTypes" :key="item.label" :label="item.label"
-                    :value="item.value" />
-            </el-select>
-        </el-row>
-        <template v-if="problem.ContentType == 1">
-            <div class="markdown">
-                <md-editor v-model="problem.Description" :toolbars="markdown.toolbar" :on-upload-img="problem.updateImg" />
-            </div>
-        </template>
-        <template v-else>
-            <div class="normal">
-                <div>
-                    <span>题目描述</span>
-                    <el-input v-model="problem.Description" type="textarea" autosize class="plainText" />
-                </div>
-                <div>
-                    <span>输入描述</span>
-                    <el-input v-model="problem.Input" type="textarea" autosize class="plainText" />
-                </div>
-                <div>
-                    <span>输出描述</span>
-                    <el-input v-model="problem.Output" type="textarea" autosize class="plainText" />
-                </div>
-                <div>
-                    <span>输入样例</span>
-                    <el-input v-model="problem.SampleInput" type="textarea" autosize class="plainText" />
-                </div>
-                <div>
-                    <span>输出样例</span>
-                    <el-input v-model="problem.SampleOutput" type="textarea" autosize class="plainText" />
-                </div>
-                <div>
-                    <span>提示</span>
-                    <el-input v-model="problem.Hit" type="textarea" autosize class="plainText" />
-                </div>
-            </div>
-        </template>
-        <el-button class="addProblemButton" type="primary" round v-on:click="complete()">
-            添 加
-        </el-button>
-    </div>
-</template>
-
 <script lang="ts" setup>
-import { getCurrentInstance, reactive } from "vue";
+import { getCurrentInstance, reactive, ref } from "vue";
 import { useConstValStore } from "../../../pinia/constVal";
 import MdEditor, { ToolbarNames } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
@@ -91,6 +9,7 @@ import { staticSourceBaseURL } from "../../../utils/axios/axios";
 
 const { proxy } = getCurrentInstance() as any;
 const constValStore = useConstValStore();
+const MdMaxVisible = ref(false);
 
 var markdown: {
     toolbar: ToolbarNames[];
@@ -286,6 +205,106 @@ function complete() {
 }
 </script>
 
+
+<template>
+    <el-drawer v-model="MdMaxVisible" :title=problem.Title fullsreen="true" size="100%" direction="btt">
+        <md-editor v-model="problem.Description" :toolbars="markdown.toolbar" :on-upload-img="problem.updateImg"
+            style="height: calc(100vh - 120px);" />
+    </el-drawer>
+    <el-container>
+        <el-header class="Container">
+            <el-row>
+                <span>标题</span>
+                <el-input v-model="problem.Title" class="problemTitle Left" />
+            </el-row>
+            <el-row class="Top">
+                <span>时间限制/ms</span>
+                <el-input-number v-model="problem.LimitTime" :min="200" :max="10000" :step="200" controls-position="right"
+                    class="Left" />
+                <span style="margin-left: 50px;">内存限制/MiB</span>
+                <el-input-number v-model="problem.LimitMemory" :min="64" :max="1024" :step="64" controls-position="right"
+                    class="Left" />
+            </el-row>
+            <el-row class="Top">
+                <span>标签</span>
+                <el-input v-model="problem.Label" placeholder="每个标签用英文的 ; 隔开" class="tagList Left" />
+            </el-row>
+            <el-row class="Top">
+                <span>来源</span>
+                <el-select v-model="problem.Origin" class="m-2 Left" placeholder="Select">
+                    <el-option v-for="(item, index) in problem.Origins" :key="item.label" :label="item.label"
+                        :value="item.value" />
+                </el-select>
+                <el-input v-show="problem.Origin != -1" v-model="problem.OriginPID"
+                    :placeholder="problem.OriginPlaceHolder[problem.Origin]" class="originInfo" />
+            </el-row>
+            <el-row class="Top">
+                <span>可见</span>
+                <el-select v-model="problem.Visible" class="m-2 Left" placeholder="Select">
+                    <el-option v-for="(item, index) in problem.Visibles" :key="item.label" :label="item.label"
+                        :value="item.value" />
+                </el-select>
+            </el-row>
+        </el-header>
+        <el-main class="Container">
+            <el-row>
+                <span>文本类型</span>
+                <el-select v-model="problem.ContentType" class="m-2 Left" placeholder="Select">
+                    <el-option v-for="(item, index) in problem.ContentTypes" :key="item.label" :label="item.label"
+                        :value="item.value" />
+                </el-select>
+                <el-button class="Left" type="primary" @click="MdMaxVisible = true" v-if="problem.ContentType == 1">
+                    <el-icon size="19px">
+                        <FullScreen />
+                    </el-icon>
+                    &nbsp全屏编辑器
+                </el-button>
+            </el-row>
+            <div v-if="problem.ContentType == 1">
+                <div class="markdown Top">
+                    <md-editor v-model="problem.Description" :toolbars="markdown.toolbar"
+                        :on-upload-img="problem.updateImg" />
+                </div>
+            </div>
+            <div v-else>
+                <div class="normal">
+                    <el-row class="Top">
+                        <span>题目描述</span>
+                        <el-input v-model="problem.Description" type="textarea" autosize class="plainText Left" />
+                    </el-row>
+                    <el-row class="Top">
+                        <span>输入描述</span>
+                        <el-input v-model="problem.Input" type="textarea" autosize class="plainText Left" />
+                    </el-row>
+                    <el-row class="Top">
+                        <span>输出描述</span>
+                        <el-input v-model="problem.Output" type="textarea" autosize class="plainText Left" />
+                    </el-row>
+                    <el-row class="Top">
+                        <span>输入样例</span>
+                        <el-input v-model="problem.SampleInput" type="textarea" autosize class="plainText Left" />
+                    </el-row>
+                    <el-row class="Top">
+                        <span>输出样例</span>
+                        <el-input v-model="problem.SampleOutput" type="textarea" autosize class="plainText Left" />
+                    </el-row>
+                    <el-row class="Top">
+                        <span>提示</span>
+                        <el-input v-model="problem.Hit" type="textarea" autosize class="plainText"
+                            style="margin-left: 50px;" />
+                    </el-row>
+                </div>
+            </div>
+        </el-main>
+    </el-container>
+    <div class="addProblem">
+        <el-button class="addProblemButton Top" type="primary" round v-on:click="complete()">
+            添 加
+        </el-button>
+    </div>
+</template>
+
+
 <style scoped lang="scss">
 .problemTitle {
     width: 600px;
@@ -306,61 +325,19 @@ function complete() {
 span {
     align-self: center;
     display: flex;
-    font-size: $fontSize6;
-    @include font_color("font1");
+    font-size: $fontSize5;
 }
 
 .addProblemButton {
     align-self: center;
-    width: 600px;
+    width: 100%;
     height: 50px;
-    margin: 20px 0;
-    border-radius: 25px;
+    border-radius: 12px;
     font-size: $fontSize6;
 }
 
 .plainText {
     width: 600px;
     display: flex;
-}
-
-.addProblem {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-
-    .normal {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-
-        >div {
-            display: flex;
-            align-content: center;
-            justify-content: flex-start;
-            box-sizing: border-box;
-            margin: 5px 0;
-
-            >span {
-                display: block;
-                font-size: $fontSize6;
-                width: 100px;
-                @include font_color("font1");
-            }
-        }
-    }
-
-    >div {
-        display: flex;
-
-        justify-content: flex-start;
-        box-sizing: border-box;
-        margin: 5px 0;
-
-        >span {
-            display: block;
-            width: 100px;
-        }
-    }
 }
 </style>
