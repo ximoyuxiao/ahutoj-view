@@ -1,152 +1,3 @@
-<template>
-  <div
-    class="code"
-    ref="code"
-  >
-    <div
-      class="submit"
-      v-show="!notFound"
-    >
-      <div class="header">
-        <div style="width: 140px">提交ID</div>
-        <div style="width: 120px">题目ID</div>
-        <div style="width: 160px">用户</div>
-        <div style="width: 120px">状态</div>
-        <div style="width: 140px">语言</div>
-        <div style="width: 120px">用时</div>
-        <div style="width: 120px">内存</div>
-        <div style="width: 180px">提交时间</div>
-      </div>
-      <div class="item">
-        <div
-          class="SID"
-          style="width: 140px"
-        >
-          {{ submit.SID }}
-        </div>
-        <div
-          class="PID cursor_pointer"
-          style="width: 120px;  "
-          @click="goToProblem(submit.PID)"
-        >
-          {{ submit.PID }}
-        </div>
-        <div
-          class="UID"
-          style="width: 160px"
-        >
-          {{ submit.UID.length >  15 ? (submit.UID.slice(0,15) + "..." ): submit.UID }}
-        </div>
-        <div style="width: 120px; display: flex; justify-content: center;">
-          <div
-            class="res cursor_pointer"
-            :style="
-          'color: #ffffff; background-color:' +
-          proxy.Utils.StatusConstValManager.getStatusColor(submit.Result)
-        "
-          >
-            {{ submit.Result }}
-          </div>
-        </div>
-        <div style="width: 140px">
-          {{ proxy.Utils.StatusConstValManager.getLangString(submit.Lang) }}
-        </div>
-        <div
-          class="useTime"
-          :style="'width: 120px;' + (submit.Result == 'TLE' ? 'color: #ff381e;' : '')"
-        >
-          {{ submit.UseTime }}&nbsp;ms
-        </div>
-        <div
-          class="useMemory"
-          :style="'width: 120px;' + (submit.Result == 'MLE' ? 'color: #ff381e;' : '')"
-        >
-          {{ (submit.UseMemory / 1024).toFixed(0) }}&nbsp;KB
-        </div>
-        <div
-          class="submitTime"
-          style="width: 180px"
-        >
-          {{ proxy.Utils.TimeTools.timestampToTime(submit.SubmitTime) }}
-        </div>
-      </div>
-      <template v-if="!judging">
-        <!-- 如果结果是 CE 则显示报错信息 -->
-        <div
-          class="ce"
-          v-if="submit.hasCeInfo"
-        >
-          <div class="title">错误信息</div>
-          <el-input
-            v-model="submit.CeInfo"
-            :autosize="{ minRows: 5 }"
-            readonly
-            resize="none"
-            show-word-limit
-            type="textarea"
-          />
-        </div>
-        <!-- 如果结果是 PE 则显示提示格式有问题 -->
-        <div
-          class="pe"
-          v-if="submit.Result == 'PE'"
-        >
-          <div class="title">格式有误</div>
-          <el-input
-            v-model="constValStore.SUBMIT_RESULT_PE"
-            :autosize="{ minRows: 5 }"
-            readonly
-            resize="none"
-            show-word-limit
-            type="textarea"
-          />
-        </div>
-        <!-- 如果结果是 Failed 则显示重判按钮 -->
-        <div
-          class="failed"
-          v-if="submit.Result == 'FAILED'"
-        >
-          <div class="title">意外的错误</div>
-          <el-input
-            v-model="constValStore.SUBMIT_RESULT_FAILED"
-            :autosize="{ minRows: 3 }"
-            readonly
-            resize="none"
-            show-word-limit
-            type="textarea"
-          />
-          <div
-            class="rejudge cursor_pointer"
-            @click="rejudge"
-          >
-            重判
-          </div>
-        </div>
-        <div class="title">代码</div>
-        <el-input
-          v-model="submit.Source"
-          :autosize="{ minRows: 5 }"
-          readonly
-          resize="none"
-          show-word-limit
-          type="textarea"
-        />
-      </template>
-      <!-- 判题中 -->
-      <div
-        id="judging"
-        v-show="judging"
-      >
-      </div>
-    </div>
-    <div
-      class="notFound"
-      v-show="notFound"
-    >
-      <el-empty description="无结果" />
-    </div>
-  </div>
-</template>
 <script lang="ts" setup>
 import { getCurrentInstance, onMounted, onUnmounted, reactive, ref } from "vue";
 import { useConfigStore } from "../pinia/config";
@@ -189,6 +40,8 @@ type submitType = {
   UseMemory: number;
   UseTime: number;
   CeInfo: string;
+  PassSample: number;
+  SampleNumber: number;
   [i: string]: any;
 };
 var submit = reactive<submitType>({
@@ -203,6 +56,8 @@ var submit = reactive<submitType>({
   UseTime: 0,
   CeInfo: "",
   hasCeInfo: false, //是否存在ce错误
+  PassSample: 0,
+  SampleNumber: 0,
   //判题自动刷新
   autoUpdate: null,
   updateTimeStep: 1,
@@ -218,6 +73,8 @@ var submit = reactive<submitType>({
     submit.UseTime = 0;
     submit.CeInfo = "";
     submit.hasCeInfo = false;
+    submit.PassSample = 0;
+    submit.SampleNumber = 0;
     clearTimeout(submit.autoUpdate);
   },
   copy(data: any) {
@@ -231,6 +88,8 @@ var submit = reactive<submitType>({
     submit.UseMemory = data.UseMemory;
     submit.UseTime = data.UseTime;
     submit.CeInfo = data.CeInfo;
+    submit.PassSample = data.PassSample;
+    submit.SampleNumber = data.SampleNumber;
     if (data.CeInfo && data.CeInfo != "") {
       submit.hasCeInfo = true;
     }
@@ -337,9 +196,134 @@ onUnmounted(() => {
   //清除定时器 ，释放内存占用。
   clearTimeout(submit.autoUpdate);
 });
+
+const tableData = [
+  {
+  },
+]
+
 </script>
 
+<template>
+  <div v-if="notFound">
+    <el-empty description="无结果" />
+  </div>
+  <div v-else class="Main" style="color: white;">
+    <el-container>
+      <el-header class="Container StatusBarAC" v-if="submit.Result != 'AC'">
+        <el-row>
+          <el-icon size="26px">
+            <SuccessFilled />
+          </el-icon>
+          <div class="Title Bold ArtFont Left">
+            Accepted
+          </div>
+        </el-row>
+      </el-header>
+      <el-header class="Container StatusBarWA" v-if="submit.Result != 'WA'">
+        <el-row>
+          <el-icon size="26px">
+            <CircleCloseFilled />
+          </el-icon>
+          <div class="Title Bold ArtFont Left">
+            Wrong Answer
+          </div>
+          <div class="Left" style="font-size: 16px; margin-top: 4px;">通过了 {{ submit.PassSample }} / {{ submit.SampleNumber }} 个测试数据</div>
+        </el-row>
+      </el-header>
+      <el-header class="Container">
+        <el-table :data="tableData" style="width: 100%">
+          <el-table-column prop="SID" label="提交 ID" align="center">
+            {{ submit.SID }}
+          </el-table-column>
+          <el-table-column prop="UID" label="用户" align="center">
+            {{ submit.UID.length > 15 ? (submit.UID.slice(0, 15) + "...") : submit.UID }}
+          </el-table-column>
+          <el-table-column prop="SubmitTime" label="提交时间" min-width="170px" align="center">
+            {{ proxy.Utils.TimeTools.timestampToTime(submit.SubmitTime) }}
+          </el-table-column>
+          <el-table-column prop="PID" label="题目" align="center">
+            <div @click="goToProblem(submit.PID)" class="cursor_pointer Bold ArtFont" style="color: #569CD6;">
+              {{ submit.PID }}
+            </div>
+          </el-table-column>
+          <el-table-column prop="Status" label="状态" align="center" min-width="120px">
+            <div style="text-align: center;">
+              <div class="res cursor_pointer Bold" style="border-radius: 6px; width: 110px; height: 24px;" :style="'color: #ffffff; background-color:' +
+                proxy.Utils.StatusConstValManager.getStatusColor(submit.Result)
+                ">
+                {{ submit.Result }}
+              </div>
+            </div>
+          </el-table-column>
+          <el-table-column prop="Time" label="用时" align="center"
+            :style="'width: 120px;' + (submit.Result == 'TLE' ? 'color: #ff381e;' : '')">
+            {{ submit.UseTime }}&nbsp;ms
+          </el-table-column>
+          <el-table-column prop="Mem" label="内存" align="center"
+            :style="'width: 120px;' + (submit.Result == 'MLE' ? 'color: #ff381e;' : '')">
+            {{ (submit.UseMemory / 1024 / 1024).toFixed(0) }}&nbsp;MB
+          </el-table-column>
+          <el-table-column prop="Lang" label="语言" align="center">
+            {{ proxy.Utils.StatusConstValManager.getLangString(submit.Lang) }}
+          </el-table-column>
+        </el-table>
+      </el-header>
+      <el-main class="Container" v-if="notFound">
+        <el-empty description="无结果" />
+      </el-main>
+      <!-- <el-main class="Container" v-else-if="judging">
+      </el-main> -->
+      <el-main class="Container" v-else-if="submit.hasCeInfo">
+        <div class="title">错误信息</div>
+        <el-input v-model="submit.CeInfo" :autosize="{ minRows: 5 }" readonly resize="none" show-word-limit
+          type="textarea" />
+      </el-main>
+      <el-main class="Container" v-else-if="submit.Result == 'PE'">
+        <div class="title">格式有误</div>
+        <el-input v-model="constValStore.SUBMIT_RESULT_PE" :autosize="{ minRows: 5 }" readonly resize="none"
+          show-word-limit type="textarea" />
+      </el-main>
+      <el-main class="Container" v-else-if="submit.Result == 'FAILED'">
+        <div class="title">意外的错误</div>
+        <el-input v-model="constValStore.SUBMIT_RESULT_FAILED" :autosize="{ minRows: 3 }" readonly resize="none"
+          show-word-limit type="textarea" />
+        <div class="rejudge cursor_pointer" @click="rejudge">
+          重判
+        </div>
+      </el-main>
+      <el-main class="Container">
+        <!-- <div class="Title Bold Bottom">代码</div> -->
+        <el-input v-model="submit.Source" :autosize="{ minRows: 5 }" readonly resize="none" show-word-limit
+          type="textarea" />
+      </el-main>
+    </el-container>
+  </div>
+  <div class="Main">
+    <div id="judging" class="Container" v-show="judging" style="width: 100%; height: 200px;">
+    </div>
+  </div>
+  <div class="Main Bottom">
+    <el-footer class="Container Footer ArtFont Bottom">
+      <el-row>
+        Anhui University of Technology
+      </el-row>
+      <el-row>
+        Online Judge &copy; 2019 - 2023
+      </el-row>
+    </el-footer>
+  </div>
+</template>
+
 <style scoped lang="scss">
+.StatusBarAC {
+  background-color: #19BE6B;
+}
+
+.StatusBarWA {
+  background-color: #ED3F14;
+}
+
 .notFound {
   width: 100%;
   height: 300px;
@@ -362,7 +346,7 @@ onUnmounted(() => {
     padding: 10px 0;
     justify-content: space-between;
 
-    > div {
+    >div {
       text-align: center;
     }
   }
@@ -381,6 +365,7 @@ onUnmounted(() => {
       @include font_color("fill12");
       box-sizing: border-box;
     }
+
     .res {
       margin: 8px 0;
       padding: 4px 10px;
@@ -390,20 +375,21 @@ onUnmounted(() => {
       filter: drop-shadow(0 0 1px #00000088);
     }
 
-    > div {
+    >div {
       text-align: center;
     }
   }
 
-  > div {
-    > .title,
-    + .title {
+  >div {
+
+    >.title,
+    +.title {
       margin: 30px 0 5px 0;
       font-size: $fontSize8;
       @include font_color("font1");
     }
 
-    > .rejudge {
+    >.rejudge {
       box-sizing: border-box;
       padding: 10px 50px;
       text-align: center;
@@ -420,17 +406,16 @@ onUnmounted(() => {
     }
   }
 
-  #judging {
-    width: 100%;
-    height: 400px;
-    border-end-start-radius: 10px;
-    border-end-end-radius: 10px;
-    overflow: hidden;
-  }
 }
-</style>
 
-<style>
+#judging {
+  width: 100%;
+  height: 400px;
+  border-end-start-radius: 10px;
+  border-end-end-radius: 10px;
+  overflow: hidden;
+}
+
 .ce .el-textarea__inner {
   color: rgb(233, 42, 42) !important;
 }

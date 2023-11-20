@@ -17,8 +17,6 @@
       </el-menu-item>
     </router-link>
   </el-menu>
-  <el-container>
-    <el-main class="Container">
       <div class="AdminEdit">
         <div class="content">
           <router-view v-slot="{ Component }">
@@ -28,8 +26,6 @@
           </router-view>
         </div>
       </div>
-    </el-main>
-  </el-container>
 </template>
 
 <script lang="ts" setup>

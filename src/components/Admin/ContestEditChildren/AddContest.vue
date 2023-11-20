@@ -27,7 +27,7 @@
         v-model="contest.Type"
         size="large"
       >
-        <el-radio-button label="ACM" />
+        <el-radio-button label="ICPC" />
         <el-radio-button label="OI" />
       </el-radio-group>
     </div>

@@ -1,36 +1,3 @@
-<template>
-    <div class="EditProblemJudgeFile">
-        <div
-            class="preview"
-        >
-            <el-upload
-                ref="upload"
-                class="uploadJson"
-                drag
-                accept=".xml,.json"
-                :multiple="true"
-                :auto-upload="false"
-                :on-change="selectFile"
-                :on-remove="removeFile"
-            >
-                <el-icon class="el-icon--upload">
-                    <upload-filled />
-                </el-icon>
-                <div class="el-upload__text">
-                    可以上传XML和JSON格式的文件 <em>点击</em>或者<em>拖拽</em>
-                </div>
-            </el-upload>
-            <el-button
-                plain
-                @click="uploadFileList"
-                type="primary"
-            >
-                上传
-            </el-button>
-        </div>
-    </div>
-</template>
-
 <script lang="ts" setup>
 import { ElMessageBox } from "element-plus";
 import { getCurrentInstance, onMounted, reactive, ref } from "vue";
@@ -121,28 +88,53 @@ function uploadFileList() {
             let formData = new FormData();
             formData.append("file", f as Blob);
             proxy
-            .$post("api/file/problem/",formData, 1)
-            .then((res: any) => {
-                let data = res.data
-                if(data.code == 0){
-                    proxy.elMessage({
+                .$post("api/file/problem/", formData, 1)
+                .then((res: any) => {
+                    let data = res.data
+                    if (data.code == 0) {
+                        proxy.elMessage({
                             message: f.name + " 上传成功!",
                             type: "success",
-                    });
-                }
-                proxy.codeProcessor(
-                    data?.code ?? 100001,
-                    data?.msg ?? "服务器错误\\\\error"
-                );
-            })
+                        });
+                    }
+                    proxy.codeProcessor(
+                        data?.code ?? 100001,
+                        data?.msg ?? "服务器错误\\\\error"
+                    );
+                })
         });
         proxy.$refs.upload.clearFiles();
     });
 }
-onMounted(() => {});
+onMounted(() => { });
 </script>
 
+<template>
+    <el-container direction="vertical">
+        <el-main class="Container">
+            <el-upload ref="upload" class="uploadJson" drag accept=".xml,.json" :multiple="true" :auto-upload="false"
+                :on-change="selectFile" :on-remove="removeFile">
+                <el-icon class="el-icon--upload">
+                    <upload-filled />
+                </el-icon>
+                <div class="el-upload__text">
+                    上传 XML 和 JSON 格式的文件，点击或者拖拽
+                </div>
+            </el-upload>
+        </el-main>
+        <el-button @click="uploadFileList" type="primary" class="uploadButton Top">
+            上传
+        </el-button>
+    </el-container>
+</template>
+
 <style scoped lang="scss">
+.uploadButton {
+    width: 100%;
+    height: 50px;
+    border-radius: 12px;
+}
+
 .search {
     display: flex;
     justify-items: center;
@@ -170,7 +162,7 @@ span {
             @include fill_color("fill34");
             font-size: $fontSize7;
 
-            > div {
+            >div {
                 box-sizing: border-box;
                 padding: 0 5px;
                 @include font_color("font1");
@@ -194,7 +186,7 @@ span {
             @include fill_color("fill4");
             font-size: $fontSize5;
 
-            > div {
+            >div {
                 box-sizing: border-box;
                 padding: 0 5px;
                 @include font_color("font2");
