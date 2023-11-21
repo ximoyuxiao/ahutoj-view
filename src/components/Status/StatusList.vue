@@ -1,55 +1,55 @@
-                        <script lang="ts" setup>
-                        import { getCurrentInstance, inject, onMounted, reactive } from "vue";
-                        const { proxy } = getCurrentInstance() as any;
-                        const props = defineProps(["data", "isContestStatus"]);
-                        //传入的参数
-                        var query = inject("query") as any;
-                        var functions = inject("config") as any;
-                        
-                        //本地配置项
-                        var config = reactive({
-                            loading: null,
-                            //切换页面
-                            changePage: (Page: number) => {
-                                query.Page = Page;
-                                //更新数据
-                                functions.update(query);
-                            },
-                        });
-                        
-                        //跳转到题目
-                        function goToProblem(PID: string) {
-                            if (props.isContestStatus) {
-                                proxy.$router.push({
-                                    name: "ContestProblem",
-                                    params: {
-                                        PID,
-                                        //解决竞赛状态跳转
-                                        CID: functions.CID,
-                                    },
-                                });
-                            } else {
-                                proxy.$router.push({
-                                    name: "Problem",
-                                    params: {
-                                        PID,
-                                    },
-                                });
-                            }
-                        }
-                        
-                        //跳转到自己提交的代码
-                        function goToSeeCode(SID: number | string) {
-                            proxy.$router.push({
-                                path: "/Code",
-                                query: {
-                                    SID,
-                                    //竞赛跳转
-                                    CID: props.isContestStatus ? functions.CID : undefined,
-                                },
-                            });
-                        }
-                        </script>
+<script lang="ts" setup>
+import { getCurrentInstance, inject, onMounted, reactive } from "vue";
+const { proxy } = getCurrentInstance() as any;
+const props = defineProps(["data", "isContestStatus"]);
+//传入的参数
+var query = inject("query") as any;
+var functions = inject("config") as any;
+
+//本地配置项
+var config = reactive({
+    loading: null,
+    //切换页面
+    changePage: (Page: number) => {
+        query.Page = Page;
+        //更新数据
+        functions.update(query);
+    },
+});
+
+//跳转到题目
+function goToProblem(PID: string) {
+    if (props.isContestStatus) {
+        proxy.$router.push({
+            name: "ContestProblem",
+            params: {
+                PID,
+                //解决竞赛状态跳转
+                CID: functions.CID,
+            },
+        });
+    } else {
+        proxy.$router.push({
+            name: "Problem",
+            params: {
+                PID,
+            },
+        });
+    }
+}
+
+//跳转到自己提交的代码
+function goToSeeCode(SID: number | string) {
+    proxy.$router.push({
+        path: "/Code",
+        query: {
+            SID,
+            //竞赛跳转
+            CID: props.isContestStatus ? functions.CID : undefined,
+        },
+    });
+}
+</script>
  
 <template>
     <div class="statusList">
@@ -80,7 +80,7 @@
                 <div class="UID" style="width: 160px">
                     {{ item.UID.length > 15 ? (item.UID.slice(0, 15) + "...") : item.UID }}
                 </div>
-                
+
                 <div class="useTime" :style="'width: 120px;' + (item.Result == 'TLE' ? 'color: #ff381e;' : '')">
                     {{ item.UseTime }}&nbsp;ms
                 </div>
@@ -100,7 +100,7 @@
             </div>
             <div class="pagination">
                 <el-pagination background layout="prev, pager, next" :page-size="query.Limit" :total="query.Count"
-                :current-page="query.Page" @current-change="config.changePage" />
+                    :current-page="query.Page" @current-change="config.changePage" />
                 <el-radio-group v-model="query.Limit" @change="config.changePage(1)" style="margin: 0 20px">
                     <el-radio-button :label="20" />
                     <el-radio-button :label="30" />

@@ -28,8 +28,8 @@ export const useConstValStore = defineStore(PiniaNameSpace.ConstVal, {
 			SUBMIT_LANG_PYTHON3: 6,
 
 			//提交的通过状态颜色
-			SUBMIT_STATUS_AC_COLOR: "#5ebd00",
-			SUBMIT_STATUS_WA_COLOR: "#e10000",
+			SUBMIT_STATUS_AC_COLOR: "#19BE6B",
+			SUBMIT_STATUS_WA_COLOR: "#ED3F14",
 			SUBMIT_STATUS_TLE_COLOR: "#8a2be2",
 			SUBMIT_STATUS_MLE_COLOR: "#a61e4d",
 			SUBMIT_STATUS_RE_COLOR: "#bdb76b",

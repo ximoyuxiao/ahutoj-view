@@ -179,15 +179,16 @@ onMounted(() => {
                     </el-icon> 加密
                   </row>
                 </el-row>
-                <div class="contestInfo interval">
+                <!-- <div class="contestInfo interval">
                   创建者：{{ item.UID }}
                   <el-divider direction="vertical" />
-                </div>
-                {{ proxy.Utils.TimeTools.timestampToTime(item.BeginTime) }}
-                - {{ proxy.Utils.TimeTools.timestampToTime(item.EndTime) }}
-                <el-divider direction="vertical" />
-                时长：
-                {{ proxy.Utils.TimeTools.timeIntervalToTime(item.EndTime, item.BeginTime) }}
+                </div> -->
+                <el-row style="margin: 10px 0 0 0;">
+                  {{ proxy.Utils.TimeTools.timestampToTime(item.BeginTime) }}
+                  <!-- - {{ proxy.Utils.TimeTools.timestampToTime(item.EndTime) }} -->
+                  <el-divider direction="vertical" />
+                  {{ proxy.Utils.TimeTools.timeIntervalToTime(item.EndTime, item.BeginTime) }}
+                </el-row>
               </div>
             </div>
           </div>
@@ -309,7 +310,7 @@ onMounted(() => {
       .item {
         background-color: #F2F3F5;
         width: 100%;
-        height: 110px;
+        height: 80px;
         box-sizing: border-box;
         padding: 0 10px 0 0;
         margin: 5px 0;

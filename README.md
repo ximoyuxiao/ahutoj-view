@@ -80,7 +80,5 @@ npm install   #或者 npm i
 ```
 npm run dev
 ```
-就可以跑起来了，记得开启后端进程，这个直接去看后端的文档就可以了
-[后端文档](https://gitee.com/practice-platform_a2571717957/ahut-onlinjudge-a.git)
-
+就可以跑起来了，记得开启后端进程
 有疑问请联系QQ：2542079957 （13东月关）
