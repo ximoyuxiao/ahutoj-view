@@ -190,7 +190,7 @@ onMounted(() => {
 
 
 <template>
-  <el-dialog v-model="centerDialogVisible" :title=notices.noticeList[notices.Selected].Title close-icon="false" center
+  <!-- <el-dialog v-model="centerDialogVisible" :title=notices.noticeList[notices.Selected].Title close-icon="false" center
     style="border-radius: 8px; width: min(80%, 700px);">
     <template #title>
       <div class="Title Bold ArtFont" style="font-size: 22px;">
@@ -206,7 +206,7 @@ onMounted(() => {
         </el-button>
       </span>
     </template>
-  </el-dialog>
+  </el-dialog> -->
   <div class="error" v-show="config.isError">
     <el-empty description="数据同步失败,可能是网络问题，请稍后重试，或者联系网站运维人员。" />
   </div>
@@ -239,10 +239,10 @@ onMounted(() => {
             </div>
           </div> -->
           <div class="right">
-            <div class="liveContests">
-              <!-- <div class="liveContests" v-show="contests.showListIndex == 1"> -->
-              <div :class="item.Title != '' ? 'item' : 'nothing'" v-for="(item, index) in contests.liveList" :key="index">
-                <div class="title cursor_pointer" @click="goto.contest(item);">
+            <div class="waitingContests">
+              <!-- <div class="waitingContests" v-show="contests.showListIndex == 2"> -->
+              <div class="cursor_pointer" :class="item.Title != '' ? 'item' : 'nothing'" v-for="(item, index) in contests.waitingList" :key="index" @click="goto.contest(item);">
+                <div class="title">
                   <el-icon v-if="item.IsPublic == -1 && item.Title" color="#ff3300" size="22px">
                     <Lock />
                   </el-icon>
@@ -254,11 +254,10 @@ onMounted(() => {
                 </div>
               </div>
             </div>
-            <div class="waitingContests">
-              <!-- <div class="waitingContests" v-show="contests.showListIndex == 2"> -->
-              <div :class="item.Title != '' ? 'item' : 'nothing'" v-for="(item, index) in contests.waitingList"
-                :key="index">
-                <div class="title cursor_pointer">
+            <div class="liveContests">
+              <!-- <div class="liveContests" v-show="contests.showListIndex == 1"> -->
+              <div class="cursor_pointer" :class="item.Title != '' ? 'item' : 'nothing'" v-for="(item, index) in contests.liveList" :key="index" @click="goto.contest(item);">
+                <div class="title" >
                   <el-icon v-if="item.IsPublic == -1 && item.Title" color="#ff3300" size="22px">
                     <Lock />
                   </el-icon>
@@ -272,8 +271,8 @@ onMounted(() => {
             </div>
             <div class="overContests">
               <!-- <div class="overContests" v-show="contests.showListIndex == 3"> -->
-              <div :class="item.Title != '' ? 'item' : 'nothing'" v-for="(item, index) in contests.overList" :key="index">
-                <div class="title cursor_pointer" @click="goto.contest(item);">
+              <div class="cursor_pointer" :class="item.Title != '' ? 'item' : 'nothing'" v-for="(item, index) in contests.overList" :key="index"  @click="goto.contest(item);">
+                <div class="title" @click="goto.contest(item);">
                   <el-icon v-if="item.IsPublic == -1 && item.Title" color="#ff3300" size="22px">
                     <Lock />
                   </el-icon>

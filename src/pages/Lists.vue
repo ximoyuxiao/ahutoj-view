@@ -99,13 +99,16 @@ function SyncUrl() {
                         <div class="list">
                             <div class="item cursor_pointer" v-for="(item, index) in problemList.list">
                                 <div class="left" @click="() => getListByLID(item.LID)">
-                                    <el-row class="Bold ArtFont">
-                                        <div id="LID">#{{ item.LID }}</div>&nbsp;
-                                        <div id="Title" class="Title">{{ item.Title }}</div>
+                                    <el-row>
+                                        <div id="LID" class="Bold ArtFont">#{{ item.LID }}</div>&nbsp;
+                                        <div id="Title" class="Bold Title ArtFont">{{ item.Title }}</div>
+                                        <div class="ltype ltypeOffcial Bold">
+                                            官方
+                                        </div>
                                     </el-row>
                                     <div class="Interval"></div>
-                                    <div id="UID">创建者：{{ item.UID }}</div>
-                                    <div id="Time">创建时间：{{ proxy.Utils.TimeTools.timestampToTime(item.StartTime) }}</div>
+                                    <!-- <div id="UID">创建者：{{ item.UID }}</div> -->
+                                    <div id="Time">{{ proxy.Utils.TimeTools.timestampToTime(item.StartTime) }}</div>
                                 </div>
                             </div>
                         </div>
@@ -135,6 +138,17 @@ function SyncUrl() {
 </template>
 
 <style  scoped lang="scss">
+.ltype {
+    padding: 3px 7px 0px 7px;
+    margin: 2px 2px 2px 10px;
+    border-radius: 6px;
+    color: #fff;
+}
+
+.ltypeOffcial {
+    background-color: #E67E22;
+}
+
 #LID {
     font-size: $fontSize6;
 }
@@ -160,12 +174,13 @@ function SyncUrl() {
             .list {
                 width: 100%;
                 box-sizing: border-box;
-                padding: 0 $modelDistance $modelDistance $modelDistance;
+                padding: 0 $modelDistance 0 $modelDistance;
 
                 .item {
                     padding: 12px;
                     position: relative;
                     // width: 100%;
+                    height: 60px;
                     border-radius: 6px;
                     background-color: #F2F3F5;
                     margin-bottom: $modelDistanceMini;

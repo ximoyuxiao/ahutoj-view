@@ -210,7 +210,57 @@ const tableData = [
   </div>
   <div v-else class="Main" style="color: white;">
     <el-container>
-      <el-header class="Container StatusBarAC" v-if="submit.Result != 'AC'">
+      <el-header class="Container StatusBarJUDGING" v-if="submit.Result == 'JUDGING'" :style="'background-color:' +
+        proxy.Utils.StatusConstValManager.getStatusColor(submit.Result)
+        ">
+        <el-row>
+          <el-icon size="26px" class="is-loading">
+            <Loading />
+          </el-icon>
+          <div class="Title Bold ArtFont Left">
+            Judging
+          </div>
+        </el-row>
+      </el-header>
+      <el-header class="Container StatusBarJUDGING" v-if="submit.Result == 'REJUDGING'" :style="'background-color:' +
+        proxy.Utils.StatusConstValManager.getStatusColor(submit.Result)
+        ">
+        <el-row>
+          <el-icon size="26px" class="is-loading">
+            <Loading />
+          </el-icon>
+          <div class="Title Bold ArtFont Left">
+            Rejudging
+          </div>
+        </el-row>
+      </el-header>
+      <el-header class="Container StatusBarPENDING" v-else-if="submit.Result == 'PENDING'" :style="'background-color:' +
+        proxy.Utils.StatusConstValManager.getStatusColor(submit.Result)
+        ">
+        <el-row>
+          <el-icon size="26px" class="is-loading">
+            <Loading />
+          </el-icon>
+          <div class="Title Bold ArtFont Left">
+            Pending
+          </div>
+        </el-row>
+      </el-header>
+      <el-header class="Container StatusBarAC" v-else-if="submit.Result == 'FAILED'" :style="'background-color:' +
+        proxy.Utils.StatusConstValManager.getStatusColor(submit.Result)
+        ">
+        <el-row>
+          <el-icon size="26px">
+            <WarningFilled />
+          </el-icon>
+          <div class="Title Bold ArtFont Left">
+            Failed
+          </div>
+        </el-row>
+      </el-header>
+      <el-header class="Container StatusBarAC" v-else-if="submit.Result == 'AC'" :style="'background-color:' +
+        proxy.Utils.StatusConstValManager.getStatusColor(submit.Result)
+        ">
         <el-row>
           <el-icon size="26px">
             <SuccessFilled />
@@ -218,9 +268,27 @@ const tableData = [
           <div class="Title Bold ArtFont Left">
             Accepted
           </div>
+          <div class="Left" style="font-size: 16px; margin-top: 4px;">通过了 {{ submit.PassSample }} / {{ submit.SampleNumber
+          }} 个测试数据</div>
         </el-row>
       </el-header>
-      <el-header class="Container StatusBarWA" v-if="submit.Result != 'WA'">
+      <el-header class="Container StatusBarWA" v-else-if="submit.Result == 'CE'" :style="'background-color:' +
+        proxy.Utils.StatusConstValManager.getStatusColor(submit.Result)
+        ">
+        <el-row>
+          <el-icon size="26px">
+            <WarningFilled />
+          </el-icon>
+          <div class="Title Bold ArtFont Left">
+            Compile Error
+          </div>
+          <div class="Left" style="font-size: 16px; margin-top: 4px;">通过了 {{ submit.PassSample }} / {{ submit.SampleNumber
+          }} 个测试数据</div>
+        </el-row>
+      </el-header>
+      <el-header class="Container" v-else-if="submit.Result == 'WA'" :style="'background-color:' +
+        proxy.Utils.StatusConstValManager.getStatusColor(submit.Result)
+        ">
         <el-row>
           <el-icon size="26px">
             <CircleCloseFilled />
@@ -228,7 +296,90 @@ const tableData = [
           <div class="Title Bold ArtFont Left">
             Wrong Answer
           </div>
-          <div class="Left" style="font-size: 16px; margin-top: 4px;">通过了 {{ submit.PassSample }} / {{ submit.SampleNumber }} 个测试数据</div>
+          <div class="Left" style="font-size: 16px; margin-top: 4px;">通过了 {{ submit.PassSample }} / {{ submit.SampleNumber
+          }} 个测试数据</div>
+        </el-row>
+      </el-header>
+      <el-header class="Container" v-else-if="submit.Result == 'TLE'" :style="'background-color:' +
+        proxy.Utils.StatusConstValManager.getStatusColor(submit.Result)
+        ">
+        <el-row>
+          <el-icon size="26px">
+            <WarningFilled />
+          </el-icon>
+          <div class="Title Bold ArtFont Left">
+            Time Limit Exceeded
+          </div>
+          <div class="Left" style="font-size: 16px; margin-top: 4px;">通过了 {{ submit.PassSample }} / {{ submit.SampleNumber
+          }} 个测试数据</div>
+        </el-row>
+      </el-header>
+      <el-header class="Container" v-else-if="submit.Result == 'MLE'" :style="'background-color:' +
+        proxy.Utils.StatusConstValManager.getStatusColor(submit.Result)
+        ">
+        <el-row>
+          <el-icon size="26px">
+            <WarningFilled />
+          </el-icon>
+          <div class="Title Bold ArtFont Left">
+            Memory Limit Exceeded
+          </div>
+          <div class="Left" style="font-size: 16px; margin-top: 4px;">通过了 {{ submit.PassSample }} / {{ submit.SampleNumber
+          }} 个测试数据</div>
+        </el-row>
+      </el-header>
+      <el-header class="Container" v-else-if="submit.Result == 'PE'" :style="'background-color:' +
+        proxy.Utils.StatusConstValManager.getStatusColor(submit.Result)
+        ">
+        <el-row>
+          <el-icon size="26px">
+            <CircleCloseFilled />
+          </el-icon>
+          <div class="Title Bold ArtFont Left">
+            Partical Error
+          </div>
+          <div class="Left" style="font-size: 16px; margin-top: 4px;">通过了 {{ submit.PassSample }} / {{ submit.SampleNumber
+          }} 个测试数据</div>
+        </el-row>
+      </el-header>
+      <el-header class="Container" v-else-if="submit.Result == 'OLE'" :style="'background-color:' +
+        proxy.Utils.StatusConstValManager.getStatusColor(submit.Result)
+        ">
+        <el-row>
+          <el-icon size="26px">
+            <RemoveFilled />
+          </el-icon>
+          <div class="Title Bold ArtFont Left">
+            Output Limit Exceeded
+          </div>
+          <div class="Left" style="font-size: 16px; margin-top: 4px;">通过了 {{ submit.PassSample }} / {{ submit.SampleNumber
+          }} 个测试数据</div>
+        </el-row>
+      </el-header>
+      <el-header class="Container" v-else-if="submit.Result == 'RE'" :style="'background-color:' +
+        proxy.Utils.StatusConstValManager.getStatusColor(submit.Result)
+        ">
+        <el-row>
+          <el-icon size="26px">
+            <RemoveFilled />
+          </el-icon>
+          <div class="Title Bold ArtFont Left">
+            Runtime Error
+          </div>
+          <div class="Left" style="font-size: 16px; margin-top: 4px;">通过了 {{ submit.PassSample }} / {{ submit.SampleNumber
+          }} 个测试数据</div>
+        </el-row>
+      </el-header>
+      <el-header class="Container" v-else style="background-color: #1E1E1E;">
+        <el-row>
+          <el-icon size="26px">
+            <QuestionFilled />
+          </el-icon>
+          <div class="Title Bold ArtFont Left">
+            Unknown Return Value
+          </div>
+          <div class="Left" style="font-size: 16px; margin-top: 4px;">通过了 {{ submit.PassSample }} / {{ submit.SampleNumber
+          }} 个测试数据</div>
         </el-row>
       </el-header>
       <el-header class="Container">
@@ -247,7 +398,7 @@ const tableData = [
               {{ submit.PID }}
             </div>
           </el-table-column>
-          <el-table-column prop="Status" label="状态" align="center" min-width="120px">
+          <!-- <el-table-column prop="Status" label="状态" align="center" min-width="120px">
             <div style="text-align: center;">
               <div class="res cursor_pointer Bold" style="border-radius: 6px; width: 110px; height: 24px;" :style="'color: #ffffff; background-color:' +
                 proxy.Utils.StatusConstValManager.getStatusColor(submit.Result)
@@ -255,7 +406,7 @@ const tableData = [
                 {{ submit.Result }}
               </div>
             </div>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column prop="Time" label="用时" align="center"
             :style="'width: 120px;' + (submit.Result == 'TLE' ? 'color: #ff381e;' : '')">
             {{ submit.UseTime }}&nbsp;ms
@@ -316,14 +467,6 @@ const tableData = [
 </template>
 
 <style scoped lang="scss">
-.StatusBarAC {
-  background-color: #19BE6B;
-}
-
-.StatusBarWA {
-  background-color: #ED3F14;
-}
-
 .notFound {
   width: 100%;
   height: 300px;
