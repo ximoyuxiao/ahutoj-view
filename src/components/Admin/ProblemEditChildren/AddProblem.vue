@@ -257,13 +257,13 @@ function complete() {
                     <el-icon size="19px">
                         <FullScreen />
                     </el-icon>
-                    &nbsp全屏编辑器
+                    &nbsp全屏编辑
                 </el-button>
             </el-row>
             <div v-if="problem.ContentType == 1">
                 <div class="markdown Top">
                     <md-editor v-model="problem.Description" :toolbars="markdown.toolbar"
-                        :on-upload-img="problem.updateImg" />
+                        :on-upload-img="problem.updateImg" preview-only style="max-height: 600px;"/>
                 </div>
             </div>
             <div v-else>
