@@ -130,20 +130,39 @@ onMounted(() => {
   <el-container class="Main">
     <el-main class="Container">
       <div class="contest">
-        <div class="top" ref="searchResult" v-show="contests.list.length != 0">
+        <div
+          class="top"
+          ref="searchResult"
+          v-show="contests.list.length != 0"
+        >
           <div class="list">
-            <div class="item" v-for="(item, index) in contests.list" :key="index">
+            <div
+              class="item"
+              v-for="(item, index) in contests.list"
+              :key="index"
+            >
               <div class="goingFlag">
                 <!-- 未开始 -->
                 <template v-if="item.BeginTime > config.serverTime">
-                  <div class="waiting" style="background-color: #009acd">
+                  <div
+                    class="waiting"
+                    style="background-color: #009acd"
+                  >
                   </div>
                 </template>
                 <!-- 已开始 -->
                 <template v-else>
-                  <div v-if="item.EndTime > config.serverTime" class="going" style="background-color: #5ebd00">
+                  <div
+                    v-if="item.EndTime > config.serverTime"
+                    class="going"
+                    style="background-color: #5ebd00"
+                  >
                   </div>
-                  <div v-else class="finish" style="background-color: #969696">
+                  <div
+                    v-else
+                    class="finish"
+                    style="background-color: #969696"
+                  >
                   </div>
                 </template>
               </div>
@@ -156,24 +175,39 @@ onMounted(() => {
                   </div>
                 </template>
               </div> -->
-              <div class="content cursor_pointer intervalVertical" @click="() => getContestById(item)">
+              <div
+                class="content cursor_pointer intervalVertical"
+                @click="() => getContestById(item)"
+              >
                 <el-row>
                   <div class="cidFlag ArtFont Bold">&nbsp;#{{ item.CID }}&nbsp;</div>
                   <div class="title ArtFont Bold">
                     {{ item.Title }}
                   </div>
-                  <div class="ctype ctypeICPC Bold" v-if="item.Type == 1">
+                  <div
+                    class="ctype ctypeICPC Bold"
+                    v-if="item.Type == 1"
+                  >
                     ICPC
                   </div>
-                  <div class="ctype ctypeOI Bold" v-else>
+                  <div
+                    class="ctype ctypeOI Bold"
+                    v-else
+                  >
                     OI
                   </div>
-                  <row v-if="item.IsPublic == 1" class="openType openTypeEnabled Bold">
+                  <row
+                    v-if="item.IsPublic == 1"
+                    class="openType openTypeEnabled Bold"
+                  >
                     <el-icon>
                       <Unlock />
                     </el-icon> 公开
                   </row>
-                  <row v-else class="openType openTypedisabled Bold">
+                  <row
+                    v-else
+                    class="openType openTypedisabled Bold"
+                  >
                     <el-icon>
                       <Lock />
                     </el-icon> 加密
@@ -193,8 +227,14 @@ onMounted(() => {
             </div>
           </div>
           <div class="pagination">
-            <el-pagination background layout="prev, pager, next" :page-size="config.limit" :total="config.Count"
-              :current-page="config.currentPage" @current-change="config.changePage" />
+            <el-pagination
+              background
+              layout="prev, pager, next"
+              :page-size="config.limit"
+              :total="config.Count"
+              :current-page="config.currentPage"
+              @current-change="config.changePage"
+            />
             <!-- <el-radio-group v-model="config.limit" @change="config.changePage(1)" style="margin: 0 20px">
               <el-radio-button :label="20" />
               <el-radio-button :label="30" />
@@ -202,7 +242,10 @@ onMounted(() => {
             </el-radio-group> -->
           </div>
         </div>
-        <div class="notFound" v-show="contests.list.length == 0">
+        <div
+          class="notFound"
+          v-show="contests.list.length == 0"
+        >
           <el-empty description="未找到结果" />
         </div>
       </div>
@@ -363,5 +406,4 @@ onMounted(() => {
     align-items: center;
     justify-content: center;
   }
-}
-</style>
+}</style>

@@ -27,12 +27,24 @@ onMounted(() => {
     <div class="left">
       <div class="options">
         <div class="label">题目</div>
-        <el-input class="Input" v-model="query.PID" placeholder="题目ID" type="text" @click="config.search(query)">
+        <el-input
+          class="Input"
+          v-model="query.PID"
+          placeholder="题目ID"
+          type="text"
+          @click="config.search(query)"
+        >
         </el-input>
       </div>
       <div class="options">
         <div class="label">用户</div>
-        <el-input class="Input" v-model="query.UID" placeholder="用户ID" type="text" @click="config.search(query)">
+        <el-input
+          class="Input"
+          v-model="query.UID"
+          placeholder="用户ID"
+          type="text"
+          @click="config.search(query)"
+        >
         </el-input>
       </div>
       <div class="options">
@@ -68,25 +80,33 @@ onMounted(() => {
           </el-radio-group>
         </div>
       </div>
+      <el-button
+        class="cursor_pointer searchButton"
+        @click="config.search(query)"
+        type="primary"
+        round
+        style="width: 354px; margin: 4px 0 4px 30px;"
+      >
+        查询
+      </el-button>
     </div>
   </div>
-  <el-button class="cursor_pointer searchButton" @click="config.search(query)" type="primary" round>
-    查询
-  </el-button>
 </template>
 
 
 <style lang="scss" scoped>
 .searchButton {
-  width: calc(100% - 90px);
-  height: 40px;
-  font-size: $fontSize6;
-  align-self: center;
-  align-content: center;
-  box-sizing: border-box;
-  padding: 5px 0;
-  margin: 0 40px 16px 40px;
-  transition-duration: 300ms;
+  // @include border(2px, solid, "border3");
+  // padding: 6px;
+  // border-radius: 4px;
+  // margin: 0 0 0 10px;
+  // margin-top: 10px;
+  // height: 30px;
+  margin: 0 0 0 10px;
+  padding: 0px 20px 0px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  // display: inline-block;
 }
 
 .statusSearch {
@@ -122,5 +142,4 @@ onMounted(() => {
       }
     }
   }
-}
-</style>
+}</style>

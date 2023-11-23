@@ -1,22 +1,36 @@
 <template>
   <div class="changeHeadImage">
-    <div class="title" style="height: 30px">
+    <div
+      class="title"
+      style="height: 30px"
+    >
       修改头像
     </div>
-    <el-icon class="close cursor_pointer" size="30px" @click="props.close(11)">
+    <el-icon
+      class="close cursor_pointer"
+      size="30px"
+      @click="props.close(11)"
+    >
       <CircleClose />
     </el-icon>
     <div class="uploadImage">
       <div class="preview">
         <div class="originImage">
           <div class="img">
-            <img v-if="headImage.originImageBlobURL" :src="headImage.originImageBlobURL">
-            <el-icon size="42px" v-else>
+            <img
+              v-if="headImage.originImageBlobURL"
+              :src="headImage.originImageBlobURL"
+            >
+            <el-icon
+              size="42px"
+              v-else
+            >
               <SemiSelect />
             </el-icon>
           </div>
           <div class="hint">原始图片</div>
-          <div class="hint">{{ headImage.originImageBlobURL ? (headImage.originImage?.size / 1024).toFixed(2) + "KB" : "" }}
+          <div class="hint">{{ headImage.originImageBlobURL ? (headImage.originImage?.size / 1024).toFixed(2) + "KB" : ""
+          }}
           </div>
         </div>
         <div class="compressResult">
@@ -27,8 +41,14 @@
         </div>
         <div class="compressedImage">
           <div class="img">
-            <img v-if="headImage.compressedImageBlobURL" :src="headImage.compressedImageBlobURL">
-            <el-icon size="42px" v-else>
+            <img
+              v-if="headImage.compressedImageBlobURL"
+              :src="headImage.compressedImageBlobURL"
+            >
+            <el-icon
+              size="42px"
+              v-else
+            >
               <SemiSelect />
             </el-icon>
           </div>
@@ -37,8 +57,14 @@
             "KB" : "" }}</div>
         </div>
       </div>
-      <el-upload ref="upload" class="upload" :limit="1" :auto-upload="false" :show-file-list="false"
-        :on-change="headImage.selectImage">
+      <el-upload
+        ref="upload"
+        class="upload"
+        :limit="1"
+        :auto-upload="false"
+        :show-file-list="false"
+        :on-change="headImage.selectImage"
+      >
         <template #trigger>
           <div class="btn cursor_pointer">
             <el-icon>
@@ -47,7 +73,10 @@
             &nbsp;选择图片
           </div>
         </template>
-        <div class="btn  cursor_pointer" @click="headImage.uploadHeadImage">
+        <div
+          class="btn  cursor_pointer"
+          @click="headImage.uploadHeadImage"
+        >
           <el-icon>
             <Upload />
           </el-icon>
@@ -264,5 +293,4 @@ onMounted(() => {
       @include fill_color("fill15");
     }
   }
-}
-</style>
+}</style>

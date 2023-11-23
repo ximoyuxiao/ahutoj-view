@@ -252,21 +252,30 @@ onMounted(() => {
   <el-container class="Main">
     <el-main class="Container">
       <div class="contest">
-        <div class="notFound" v-show="notFound">
+        <div
+          class="notFound"
+          v-show="notFound"
+        >
           <el-empty description="肥肠抱歉，木有找到该题单，返回重试吧。" />
         </div>
         <template v-if="!notFound">
-          <div class="infoBox" ref="infoBox">
+          <div
+            class="infoBox"
+            ref="infoBox"
+          >
             <el-row>
-                <div class="ArtFont Bold">&nbsp;#{{ list.LID }}&nbsp;</div>
-                <div class="Title Bold ArtFont">{{ list.Title }}</div>
-              </el-row>
+              <div class="ArtFont Bold">&nbsp;#{{ list.LID }}&nbsp;</div>
+              <div class="Title Bold ArtFont">{{ list.Title }}</div>
+            </el-row>
             <div class="text">创建者：{{ list.UID }}</div>
             <div class="text">开始时间：{{ proxy.Utils.TimeTools.timestampToTime(list.StartTime) }}</div>
             <template v-if="addlist">
               <div class="addList">
                 <div class="functionBox">
-                  <div class="contestRank cursor_pointer" v-on:click="RegisterTrain()">
+                  <div
+                    class="contestRank cursor_pointer"
+                    v-on:click="RegisterTrain()"
+                  >
                     加入题单
                   </div>
                 </div>
@@ -276,22 +285,37 @@ onMounted(() => {
             <template v-else>
               <div class="text">已解决:{{ userListInfo.solved }}/{{ list.Data.length }}</div>
               <div class="process">
-                <el-progress :show-text="false" :stroke-width="20"
-                  :percentage="100 * userListInfo.solved / list.Data.length" style="margin: 20px 0 20px 0;" />
+                <el-progress
+                  :show-text="false"
+                  :stroke-width="20"
+                  :percentage="100 * userListInfo.solved / list.Data.length"
+                  style="margin: 20px 0 20px 0;"
+                />
               </div>
             </template>
             <div class="functionBox">
-              <el-button class="contestButton" v-on:click="goToRank()">
+              <el-button
+                class="contestButton"
+                v-on:click="goToRank()"
+              >
                 <el-icon size="16px">
                   <Histogram />
                 </el-icon>&nbsp;&nbsp;排 名
               </el-button>
-              <el-button v-if="admin" class="contestButton" v-on:click="CloneList()">
+              <el-button
+                v-if="admin"
+                class="contestButton"
+                v-on:click="CloneList()"
+              >
                 <el-icon size="16px">
                   <DocumentAdd />
                 </el-icon>&nbsp;&nbsp;克 隆
               </el-button>
-              <el-button v-if="admin" class="contestButton" v-on:click="goToListAdmin()">
+              <el-button
+                v-if="admin"
+                class="contestButton"
+                v-on:click="goToListAdmin()"
+              >
                 <el-icon size="16px">
                   <Edit />
                 </el-icon>&nbsp;&nbsp;编 辑
@@ -299,22 +323,42 @@ onMounted(() => {
             </div>
           </div>
           <el-divider></el-divider>
-          <div class="problemList" ref="problemList">
+          <div
+            class="problemList"
+            ref="problemList"
+          >
             <div class="nav">
               <div style="width: 90px">序号</div>
               <div style="width: calc(100% - 190px)">题目</div>
               <div style="width: 100px">通过情况</div>
             </div>
-            <div class="item" v-for="(item, index) in list.Data" :key="index">
-              <div class="flag cursor_pointer" v-on:click="goToProblem(item.PID)">
+            <div
+              class="item"
+              v-for="(item, index) in list.Data"
+              :key="index"
+            >
+              <div
+                class="flag cursor_pointer"
+                v-on:click="goToProblem(item.PID)"
+              >
                 {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
               </div>
-              <div class="title cursor_pointer" v-on:click="goToProblem(item.PID)">
+              <div
+                class="title cursor_pointer"
+                v-on:click="goToProblem(item.PID)"
+              >
                 {{ item.Title }}
               </div>
               <div class="status">
-                <el-progress type="circle" :width="22" :stroke-width="3" :percentage="checkSolved(item.PID) ? 100 : 0"
-                  :show-text="false" style="margin: 0 10px" color="#5E8D00" />
+                <el-progress
+                  type="circle"
+                  :width="22"
+                  :stroke-width="3"
+                  :percentage="checkSolved(item.PID) ? 100 : 0"
+                  :show-text="false"
+                  style="margin: 0 10px"
+                  color="#5E8D00"
+                />
               </div>
             </div>
           </div>
@@ -325,7 +369,6 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-
 .contestButton {
   width: 160px;
   height: 40px;

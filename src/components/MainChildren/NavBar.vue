@@ -46,46 +46,90 @@ function initLoginCredentials() {
 }
 </script>
 <template>
-  <el-menu class="navBar Serif" mode="horizontal" :ellipsis="false" :default-active="activeIndex" @select="handleSelect">
+  <el-menu
+    class="navBar Serif"
+    mode="horizontal"
+    :ellipsis="false"
+    :default-active="activeIndex"
+    @select="handleSelect"
+  >
     <router-link to="/Home">
-      <el-menu-item index="0" class="Bold navBarComponent">
+      <el-menu-item
+        index="0"
+        class="Bold navBarComponent"
+      >
         AHUT OJ
       </el-menu-item>
     </router-link>
-    <router-link active-class="selected" id="problems" to="/Problems">
-      <el-menu-item index="1" class="navBarComponent">
+    <router-link
+      active-class="selected"
+      id="problems"
+      to="/Problems"
+    >
+      <el-menu-item
+        index="1"
+        class="navBarComponent"
+      >
         <el-icon>
           <Files />
         </el-icon>
         题库
       </el-menu-item>
     </router-link>
-    <router-link active-class="selected" id="contests" to="/Contests">
-      <el-menu-item index="2" class="navBarComponent">
+    <router-link
+      active-class="selected"
+      id="contests"
+      to="/Contests"
+    >
+      <el-menu-item
+        index="2"
+        class="navBarComponent"
+      >
         <el-icon>
           <SwitchFilled />
         </el-icon>
         比赛
       </el-menu-item>
     </router-link>
-    <router-link active-class="selected" id="Lists" to="/Lists">
-      <el-menu-item index="3" class="navBarComponent">
+    <router-link
+      active-class="selected"
+      id="Lists"
+      to="/Lists"
+    >
+      <el-menu-item
+        index="3"
+        class="navBarComponent"
+      >
         <el-icon>
           <Tickets />
         </el-icon>
         题单
       </el-menu-item>
     </router-link>
-    <router-link active-class="selected" id="status" to="/Status">
-      <el-menu-item index="4" class="navBarComponent">
+    <router-link
+      active-class="selected"
+      id="status"
+      to="/Status"
+    >
+      <el-menu-item
+        index="4"
+        class="navBarComponent"
+      >
         <el-icon>
           <DataAnalysis />
         </el-icon>
         状态
       </el-menu-item>
     </router-link>
-    <router-link active-class="selected" id="status" to="/About">
-      <el-menu-item index="5" class="navBarComponent">
+    <router-link
+      active-class="selected"
+      id="status"
+      to="/About"
+    >
+      <el-menu-item
+        index="5"
+        class="navBarComponent"
+      >
         <el-icon>
           <InfoFilled />
         </el-icon>
@@ -93,58 +137,70 @@ function initLoginCredentials() {
       </el-menu-item>
     </router-link>
     <div class="flex-grow" />
-    <el-menu-item index="6" @click="props.config">
+    <el-menu-item
+      index="6"
+      @click="props.config"
+    >
       <el-icon size="55px">
         <Setting />
       </el-icon>
     </el-menu-item>
     <div v-if="userDataStore.UserName == ''">
-      <el-menu-item @click="props.login" index="7">
+      <el-menu-item
+        @click="props.login"
+        index="7"
+      >
         登录
       </el-menu-item>
     </div>
     <div v-else>
       <el-sub-menu index="8">
-        <template #title>
-          <div class="Bold"> {{ userDataStore.UserName }}</div>
-        </template>
-        <div @click.stop="intoUserCenter()">
-          <el-menu-item index="7-1" class="adminComponent">
-            <el-icon>
-              <User />
-            </el-icon>
-            个人中心
-          </el-menu-item>
-        </div>
-        <div v-if="userDataStore.PermissionMap > 3" @click.stop="intoAdminCenter()">
-          <el-menu-item index="7-2" class="adminComponent">
-            <el-icon>
-              <Operation />
-            </el-icon>
-            OJ&nbsp;管理
-          </el-menu-item>
-        </div>
-        <div @click.stop="initLoginCredentials()">
-          <el-menu-item index="7-3">
-            <el-icon>
-              <Close />
-            </el-icon>
-            退出登录
-          </el-menu-item>
-        </div>
-      </el-sub-menu>
-    </div>
-  </el-menu>
-</template>
+      <template #title>
+        <div class="Bold"> {{ userDataStore.UserName }}</div>
+      </template>
+      <div @click.stop="intoUserCenter()">
+        <el-menu-item
+          index="7-1"
+          class="adminComponent"
+        >
+          <el-icon>
+            <User />
+          </el-icon>
+          个人中心
+        </el-menu-item>
+      </div>
+      <div
+        v-if="userDataStore.PermissionMap > 3"
+        @click.stop="intoAdminCenter()"
+      >
+        <el-menu-item
+          index="7-2"
+          class="adminComponent"
+        >
+          <el-icon>
+            <Operation />
+          </el-icon>
+          OJ&nbsp;管理
+        </el-menu-item>
+      </div>
+      <div @click.stop="initLoginCredentials()">
+        <el-menu-item index="7-3">
+          <el-icon>
+            <Close />
+          </el-icon>
+          退出登录
+        </el-menu-item>
+      </div>
+    </el-sub-menu>
+  </div>
+</el-menu></template>
 
 
-<style scoped lang="scss">
-.flex-grow {
+<style scoped lang="scss">.flex-grow {
   flex-grow: 1;
 }
 
-.navBar {
-}
+.navBar {}
 
 .adminComponent {
   font-size: $fontSize4;
@@ -152,5 +208,4 @@ function initLoginCredentials() {
 
 .navBarComponent {
   font-size: $fontSize4;
-}
-</style>
+}</style>

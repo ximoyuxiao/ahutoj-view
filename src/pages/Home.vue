@@ -190,24 +190,43 @@ onMounted(() => {
 
 
 <template>
-  <!-- <el-dialog v-model="centerDialogVisible" :title=notices.noticeList[notices.Selected].Title close-icon="false" center
-    style="border-radius: 8px; width: min(80%, 700px);">
+  <el-dialog
+    v-model="centerDialogVisible"
+    :title=notices.noticeList[notices.Selected].Title
+    close-icon="false"
+    center
+    style="border-radius: 8px; width: min(80%, 700px);"
+  >
     <template #title>
-      <div class="Title Bold ArtFont" style="font-size: 22px;">
+      <div
+        class="Title Bold ArtFont"
+        style="font-size: 22px;"
+      >
         {{ notices.noticeList[notices.Selected].Title }}
       </div>
     </template>
-    <md-editor class="markDown" v-model="notices.noticeList[notices.Selected].Content"
-      :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'" preview-only />
+    <md-editor
+      class="markDown"
+      v-model="notices.noticeList[notices.Selected].Content"
+      :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'"
+      preview-only
+    />
     <template #footer>
       <span class="dialog-footer">
-        <el-button type="primary" @click="centerDialogVisible = false" style="width: 80px;">
+        <el-button
+          type="primary"
+          @click="centerDialogVisible = false"
+          style="width: 80px;"
+        >
           <el-icon><Select /></el-icon>
         </el-button>
       </span>
     </template>
-  </el-dialog> -->
-  <div class="error" v-show="config.isError">
+  </el-dialog>
+  <div
+    class="error"
+    v-show="config.isError"
+  >
     <el-empty description="数据同步失败,可能是网络问题，请稍后重试，或者联系网站运维人员。" />
   </div>
   <el-container class="Main">
@@ -223,7 +242,10 @@ onMounted(() => {
         <div class="Title ArtFont Bold">
           近期比赛
         </div>
-        <div class="contestsPreview" v-show="!config.isError">
+        <div
+          class="contestsPreview"
+          v-show="!config.isError"
+        >
           <!-- <div class="left">
             <div :class="(contests.showListIndex == 1 ? 'selected ' : '') + 'liveContests cursor_pointer'"
               @click="contests.show(1)">
@@ -241,9 +263,19 @@ onMounted(() => {
           <div class="right">
             <div class="waitingContests">
               <!-- <div class="waitingContests" v-show="contests.showListIndex == 2"> -->
-              <div class="cursor_pointer" :class="item.Title != '' ? 'item' : 'nothing'" v-for="(item, index) in contests.waitingList" :key="index" @click="goto.contest(item);">
+              <div
+                class="cursor_pointer"
+                :class="item.Title != '' ? 'item' : 'nothing'"
+                v-for="(item, index) in contests.waitingList"
+                :key="index"
+                @click="goto.contest(item);"
+              >
                 <div class="title">
-                  <el-icon v-if="item.IsPublic == -1 && item.Title" color="#ff3300" size="22px">
+                  <el-icon
+                    v-if="item.IsPublic == -1 && item.Title"
+                    color="#ff3300"
+                    size="22px"
+                  >
                     <Lock />
                   </el-icon>
                   {{ item.Title }}
@@ -256,9 +288,19 @@ onMounted(() => {
             </div>
             <div class="liveContests">
               <!-- <div class="liveContests" v-show="contests.showListIndex == 1"> -->
-              <div class="cursor_pointer" :class="item.Title != '' ? 'item' : 'nothing'" v-for="(item, index) in contests.liveList" :key="index" @click="goto.contest(item);">
-                <div class="title" >
-                  <el-icon v-if="item.IsPublic == -1 && item.Title" color="#ff3300" size="22px">
+              <div
+                class="cursor_pointer"
+                :class="item.Title != '' ? 'item' : 'nothing'"
+                v-for="(item, index) in contests.liveList"
+                :key="index"
+                @click="goto.contest(item);"
+              >
+                <div class="title">
+                  <el-icon
+                    v-if="item.IsPublic == -1 && item.Title"
+                    color="#ff3300"
+                    size="22px"
+                  >
                     <Lock />
                   </el-icon>
                   {{ item.Title }}
@@ -271,9 +313,22 @@ onMounted(() => {
             </div>
             <div class="overContests">
               <!-- <div class="overContests" v-show="contests.showListIndex == 3"> -->
-              <div class="cursor_pointer" :class="item.Title != '' ? 'item' : 'nothing'" v-for="(item, index) in contests.overList" :key="index"  @click="goto.contest(item);">
-                <div class="title" @click="goto.contest(item);">
-                  <el-icon v-if="item.IsPublic == -1 && item.Title" color="#ff3300" size="22px">
+              <div
+                class="cursor_pointer"
+                :class="item.Title != '' ? 'item' : 'nothing'"
+                v-for="(item, index) in contests.overList"
+                :key="index"
+                @click="goto.contest(item);"
+              >
+                <div
+                  class="title"
+                  @click="goto.contest(item);"
+                >
+                  <el-icon
+                    v-if="item.IsPublic == -1 && item.Title"
+                    color="#ff3300"
+                    size="22px"
+                  >
                     <Lock />
                   </el-icon>
                   {{ item.Title }}
@@ -288,16 +343,23 @@ onMounted(() => {
           </div>
         </div>
       </el-main>
-      <el-asider class="Container Left" style="width: min(40%, 400px);">
+      <el-asider
+        class="Container Left"
+        style="width: min(40%, 400px);"
+      >
         <div class="Title ArtFont Bold">
           公告
         </div>
         <div class="notice">
           <div class="left">
             <div class="noticeItem">
-              <div :class="item.Title != '' ? 'item' : 'nothing'" class="cursor_pointer"
-                v-for="(item, index) in notices.noticeList" :key="index"
-                @click="notices.SelectIdx(index), centerDialogVisible = true">
+              <div
+                :class="item.Title != '' ? 'item' : 'nothing'"
+                class="cursor_pointer"
+                v-for="(item, index) in notices.noticeList"
+                :key="index"
+                @click="notices.SelectIdx(index), centerDialogVisible = true"
+              >
                 <div>{{ item.Title }}<span class="rightTime">{{ item.CreateTime ? (
                   proxy.Utils.TimeTools.timestampToTime(item.CreateTime)) : "" }}</span></div>
               </div>

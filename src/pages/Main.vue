@@ -177,9 +177,12 @@ onMounted(() => {
         v-if="config.showCover"
         style="background: linear-gradient(to bottom right, #50A3A2, #53E3A6);"
       >
-      <ul class="bg-bubbles">
-      <li v-for="i in 10" :key="i"></li>
-      </ul>
+        <ul class="bg-bubbles">
+          <li
+            v-for="i in 10"
+            :key="i"
+          ></li>
+        </ul>
         <div class="cover" />
       </div>
 
@@ -279,5 +282,4 @@ onMounted(() => {
   overflow: hidden;
   filter: blur(3px);
 }
-
 </style>

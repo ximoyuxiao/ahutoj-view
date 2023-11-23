@@ -9,7 +9,7 @@
           <Back />
         </el-icon>
         <div>
-          #{{config.CID}}&nbsp;-&nbsp;{{contest.info.Title}}
+          #{{ config.CID }}&nbsp;-&nbsp;{{ contest.info.Title }}
         </div>
       </div>
       <StatusSearch :query="query">
@@ -350,7 +350,7 @@ onMounted(() => {
   box-sizing: border-box;
   padding: $status_outerPaddingTop $status_outerPaddingLeft;
 
-  > .contestID {
+  >.contestID {
     margin-bottom: 30px;
     font-size: $fontSize14;
     @include font_color("font4");
@@ -367,7 +367,7 @@ onMounted(() => {
       @include font_color("font2");
     }
 
-    > div {
+    >div {
       margin: 0 10px;
     }
   }
@@ -395,7 +395,7 @@ onMounted(() => {
       grid-template-rows: 40px;
       grid-gap: 8px;
 
-      > .problem {
+      >.problem {
         width: 100%;
         text-align: center;
         line-height: 40px;

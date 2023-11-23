@@ -1,26 +1,61 @@
 <template>
   <div class="addUser">
     <el-row>
-      <label class="loginLabel" for="username">
+      <label
+        class="loginLabel"
+        for="username"
+      >
         账号
       </label>
-      <el-input class="loginInput" name="username" type="text" autocomplete="off" maxlength="20" v-model="userInfo.UID" />
+      <el-input
+        class="loginInput"
+        name="username"
+        type="text"
+        autocomplete="off"
+        maxlength="20"
+        v-model="userInfo.UID"
+      />
     </el-row>
     <el-row>
-      <label class="loginLabel" for="nickname">
+      <label
+        class="loginLabel"
+        for="nickname"
+      >
         昵称
       </label>
-      <el-input class="loginInput" name="nickname" type="text" autocomplete="off" maxlength="20"
-        v-model="userInfo.UserName" />
+      <el-input
+        class="loginInput"
+        name="nickname"
+        type="text"
+        autocomplete="off"
+        maxlength="20"
+        v-model="userInfo.UserName"
+      />
     </el-row>
     <el-row>
-      <label class="loginLabel" for="password">
+      <label
+        class="loginLabel"
+        for="password"
+      >
         密码
       </label>
-      <el-input class="loginInput" name="password" type="password" v-model="userInfo.Pass" maxlength="30" show-password />
+      <el-input
+        class="loginInput"
+        name="password"
+        type="password"
+        v-model="userInfo.Pass"
+        maxlength="30"
+        show-password
+      />
     </el-row>
     <el-row>
-      <el-button class="confirm" type="primary" round shoudAddSpace @click="signin">注 册</el-button>
+      <el-button
+        class="confirm"
+        type="primary"
+        round
+        shoudAddSpace
+        @click="signin"
+      >注 册</el-button>
     </el-row>
   </div>
 </template>
@@ -92,19 +127,16 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.addUser {
+<style scoped lang="scss">.addUser {
   width: 250px;
   font-size: $fontSize6;
 }
 
 .confirm {
-    width: 330px;
-    height: 40px;
-    font-size: $fontSize7;
-    box-sizing: border-box;
-    padding: 5px 0;
-    margin: 20px 0px 16px 0px;
-  }
-
-</style>
+  width: 330px;
+  height: 40px;
+  font-size: $fontSize7;
+  box-sizing: border-box;
+  padding: 5px 0;
+  margin: 20px 0px 16px 0px;
+}</style>

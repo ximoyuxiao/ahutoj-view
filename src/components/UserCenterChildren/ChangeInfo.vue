@@ -85,7 +85,7 @@ type propsType = {
 };
 const props = withDefaults(defineProps<propsType>(), {
   userInfo: {},
-  close: () => {},
+  close: () => { },
 });
 
 //进入修改资料模式
@@ -240,7 +240,7 @@ onMounted(() => {
     @include box_shadow(0, 0, 8px, 1px, "fill51");
   }
 
-  > div {
+  >div {
     @include font_color("font1");
     font-size: $fontSize6;
     letter-spacing: 1px;
@@ -253,7 +253,7 @@ onMounted(() => {
     }
   }
 
-  > .close {
+  >.close {
     position: absolute;
     right: 10px;
     top: 10px;
@@ -264,7 +264,7 @@ onMounted(() => {
     }
   }
 
-  > .btn {
+  >.btn {
     position: relative;
     overflow: hidden;
     margin: 8px 0;

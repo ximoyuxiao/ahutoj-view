@@ -59,7 +59,7 @@ type propsType = {
   close: Function;
 };
 const props = withDefaults(defineProps<propsType>(), {
-  close: () => {},
+  close: () => { },
 });
 
 //修改密码
@@ -138,7 +138,7 @@ var changePassword = reactive({
     @include box_shadow(0, 0, 8px, 1px, "fill12");
   }
 
-  > div {
+  >div {
     @include font_color("font1");
     font-size: $fontSize6;
     letter-spacing: 1px;
@@ -151,7 +151,7 @@ var changePassword = reactive({
     }
   }
 
-  > .close {
+  >.close {
     position: absolute;
     right: 10px;
     top: 10px;
@@ -162,7 +162,7 @@ var changePassword = reactive({
     }
   }
 
-  > .btn {
+  >.btn {
     position: relative;
     overflow: hidden;
     margin: 8px 0;

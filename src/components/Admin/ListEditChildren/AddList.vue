@@ -11,9 +11,9 @@
         autosize
       />
     </div>
-    
-    
-    
+
+
+
 
     <el-table
       :data="problemList.data"
@@ -29,7 +29,7 @@
       />
       <el-table-column align="right">
         <template #header>
-          <div class="count">{{ problemList.data.length }}/{{maxListProblemLength  }}</div>
+          <div class="count">{{ problemList.data.length }}/{{ maxListProblemLength }}</div>
           <el-input
             v-model="problemList.searchPid"
             style="width: 200px;"
@@ -79,7 +79,7 @@ type ListType = {
   UID: string;
   Title: string;
   Description: string;
-  Problems:string[];
+  Problems: string[];
   [item: string]: any;
 };
 
@@ -103,12 +103,12 @@ var problemList = reactive({
   //搜索
   search() {
     //如果列表中已经存在则取消添加
-    if(this.data.length == maxListProblemLength){
+    if (this.data.length == maxListProblemLength) {
       proxy.elMessage({
-          message: "添加失败,一个题单最多只能添加" + maxListProblemLength+ "道题目",
-          type: "warning",
-        });
-      return ;
+        message: "添加失败,一个题单最多只能添加" + maxListProblemLength + "道题目",
+        type: "warning",
+      });
+      return;
     }
     for (let p in this.data)
       if (this.data[p].PID == this.searchPid) {
@@ -146,29 +146,29 @@ var problemList = reactive({
   },
 });
 
-function AddList(){
+function AddList() {
   list.Problems = [];
   problemList.data.forEach(element => {
     list.Problems.push(element.PID)
   });
-  if(list.Title == ""){
+  if (list.Title == "") {
     elMessage({ message: "请输入题单标题!", type: "warning" });
-    return ;
+    return;
   }
-  proxy.$post("/api/training/add/",{
-    Title:list.Title,
-    Description:list.Description,
-    Problems:list.Problems.join(","),
-  }).then((res:any)=>{
+  proxy.$post("/api/training/add/", {
+    Title: list.Title,
+    Description: list.Description,
+    Problems: list.Problems.join(","),
+  }).then((res: any) => {
     let data = res.data;
-      if (data.code == 0) {
-        proxy.elMessage({ message: "添加成功!", type: "success" });
-      } else {
-        proxy.codeProcessor(
-          data?.code ?? 100001,
-          data?.msg ?? "服务器错误\\\\error"
-        );
-      }
+    if (data.code == 0) {
+      proxy.elMessage({ message: "添加成功!", type: "success" });
+    } else {
+      proxy.codeProcessor(
+        data?.code ?? 100001,
+        data?.msg ?? "服务器错误\\\\error"
+      );
+    }
   });
 }
 </script>
@@ -178,21 +178,22 @@ function AddList(){
   width: 100%;
 }
 
-.addlist > div {
+.addlist>div {
   display: flex;
   align-content: center;
   box-sizing: border-box;
   margin: 5px 0;
 }
 
-.addlist > div > span {
+.addlist>div>span {
   font-size: 22px;
   width: 150px;
   @include font_color("font1");
 }
-.count{
+
+.count {
   width: 20%;
-  display:inline-flex;
+  display: inline-flex;
   font-size: 15px;
   // align-content: center;
   text-align: center;

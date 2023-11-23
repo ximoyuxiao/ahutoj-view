@@ -40,7 +40,7 @@ onMounted(() => {
   align-items: center;
   justify-content: space-between;
 
-  &:hover > div {
+  &:hover>div {
     @include border_color("fill12");
     @include font_color("fill12");
   }
@@ -56,8 +56,8 @@ onMounted(() => {
     @include fill_color("fill4");
 
     &:focus,
-    &:hover + div,
-    &:focus + div {
+    &:hover+div,
+    &:focus+div {
       outline: none;
       border: 2px solid;
       @include border_color("fill12");

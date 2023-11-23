@@ -485,13 +485,13 @@ onMounted(() => {
                     <el-icon size="19px">
                         <FullScreen />
                     </el-icon>
-                    &nbsp全屏编辑器
+                    &nbsp全屏编辑
                 </el-button>
             </el-row>
             <div v-if="problem.ContentType == 1">
                 <div class="markdown Top">
                     <md-editor v-model="problem.Description" :toolbars="markdown.toolbar"
-                        :on-upload-img="problem.updateImg" />
+                        :on-upload-img="problem.updateImg" preview-only style="max-height: 600px;"/>
                 </div>
             </div>
             <div v-else>
@@ -525,19 +525,25 @@ onMounted(() => {
             </div>
         </el-main>
         <div style="display: flex;" class="Top" v-if="search.isSearched">
-            <el-button type="danger" v-on:click="deleteProblem()" class="button-2">
-                <span>删 除</span>
+            <el-button type="danger" v-on:click="deleteProblem()" class="button-1">
+                <span class="Bold">删 除</span>
             </el-button>
             <el-button v-on:click="complete()" type="warning" class="button-2">
-                <span>修 改</span>
+                <span class="Bold">修 改</span>
             </el-button>
         </div>
     </el-container>
 </template>
 
 <style scoped lang="scss">
+.button-1 {
+    width: 20%;
+    height: 50px;
+    border-radius: 12px;
+}
+
 .button-2 {
-    width: 100%;
+    width: 80%;
     height: 50px;
     border-radius: 12px;
 }

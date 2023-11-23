@@ -4,17 +4,39 @@
       <label class="loginLabel">
         账号
       </label>
-      <input class="loginInput" name="UID" type="text" autocomplete="off" maxlength="20" v-model="userInfo.UID" />
+      <input
+        class="loginInput"
+        name="UID"
+        type="text"
+        autocomplete="off"
+        maxlength="20"
+        v-model="userInfo.UID"
+      />
     </div>
     <div class="password">
-      <label class="loginLabel" for="username">
+      <label
+        class="loginLabel"
+        for="username"
+      >
         密码
       </label>
-      <input class="loginInput" name="password" type="text" autocomplete="off" maxlength="20"
-        v-model="userInfo.Password" />
+      <input
+        class="loginInput"
+        name="password"
+        type="text"
+        autocomplete="off"
+        maxlength="20"
+        v-model="userInfo.Password"
+      />
     </div>
     <el-row>
-      <el-button class="confirm" type="primary" round shoudAddSpace @click="changeUserPass()">重置密码</el-button>
+      <el-button
+        class="confirm"
+        type="primary"
+        round
+        shoudAddSpace
+        @click="changeUserPass()"
+      >重置密码</el-button>
     </el-row>
   </div>
 </template>
@@ -115,11 +137,10 @@ function changeUserPass() {
 }
 
 .confirm {
-    width: 330px;
-    height: 40px;
-    font-size: $fontSize7;
-    box-sizing: border-box;
-    padding: 5px 0;
-    margin: 20px 0px 16px 0px;
-  }
-</style>
+  width: 330px;
+  height: 40px;
+  font-size: $fontSize7;
+  box-sizing: border-box;
+  padding: 5px 0;
+  margin: 20px 0px 16px 0px;
+}</style>

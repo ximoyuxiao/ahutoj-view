@@ -3,23 +3,43 @@
     <el-main class="Container">
       <el-row>
         <span>Run ID</span>
-        <el-input-number v-model="submit.SID" :min="0" class="Left" />
+        <el-input-number
+          v-model="submit.SID"
+          :min="0"
+          class="Left"
+        />
       </el-row>
       <el-row class="Top">
         <span>题目ID</span>
-        <el-input v-model="submit.PID" style="width: 200px" class="Left" />
+        <el-input
+          v-model="submit.PID"
+          style="width: 200px"
+          class="Left"
+        />
       </el-row>
       <el-row class="Top">
         <span>用户ID</span>
-        <el-input v-model="submit.UID" style="width: 200px" class="Left" />
+        <el-input
+          v-model="submit.UID"
+          style="width: 200px"
+          class="Left"
+        />
       </el-row>
       <el-row class="Top">
         <span>竞赛ID</span>
-        <el-input-number v-model="submit.CID" :min="0" class="Left" />
+        <el-input-number
+          v-model="submit.CID"
+          :min="0"
+          class="Left"
+        />
       </el-row>
       <div class="Top">"0"或者空代表不填</div>
     </el-main>
-    <el-button type="warning" v-on:click="complete()" class="rejudgeButton Top">
+    <el-button
+      type="warning"
+      v-on:click="complete()"
+      class="rejudgeButton Top"
+    >
       重判
     </el-button>
   </el-container>
@@ -93,5 +113,4 @@ span {
       @include font_color("font1");
     }
   }
-}
-</style>
+}</style>

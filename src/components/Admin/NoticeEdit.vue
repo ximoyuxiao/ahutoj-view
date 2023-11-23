@@ -1,6 +1,12 @@
 <template>
-  <el-menu class="ListEdit" mode="horizontal">
-    <router-link active-class="selected" to="/Admin/NoticeEdit/AddNotice">
+  <el-menu
+    class="ListEdit"
+    mode="horizontal"
+  >
+    <router-link
+      active-class="selected"
+      to="/Admin/NoticeEdit/AddNotice"
+    >
       <el-menu-item index="1">
         <el-icon>
           <Plus />
@@ -8,7 +14,10 @@
         新增
       </el-menu-item>
     </router-link>
-    <router-link active-class="selected" to="/Admin/NoticeEdit/UpdateNotice">
+    <router-link
+      active-class="selected"
+      to="/Admin/NoticeEdit/UpdateNotice"
+    >
       <el-menu-item index="2">
         <el-icon>
           <Edit />

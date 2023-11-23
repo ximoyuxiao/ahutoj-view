@@ -4,7 +4,7 @@
       <span>UID：</span>
       <el-input
         v-model="search.UID"
-        @focus="()=>{search.isSearched = false}"
+        @focus="() => { search.isSearched = false }"
       />
     </div>
     <el-button @click="search.getInfo">搜索</el-button>
@@ -13,21 +13,21 @@
       class="userInfo"
       v-show="search.isSearched"
     >
-      <div>用户名：{{search.UID}}</div>
-      <div>昵称：{{search.UserName}}</div>
-      <div>学校：{{search.School}}</div>
-      <div>班级：{{search.Classes}}</div>
-      <div>邮箱：{{search.Email}}</div>
+      <div>用户名：{{ search.UID }}</div>
+      <div>昵称：{{ search.UserName }}</div>
+      <div>学校：{{ search.School }}</div>
+      <div>班级：{{ search.Classes }}</div>
+      <div>邮箱：{{ search.Email }}</div>
       <div class="permissionTabel">
         <div
           class="header"
-          v-for="(item,index) in ['超管','资源','竞赛','题单','题目','管理员']"
+          v-for="(item, index) in ['超管', '资源', '竞赛', '题单', '题目', '管理员']"
         >
-          {{item}}
+          {{ item }}
         </div>
         <div
           class="select"
-          v-for="(item,index) in search.permissionTabel"
+          v-for="(item, index) in search.permissionTabel"
         >
           <el-switch
             v-model="search.permissionTabel[index]"
@@ -40,7 +40,6 @@
       <el-button @click="confirm">修改</el-button>
     </div>
   </div>
-
 </template>
 
 <script lang="ts" setup>
@@ -226,6 +225,7 @@ function confirm() {
         line-height: 40px;
         text-align: center;
       }
+
       .select {
         display: flex;
         align-items: center;

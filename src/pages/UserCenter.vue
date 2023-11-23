@@ -17,7 +17,7 @@ const themeSwitch = useThemeSwitchStore();
 //用户资料
 type userInfoType = {
   UID: string;
-  Rating:null|number;
+  Rating: null | number;
   HeadURL: string;
   UserName: string;
   School: string;
@@ -28,8 +28,8 @@ type userInfoType = {
   CodeForceUser: string;
   Vjid: string;
   AdeptArray: Array<string>;
-  Submited:number;
-  Solved:number;
+  Submited: number;
+  Solved: number;
   copy: Function;
 };
 var userInfo = reactive<userInfoType>({
@@ -44,9 +44,9 @@ var userInfo = reactive<userInfoType>({
   CodeForceUser: "",
   Vjid: "",
   AdeptArray: [],
-  Solved:0,
-  Submited:0,
-  Rating:0,
+  Solved: 0,
+  Submited: 0,
+  Rating: 0,
   copy: (data: any) => {
     console.log(data);
     userInfo.UID = data.UID;
@@ -118,7 +118,7 @@ var activityCalendarConfig = reactive<activityCalendarConfigType>({
   levelFlagText: ["少", "多"],
   fontSize: 12,
   fontColor: "#707070",
-  clickEvent: function clickEvent(item: object) {},
+  clickEvent: function clickEvent(item: object) { },
   init(data: { date: string; count: number; SubmitTime: number }[]) {
     this.endDate = proxy.Utils.TimeTools.timestampToDate(Date.now(), 2);
     let tempMap = new Map();
@@ -252,32 +252,32 @@ var functionConfig = reactive({
   },
 });
 
-function getRatingColor(rating:number){
-  if(rating == 0){
+function getRatingColor(rating: number) {
+  if (rating == 0) {
     return "color:#000000;"
   }
-  if(rating < 1200){
+  if (rating < 1200) {
     return "color:#C0C0C0;";
   }
-  if( rating >= 1200 && rating < 1400){
+  if (rating >= 1200 && rating < 1400) {
     return "color:#00FF00;";
   }
-  if(rating >= 1400 && rating < 1600){
+  if (rating >= 1400 && rating < 1600) {
     return "color:#00FFFF;";
   }
-  if(rating >= 1600 && rating < 1900){
+  if (rating >= 1600 && rating < 1900) {
     return "color:#0000FF;";
   }
-  if(rating >=1900 && rating < 2100){
+  if (rating >= 1900 && rating < 2100) {
     return "color:#FF00FF;";
   }
-  if(rating >= 2100 && rating < 2400){
+  if (rating >= 2100 && rating < 2400) {
     return "color:#FF8000;";
   }
-  if(rating >= 2400 && rating < 2600){
+  if (rating >= 2400 && rating < 2600) {
     return "color:#FF0000;";
   }
-  if(rating >= 2600){
+  if (rating >= 2600) {
     return "color:FFFF00;";
   }
 }
@@ -307,7 +307,9 @@ onMounted(() => {
             class="cursor_noFocus cursor_pointer"
             @click="functionConfig.show(11)"
           >
-            <img :src="userInfo.HeadURL ? (staticSourceBaseURL + userInfo.HeadURL) : proxy.Utils.DefaultHeadImage.show(userInfo.UID)" />
+            <img
+              :src="userInfo.HeadURL ? (staticSourceBaseURL + userInfo.HeadURL) : proxy.Utils.DefaultHeadImage.show(userInfo.UID)"
+            />
             <div class="changImage">
               <el-icon size="42px">
                 <Upload />
@@ -320,10 +322,11 @@ onMounted(() => {
               AC:&nbsp;&nbsp;&nbsp;<span style="color:#00CC00">{{ userInfo.Solved }}</span>
             </div>
             <div class="submittedCount">
-              Submit:&nbsp;&nbsp;&nbsp;<span style="color:#0000FF">{{userInfo.Submited}}</span>
+              Submit:&nbsp;&nbsp;&nbsp;<span style="color:#0000FF">{{ userInfo.Submited }}</span>
             </div>
             <div class="rating">
-              Rating:&nbsp;&nbsp;&nbsp;<span :style="getRatingColor(userInfo.Rating?userInfo.Rating:0)">{{ userInfo.Rating?userInfo.Rating:0 }}</span>
+              Rating:&nbsp;&nbsp;&nbsp;<span :style="getRatingColor(userInfo.Rating ? userInfo.Rating : 0)">{{
+                userInfo.Rating ? userInfo.Rating : 0 }}</span>
             </div>
           </div>
         </div>
@@ -355,38 +358,38 @@ onMounted(() => {
     </el-header>
     <el-main class="Container">
       <div class="activityCalendarBox">
-          <ActivityCalendar
-            :data="activityCalendarConfig.data"
-            backgroundColor="#ffffff00"
-            :width="activityCalendarConfig.width"
-            :height="activityCalendarConfig.height"
-            :cellLength="activityCalendarConfig.cellLength"
-            :cellInterval="activityCalendarConfig.cellInterval"
-            :cellBorderRadius="activityCalendarConfig.cellBorderRadius"
-            :fontSize="activityCalendarConfig.fontSize"
-            :fontColor="activityCalendarConfig.fontColor"
-            :showLevelFlag="activityCalendarConfig.showLevelFlag"
-            :colors="activityCalendarConfig.colors"
-            :showWeekDayFlag="true"
-            :levelMapper="activityCalendarConfig.levelMapper"
-            :levelFlagText="activityCalendarConfig.levelFlagText"
-            />
-          </div>
-        </el-main>
-        <el-container class="Bottom">
-          <el-asider class="Container">
+        <ActivityCalendar
+          :data="activityCalendarConfig.data"
+          backgroundColor="#ffffff00"
+          :width="activityCalendarConfig.width"
+          :height="activityCalendarConfig.height"
+          :cellLength="activityCalendarConfig.cellLength"
+          :cellInterval="activityCalendarConfig.cellInterval"
+          :cellBorderRadius="activityCalendarConfig.cellBorderRadius"
+          :fontSize="activityCalendarConfig.fontSize"
+          :fontColor="activityCalendarConfig.fontColor"
+          :showLevelFlag="activityCalendarConfig.showLevelFlag"
+          :colors="activityCalendarConfig.colors"
+          :showWeekDayFlag="true"
+          :levelMapper="activityCalendarConfig.levelMapper"
+          :levelFlagText="activityCalendarConfig.levelFlagText"
+        />
+      </div>
+    </el-main>
+    <el-container class="Bottom">
+      <el-asider class="Container">
         <div class="leftBox">
           <div
             class="functionBtn"
             @click="functionConfig.show(1)"
           >
-            {{userInfo.CodeForceUser ?  "CodeForce:\n" + userInfo.CodeForceUser : "绑定CodeForce"}}
+            {{ userInfo.CodeForceUser ? "CodeForce:\n" + userInfo.CodeForceUser : "绑定CodeForce" }}
           </div>
           <div
             class="functionBtn"
             @click="functionConfig.show(2)"
           >
-            {{userInfo.Vjid ?  "VJudge:\n" + userInfo.Vjid : "绑定VJudge"}}
+            {{ userInfo.Vjid ? "VJudge:\n" + userInfo.Vjid : "绑定VJudge" }}
           </div>
           <el-divider style="margin: 2px;" />
           <div
@@ -399,55 +402,54 @@ onMounted(() => {
 
       </el-asider>
       <el-main class="Container Left">
-      <ChangeInfo
-        v-if="functionConfig.showChangeInfo"
-        :userInfo="userInfo"
-        :close="functionConfig.close"
-      >
-      </ChangeInfo>
-      <ChangeHeadImage
-        v-if="functionConfig.showChangeHeadImage"
-        :userInfo="userInfo"
-        :close="functionConfig.close"
-      >
-      </ChangeHeadImage>
-    <div class="contentBox">
-      <div class="rightBox">
-        <transition
-          enter-active-class="animate__animated animate__zoomIn"
-          leave-active-class="animate__animated animate__zoomOut"
+        <ChangeInfo
+          v-if="functionConfig.showChangeInfo"
+          :userInfo="userInfo"
+          :close="functionConfig.close"
         >
-          <BindingCodeForce
-            v-if="functionConfig.showBindingCodeForce"
-            :CodeForceUser="userInfo.CodeForceUser"
-            :close="functionConfig.close"
-          ></BindingCodeForce>
-        </transition>
-        <transition
-          enter-active-class="animate__animated animate__zoomIn"
-          leave-active-class="animate__animated animate__zoomOut"
+        </ChangeInfo>
+        <ChangeHeadImage
+          v-if="functionConfig.showChangeHeadImage"
+          :userInfo="userInfo"
+          :close="functionConfig.close"
         >
-          <BindingVJudge
-            v-if="functionConfig.showBindingVJudge"
-            :Vjid="userInfo.Vjid"
-            :close="functionConfig.close"
-          ></BindingVJudge>
-        </transition>
-        <transition
-          enter-active-class="animate__animated animate__zoomIn"
-          leave-active-class="animate__animated animate__zoomOut"
-        >
-          <ChangePassword
-            v-if="functionConfig.showChangePassword"
-            :close="functionConfig.close"
-          ></ChangePassword>
-        </transition>
-      </div>
-    </div>
+        </ChangeHeadImage>
+        <div class="contentBox">
+          <div class="rightBox">
+            <transition
+              enter-active-class="animate__animated animate__zoomIn"
+              leave-active-class="animate__animated animate__zoomOut"
+            >
+              <BindingCodeForce
+                v-if="functionConfig.showBindingCodeForce"
+                :CodeForceUser="userInfo.CodeForceUser"
+                :close="functionConfig.close"
+              ></BindingCodeForce>
+            </transition>
+            <transition
+              enter-active-class="animate__animated animate__zoomIn"
+              leave-active-class="animate__animated animate__zoomOut"
+            >
+              <BindingVJudge
+                v-if="functionConfig.showBindingVJudge"
+                :Vjid="userInfo.Vjid"
+                :close="functionConfig.close"
+              ></BindingVJudge>
+            </transition>
+            <transition
+              enter-active-class="animate__animated animate__zoomIn"
+              leave-active-class="animate__animated animate__zoomOut"
+            >
+              <ChangePassword
+                v-if="functionConfig.showChangePassword"
+                :close="functionConfig.close"
+              ></ChangePassword>
+            </transition>
+          </div>
+        </div>
       </el-main>
     </el-container>
   </el-container>
-
 </template>
 
 
@@ -456,175 +458,176 @@ onMounted(() => {
   transition-duration: 150ms;
 }
 
-  .infoBox {
-    position: relative;
-    height: 280px;
-    // border-radius: 20px;
-    // overflow: hidden;
+.infoBox {
+  position: relative;
+  height: 280px;
+  // border-radius: 20px;
+  // overflow: hidden;
 
-    .filter {
-      position: absolute;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: blur(30px) opacity(0.25);
-    }
-
-    .user {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-
-      > #userImg {
-        position: relative;
-        margin: 15px;
-        height: $userCenter_UserHeadImageSide;
-        width: $userCenter_UserHeadImageSide;
-        border-radius: 12px;
-        @include box_shadow(0, 0, 1px, 1px, "font2");
-        overflow: hidden;
-
-        &:hover > .changImage {
-          visibility: visible;
-          opacity: 1;
-        }
-
-        &:hover > img {
-          filter: blur(5px);
-        }
-
-        > .changImage {
-          height: $userCenter_UserHeadImageSide;
-          width: $userCenter_UserHeadImageSide;
-          visibility: hidden;
-          position: absolute;
-          opacity: 0;
-          background-color: #cdcdcd55;
-          transition-duration: 260ms;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-        }
-
-        > img {
-          width: 100%;
-          height: 100%;
-        }
-      }
-
-      > div {
-        font-weight: 600;
-        height: 115px;
-        display: flex;
-        align-items: flex-end;
-      }
-
-      > .username {
-        font-size: $fontSize12;
-        @include font_color("font1");
-      }
-
-      .acStatus {
-        height: 100%;
-        position: absolute;
-        right: 30px;
-        font-size: $fontSize5;
-        @include font_color("font2");
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        justify-content: flex-end;
-        > div {
-          width:100px;
-          text-align:left;
-          font-weight: 525;
-          margin-bottom: 5px;
-        }
-      }
-    }
-
-    .userInfo {
-      width: 100%;
-      height: 115px;
-      padding: 0 20px;
-      box-sizing: border-box;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-
-      > div {
-        @include font_color("font1");
-        font-size: $fontSize6;
-        letter-spacing: 1px;
-        display: flex;
-        align-items: center;
-
-        span {
-          margin: 0 1px;
-        }
-      }
-
-      .set {
-        position: absolute;
-        right: 20px;
-        height: 115px;
-        display: flex;
-        align-items: center;
-        transition-duration: 500ms;
-
-        &:hover {
-          transform: rotateZ(360deg);
-        }
-      }
-    }
+  .filter {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(30px) opacity(0.25);
   }
 
-  .contentBox {
-    margin: $modelDistance 0;
+  .user {
     position: relative;
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    transition-duration: 500ms;
+    align-items: center;
+    justify-content: flex-start;
 
-    .leftBox {
-      width: 200px;
+    >#userImg {
+      position: relative;
+      margin: 15px;
+      height: $userCenter_UserHeadImageSide;
+      width: $userCenter_UserHeadImageSide;
+      border-radius: 12px;
+      @include box_shadow(0, 0, 1px, 1px, "font2");
+      overflow: hidden;
+
+      &:hover>.changImage {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      &:hover>img {
+        filter: blur(5px);
+      }
+
+      >.changImage {
+        height: $userCenter_UserHeadImageSide;
+        width: $userCenter_UserHeadImageSide;
+        visibility: hidden;
+        position: absolute;
+        opacity: 0;
+        background-color: #cdcdcd55;
+        transition-duration: 260ms;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      >img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    >div {
+      font-weight: 600;
+      height: 115px;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    >.username {
+      font-size: $fontSize12;
+      @include font_color("font1");
+    }
+
+    .acStatus {
+      height: 100%;
+      position: absolute;
+      right: 30px;
+      font-size: $fontSize5;
+      @include font_color("font2");
       display: flex;
       flex-direction: column;
-      align-items: center;
-      // padding: 10px 15px;
-      box-sizing: border-box;
-      overflow: hidden;
-      border-radius: 20px;
-      // @include box_shadow(0, 0, 8px, 1px, "fill34");
+      align-items: flex-end;
+      justify-content: flex-end;
 
-      // &:hover {
-      //   @include box_shadow(0, 0, 8px, 1px, "fill32");
-      // }
-
-      .functionBtn {
-        margin: 4px 0;
-        width: 100%;
-        // border-radius: 8px;
-        box-sizing: border-box;
-        padding: 5px 0;
-        @include font_color("font1");
-        font-size: $fontSize7;
-        // line-height: $fontSize8;
-        text-align: center;
-        transition-duration: 260ms;
-        white-space: pre;
-
-        &:hover {
-          @include fill_color("fill35");
-          transform: scale(1.04);
-        }
+      >div {
+        width: 100px;
+        text-align: left;
+        font-weight: 525;
+        margin-bottom: 5px;
       }
     }
   }
-// }
-</style>
+
+  .userInfo {
+    width: 100%;
+    height: 115px;
+    padding: 0 20px;
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    >div {
+      @include font_color("font1");
+      font-size: $fontSize6;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+
+      span {
+        margin: 0 1px;
+      }
+    }
+
+    .set {
+      position: absolute;
+      right: 20px;
+      height: 115px;
+      display: flex;
+      align-items: center;
+      transition-duration: 500ms;
+
+      &:hover {
+        transform: rotateZ(360deg);
+      }
+    }
+  }
+}
+
+.contentBox {
+  margin: $modelDistance 0;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  transition-duration: 500ms;
+
+  .leftBox {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // padding: 10px 15px;
+    box-sizing: border-box;
+    overflow: hidden;
+    border-radius: 20px;
+    // @include box_shadow(0, 0, 8px, 1px, "fill34");
+
+    // &:hover {
+    //   @include box_shadow(0, 0, 8px, 1px, "fill32");
+    // }
+
+    .functionBtn {
+      margin: 4px 0;
+      width: 100%;
+      // border-radius: 8px;
+      box-sizing: border-box;
+      padding: 5px 0;
+      @include font_color("font1");
+      font-size: $fontSize7;
+      // line-height: $fontSize8;
+      text-align: center;
+      transition-duration: 260ms;
+      white-space: pre;
+
+      &:hover {
+        @include fill_color("fill35");
+        transform: scale(1.04);
+      }
+    }
+  }
+}
+
+// }</style>

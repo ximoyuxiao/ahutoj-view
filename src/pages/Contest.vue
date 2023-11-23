@@ -307,29 +307,53 @@ onUnmounted(() => {
     <el-main class="Container">
       <div class="contest">
         <template v-if="!needPass">
-          <div class="notFound" v-show="notFound">
+          <div
+            class="notFound"
+            v-show="notFound"
+          >
             <el-empty description="肥肠抱歉，木有找到该比赛，返回重试吧。" />
           </div>
           <template v-if="!notFound">
-            <div class="infoBox" ref="infoBox">
+            <div
+              class="infoBox"
+              ref="infoBox"
+            >
               <el-row>
                 <div class="ArtFont Bold">&nbsp;#{{ contest.CID }}&nbsp;</div>
                 <div class="title Bold ArtFont">{{ contest.Title }}</div>
-                <div class="ctype ctypeICPC Bold" v-if="contest.Type == 1">
+                <div
+                  class="ctype ctypeICPC Bold"
+                  v-if="contest.Type == 1"
+                >
                   ICPC
                 </div>
-                <div class="ctype ctypeOI bold" v-else>
+                <div
+                  class="ctype ctypeOI bold"
+                  v-else
+                >
                   OI
                 </div>
               </el-row>
               <div class="text">创建者：{{ contest.UID }}</div>
               <div class="text">描述：{{ contest.Description }}</div>
-              <div class="status" v-if="timePercent.status == 1">
-                <div class="point" style="background-color: #5ebd00"></div>
+              <div
+                class="status"
+                v-if="timePercent.status == 1"
+              >
+                <div
+                  class="point"
+                  style="background-color: #5ebd00"
+                ></div>
                 进行中
               </div>
-              <div class="status" v-else>
-                <div class="point" style="background-color: #ff3300"></div>
+              <div
+                class="status"
+                v-else
+              >
+                <div
+                  class="point"
+                  style="background-color: #ff3300"
+                ></div>
                 已结束
               </div>
               <div class="left_time">
@@ -349,21 +373,38 @@ onUnmounted(() => {
                 </div>
               </div>
               <div class="process">
-                <el-progress :text-inside="true" :percentage="timePercent.percent" :stroke-width="25" striped striped-flow
-                  :duration="15" :color="timePercent.color" />
+                <el-progress
+                  :text-inside="true"
+                  :percentage="timePercent.percent"
+                  :stroke-width="25"
+                  striped
+                  striped-flow
+                  :duration="15"
+                  :color="timePercent.color"
+                />
               </div>
               <div class="functionBox">
-                <el-button class="contestButton" v-on:click="goToRank()">
+                <el-button
+                  class="contestButton"
+                  v-on:click="goToRank()"
+                >
                   <el-icon size="16px">
                     <Histogram />
                   </el-icon>&nbsp;&nbsp;排 名
                 </el-button>
-                <el-button class="contestButton" v-on:click="goToStatus()">
+                <el-button
+                  class="contestButton"
+                  v-on:click="goToStatus()"
+                >
                   <el-icon size="16px">
                     <DataAnalysis />
                   </el-icon>&nbsp;&nbsp;状 态
                 </el-button>
-                <el-button v-if="admin" class="contestButton" v-on:click="goToContestAdmin()">
+                <el-button
+                  v-if="admin"
+                  class="contestButton"
+                  v-on:click="goToContestAdmin()"
+                >
                   <el-icon size="16px">
                     <Edit />
                   </el-icon>&nbsp;&nbsp;编 辑
@@ -371,22 +412,42 @@ onUnmounted(() => {
               </div>
             </div>
             <el-divider></el-divider>
-            <div class="problemList" ref="problemList">
+            <div
+              class="problemList"
+              ref="problemList"
+            >
               <div class="nav">
                 <div style="width: 90px">序号</div>
                 <div style="width: calc(100% - 190px)">题目</div>
                 <div style="width: 100px">通过情况</div>
               </div>
-              <div class="item" v-for="(item, index) in contest.Data" :key="index">
-                <div class="flag cursor_pointer" v-on:click="goToProblem(item.PID)">
+              <div
+                class="item"
+                v-for="(item, index) in contest.Data"
+                :key="index"
+              >
+                <div
+                  class="flag cursor_pointer"
+                  v-on:click="goToProblem(item.PID)"
+                >
                   {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
                 </div>
-                <div class="title cursor_pointer" v-on:click="goToProblem(item.PID)">
+                <div
+                  class="title cursor_pointer"
+                  v-on:click="goToProblem(item.PID)"
+                >
                   {{ item.Title }}
                 </div>
                 <div class="status">
-                  <el-progress type="circle" :width="22" :stroke-width="3" :percentage="item.SubmitNum == 0 ? 0 : (item.ACNum / item.SubmitNum) * 100
-                    " :show-text="false" style="margin: 0 10px" />
+                  <el-progress
+                    type="circle"
+                    :width="22"
+                    :stroke-width="3"
+                    :percentage="item.SubmitNum == 0 ? 0 : (item.ACNum / item.SubmitNum) * 100
+                      "
+                    :show-text="false"
+                    style="margin: 0 10px"
+                  />
                   {{ item.ACNum + "/" + item.SubmitNum }}
                 </div>
               </div>
@@ -395,14 +456,24 @@ onUnmounted(() => {
           </template>
         </template>
         <!-- 密码验证 -->
-        <div v-show="needPass" class="needPass">
+        <div
+          v-show="needPass"
+          class="needPass"
+        >
           <div class="title">验证</div>
           <div class="input">
             <div class="label">密码</div>
-            <Input v-model="inputPass" @click="getContestById(contest.CID, inputPass)" type="text"></Input>
+            <Input
+              v-model="inputPass"
+              @click="getContestById(contest.CID, inputPass)"
+              type="text"
+            ></Input>
           </div>
 
-          <div class="btn cursor_pointer" @click="getContestById(contest.CID, inputPass)">
+          <div
+            class="btn cursor_pointer"
+            @click="getContestById(contest.CID, inputPass)"
+          >
             <el-icon>
               <Unlock />
             </el-icon>
@@ -659,5 +730,4 @@ onUnmounted(() => {
     @include box_shadow(0, 0, 2px, 1px, "fill12");
     @include fill_color("fill15");
   }
-}
-</style>
+}</style>

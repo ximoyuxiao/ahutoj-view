@@ -7,20 +7,36 @@
   </div>
   <div class="userInfo">
     <div class="permissionHead">
-      <div class="header" v-for="(item, _) in ['用户ID', '超管', '资源', '竞赛', '题单', '题目', '管理员', '修改权限']">
+      <div
+        class="header"
+        v-for="(item, _) in ['用户ID', '超管', '资源', '竞赛', '题单', '题目', '管理员', '修改权限']"
+      >
         {{ item }}
       </div>
     </div>
     <div class="permissionBody">
-      <div class="body" v-for="(permission, _) in adminList.list">
+      <div
+        class="body"
+        v-for="(permission, _) in adminList.list"
+      >
         <div>
           {{ permission.UID }}
         </div>
-        <div class="select" v-for="(_, index) in permission.permissionTabel">
-          <el-switch v-model="permission.permissionTabel[index]" @change="adminList.select(permission, index)"
-            :active-value="true" :inactive-value="false" />
+        <div
+          class="select"
+          v-for="(_, index) in permission.permissionTabel"
+        >
+          <el-switch
+            v-model="permission.permissionTabel[index]"
+            @change="adminList.select(permission, index)"
+            :active-value="true"
+            :inactive-value="false"
+          />
         </div>
-        <el-button class="botton" @click="adminList.ChangePermission(permission)">
+        <el-button
+          class="botton"
+          @click="adminList.ChangePermission(permission)"
+        >
           修改
         </el-button>
       </div>
@@ -213,5 +229,4 @@ var adminList = reactive({
       align-items: center;
     }
   }
-}
-</style>
+}</style>

@@ -1,31 +1,44 @@
 <template>
-  <el-menu class="ListEdit" mode="horizontal">
-    <router-link active-class="selected" to="/Admin/ListEdit/AddList">
+  <el-menu
+    class="ListEdit"
+    mode="horizontal"
+  >
+    <router-link
+      active-class="selected"
+      to="/Admin/ListEdit/AddList"
+    >
       <el-menu-item index="1">
-        <el-icon><Plus /></el-icon>
+        <el-icon>
+          <Plus />
+        </el-icon>
         新增
       </el-menu-item>
     </router-link>
-    <router-link active-class="selected" to="/Admin/ListEdit/UpdateList">
+    <router-link
+      active-class="selected"
+      to="/Admin/ListEdit/UpdateList"
+    >
       <el-menu-item index="2">
-        <el-icon><Edit /></el-icon>
+        <el-icon>
+          <Edit />
+        </el-icon>
         编辑
       </el-menu-item>
     </router-link>
   </el-menu>
   <el-container>
-        <el-main class="Container">
-          <div class="ListEdit">
-            <div class="content">
-              <router-view v-slot="{ Component }">
-                <transition enter-active-class="animate__animated animate__fadeInRight">
-                  <component :is="Component" />
-                </transition>
-              </router-view>
-            </div>
-          </div>
-        </el-main>
-    </el-container>
+    <el-main class="Container">
+      <div class="ListEdit">
+        <div class="content">
+          <router-view v-slot="{ Component }">
+            <transition enter-active-class="animate__animated animate__fadeInRight">
+              <component :is="Component" />
+            </transition>
+          </router-view>
+        </div>
+      </div>
+    </el-main>
+  </el-container>
 </template>
 
 <script lang="ts" setup>
@@ -59,7 +72,7 @@ onMounted(() => {
     justify-content: centers;
     @include fill_color("fill3");
 
-    > a {
+    >a {
       box-sizing: border-box;
       padding: 5px 15px;
       font-size: $fontSize7;
@@ -72,7 +85,7 @@ onMounted(() => {
       }
     }
 
-    > .selected {
+    >.selected {
       border-bottom: 2px solid;
       @include border_color("fill21");
     }
@@ -86,5 +99,4 @@ onMounted(() => {
     width: 100%;
     // min-height: 400px;
   }
-}
-</style>
+}</style>

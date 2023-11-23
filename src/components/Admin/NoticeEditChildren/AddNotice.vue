@@ -7,10 +7,18 @@
       <span>公告内容</span>
     </div>
     <div class="markdown">
-      <md-editor v-model="notice.Content" :toolbars="markdown.toolbar" :on-upload-img="notice.updateImg" />
+      <md-editor
+        v-model="notice.Content"
+        :toolbars="markdown.toolbar"
+        :on-upload-img="notice.updateImg"
+      />
     </div>
   </div>
-  <el-button class="addNoticeButton" type="primary" v-on:click="AddNotice()">
+  <el-button
+    class="addNoticeButton"
+    type="primary"
+    v-on:click="AddNotice()"
+  >
     添 加
   </el-button>
 </template>
@@ -170,5 +178,4 @@ function uploadF(f: any) {
   font-size: 15px;
   // align-content: center;
   text-align: center;
-}
-</style>
+}</style>

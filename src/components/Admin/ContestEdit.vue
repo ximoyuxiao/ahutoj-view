@@ -1,6 +1,12 @@
 <template>
-  <el-menu class="contestEdit" mode="horizontal">
-    <router-link active-class="selected" to="/Admin/ContestEdit/AddContest">
+  <el-menu
+    class="contestEdit"
+    mode="horizontal"
+  >
+    <router-link
+      active-class="selected"
+      to="/Admin/ContestEdit/AddContest"
+    >
       <el-menu-item index="1">
         <el-icon>
           <Plus />
@@ -8,7 +14,10 @@
         新增
       </el-menu-item>
     </router-link>
-    <router-link active-class="selected" to="/Admin/ContestEdit/UpdateContest">
+    <router-link
+      active-class="selected"
+      to="/Admin/ContestEdit/UpdateContest"
+    >
       <el-menu-item index="2">
         <el-icon>
           <Edit />
