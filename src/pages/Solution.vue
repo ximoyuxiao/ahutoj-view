@@ -2,19 +2,26 @@
   <el-container class="Main">
     <el-container>
       <el-main class="Container">
-        <div class="notFound" v-show="notFound">
+        <div
+          class="notFound"
+          v-show="notFound"
+        >
           <el-empty description="该题还木有题解" />
         </div>
         <template v-if="solutions.data.length > 0">
           <div class="topBox">
             <div class="count">共发现&nbsp;{{ config.Count }}&nbsp;个题解</div>
           </div>
-          <div :class="item.IThumbsUp == 1 ? 'item itemThumbsUp' : 'item'" v-for="(item, index) in solutions.data">
+          <div
+            :class="item.IThumbsUp == 1 ? 'item itemThumbsUp' : 'item'"
+            v-for="(item, index) in solutions.data"
+          >
             <div class="userInfo">
               <div class="headImg">
                 <img
                   :src="item.HeadURL ? (staticSourceBaseURL + item.HeadURL) : proxy.Utils.DefaultHeadImage.show(item.UID)"
-                  style="height: 80px; width: 80px;" />
+                  style="height: 80px; width: 80px;"
+                />
               </div>
               <div class="info">
                 <div class="userName">
@@ -30,9 +37,16 @@
             </div>
             <div :class="(item?.Fold ?? true) ? 'contentFold' : 'content'">
               <h3>{{ item.Title }}</h3>
-              <md-editor class="mdEditor" v-model="item.text" :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'"
-                preview-only />
-              <div class="foldCover" v-show="(item?.Fold ?? true) && item.CanFold">
+              <md-editor
+                class="mdEditor"
+                v-model="item.text"
+                :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'"
+                preview-only
+              />
+              <div
+                class="foldCover"
+                v-show="(item?.Fold ?? true) && item.CanFold"
+              >
                 <div @click="solutions.fold(index, false)">
                   展开
                   &nbsp;
@@ -46,36 +60,62 @@
             <div class="status">
               <div class="left">
                 <div class="thumbsUp">
-                  <el-icon class="iconThumbsUp cursor_pointer" size="20px" @click="solutions.thumbUp(index, item.SID, 3)"
-                    v-if="item.IThumbsUp == true">
+                  <el-icon
+                    class="iconThumbsUp cursor_pointer"
+                    size="20px"
+                    @click="solutions.thumbUp(index, item.SID, 3)"
+                    v-if="item.IThumbsUp == true"
+                  >
                     <CaretTop />
                   </el-icon>
-                  <el-icon class="icon cursor_pointer" size="20px" @click="solutions.thumbUp(index, item.SID, 1)" v-else>
+                  <el-icon
+                    class="icon cursor_pointer"
+                    size="20px"
+                    @click="solutions.thumbUp(index, item.SID, 1)"
+                    v-else
+                  >
                     <ArrowUpBold />
                   </el-icon>
                   &nbsp;{{ item.ThumbsUp }}&nbsp;个人顶了这个帖子
                 </div>
-                <div class="conmment cursor_pointer" @click="solutions.openComment(index)">
-                  <el-icon class="icon cursor_pointer" size="20px">
+                <div
+                  class="conmment cursor_pointer"
+                  @click="solutions.openComment(index)"
+                >
+                  <el-icon
+                    class="icon cursor_pointer"
+                    size="20px"
+                  >
                     <ChatLineSquare />
                   </el-icon>
                   &nbsp;{{ item.CommentCount }}&nbsp;条评论
                 </div>
               </div>
-              <div class="right cursor_pointer" v-if="!item?.Fold && item.CanFold" @click="solutions.fold(index, true)">
+              <div
+                class="right cursor_pointer"
+                v-if="!item?.Fold && item.CanFold"
+                @click="solutions.fold(index, true)"
+              >
                 收起&nbsp;
                 <el-icon size="26px">
                   <ArrowUp />
                 </el-icon>
               </div>
             </div>
-            <div class="comment" v-show="item?.ShowComment ?? false">
+            <div
+              class="comment"
+              v-show="item?.ShowComment ?? false"
+            >
               <!-- 评论列表 -->
-              <div class="item" v-for="(comment, commentIndex) in (item?.Comments ?? [])">
+              <div
+                class="item"
+                v-for="(comment, commentIndex) in (item?.Comments ?? [])"
+              >
                 <div class="left">
                   <img
                     :src="comment.HeadURL ? (staticSourceBaseURL + comment.HeadURL) : proxy.Utils.DefaultHeadImage.show(comment.UID)"
-                    alt="">
+                    alt=""
+                  >
                 </div>
                 <div class="
                   right">
@@ -84,8 +124,11 @@
                   </div>
                   <div class="content">{{ comment.Text }}</div>
                   <div class="buttom">
-                    <div class="delete cursor_pointer" v-if="userDataStore.isLogin && userDataStore.UID == comment.UID"
-                      @click="solutions.deleteComment(index, comment.SLTCMTID, item.SLTID, userDataStore.UID)">
+                    <div
+                      class="delete cursor_pointer"
+                      v-if="userDataStore.isLogin && userDataStore.UID == comment.UID"
+                      @click="solutions.deleteComment(index, comment.SLTCMTID, item.SLTID, userDataStore.UID)"
+                    >
                       删除
                     </div>
                     <div class="time">{{ proxy.Utils.TimeTools.timestampToDate(comment.UpdateTime, 2) }}</div>
@@ -93,23 +136,46 @@
                 </div>
               </div>
               <!-- 未找到 -->
-              <div class="notFound" v-if="(item.Count ?? 0) == 0">
+              <div
+                class="notFound"
+                v-if="(item.Count ?? 0) == 0"
+              >
                 <el-empty description="当前还没有评论哦~" />
               </div>
               <!-- 分页 -->
-              <div class="pagination" v-if="(item.Count ?? 0) >= 10">
-                <el-pagination background layout="prev, pager, next" :page-size="item.Limit" :total="item.Count"
-                  :current-page="item.Page" @current-change="item.CommentChangePage" />
+              <div
+                class="pagination"
+                v-if="(item.Count ?? 0) >= 10"
+              >
+                <el-pagination
+                  background
+                  layout="prev, pager, next"
+                  :page-size="item.Limit"
+                  :total="item.Count"
+                  :current-page="item.Page"
+                  @current-change="item.CommentChangePage"
+                />
               </div>
               <!-- 发表评论 -->
               <div class="myComment">
-                <el-input v-model="solutions.myComment" autosize type="textarea" placeholder="留下你友好的评论吧！" />
-                <el-button type="primary" :plain="themeSwitchStore.theme > 0 ? true : false"
-                  @click="solutions.publishComment(index)">
+                <el-input
+                  v-model="solutions.myComment"
+                  autosize
+                  type="textarea"
+                  placeholder="留下你友好的评论吧！"
+                />
+                <el-button
+                  type="primary"
+                  :plain="themeSwitchStore.theme > 0 ? true : false"
+                  @click="solutions.publishComment(index)"
+                >
                   发表
                 </el-button>
               </div>
-              <div class="hideComment cursor_pointer" @click="solutions.closeComment(index)">
+              <div
+                class="hideComment cursor_pointer"
+                @click="solutions.closeComment(index)"
+              >
                 隐藏评论&nbsp;
                 <el-icon size="24px">
                   <Hide />
@@ -117,10 +183,23 @@
               </div>
             </div>
           </div>
-          <div class="pagination" v-if="config.Count > 5">
-            <el-pagination background layout="prev, pager, next" :page-size="config.Limit" :total="config.Count"
-              :current-page="config.currentPage" @current-change="config.changePage" />
-            <el-radio-group v-model="config.Limit" @change="config.changePage(1)" style="margin: 0 20px">
+          <div
+            class="pagination"
+            v-if="config.Count > 5"
+          >
+            <el-pagination
+              background
+              layout="prev, pager, next"
+              :page-size="config.Limit"
+              :total="config.Count"
+              :current-page="config.currentPage"
+              @current-change="config.changePage"
+            />
+            <el-radio-group
+              v-model="config.Limit"
+              @change="config.changePage(1)"
+              style="margin: 0 20px"
+            >
               <el-radio-button :label="5" />
               <el-radio-button :label="10" />
               <el-radio-button :label="15" />
@@ -131,10 +210,23 @@
       <el-footer class="Container">
         <div class="publish">
           <h1>标题</h1>
-          <el-input v-model="solutions.title" placeholder="Please input" clearable style="width: 500px;" />
-          <md-editor class="mdEditor" v-model="solutions.mySolution" :toolbars="markdown.toolbar"
-            :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'" />
-          <el-button type="primary" :plain="themeSwitchStore.theme > 0 ? true : false" @click="solutions.publishSolution">
+          <el-input
+            v-model="solutions.title"
+            placeholder="Please input"
+            clearable
+            style="width: 500px;"
+          />
+          <md-editor
+            class="mdEditor"
+            v-model="solutions.mySolution"
+            :toolbars="markdown.toolbar"
+            :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'"
+          />
+          <el-button
+            type="primary"
+            :plain="themeSwitchStore.theme > 0 ? true : false"
+            @click="solutions.publishSolution"
+          >
             发布题解
           </el-button>
         </div>
@@ -814,5 +906,4 @@ onMounted(() => {
       padding: 8px 4px;
     }
   }
-}
-</style>
+}</style>

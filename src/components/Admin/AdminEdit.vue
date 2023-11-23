@@ -1,6 +1,12 @@
 <template>
-  <el-menu class="contestEdit" mode="horizontal">
-    <router-link active-class="selected" to="/Admin/AdminEdit/AddAdmin">
+  <el-menu
+    class="contestEdit"
+    mode="horizontal"
+  >
+    <router-link
+      active-class="selected"
+      to="/Admin/AdminEdit/AddAdmin"
+    >
       <el-menu-item index="1">
         <el-icon>
           <Plus />
@@ -8,7 +14,10 @@
         新增权限
       </el-menu-item>
     </router-link>
-    <router-link active-class="selected" to="/Admin/AdminEdit/UpdateAdmin">
+    <router-link
+      active-class="selected"
+      to="/Admin/AdminEdit/UpdateAdmin"
+    >
       <el-menu-item index="2">
         <el-icon>
           <Tickets />
@@ -17,15 +26,15 @@
       </el-menu-item>
     </router-link>
   </el-menu>
-      <div class="AdminEdit">
-        <div class="content">
-          <router-view v-slot="{ Component }">
-            <transition enter-active-class="animate__animated animate__fadeInRight">
-              <component :is="Component" />
-            </transition>
-          </router-view>
-        </div>
-      </div>
+  <div class="AdminEdit">
+    <div class="content">
+      <router-view v-slot="{ Component }">
+        <transition enter-active-class="animate__animated animate__fadeInRight">
+          <component :is="Component" />
+        </transition>
+      </router-view>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>

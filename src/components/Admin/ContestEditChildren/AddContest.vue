@@ -257,14 +257,14 @@ function complete() {
   width: 100%;
 }
 
-.AddContest > div {
+.AddContest>div {
   display: flex;
   align-content: center;
   box-sizing: border-box;
   margin: 5px 0;
 }
 
-.AddContest > div > span {
+.AddContest>div>span {
   font-size: 22px;
   width: 150px;
   @include font_color("font1");

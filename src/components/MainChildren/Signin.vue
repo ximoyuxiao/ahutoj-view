@@ -8,59 +8,141 @@
       <!-- <img
         src="../../assets/image/global/close.svg"
       /> -->
-      <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="cursor_pointer"
-        @click="props.close" style="
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="1em"
+        height="1em"
+        viewBox="0 0 24 24"
+        class="cursor_pointer"
+        @click="props.close"
+        style="
             position: absolute;
             top: 15px;
             right: 15px;
             width: 35px;
             height: 35px;
-          ">
-        <path fill="currentColor"
-          d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z" />
+          "
+      >
+        <path
+          fill="currentColor"
+          d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"
+        />
       </svg>
     </div>
     <div class="username">
-      <el-input placeholder="" class="loginInput" name="UID" type="text" autocomplete="off"
-        :onkeyup="signinInfo.UIDChecker" maxlength="20" v-model="signinInfo.UID" />
-      <label class="loginLabel" for="UID">
+      <el-input
+        placeholder=""
+        class="loginInput"
+        name="UID"
+        type="text"
+        autocomplete="off"
+        :onkeyup="signinInfo.UIDChecker"
+        maxlength="20"
+        v-model="signinInfo.UID"
+      />
+      <label
+        class="loginLabel"
+        for="UID"
+      >
         账号
       </label>
     </div>
     <div class="nickname">
-      <el-input placeholder="" class="loginInput" name="nickname" type="text" autocomplete="off"
-        :onkeyup="signinInfo.UserNameChecker" maxlength="20" v-model="signinInfo.UserName" />
-      <label class="loginLabel" for="nickname">
+      <el-input
+        placeholder=""
+        class="loginInput"
+        name="nickname"
+        type="text"
+        autocomplete="off"
+        :onkeyup="signinInfo.UserNameChecker"
+        maxlength="20"
+        v-model="signinInfo.UserName"
+      />
+      <label
+        class="loginLabel"
+        for="nickname"
+      >
         昵称
       </label>
     </div>
     <div class="password">
-      <el-input placeholder="" class="loginInput" name="password" type="password" :onkeyup="signinInfo.PassChecker"
-        maxlength="30" autocomplete="off" v-model="signinInfo.Pass" show-password />
-      <label class="loginLabel" for="password">
+      <el-input
+        placeholder=""
+        class="loginInput"
+        name="password"
+        type="password"
+        :onkeyup="signinInfo.PassChecker"
+        maxlength="30"
+        autocomplete="off"
+        v-model="signinInfo.Pass"
+        show-password
+      />
+      <label
+        class="loginLabel"
+        for="password"
+      >
         密码
       </label>
     </div>
     <div class="password">
-      <el-input placeholder="" class="loginInput" name="password" type="password" :onkeyup="signinInfo.PassChecker"
-        autocomplete="off" maxlength="30" v-model="signinInfo.PassAgain" show-password />
-      <label class="loginLabel" for="password">
+      <el-input
+        placeholder=""
+        class="loginInput"
+        name="password"
+        type="password"
+        :onkeyup="signinInfo.PassChecker"
+        autocomplete="off"
+        maxlength="30"
+        v-model="signinInfo.PassAgain"
+        show-password
+      />
+      <label
+        class="loginLabel"
+        for="password"
+      >
         密码
       </label>
     </div>
     <div class="email">
-      <el-input placeholder="" class="loginInput" name="email" type="text" autocomplete="off"
-        v-model="signinInfo.Email" />
-      <label class="loginLabel" for="password">邮箱</label>
+      <el-input
+        placeholder=""
+        class="loginInput"
+        name="email"
+        type="text"
+        autocomplete="off"
+        v-model="signinInfo.Email"
+      />
+      <label
+        class="loginLabel"
+        for="password"
+      >邮箱</label>
     </div>
-    <div class="save" name="save">
-      <el-checkbox label="3 天内自动登录" size="large" name="save" v-model="signinInfo.save" type="checkbox"
-        style="margin: 10px 0;" />
+    <div
+      class="save"
+      name="save"
+    >
+      <el-checkbox
+        label="3 天内自动登录"
+        size="large"
+        name="save"
+        v-model="signinInfo.save"
+        type="checkbox"
+        style="margin: 10px 0;"
+      />
     </div>
     <div class="redirect">
-      <span class="toLogin cursor_pointer" @click="props.login">登录账号</span>
+      <span
+        class="toLogin cursor_pointer"
+        @click="props.login"
+      >登录账号</span>
     </div>
-    <el-button class="confirm" type="primary" round shoudAddSpace @click="signin">注册</el-button>
+    <el-button
+      class="confirm"
+      type="primary"
+      round
+      shoudAddSpace
+      @click="signin"
+    >注册</el-button>
   </form>
 </template>
 
@@ -304,5 +386,4 @@ function signin() {
     margin: 0 40px 16px 40px;
     transition-duration: 100ms;
   }
-}
-</style>
+}</style>

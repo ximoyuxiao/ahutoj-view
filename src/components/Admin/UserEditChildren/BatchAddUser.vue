@@ -214,25 +214,25 @@ function complete() {
 .BatchAddUser {
   background-color: #ffffff;
 
-  > .uploadJson {
+  >.uploadJson {
     margin-bottom: 20px;
   }
 
-  > .example {
+  >.example {
     width: fit-content;
     position: relative;
     padding: 10px;
     font-weight: 600;
 
-    &:hover > .exampleText {
+    &:hover>.exampleText {
       visibility: visible;
     }
 
-    > .title {
+    >.title {
       @extend %title;
     }
 
-    > .exampleText {
+    >.exampleText {
       width: max-content;
       position: absolute;
       visibility: hidden;
@@ -253,7 +253,7 @@ function complete() {
       @extend %title;
     }
 
-    > div {
+    >div {
       color: #797979;
     }
   }
@@ -270,7 +270,7 @@ function complete() {
       background-color: #ababab;
       width: 100%;
 
-      > div {
+      >div {
         font-size: $fontSize5;
       }
     }
@@ -284,7 +284,7 @@ function complete() {
       margin: 5px 0;
       border-bottom: 2px dotted #cdcdcd;
 
-      > div {
+      >div {
         font-size: $fontSize5;
       }
     }

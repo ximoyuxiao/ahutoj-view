@@ -9,21 +9,21 @@
         :key="index"
         :style="style.weekDay(weekDay)"
       >
-        {{weekDay.text}}
+        {{ weekDay.text }}
       </div>
     </div>
     <div class="right">
       <div
         class="header"
         v-show="config.showHeader"
-        :style="'height:' + (config.fontSize)+ 'px;'"
+        :style="'height:' + (config.fontSize) + 'px;'"
       >
         <div
           v-for="(month, index) in config.headerLength"
           :key="index"
           :style="style.header(month)"
         >
-          {{month.text}}
+          {{ month.text }}
         </div>
       </div>
       <div
@@ -35,7 +35,7 @@
           v-for="(item, index) in config.data"
           :key="index"
           :style="style.item(item)"
-          @click="config.clickEvent ? config.clickEvent(item) : null "
+          @click="config.clickEvent ? config.clickEvent(item) : null"
         >
         </div>
       </div>
@@ -43,22 +43,22 @@
         class="levelFlagContent"
         v-show="config.showLevelFlag"
       >
-        <div :style="'font-size:'  +config.fontSize+ 'px;'+ 'color: ' + config.fontColor">
-          {{ config.levelFlagText ? config.levelFlagText[0] : ""}}
+        <div :style="'font-size:' + config.fontSize + 'px;' + 'color: ' + config.fontColor">
+          {{ config.levelFlagText ? config.levelFlagText[0] : "" }}
         </div>
         <div
           class="levelFlag"
           :style="style.levelFlag()"
         >
           <div
-            v-for="(i,index) in config.colors"
+            v-for="(i, index) in config.colors"
             :key="index"
             :style="style.levelFlagItem(index)"
           >
           </div>
         </div>
-        <div :style="'font-size:'  +config.fontSize+ 'px;'+ 'color: ' + config.fontColor">
-          {{config.levelFlagText ? config.levelFlagText[1] : ""}}
+        <div :style="'font-size:' + config.fontSize + 'px;' + 'color: ' + config.fontColor">
+          {{ config.levelFlagText ? config.levelFlagText[1] : "" }}
         </div>
       </div>
     </div>
@@ -192,7 +192,7 @@ const config = reactive<propsType>({
   fontSize: 12,
   fontColor: "#080808",
   //响应点击事件
-  clickEvent: function clickEvent(item: any) {},
+  clickEvent: function clickEvent(item: any) { },
 });
 
 const style = reactive({
@@ -244,7 +244,7 @@ const style = reactive({
       config.cellLength +
       "px; background-color:" +
       config?.colors[
-        config.levelMapper ? config.levelMapper(varitem.count) : 0
+      config.levelMapper ? config.levelMapper(varitem.count) : 0
       ] +
       ";" +
       "border-radius:" +
@@ -486,7 +486,7 @@ onMounted(() => {
     width: 100px;
     position: relative;
 
-    > div {
+    >div {
       width: max-content;
       right: 0;
       position: absolute;
@@ -501,9 +501,11 @@ onMounted(() => {
     padding: 14px;
     display: flex;
     flex-direction: column;
+
     .header {
       position: relative;
       padding: 10px 0;
+
       div {
         width: max-content;
         top: 0;
@@ -514,10 +516,12 @@ onMounted(() => {
     .content {
       display: grid;
       grid-auto-flow: column;
+
       .item {
         aspect-ratio: 1;
         margin: auto;
         transition-duration: 100ms;
+
         &:hover {
           cursor: pointer;
           transform: scale(1.2);
@@ -543,5 +547,4 @@ onMounted(() => {
       }
     }
   }
-}
-</style>
+}</style>

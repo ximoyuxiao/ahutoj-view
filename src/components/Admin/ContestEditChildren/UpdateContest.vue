@@ -119,7 +119,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance, reactive, ref,onMounted} from "vue";
+import { getCurrentInstance, reactive, ref, onMounted } from "vue";
 import { ElMessageBox } from "element-plus";
 import { useUserDataStore } from "../../../pinia/userData";
 import { useConstValStore } from "../../../pinia/constVal";
@@ -348,7 +348,7 @@ function complete() {
 }
 onMounted(() => {
   var CID = proxy.$route.query.CID
-  if(CID){
+  if (CID) {
     contest.searchCid = CID;
     contest.search();
   }
@@ -366,14 +366,14 @@ onMounted(() => {
   width: 100%;
 }
 
-.content > div {
+.content>div {
   display: flex;
   align-content: center;
   box-sizing: border-box;
   margin: 5px 0;
 }
 
-.content > div > span {
+.content>div>span {
   font-size: 22px;
   width: 150px;
   @include font_color("font1");

@@ -96,38 +96,77 @@ watch(propsChange, (nv, ov) => { }, {
             height: 35px;
           "
       /> -->
-      <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="cursor_pointer"
-        @click="props.close" style="
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="1em"
+        height="1em"
+        viewBox="0 0 24 24"
+        class="cursor_pointer"
+        @click="props.close"
+        style="
             position: absolute;
             top: 15px;
             right: 15px;
             width: 35px;
             height: 35px;
-          ">
-        <path fill="currentColor"
-          d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z" />
+          "
+      >
+        <path
+          fill="currentColor"
+          d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"
+        />
       </svg>
     </div>
     <div class="username">
-      <el-input placeholder="" class="loginInput" type="text" autocomplete="off" v-model="loginInfo.UID" />
+      <el-input
+        placeholder=""
+        class="loginInput"
+        type="text"
+        autocomplete="off"
+        v-model="loginInfo.UID"
+      />
       <label class="loginLabel">
         账号
       </label>
     </div>
     <div class="password">
-      <el-input placeholder="" class="loginInput" type="password" v-model="loginInfo.Pass" autocomplete="off"
-        show-password @keyup.enter="login" />
+      <el-input
+        placeholder=""
+        class="loginInput"
+        type="password"
+        v-model="loginInfo.Pass"
+        autocomplete="off"
+        show-password
+        @keyup.enter="login"
+      />
       <label class="loginLabel">密码</label>
     </div>
-    <div class="save" style="display: flex; justify-items: center; margin: 0 40px">
-      <el-checkbox label="3 天内自动登录" size="large" name="save" v-model="loginInfo.save" type="checkbox"
-        style="margin: 10px 0;" />
+    <div
+      class="save"
+      style="display: flex; justify-items: center; margin: 0 40px"
+    >
+      <el-checkbox
+        label="3 天内自动登录"
+        size="large"
+        name="save"
+        v-model="loginInfo.save"
+        type="checkbox"
+        style="margin: 10px 0;"
+      />
     </div>
     <div class="redirect">
       <!-- <span class="lostPassword cursor_pointer" @click="null">忘记密码</span> | -->
-      <span class="toSignin cursor_pointer" @click="props.signin">注册账户</span>
+      <span
+        class="toSignin cursor_pointer"
+        @click="props.signin"
+      >注册账户</span>
     </div>
-    <el-button class="confirm" type="primary" round @click="login">登 录</el-button>
+    <el-button
+      class="confirm"
+      type="primary"
+      round
+      @click="login"
+    >登 录</el-button>
   </form>
 </template>
 
@@ -169,6 +208,7 @@ watch(propsChange, (nv, ov) => { }, {
 }
 
 .login {
+
   .username,
   .password {
     position: relative;
@@ -243,5 +283,4 @@ watch(propsChange, (nv, ov) => { }, {
     margin: 0 40px 16px 40px;
     transition-duration: 300ms;
   }
-}
-</style>
+}</style>

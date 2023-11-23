@@ -138,39 +138,71 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-menu class="adminHeader" mode="horizontal" v-if="config.Administrator">
+  <el-menu
+    class="adminHeader"
+    mode="horizontal"
+    v-if="config.Administrator"
+  >
     <el-row class="adminPageFlag">AHUT OJ 管理</el-row>
-    <router-link v-if="config.ProblemAdmin" active-class="selected" to="/Admin/ProblemEdit">
+    <router-link
+      v-if="config.ProblemAdmin"
+      active-class="selected"
+      to="/Admin/ProblemEdit"
+    >
       <el-menu-item index="1">
         题目
       </el-menu-item>
     </router-link>
-    <router-link v-if="config.ContestAdmin" active-class="selected" to="/Admin/DataGenerator">
+    <router-link
+      v-if="config.ContestAdmin"
+      active-class="selected"
+      to="/Admin/DataGenerator"
+    >
       <el-menu-item index="2">
         数据生成器
       </el-menu-item>
     </router-link>
-    <router-link v-if="config.ContestAdmin" active-class="selected" to="/Admin/ContestEdit">
+    <router-link
+      v-if="config.ContestAdmin"
+      active-class="selected"
+      to="/Admin/ContestEdit"
+    >
       <el-menu-item index="3">
         竞赛
       </el-menu-item>
     </router-link>
-    <router-link v-if="config.ListAdmin" active-class="selected" to="/Admin/ListEdit">
+    <router-link
+      v-if="config.ListAdmin"
+      active-class="selected"
+      to="/Admin/ListEdit"
+    >
       <el-menu-item index="4">
         题单
       </el-menu-item>
     </router-link>
-    <router-link v-if="config.Administrator" active-class="selected" to="/Admin/UserEdit">
+    <router-link
+      v-if="config.Administrator"
+      active-class="selected"
+      to="/Admin/UserEdit"
+    >
       <el-menu-item index="5">
         用户
       </el-menu-item>
     </router-link>
-    <router-link v-if="config.SuperAdmin" active-class="selected" to="/Admin/AdminEdit">
+    <router-link
+      v-if="config.SuperAdmin"
+      active-class="selected"
+      to="/Admin/AdminEdit"
+    >
       <el-menu-item index="6">
         权限
       </el-menu-item>
     </router-link>
-    <router-link v-if="config.Administrator" active-class="selected" to="/Admin/NoticeEdit">
+    <router-link
+      v-if="config.Administrator"
+      active-class="selected"
+      to="/Admin/NoticeEdit"
+    >
       <el-menu-item index="7">
         公告
       </el-menu-item>
@@ -180,7 +212,7 @@ onMounted(() => {
     <div class="content">
       <router-view v-slot="{ Component }">
         <transition enter-active-class="animate__animated animate__fadeInUp">
-          <component :is="Component"/>
+          <component :is="Component" />
         </transition>
       </router-view>
     </div>
@@ -192,6 +224,7 @@ onMounted(() => {
 .adminHeader {
   height: 55px;
   margin: 5px 0;
+
   .el-menu-item {
     font-size: $fontSize5;
   }

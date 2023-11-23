@@ -5,8 +5,14 @@ export default {
 </script>
 
 <template>
-  <el-menu class="ProblemEdit" mode="horizontal">
-    <router-link active-class="selected" to="/Admin/ProblemEdit/AddProblem">
+  <el-menu
+    class="ProblemEdit"
+    mode="horizontal"
+  >
+    <router-link
+      active-class="selected"
+      to="/Admin/ProblemEdit/AddProblem"
+    >
       <el-menu-item index="1">
         <el-icon>
           <Plus />
@@ -14,7 +20,10 @@ export default {
         新增
       </el-menu-item>
     </router-link>
-    <router-link active-class="selected" to="/Admin/ProblemEdit/UpdateProblem">
+    <router-link
+      active-class="selected"
+      to="/Admin/ProblemEdit/UpdateProblem"
+    >
       <el-menu-item index="2">
         <el-icon>
           <Edit />
@@ -22,7 +31,10 @@ export default {
         编辑
       </el-menu-item>
     </router-link>
-    <router-link active-class="selected" to="/Admin/ProblemEdit/EditProblemJudgeFile">
+    <router-link
+      active-class="selected"
+      to="/Admin/ProblemEdit/EditProblemJudgeFile"
+    >
       <el-menu-item index="3">
         <el-icon>
           <DocumentChecked />
@@ -30,7 +42,10 @@ export default {
         数据
       </el-menu-item>
     </router-link>
-    <router-link active-class="selected" to="/Admin/ProblemEdit/Rejudge">
+    <router-link
+      active-class="selected"
+      to="/Admin/ProblemEdit/Rejudge"
+    >
       <el-menu-item index="4">
         <el-icon>
           <RefreshRight />
@@ -38,7 +53,10 @@ export default {
         重判
       </el-menu-item>
     </router-link>
-    <router-link active-class="selected" to="/Admin/ProblemEdit/UploadProblem">
+    <router-link
+      active-class="selected"
+      to="/Admin/ProblemEdit/UploadProblem"
+    >
       <el-menu-item index="5">
         <el-icon>
           <Upload />
@@ -46,7 +64,10 @@ export default {
         导入
       </el-menu-item>
     </router-link>
-    <router-link active-class="selected" to="/Admin/ProblemEdit/DownloadProblem">
+    <router-link
+      active-class="selected"
+      to="/Admin/ProblemEdit/DownloadProblem"
+    >
       <el-menu-item index="6">
         <el-icon>
           <Download />
@@ -106,5 +127,4 @@ export default {
     width: 100%;
     // min-height: 400px;
   }
-}
-</style>
+}</style>

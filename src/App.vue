@@ -3,7 +3,10 @@
     <!-- 主界面 -->
     <Main v-if="config.serverActive"></Main>
     <!-- 服务器连接失败 -->
-    <div class="heartbeat" v-else>
+    <div
+      class="heartbeat"
+      v-else
+    >
       <div class="title">服务器异常</div>
       <div class="beat">正在自动发送心跳包</div>
       <div class="content">{{ config.nextHeartbeatTime }} 秒后自动尝试重连</div>

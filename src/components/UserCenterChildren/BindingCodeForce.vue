@@ -13,7 +13,7 @@
       v-if="props.CodeForceUser"
       class="bindingNow"
     >
-      当前已绑定：{{props.CodeForceUser}}
+      当前已绑定：{{ props.CodeForceUser }}
     </div>
     <div>
       <span>ID:&nbsp;</span>
@@ -54,7 +54,7 @@ type propsType = {
 };
 const props = withDefaults(defineProps<propsType>(), {
   CodeForceUser: "",
-  close: () => {},
+  close: () => { },
 });
 
 var codeForce = reactive({
@@ -120,7 +120,7 @@ var codeForce = reactive({
     @include box_shadow(0, 0, 8px, 1px, "fill12");
   }
 
-  > div {
+  >div {
     @include font_color("font1");
     font-size: $fontSize6;
     letter-spacing: 1px;
@@ -133,15 +133,16 @@ var codeForce = reactive({
     }
   }
 
-  > .title {
+  >.title {
     font-size: $fontSize8;
   }
 
-  > .bindingNow {
+  >.bindingNow {
     font-size: $fontSize5;
     margin: 10px 30px;
   }
-  > .close {
+
+  >.close {
     position: absolute;
     right: 10px;
     top: 10px;
@@ -152,7 +153,7 @@ var codeForce = reactive({
     }
   }
 
-  > .btn {
+  >.btn {
     position: relative;
     overflow: hidden;
     margin: 8px 0;

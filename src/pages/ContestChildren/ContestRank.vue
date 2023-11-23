@@ -1,6 +1,12 @@
 <template>
-  <div class="ContestRank" ref="ContestRank">
-    <div class="contestID cursor_pointer" @click="backToContest">
+  <div
+    class="ContestRank"
+    ref="ContestRank"
+  >
+    <div
+      class="contestID cursor_pointer"
+      @click="backToContest"
+    >
       <el-icon size="32px">
         <Back />
       </el-icon>
@@ -16,7 +22,10 @@
       <div class="time">{{ proxy.Utils.TimeTools.timestampToTime(contest.BeginTime) }} -
         {{ proxy.Utils.TimeTools.timestampToTime(contest.EndTime) }}</div>
     </div>
-    <el-button style="margin: auto;" v-on:click="DownLoadRankList()">下载竞赛排名</el-button>
+    <el-button
+      style="margin: auto;"
+      v-on:click="DownLoadRankList()"
+    >下载竞赛排名</el-button>
     <br>
     <template v-if="ACM == 1">
       <div class="header">
@@ -25,21 +34,41 @@
         <div style="width:120px">班级</div>
         <div style="width:90px">总分</div>
         <div style="width:80px">罚时</div>
-        <div v-for="(item, index) in contest.Data" :key="index" style="width:80px">
+        <div
+          v-for="(item, index) in contest.Data"
+          :key="index"
+          style="width:80px"
+        >
           {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) + "(" + item.ACNum + "/" + item.SubmitNum + ")" }}
         </div>
       </div>
-      <div class="item" v-for="(item, index) in rank.rankList" :key="index">
+      <div
+        class="item"
+        v-for="(item, index) in rank.rankList"
+        :key="index"
+      >
         <template v-if="item.medal != 0">
           <div style="width:70px;">
             <div class="medalIcon">
-              <el-icon size="36px" color="#fabd08" v-if="item.medal == 1">
+              <el-icon
+                size="36px"
+                color="#fabd08"
+                v-if="item.medal == 1"
+              >
                 <Medal />
               </el-icon>
-              <el-icon size="36px" color="#d6d6d6" v-else-if="item.medal == 2">
+              <el-icon
+                size="36px"
+                color="#d6d6d6"
+                v-else-if="item.medal == 2"
+              >
                 <Medal />
               </el-icon>
-              <el-icon size="36px" color="#c57120" v-else="item.medal == 3">
+              <el-icon
+                size="36px"
+                color="#c57120"
+                v-else="item.medal == 3"
+              >
                 <Medal />
               </el-icon>
             </div>
@@ -54,14 +83,19 @@
         <div style="width:120px">{{ item.Uclass }}</div>
         <div style="width:90px">{{ item.ACNumber }}</div>
         <div style="width:80px">{{ proxy.Utils.TimeTools.timestampToInterval(item.TimePenalty * 1000, 2) }}</div>
-        <div class="problemStatus" v-for="(p, index) in contest.Data" :key="index"
-          :style="'width:80px;' + getBackgroundColor(item.ProblemsMap[p.PID])">
+        <div
+          class="problemStatus"
+          v-for="(p, index) in contest.Data"
+          :key="index"
+          :style="'width:80px;' + getBackgroundColor(item.ProblemsMap[p.PID])"
+        >
           <div v-if="item.ProblemsMap[p.PID] && item.ProblemsMap[p.PID].Status == 'AC'">
             {{ (item.ProblemsMap[p.PID].Time / 1000).toFixed(0) }}
           </div>
           <div
             v-if="(item.ProblemsMap[p.PID] && (item.ProblemsMap[p.PID].SubmitNumber > 1))
-              || (item.ProblemsMap[p.PID] && (item.ProblemsMap[p.PID].SubmitNumber >= 1) && (item.ProblemsMap[p.PID].Status != 'AC'))">
+              || (item.ProblemsMap[p.PID] && (item.ProblemsMap[p.PID].SubmitNumber >= 1) && (item.ProblemsMap[p.PID].Status != 'AC'))"
+          >
             (-{{ item.ProblemsMap[p.PID].Status == 'AC' ? item.ProblemsMap[p.PID].SubmitNumber - 1 :
               item.ProblemsMap[p.PID].SubmitNumber }})
           </div>
@@ -75,21 +109,41 @@
         <div style="width:120px">班级</div>
         <div style="width:90px">总得分</div>
         <div style="width:80px">总用时</div>
-        <div v-for="(item, index) in contest.Data" :key="index" style="width:80px">
+        <div
+          v-for="(item, index) in contest.Data"
+          :key="index"
+          style="width:80px"
+        >
           {{ proxy.Utils.TSBaseTools.numberToAlpha(index + 1) }}
         </div>
       </div>
-      <div class="item" v-for="(item, index) in rank.rankListOfOI" :key="index">
+      <div
+        class="item"
+        v-for="(item, index) in rank.rankListOfOI"
+        :key="index"
+      >
         <template v-if="item.medal != 0">
           <div style="width:70px;">
             <div class="medalIcon">
-              <el-icon size="36px" color="#fabd08" v-if="item.medal == 1">
+              <el-icon
+                size="36px"
+                color="#fabd08"
+                v-if="item.medal == 1"
+              >
                 <Medal />
               </el-icon>
-              <el-icon size="36px" color="#d6d6d6" v-else-if="item.medal == 2">
+              <el-icon
+                size="36px"
+                color="#d6d6d6"
+                v-else-if="item.medal == 2"
+              >
                 <Medal />
               </el-icon>
-              <el-icon size="36px" color="#c57120" v-else="item.medal == 3">
+              <el-icon
+                size="36px"
+                color="#c57120"
+                v-else="item.medal == 3"
+              >
                 <Medal />
               </el-icon>
             </div>
@@ -104,8 +158,12 @@
         <div style="width:120px">{{ item.Uclass }}</div>
         <div style="width:90px">{{ item.Score }}</div>
         <div style="width:80px">{{ item.AllTime }}</div>
-        <div class="problemStatus" v-for="(p, index) in contest.Data" :key="index"
-          :style="'width:80px;' + getBackgroundColorOfOI(item.ProblemsMap[p.PID])">
+        <div
+          class="problemStatus"
+          v-for="(p, index) in contest.Data"
+          :key="index"
+          :style="'width:80px;' + getBackgroundColorOfOI(item.ProblemsMap[p.PID])"
+        >
           <div v-if="item.ProblemsMap[p.PID]">
             {{ item.ProblemsMap[p.PID].Score }} ({{ (item.ProblemsMap[p.PID].Time) }}ms)
           </div>
@@ -719,7 +777,7 @@ onMounted(() => {
       // border-right: 1px solid;
       border-bottom: 1px solid;
       border-left: 1px solid;
-    // border-right: 1px solid;
+      // border-right: 1px solid;
       @include fill_color("fill14");
       // @include border_color("border1");
       flex-shrink: 0;
@@ -810,5 +868,4 @@ onMounted(() => {
       }
     }
   }
-}
-</style>
+}</style>

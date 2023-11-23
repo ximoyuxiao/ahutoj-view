@@ -15,7 +15,7 @@
       v-if="props.Vjid"
       class="bindingNow"
     >
-      当前已绑定：{{props.Vjid}}
+      当前已绑定：{{ props.Vjid }}
     </div>
     <div>
       <span>ID:&nbsp;</span>
@@ -54,7 +54,7 @@ type propsType = {
 };
 const props = withDefaults(defineProps<propsType>(), {
   Vjid: "",
-  close: () => {},
+  close: () => { },
 });
 
 //绑定vj
@@ -126,7 +126,7 @@ var bindingVJ = reactive({
     @include box_shadow(0, 0, 8px, 1px, "fill12");
   }
 
-  > div {
+  >div {
     @include font_color("font1");
     font-size: $fontSize6;
     letter-spacing: 1px;
@@ -139,7 +139,7 @@ var bindingVJ = reactive({
     }
   }
 
-  > .close {
+  >.close {
     position: absolute;
     right: 10px;
     top: 10px;
@@ -150,16 +150,16 @@ var bindingVJ = reactive({
     }
   }
 
-  > .title {
+  >.title {
     font-size: $fontSize8;
   }
 
-  > .bindingNow {
+  >.bindingNow {
     font-size: $fontSize5;
     margin: 10px 30px;
   }
 
-  > .btn {
+  >.btn {
     position: relative;
     overflow: hidden;
     margin: 8px 0;
