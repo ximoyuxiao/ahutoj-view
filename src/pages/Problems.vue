@@ -145,7 +145,10 @@ onMounted(() => {
 
 <template>
   <el-container class="Main">
-    <el-header class="Container">
+    <el-aside
+      class="Container"
+      style="height: 100%; width: 350px;"
+    >
       <div class="search">
         <div class="option">
           <div class="label">题目 ID</div>
@@ -168,14 +171,6 @@ onMounted(() => {
             &nbsp;跳转
           </el-button>
         </div>
-        <!-- <el-row class="option">
-          题目 ID
-          <el-input v-model="search.PID" placeholder="题目 ID" type="text">
-          </el-input>
-          <el-icon @click="getProblemById()">
-            <Search />
-          </el-icon>
-        </el-row> -->
         <!-- <el-row>
           题目标题
           <el-input v-model="search.Title" placeholder="题目标题" type="text">
@@ -206,80 +201,81 @@ onMounted(() => {
           </div>
         </div> -->
       </div>
-
-    </el-header>
-    <el-main class="Container">
-      <div
-        class="notFound"
-        v-if="search.Data.length == 0"
-      >
-        <el-empty description="未找到结果" />
-      </div>
-      <div
-        class="info"
-        v-else
-      >
-        <div class="count">搜索到 {{ config.Count }} 个题目</div>
-      </div>
-      <div class="list">
+    </el-aside>
+    <el-container class="Left">
+      <el-main class="Container">
         <div
-          class="item cursor_pointer"
-          v-for="(item, index) in search.Data"
-          :key="index"
-          @click="() => getProblemById(item.PID)"
+          class="notFound"
+          v-if="search.Data.length == 0"
         >
-          <div class="title">
-            {{ item.PID }}&nbsp;-&nbsp;{{ item.Title }}
-          </div>
+          <el-empty description="未找到结果" />
+        </div>
+        <div
+          class="info"
+          v-else
+        >
+          <div class="count">检索到 {{ config.Count }} 个题目</div>
+        </div>
+        <div class="list">
           <div
-            class="tag"
-            v-if="item.Label.length > 0"
+            class="item cursor_pointer"
+            v-for="(item, index) in search.Data"
+            :key="index"
+            @click="() => getProblemById(item.PID)"
           >
-            <el-tag
-              v-for="major in item.Label.split(/;| /)"
-              :key="major"
+            <div class="FontSize18">
+              {{ item.PID }}&nbsp;{{ item.Title }}
+            </div>
+            <div
+              class="tag"
+              v-if="item.Label.length > 0"
             >
-              {{ major }}
-            </el-tag>
-          </div>
-          <div
-            class="tag"
-            v-else
-          >
-            <el-tag type="info">
-              暂无标签
-            </el-tag>
+              <el-tag
+                v-for="major in item.Label.split(/;| /)"
+                :key="major"
+              >
+                {{ major }}
+              </el-tag>
+            </div>
+            <div
+              class="tag"
+              v-else
+            >
+              <el-tag type="info">
+                暂无标签
+              </el-tag>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="pagination">
-        <el-pagination
-          background
-          layout="prev, pager, next"
-          :page-size="config.limit"
-          :total="config.Count"
-          :current-page="config.currentPage"
-          @current-change="config.changePage"
-        />
-        <el-radio-group
-          v-model="config.limit"
-          @change="config.changePage(1)"
-          style="margin: 0 20px"
-        >
-          <el-radio-button :label="20" />
-          <el-radio-button :label="30" />
-          <el-radio-button :label="50" />
-        </el-radio-group>
-      </div>
-    </el-main>
-    <el-footer class="Container Footer ArtFont Bottom">
-      <el-row>
-        Anhui University of Technology
-      </el-row>
-      <el-row>
-        Online Judge &copy; 2019 - 2023
-      </el-row>
-    </el-footer>
+        <div class="pagination">
+          <el-pagination
+            background
+            layout="prev, pager, next"
+            :page-size="config.limit"
+            :total="config.Count"
+            :current-page="config.currentPage"
+            @current-change="config.changePage"
+          />
+          <!-- <el-radio-group
+            v-model="config.limit"
+            @change="config.changePage(1)"
+            style="margin: 0 20px"
+          >
+            <el-radio-button :label="20" />
+            <el-radio-button :label="30" />
+            <el-radio-button :label="50" />
+          </el-radio-group> -->
+        </div>
+      </el-main>
+      <el-footer class="Container Footer ArtFont Bottom">
+        <el-row>
+          Anhui University of Technology
+        </el-row>
+        <el-row>
+          Online Judge &copy; 2019 - 2023
+        </el-row>
+      </el-footer>
+    </el-container>
   </el-container>
 </template>
 
@@ -321,12 +317,12 @@ onMounted(() => {
     }
 
     .info {
-      margin-top: $modelDistance;
+      // margin-top: $modelDistance;
       // width: 100%;
-      margin: 0 5px;
+      // margin: 0 5px;
       // @include fill_color("fill2");
-      @include border(1px, solid, "border3");
-      border-radius: 8px;
+      // @include border(1px, solid, "border3");
+      // border-radius: 8px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -334,7 +330,7 @@ onMounted(() => {
 
       .count {
         box-sizing: border-box;
-        padding: 10px;
+        padding: 3px;
         font-size: $fontSize5;
         @include font_color("font1");
       }
@@ -367,6 +363,7 @@ onMounted(() => {
       display: flex;
       flex-direction: column;
       transition-duration: 200ms;
+      background-color: #F2F3F5;
 
       &:hover {
         @include fill_color("fill15");
@@ -395,7 +392,7 @@ onMounted(() => {
   }
 
   .pagination {
-    margin: 25px 0;
+    margin: 4px 0 0 0;
     width: 100%;
     display: flex;
     align-items: center;

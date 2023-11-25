@@ -4,7 +4,7 @@ import { getCurrentInstance } from "vue";
 const { proxy } = getCurrentInstance() as any;
 
 var config = reactive({
-  search: 1000,
+  search: null,
   Count: 0,
   currentPage: 1,
   limit: 20,
@@ -81,18 +81,21 @@ function SyncUrl() {
 
 <template>
   <el-container class="Main">
-    <el-header class="Container">
+    <el-aside
+      class="Container"
+      style="height: 100%; width: 350px;"
+    >
       <div
         class="search"
-        style="padding: 16px;"
+        style="padding: 10px;"
       >
         <div style="font-size: 16px;">题单 ID</div>
         <el-input
           class="Left"
           v-model="config.search"
-          placeholder="Please input"
+          placeholder="例如 1000"
           clearable
-          style="width: 120px;"
+          style="width: 127px;"
         />
         <el-button
           v-on:click="getListByLID()"
@@ -105,85 +108,84 @@ function SyncUrl() {
           &nbsp;跳转
         </el-button>
       </div>
-    </el-header>
-    <el-main class="Container">
-      <div
-        class="ProblemList"
-        style="padding: 16px;"
-      >
-        <div class="left">
-          <div class="content">
-            <div class="list">
-              <div
-                class="item cursor_pointer"
-                v-for="(item, index) in problemList.list"
-              >
+
+    </el-aside>
+    <el-container class="Left">
+      <el-main class="Container">
+        <div
+          class="ProblemList"
+        >
+          <div class="left">
+            <div class="content">
+              <div class="list">
                 <div
-                  class="left"
-                  @click="() => getListByLID(item.LID)"
+                  class="item cursor_pointer"
+                  v-for="(item, index) in problemList.list"
                 >
-                  <el-row>
-                    <div
-                      id="LID"
-                      class="Bold ArtFont"
-                    >#{{ item.LID }}</div>&nbsp;
-                    <div
-                      id="Title"
-                      class="Bold Title ArtFont"
-                    >{{ item.Title }}</div>
-                    <div class="ltype ltypeOffcial Bold">
-                      官方
-                    </div>
-                  </el-row>
-                  <div class="Interval"></div>
-                  <!-- <div id="UID">创建者：{{ item.UID }}</div> -->
-                  <div id="Time">{{ proxy.Utils.TimeTools.timestampToTime(item.StartTime) }}</div>
+                  <div
+                    class="left"
+                    @click="() => getListByLID(item.LID)"
+                  >
+                    <el-row>
+                      <div
+                        id="LID"
+                        class="Bold ArtFont"
+                      >#{{ item.LID }}</div>&nbsp;
+                      <div
+                        id="Title"
+                        class="Bold Title ArtFont"
+                      >{{ item.Title }}</div>
+                      <div class="ltype ltypeOffcial Bold">
+                        官方
+                      </div>
+                    </el-row>
+                    <div class="Interval"></div>
+                    <!-- <div id="UID">创建者：{{ item.UID }}</div> -->
+                    <div id="Time">{{ proxy.Utils.TimeTools.timestampToTime(item.StartTime) }}</div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="pagination">
-              <el-pagination
-                background
-                layout="prev, pager, next"
-                :page-size="config.limit"
-                :total="config.Count"
-                :current-page="config.currentPage"
-                @current-change="config.changePage"
-              />
-              <!-- <el-radio-group v-model="config.limit" @change="config.changePage(1)" style="margin: 0 20px">
-                <el-radio-button :label="20" />
-                <el-radio-button :label="30" />
-                <el-radio-button :label="50" />
-            </el-radio-group> -->
+              <div class="pagination">
+                <el-pagination
+                  background
+                  layout="prev, pager, next"
+                  :page-size="config.limit"
+                  :total="config.Count"
+                  :current-page="config.currentPage"
+                  @current-change="config.changePage"
+                />
+                <!-- <el-radio-group
+                  v-model="config.limit"
+                  @change="config.changePage(1)"
+                  style="margin: 0 20px"
+                >
+                  <el-radio-button :label="20" />
+                  <el-radio-button :label="30" />
+                  <el-radio-button :label="50" />
+                </el-radio-group> -->
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </el-main>
-    <el-footer class="Container Footer ArtFont Bottom">
-      <el-row>
-        Anhui University of Technology
-      </el-row>
-      <el-row>
-        Online Judge &copy; 2019 - 2023
-      </el-row>
-    </el-footer>
+      </el-main>
+      <el-footer class="Container Footer ArtFont Bottom">
+        <el-row>
+          Anhui University of Technology
+        </el-row>
+        <el-row>
+          Online Judge &copy; 2019 - 2023
+        </el-row>
+      </el-footer>
+    </el-container>
   </el-container>
 </template>
 
 <style  scoped lang="scss">
 .searchButton {
-  // @include border(2px, solid, "border3");
-  // padding: 6px;
-  // border-radius: 4px;
-  // margin: 0 0 0 10px;
-  // margin-top: 10px;
-  // height: 30px;
   margin: 0 0 0 10px;
   padding: 0px 20px 0px 20px;
   border-radius: 5px;
   font-weight: bold;
-  // display: inline-block;
 }
 
 .ltype {
@@ -211,44 +213,36 @@ function SyncUrl() {
   >.left {
     width: 100%;
 
-    .top {
-      // box-sizing: border-box;
-      // padding: $modelDistance $modelDistance 0 $modelDistance;
-
-
-    }
-
     .content {
       width: 100%;
 
       .list {
         width: 100%;
+        display: flex;
+        flex-direction: column;
         box-sizing: border-box;
-        // padding: 0 $modelDistance 0 $modelDistance;
+        padding: 10px;
 
         .item {
-          padding: 12px;
-          position: relative;
-          // width: 100%;
-          height: 60px;
-          border-radius: 6px;
+          box-sizing: border-box;
+          padding: 3px 10px;
+          margin: 5px 0;
+          border-radius: 8px;
+          @include border(1px, solid, "border3");
+          display: flex;
+          flex-direction: column;
+          transition-duration: 200ms;
           background-color: #F2F3F5;
-          margin-bottom: $modelDistanceMini;
-          overflow: hidden;
-          // box-shadow: 0 0 2px 1px rgb(142, 142, 142);
 
           &:hover {
-            // @include box_shadow(0, 0, 2px, 1px, "fill53");
-            box-shadow: 0 0 2px 1px #409EFF;
-            background-color: #EDF6FF;
-            border-color: #409EFF;
-            border-width: 2px;
+            @include fill_color("fill15");
+            @include border(1px, solid, "fill12");
           }
         }
       }
 
       .pagination {
-        margin: 25px 0 0 0;
+        margin: 12px 0 -12px 0;
         width: 100%;
         display: flex;
         align-items: center;
@@ -257,5 +251,4 @@ function SyncUrl() {
       }
     }
   }
-}
-</style>
+}</style>

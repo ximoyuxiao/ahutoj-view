@@ -288,41 +288,6 @@ const tableData = [
         </el-row>
       </el-header>
       <el-header
-        class="Container StatusBarJUDGING"
-        v-if="submit.SampleNumber == 0"
-        style="background-color: #409EFF"
-      >
-        <el-row>
-          <el-icon size="26px">
-            <DocumentDelete />
-          </el-icon>
-          <div class="Title Bold ArtFont Left">
-            本题数据缺失，请联系管理员
-          </div>
-        </el-row>
-      </el-header>
-      <el-header
-        class="Container StatusBarAC"
-        v-else-if="submit.Result == 'AC'"
-        :style="'background-color:' +
-          proxy.Utils.StatusConstValManager.getStatusColor(submit.Result)
-          "
-      >
-        <el-row>
-          <el-icon size="26px">
-            <SuccessFilled />
-          </el-icon>
-          <div class="Title Bold ArtFont Left">
-            Accepted
-          </div>
-          <div
-            class="Left"
-            style="font-size: 16px; margin-top: 4px;"
-          >通过了 {{ submit.PassSample }} / {{ submit.SampleNumber
-          }} 个测试数据</div>
-        </el-row>
-      </el-header>
-      <el-header
         class="Container StatusBarWA"
         v-else-if="submit.Result == 'CE'"
         :style="'background-color:' +
@@ -461,6 +426,41 @@ const tableData = [
           </el-icon>
           <div class="Title Bold ArtFont Left">
             Runtime Error
+          </div>
+          <div
+            class="Left"
+            style="font-size: 16px; margin-top: 4px;"
+          >通过了 {{ submit.PassSample }} / {{ submit.SampleNumber
+          }} 个测试数据</div>
+        </el-row>
+      </el-header>
+      <el-header
+        class="Container StatusBarJUDGING"
+        v-else-if="submit.SampleNumber == 0"
+        style="background-color: #409EFF"
+      >
+        <el-row>
+          <el-icon size="26px">
+            <DocumentDelete />
+          </el-icon>
+          <div class="Title Bold ArtFont Left">
+            本题数据缺失，请联系管理员
+          </div>
+        </el-row>
+      </el-header>
+      <el-header
+        class="Container StatusBarAC"
+        v-else-if="submit.Result == 'AC'"
+        :style="'background-color:' +
+          proxy.Utils.StatusConstValManager.getStatusColor(submit.Result)
+          "
+      >
+        <el-row>
+          <el-icon size="26px">
+            <SuccessFilled />
+          </el-icon>
+          <div class="Title Bold ArtFont Left">
+            Accepted
           </div>
           <div
             class="Left"

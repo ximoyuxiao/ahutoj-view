@@ -8,11 +8,11 @@ const themeSwitchStore = useThemeSwitchStore();
 </script>
 
 <template>
-  <el-container class="main">
+  <el-container class="Main">
     <!-- <el-header class="Container">
         </el-header> -->
-    <el-main class="Container mainContainer">
-      <div class="title">
+    <el-main class="Container">
+      <div class="Title">
         <el-tabs
           :tab-position="tabPosition"
           style="height: 200px"
@@ -38,17 +38,6 @@ const themeSwitchStore = useThemeSwitchStore();
 </template>
 
 <style scoped lang="scss">
-.main {
-  align-self: center;
-}
-
-.title {
-  font-size: $fontSize8;
-}
-
-.bold {
-  font-weight: bold;
-}
 
 .mainContainer {
   width: 800px;

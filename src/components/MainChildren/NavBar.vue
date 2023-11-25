@@ -200,8 +200,6 @@ function initLoginCredentials() {
   flex-grow: 1;
 }
 
-.navBar {}
-
 .adminComponent {
   font-size: $fontSize4;
 }

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onMounted, reactive } from "vue";
+import { inject, onMounted, reactive, ref } from "vue";
 import Input from "../MyComponents/Input.vue";
 var config = inject("config") as any;
 //来自父组件的query数据，在mounted时根据这个数据同步一次
@@ -12,6 +12,59 @@ var query = reactive({
   Lang: -1,
   Result: "不限",
 });
+
+// const value = ref('');
+
+const options = [
+  {
+    value: '不限',
+    label: '不限',
+  },
+  {
+    value: 'AC',
+    label: 'AC',
+  },
+  {
+    value: 'WA',
+    label: 'WA',
+  },
+  {
+    value: 'TLE',
+    label: 'TLE',
+  },
+  {
+    value: 'MLE',
+    label: 'MLE',
+  },
+  {
+    value: 'RE',
+    label: 'RE',
+  },
+  {
+    value: 'OLE',
+    label: 'OLE',
+  },
+  {
+    value: 'CE',
+    label: 'CE',
+  },
+  {
+    value: 'JUDGING',
+    label: 'JUDGING',
+  },
+  {
+    value: 'REJUDGING',
+    label: 'REJUDGING',
+  },
+  {
+    value: 'PENDING',
+    label: 'PENDING',
+  },
+  {
+    value: 'FAILED',
+    label: 'FAILED',
+  },
+]
 
 onMounted(() => {
   //初始化
@@ -56,14 +109,26 @@ onMounted(() => {
             <!-- <el-radio-button :label="2">C++</el-radio-button> -->
             <el-radio-button :label="3">C++11</el-radio-button>
             <el-radio-button :label="4">C++17</el-radio-button>
-            <el-radio-button :label="5">Java</el-radio-button>
+            <!-- <el-radio-button :label="5">Java</el-radio-button> -->
             <el-radio-button :label="6">Python3</el-radio-button>
           </el-radio-group>
         </div>
       </div>
       <div class="options">
         <div class="label">结果</div>
-        <div class="input">
+        <el-select
+          v-model="query.Result"
+          placeholder="Select"
+          class="Input"
+        >
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+        <!-- <div class="input">
           <el-radio-group v-model="query.Result">
             <el-radio-button label="不限"></el-radio-button>
             <el-radio-button label="AC"></el-radio-button>
@@ -78,16 +143,15 @@ onMounted(() => {
             <el-radio-button label="PENDING"></el-radio-button>
             <el-radio-button label="FAILED"></el-radio-button>
           </el-radio-group>
-        </div>
+        </div> -->
       </div>
       <el-button
-        class="cursor_pointer searchButton"
+        class="searchButton FontSize18"
         @click="config.search(query)"
         type="primary"
         round
-        style="width: 354px; margin: 4px 0 4px 30px;"
       >
-        查询
+        查&nbsp;询
       </el-button>
     </div>
   </div>
@@ -96,17 +160,12 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .searchButton {
-  // @include border(2px, solid, "border3");
-  // padding: 6px;
-  // border-radius: 4px;
-  // margin: 0 0 0 10px;
-  // margin-top: 10px;
-  // height: 30px;
-  margin: 0 0 0 10px;
+  margin: 10px 0 0 32px;
+  height: 40px;
   padding: 0px 20px 0px 20px;
   border-radius: 5px;
   font-weight: bold;
-  // display: inline-block;
+  width: 354px;
 }
 
 .statusSearch {
