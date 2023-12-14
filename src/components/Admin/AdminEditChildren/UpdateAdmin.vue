@@ -1,58 +1,3 @@
-<template>
-  <div class="UpdateAdmin">
-    <!-- <el-input
-      v-model="search.UID"
-      placeholder="请输入UID"
-    /> -->
-  </div>
-  <div class="userInfo">
-    <div class="permissionHead">
-      <div
-        class="header"
-        v-for="(item, _) in ['用户ID', '超管', '资源', '竞赛', '题单', '题目', '管理员', '修改权限']"
-      >
-        {{ item }}
-      </div>
-    </div>
-    <div class="permissionBody">
-      <div
-        class="body"
-        v-for="(permission, _) in adminList.list"
-      >
-        <div>
-          {{ permission.UID }}
-        </div>
-        <div
-          class="select"
-          v-for="(_, index) in permission.permissionTabel"
-        >
-          <el-switch
-            v-model="permission.permissionTabel[index]"
-            @change="adminList.select(permission, index)"
-            :active-value="true"
-            :inactive-value="false"
-          />
-        </div>
-        <el-button
-          class="botton"
-          @click="adminList.ChangePermission(permission)"
-        >
-          修改
-        </el-button>
-      </div>
-    </div>
-  </div>
-  <!-- <div class="pagination">
-    <el-pagination background layout="prev, pager, next" :page-size="config.limit" :total="config.Count"
-      :current-page="config.currentPage" @current-change="config.changePage" />
-    <el-radio-group v-model="config.limit" @change="config.changePage(1)" style="margin: 0 20px">
-      <el-radio-button :label="20" />
-      <el-radio-button :label="30" />
-      <el-radio-button :label="50" />
-    </el-radio-group>
-  </div> -->
-</template>
-
 <script lang="ts" setup>
 import { onMounted } from "@vue/runtime-core";
 import { getCurrentInstance, reactive } from "vue";
@@ -68,10 +13,43 @@ type PermissionType = {
   PermissionMap: Number;
   permissionTabel: [boolean, boolean, boolean, boolean, boolean, boolean],
 };
+
+var config = reactive({
+  search: null,
+  Count: 0,
+  currentPage: 1,
+  limit: 20,
+  loading: null,
+  init() {
+    this.Count = 0;
+    this.currentPage = 1;
+    this.limit = 20;
+    this.loading = null;
+  },
+  //切换页面
+  changePage: (page: number): void => {
+    config.currentPage = page;
+    SyncUrl();
+    adminList.getAdminList();
+  },
+});
+
+//用于同步浏览器url
+function SyncUrl() {
+  //仅用于展示实时url，可用于复制跳转
+  proxy.$router.replace({
+    path: "/Lists",
+    query: {
+      Page: config.currentPage,
+      Limit: config.limit,
+    },
+  });
+}
+
 var adminList = reactive({
   list: [] as PermissionType[],
   Count: 0,
-  gatAdminList: () => {
+  getAdminList: () => {
     proxy.$get("/api/admin/permission/list/?Page=" + page + "&Limit=" + Limit).then((res: any) => {
       var data = res.data;
       if (data.code === 0) {
@@ -168,11 +146,81 @@ var adminList = reactive({
 });
 
 (() => {
-  adminList.gatAdminList()
+  adminList.getAdminList()
 })();
 </script>
 
+<template>
+  <div class="UpdateAdmin">
+    <!-- <el-input
+      v-model="search.UID"
+      placeholder="请输入UID"
+    /> -->
+  </div>
+  <div class="userInfo">
+    <div class="permissionHead">
+      <div
+        class="header"
+        v-for="(item, _) in ['ID', '超管', '资源', '竞赛', '题单', '题目', '管理员', '']"
+      >
+        {{ item }}
+      </div>
+    </div>
+    <div class="permissionBody">
+      <div
+        class="body"
+        v-for="(permission, _) in adminList.list"
+      >
+        <div>
+          {{ permission.UID }}
+        </div>
+        <div
+          class="select"
+          v-for="(_, index) in permission.permissionTabel"
+        >
+          <el-switch
+            v-model="permission.permissionTabel[index]"
+            @change="adminList.select(permission, index)"
+            :active-value="true"
+            :inactive-value="false"
+          />
+        </div>
+        <el-button
+          class="botton"
+          @click="adminList.ChangePermission(permission)"
+        >
+          修改
+        </el-button>
+      </div>
+    </div>
+  </div>
+  <div class="pagination">
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :page-size="config.limit"
+      :total="config.Count"
+      :current-page="config.currentPage"
+      @current-change="config.changePage"
+    />
+    <!-- <el-radio-group v-model="config.limit" @change="config.changePage(1)" style="margin: 0 20px">
+      <el-radio-button :label="20" />
+      <el-radio-button :label="30" />
+      <el-radio-button :label="50" />
+    </el-radio-group> -->
+  </div>
+</template>
+
 <style scoped lang="scss">
+.pagination {
+  margin: 12px 0 -12px 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+}
+
 .userInfo {
 
   display: flex;
@@ -229,4 +277,5 @@ var adminList = reactive({
       align-items: center;
     }
   }
-}</style>
+}
+</style>

@@ -51,4 +51,10 @@
 
 </script>
   
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+
+.content {
+  padding: 0 12px;
+}
+
+</style>

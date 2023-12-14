@@ -94,7 +94,7 @@ onMounted(() => {
   .content {
     // @include fill_color("fill1");
     box-sizing: border-box;
-    padding: 12px;
+    padding: 0 12px;
     // padding: $adminCenter_contentPadding;
     width: 100%;
     // min-height: 400px;

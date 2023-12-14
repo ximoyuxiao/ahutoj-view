@@ -1,56 +1,95 @@
 .ArtFont {
-    font-family: Merriweather, 'PingFang SC', 'Microsoft Yahei', 'Times New Roman', serif;
+  font-family: Merriweather, 'PingFang SC', 'Microsoft Yahei', 'Times New Roman', serif;
 }
 
 .Serif {
-    font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, \5fae\8f6f\96c5\9ed1, Arial, sans-serif;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, \5fae\8f6f\96c5\9ed1, Arial, sans-serif;
 }
 
 .Bold {
-    font-weight: bold;
+  font-weight: bold;
+}
+
+.DarkGray {
+  color: #3f3f3f;
+}
+
+.Center {
+  text-align: center;
+  // align-self: center;
+  // align-items: center;
+  // align-content: center;
 }
 
 .Container {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    margin: 16px 0 0 0;
-    padding: 16px;
-    height: auto;
-    box-sizing: border-box;
-    font-size: $fontSize3;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin: 16px 0 0 0;
+  padding: 16px;
+  height: auto;
+  box-sizing: border-box;
+  font-size: $fontSize3;
 }
 
 .Top {
-    margin-top: 16px;
+  margin-top: 16px;
 }
 
 .Bottom {
-    margin-bottom: 16px;
+  margin-bottom: 16px;
 }
 
 .Left {
-    margin-left: 16px;
+  margin-left: 16px;
 }
 
 .Footer {
-    font-size: $fontSize5;
+  font-size: $fontSize5;
 }
 
 .Interval {
-    margin: 16px 0 0 0;
+  margin: 16px 0 0 0;
 }
 
 .Title {
-    font-size: $fontSize8;
+  font-size: $fontSize8;
 }
 
 .Main {
-    align-self: center;
-    width: min(100% - 32px, 1200px);
-    font-size: $fontSize3;
+  align-self: center;
+  width: min(100% - 32px, 1200px);
+  font-size: $fontSize3;
 }
 
 .Input {
-    width: 300px;
+  width: 300px;
+}
+
+.FontSize10 {
+  font-size: 14px;
+}
+
+.FontSize12 {
+  font-size: 14px;
+}
+
+.FontSize14 {
+  font-size: 14px;
+}
+
+.FontSize16 {
+  font-size: 16px;
+}
+
+.FontSize18 {
+  font-size: 18px;
+}
+
+.FontSize20 {
+  font-size: 20px;
+}
+
+.FontSize22 {
+  font-size: 22px;
 }

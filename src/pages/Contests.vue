@@ -127,7 +127,7 @@ onMounted(() => {
 });
 </script>
 <template>
-  <el-container class="Main">
+  <el-container class="Main" direction="">
     <el-main class="Container">
       <div class="contest">
         <div

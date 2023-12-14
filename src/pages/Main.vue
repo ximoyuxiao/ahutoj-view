@@ -233,15 +233,31 @@ onMounted(() => {
         v-if="!configStore.reload"
         v-slot="{ Component }"
       >
-        <transition enter-active-class="animate__animated animate__fadeInUp">
-          <component :is="Component" />
-        </transition>
+        <component :is="Component" />
       </router-view>
     </div>
   </div>
+  <!-- <div class="Footer">
+    <div class="ArtFont">
+      <el-row>
+        Anhui University of Technology
+      </el-row>
+      <el-row>
+        Online Judge &copy; 2019 - 2023
+      </el-row>
+    </div>
+  </div> -->
 </template>
 
 <style  scoped lang="scss">
+.Footer {
+  background-color: #333333;
+  color: white;
+  margin-bottom: 0px;
+  height: 100vh;
+  padding: 10px 50px;
+}
+
 .main {
   // min-height: 100vh;
   box-sizing: border-box;

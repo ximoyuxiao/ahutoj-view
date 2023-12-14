@@ -5,11 +5,11 @@ import router from "./router";
 import { createPinia } from "pinia";
 import mountServerFunctions from "./mountServerFunctions";
 
-//创建App
+//创建 App
 const app = createApp(App);
-//挂载pinia
+//挂载 pinia
 app.use(createPinia());
-//挂载Vue-router
+//挂载 Vue-router
 app.use(router);
 init(app);
 app.mount("#app");

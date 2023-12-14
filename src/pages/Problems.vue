@@ -1,5 +1,6 @@
 <script lang="ts" setup name = "Problems">
 import { onMounted, getCurrentInstance, reactive } from "vue";
+import { Promotion } from '@element-plus/icons-vue'
 import IconInput from "../components/MyComponents/IconInput.vue";
 import Input from "../components/MyComponents/Input.vue";
 const { proxy } = getCurrentInstance() as any;
@@ -87,6 +88,7 @@ function getProblems() {
       Page: config.currentPage - 1,
       Limit: config.limit,
       PType,
+      Label: search.Label,
     })
     .then((res: any) => {
       let data = res.data;
@@ -122,6 +124,18 @@ function getProblemById(PID?: string) {
   });
 }
 
+function getProblemByLabel(Label?: string) {
+  search.Label = Label ?? search.Label;
+  // if (!search.Label) {
+  //   proxy.elMessage({
+  //     message: "标签无效",
+  //     type: "warning",
+  //   });
+  //   return;
+  // }
+  getProblems();
+}
+
 //用于同步浏览器url
 function SyncUrl() {
   //仅用于展示实时url，可用于复制跳转
@@ -145,146 +159,207 @@ onMounted(() => {
 
 <template>
   <el-container class="Main">
-    <el-header class="Container">
-      <div class="search">
-        <div class="option">
-          <div class="label">题目 ID</div>
-          <el-input
-            v-model="search.PID"
-            placeholder="例如 P1000"
-            type="text"
-            class="Input"
-            style="width: 116px;"
-          >
-          </el-input>
-          <el-button
-            v-on:click="getProblemById()"
-            type="primary"
-            class="searchButton"
-          >
-            <el-icon size="16px">
-              <Position />
-            </el-icon>
-            &nbsp;跳转
-          </el-button>
-        </div>
-        <!-- <el-row class="option">
-          题目 ID
-          <el-input v-model="search.PID" placeholder="题目 ID" type="text">
-          </el-input>
-          <el-icon @click="getProblemById()">
-            <Search />
-          </el-icon>
-        </el-row> -->
-        <!-- <el-row>
-          题目标题
-          <el-input v-model="search.Title" placeholder="题目标题" type="text">
-          </el-input>
-        </el-row> -->
-        <div class="option">
-          <div class="label">所属题库</div>
-          <el-select
-            v-model="search.PType"
-            class="m-2"
-            placeholder="Select"
-            @change="getProblems()"
-          >
-            <el-option
-              v-for="item in search.PTypeOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </div>
-        <!-- <div class="option">
-          <div class="label">标签</div>
-          <div>
-            <el-select v-model="search.PType" class="m-2" placeholder="Select" @change="getProblems()">
-              <el-option v-for="item in search.PTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
-          </div>
-        </div> -->
-      </div>
-
-    </el-header>
-    <el-main class="Container">
-      <div
-        class="notFound"
-        v-if="search.Data.length == 0"
+    <el-aside class="Aside">
+      <el-container
+        direction="vertical"
+        class="AsideContainer"
       >
-        <el-empty description="未找到结果" />
-      </div>
-      <div
-        class="info"
-        v-else
-      >
-        <div class="count">搜索到 {{ config.Count }} 个题目</div>
-      </div>
-      <div class="list">
-        <div
-          class="item cursor_pointer"
-          v-for="(item, index) in search.Data"
-          :key="index"
-          @click="() => getProblemById(item.PID)"
-        >
-          <div class="title">
-            {{ item.PID }}&nbsp;-&nbsp;{{ item.Title }}
-          </div>
-          <div
-            class="tag"
-            v-if="item.Label.length > 0"
-          >
-            <el-tag
-              v-for="major in item.Label.split(/;| /)"
-              :key="major"
+        <el-main class="Container gotoProblemContainer">
+          <el-row class="Row">
+            <span class="FontSize16 Bold DarkGray">题目 ID</span>
+            <el-input
+              v-model="search.PID"
+              placeholder="e.g. P1000"
+              type="text"
+              class="Left goToProblemInput input-with-select"
             >
-              {{ major }}
-            </el-tag>
-          </div>
-          <div
-            class="tag"
-            v-else
+              <template #append>
+                <el-button
+                  v-on:click="getProblemById()"
+                  type="primary"
+                  class="goToProblemButton Bold"
+                >
+                  跳转
+                </el-button>
+              </template>
+            </el-input>
+          </el-row>
+        </el-main>
+        <el-main class="Container filterContainer">
+          <el-row class="Row">
+            <span class="FontSize16 Bold DarkGray">题库</span>
+            <el-select
+              v-model="search.PType"
+              class="Left problemBankSelect"
+              placeholder="Select"
+              @change="getProblems()"
+            >
+              <el-option
+                v-for="item in search.PTypeOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-row>
+          <el-row class="Row2 Top">
+            <span class="FontSize16 Bold DarkGray">标签</span>
+            <!-- <el-select class="Left">
+
+            </el-select> -->
+            <el-input
+              v-model="search.Label"
+              placeholder="e.g. 图论"
+              type="text"
+              class="Left labelInput input-with-select"
+            >
+              <template #append>
+                <el-button
+                  v-on:click="getProblemByLabel()"
+                  type="primary"
+                  class="goToProblemButton Bold"
+                >
+                  搜索
+                </el-button>
+              </template>
+            </el-input>
+          </el-row>
+        </el-main>
+      </el-container>
+    </el-aside>
+    <el-container class="Left Bottom">
+      <el-main class="Container">
+        <div
+        class="notFound"
+          v-if="search.Data.length == 0"
           >
-            <el-tag type="info">
-              暂无标签
-            </el-tag>
+          <el-empty description="未找到结果" />
+        </div>
+        <div
+          class="info"
+          v-else
+        >
+          <div class="count">检索到 {{ config.Count }} 个题目</div>
+        </div>
+        <div class="list">
+          <div
+            class="item cursor_pointer"
+            v-for="(item, index) in search.Data"
+            :key="index"
+            @click="() => getProblemById(item.PID)"
+          >
+            <div class="FontSize18">
+              {{ item.PID }}&nbsp;{{ item.Title }}
+            </div>
+            <div
+              class="tag"
+              v-if="item.Label.length > 0"
+            >
+              <el-tag
+                v-for="major in item.Label.split(/;| /)"
+                :key="major"
+              >
+                {{ major }}
+              </el-tag>
+            </div>
+            <div
+              class="tag"
+              v-else
+            >
+              <el-tag type="info">
+                暂无标签
+              </el-tag>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="pagination">
-        <el-pagination
-          background
-          layout="prev, pager, next"
-          :page-size="config.limit"
-          :total="config.Count"
-          :current-page="config.currentPage"
-          @current-change="config.changePage"
-        />
-        <el-radio-group
-          v-model="config.limit"
-          @change="config.changePage(1)"
-          style="margin: 0 20px"
-        >
-          <el-radio-button :label="20" />
-          <el-radio-button :label="30" />
-          <el-radio-button :label="50" />
-        </el-radio-group>
-      </div>
-    </el-main>
-    <el-footer class="Container Footer ArtFont Bottom">
-      <el-row>
-        Anhui University of Technology
-      </el-row>
-      <el-row>
-        Online Judge &copy; 2019 - 2023
-      </el-row>
-    </el-footer>
+        <div class="pagination">
+          <el-pagination
+            background
+            layout="prev, pager, next"
+            :page-size="config.limit"
+            :total="config.Count"
+            :current-page="config.currentPage"
+            @current-change="config.changePage"
+          />
+          <!-- <el-radio-group
+            v-model="config.limit"
+            @change="config.changePage(1)"
+            style="margin: 0 20px"
+          >
+            <el-radio-button :label="20" />
+            <el-radio-button :label="30" />
+            <el-radio-button :label="50" />
+          </el-radio-group> -->
+        </div>
+      </el-main>
+      <el-footer class="Container Footer ArtFont Bottom">
+        <el-row>
+          Anhui University of Technology
+        </el-row>
+        <el-row>
+          Online Judge &copy; 2019 - 2023
+        </el-row>
+      </el-footer>
+    </el-container>
   </el-container>
 </template>
 
 
 <style  scoped lang="scss">
+.Main {
+  .Aside {
+    width: 310px;
+
+    .AsideContainer {
+      .gotoProblemContainer {
+        .Row {
+          span {
+            line-height: 30px;
+          }
+
+          .goToProblemInput {
+            border-radius: 5px 0 0 5px;
+            width: 195px;
+          }
+
+          .goToProblemButton {
+            // border-radius: 0 5px 5px 0;
+            // width: 100px;
+          }
+        }
+      }
+
+      .filterContainer {
+        .Row {
+          span {
+            line-height: 30px;
+          }
+          .problemBankSelect {
+            // width: 190px;
+          }
+        }
+
+        .Row2 {
+          span {
+            line-height: 30px;
+          }
+          .labelInput {
+            width: 218px;
+          }
+        }
+      }
+    }
+  }
+}
+
+el-aside {
+  // height: 100%;
+}
+
+span {
+  box-sizing: border-box;
+}
+
 .searchButton {
   // @include border(2px, solid, "border3");
   // padding: 6px;
@@ -321,12 +396,12 @@ onMounted(() => {
     }
 
     .info {
-      margin-top: $modelDistance;
+      // margin-top: $modelDistance;
       // width: 100%;
-      margin: 0 5px;
+      // margin: 0 5px;
       // @include fill_color("fill2");
-      @include border(1px, solid, "border3");
-      border-radius: 8px;
+      // @include border(1px, solid, "border3");
+      // border-radius: 8px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -334,7 +409,7 @@ onMounted(() => {
 
       .count {
         box-sizing: border-box;
-        padding: 10px;
+        padding: 3px;
         font-size: $fontSize5;
         @include font_color("font1");
       }
@@ -367,6 +442,7 @@ onMounted(() => {
       display: flex;
       flex-direction: column;
       transition-duration: 200ms;
+      background-color: #F2F3F5;
 
       &:hover {
         @include fill_color("fill15");
@@ -395,7 +471,7 @@ onMounted(() => {
   }
 
   .pagination {
-    margin: 25px 0;
+    margin: 4px 0 0 0;
     width: 100%;
     display: flex;
     align-items: center;

@@ -64,13 +64,13 @@ function goToSeeCode(SID: number | string) {
       v-show="props.data.length != 0"
     >
       <div class="header">
-        <div style="width: 140px">ID</div>
-        <div style="width: 180px">时间</div>
-        <div style="width: 120px">题目</div>
-        <div style="width: 160px">用户</div>
-        <div style="width: 120px">用时</div>
-        <div style="width: 120px">内存</div>
-        <div style="width: 140px">语言</div>
+        <div style="width: 80px">ID</div>
+        <div style="width: 200px">时间</div>
+        <div style="width: 80px">题目</div>
+        <div style="width: 120px">用户</div>
+        <div style="width: 80px">用时</div>
+        <div style="width: 80px">内存</div>
+        <div style="width: 80px">语言</div>
         <div style="width: 120px">状态</div>
       </div>
       <div
@@ -80,43 +80,43 @@ function goToSeeCode(SID: number | string) {
       >
         <div
           class="SID"
-          style="width: 140px"
+          style="width: 80px"
         >
           {{ item.SID }}
         </div>
         <div
           class="submitTime"
-          style="width: 180px"
+          style="width: 200px"
         >
           {{ proxy.Utils.TimeTools.timestampToTime(item.SubmitTime) }}
         </div>
         <div
           class="PID cursor_pointer"
-          style="width: 120px"
+          style="width: 80px"
           @click="goToProblem(item.PID)"
         >
           {{ item.PID }}
         </div>
         <div
           class="UID"
-          style="width: 160px"
+          style="width: 120px"
         >
           {{ item.UID.length > 15 ? (item.UID.slice(0, 15) + "...") : item.UID }}
         </div>
 
         <div
           class="useTime"
-          :style="'width: 120px;' + (item.Result == 'TLE' ? 'color: #ff381e;' : '')"
+          :style="'width: 80px;' + (item.Result == 'TLE' ? 'color: #ff381e;' : '')"
         >
           {{ item.UseTime }}&nbsp;ms
         </div>
         <div
           class="useMemory"
-          :style="'width: 120px;' + (item.Result == 'MLE' ? 'color: #ff381e;' : '')"
+          :style="'width: 80px;' + (item.Result == 'MLE' ? 'color: #ff381e;' : '')"
         >
-          {{ (item.UseMemory / 1024).toFixed(0) }}&nbsp;KB
+          {{ (item.UseMemory / 1024 / 1024).toFixed(0) }}&nbsp;MB
         </div>
-        <div style="width: 140px">
+        <div style="width: 80px">
           {{ proxy.Utils.StatusConstValManager.getLangString(item.Lang) }}
         </div>
         <div style="width: 120px; display: flex; justify-content: center;">
@@ -178,7 +178,7 @@ function goToSeeCode(SID: number | string) {
       justify-content: space-between;
       font-size: $fontSize6;
       @include font_color("font1");
-      border-bottom: 2px solid;
+      border-bottom: 1px solid;
       @include border_color("border2");
       padding: 10px 0;
 
@@ -190,17 +190,17 @@ function goToSeeCode(SID: number | string) {
     .item {
       display: flex;
       align-items: center;
-      font-size: $fontSize5;
+      font-size: $fontSize4;
       @include font_color("font2");
       // @include fill_color("fill3");
       justify-content: space-between;
-      border-bottom: 2px solid;
+      border-bottom: 1px solid;
       box-sizing: border-box;
       @include border_color("border2");
       transition-duration: 200ms;
 
       &:hover {
-        @include fill_color("fill14");
+        @include fill_color("fill15");
       }
 
       .PID {
@@ -210,8 +210,8 @@ function goToSeeCode(SID: number | string) {
 
       .res {
         font-size: $fontSize4;
-        margin: 8px 0;
-        padding: 3px 6px;
+        margin: 6px 0;
+        padding: 2px 5px;
         box-sizing: border-box;
         border-radius: 6px;
         width: fit-content;
@@ -224,7 +224,7 @@ function goToSeeCode(SID: number | string) {
     }
 
     .pagination {
-      margin: 25px 0;
+      margin: 16px 0 2px 0;
       width: 100%;
       display: flex;
       align-items: center;
@@ -232,4 +232,5 @@ function goToSeeCode(SID: number | string) {
       justify-items: center;
     }
   }
-}</style>
+}
+</style>
