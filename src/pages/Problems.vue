@@ -1,5 +1,6 @@
 <script lang="ts" setup name = "Problems">
 import { onMounted, getCurrentInstance, reactive } from "vue";
+import { Promotion } from '@element-plus/icons-vue'
 import IconInput from "../components/MyComponents/IconInput.vue";
 import Input from "../components/MyComponents/Input.vue";
 const { proxy } = getCurrentInstance() as any;
@@ -87,6 +88,7 @@ function getProblems() {
       Page: config.currentPage - 1,
       Limit: config.limit,
       PType,
+      Label: search.Label,
     })
     .then((res: any) => {
       let data = res.data;
@@ -122,6 +124,18 @@ function getProblemById(PID?: string) {
   });
 }
 
+function getProblemByLabel(Label?: string) {
+  search.Label = Label ?? search.Label;
+  // if (!search.Label) {
+  //   proxy.elMessage({
+  //     message: "标签无效",
+  //     type: "warning",
+  //   });
+  //   return;
+  // }
+  getProblems();
+}
+
 //用于同步浏览器url
 function SyncUrl() {
   //仅用于展示实时url，可用于复制跳转
@@ -145,69 +159,80 @@ onMounted(() => {
 
 <template>
   <el-container class="Main">
-    <el-aside
-      class="Container"
-      style="height: 100%; width: 350px;"
-    >
-      <div class="search">
-        <div class="option">
-          <div class="label">题目 ID</div>
-          <el-input
-            v-model="search.PID"
-            placeholder="例如 P1000"
-            type="text"
-            class="Input"
-            style="width: 116px;"
-          >
-          </el-input>
-          <el-button
-            v-on:click="getProblemById()"
-            type="primary"
-            class="searchButton"
-          >
-            <el-icon size="16px">
-              <Position />
-            </el-icon>
-            &nbsp;跳转
-          </el-button>
-        </div>
-        <!-- <el-row>
-          题目标题
-          <el-input v-model="search.Title" placeholder="题目标题" type="text">
-          </el-input>
-        </el-row> -->
-        <div class="option">
-          <div class="label">所属题库</div>
-          <el-select
-            v-model="search.PType"
-            class="m-2"
-            placeholder="Select"
-            @change="getProblems()"
-          >
-            <el-option
-              v-for="item in search.PTypeOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </div>
-        <!-- <div class="option">
-          <div class="label">标签</div>
-          <div>
-            <el-select v-model="search.PType" class="m-2" placeholder="Select" @change="getProblems()">
-              <el-option v-for="item in search.PTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
+    <el-aside class="Aside">
+      <el-container
+        direction="vertical"
+        class="AsideContainer"
+      >
+        <el-main class="Container gotoProblemContainer">
+          <el-row class="Row">
+            <span class="FontSize16 Bold DarkGray">题目 ID</span>
+            <el-input
+              v-model="search.PID"
+              placeholder="e.g. P1000"
+              type="text"
+              class="Left goToProblemInput input-with-select"
+            >
+              <template #append>
+                <el-button
+                  v-on:click="getProblemById()"
+                  type="primary"
+                  class="goToProblemButton Bold"
+                >
+                  跳转
+                </el-button>
+              </template>
+            </el-input>
+          </el-row>
+        </el-main>
+        <el-main class="Container filterContainer">
+          <el-row class="Row">
+            <span class="FontSize16 Bold DarkGray">题库</span>
+            <el-select
+              v-model="search.PType"
+              class="Left problemBankSelect"
+              placeholder="Select"
+              @change="getProblems()"
+            >
+              <el-option
+                v-for="item in search.PTypeOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
             </el-select>
-          </div>
-        </div> -->
-      </div>
+          </el-row>
+          <el-row class="Row2 Top">
+            <span class="FontSize16 Bold DarkGray">标签</span>
+            <!-- <el-select class="Left">
+
+            </el-select> -->
+            <el-input
+              v-model="search.Label"
+              placeholder="e.g. 图论"
+              type="text"
+              class="Left labelInput input-with-select"
+            >
+              <template #append>
+                <el-button
+                  v-on:click="getProblemByLabel()"
+                  type="primary"
+                  class="goToProblemButton Bold"
+                >
+                  搜索
+                </el-button>
+              </template>
+            </el-input>
+          </el-row>
+        </el-main>
+      </el-container>
     </el-aside>
-    <el-container class="Left">
+    <el-container class="Left Bottom">
       <el-main class="Container">
         <div
-          class="notFound"
+        class="notFound"
           v-if="search.Data.length == 0"
-        >
+          >
           <el-empty description="未找到结果" />
         </div>
         <div
@@ -281,6 +306,60 @@ onMounted(() => {
 
 
 <style  scoped lang="scss">
+.Main {
+  .Aside {
+    width: 310px;
+
+    .AsideContainer {
+      .gotoProblemContainer {
+        .Row {
+          span {
+            line-height: 30px;
+          }
+
+          .goToProblemInput {
+            border-radius: 5px 0 0 5px;
+            width: 195px;
+          }
+
+          .goToProblemButton {
+            // border-radius: 0 5px 5px 0;
+            // width: 100px;
+          }
+        }
+      }
+
+      .filterContainer {
+        .Row {
+          span {
+            line-height: 30px;
+          }
+          .problemBankSelect {
+            // width: 190px;
+          }
+        }
+
+        .Row2 {
+          span {
+            line-height: 30px;
+          }
+          .labelInput {
+            width: 218px;
+          }
+        }
+      }
+    }
+  }
+}
+
+el-aside {
+  // height: 100%;
+}
+
+span {
+  box-sizing: border-box;
+}
+
 .searchButton {
   // @include border(2px, solid, "border3");
   // padding: 6px;

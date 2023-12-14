@@ -406,7 +406,9 @@ function complete() {
 </div></template>
 
 
-<style scoped lang="scss">.problemTitle {
+<style scoped lang="scss">
+
+.problemTitle {
   width: 600px;
 }
 

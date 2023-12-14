@@ -155,48 +155,71 @@ function initLoginCredentials() {
     </div>
     <div v-else>
       <el-sub-menu index="8">
-      <template #title>
-        <div class="Bold"> {{ userDataStore.UserName }}</div>
-      </template>
-      <div @click.stop="intoUserCenter()">
-        <el-menu-item
-          index="7-1"
-          class="adminComponent"
+        <template #title>
+          <div
+            v-if="userDataStore.PermissionMap > 3"
+            class="usertype userAdmin Bold"
+          >
+            OP
+          </div>
+          <div class="Bold"> {{ userDataStore.UserName }}</div>
+        </template>
+        <div @click.stop="intoUserCenter()">
+          <el-menu-item
+            index="7-1"
+            class="adminComponent"
+          >
+            <el-icon>
+              <User />
+            </el-icon>
+            个人中心
+          </el-menu-item>
+        </div>
+        <div
+          v-if="userDataStore.PermissionMap > 3"
+          @click.stop="intoAdminCenter()"
         >
-          <el-icon>
-            <User />
-          </el-icon>
-          个人中心
-        </el-menu-item>
-      </div>
-      <div
-        v-if="userDataStore.PermissionMap > 3"
-        @click.stop="intoAdminCenter()"
-      >
-        <el-menu-item
-          index="7-2"
-          class="adminComponent"
-        >
-          <el-icon>
-            <Operation />
-          </el-icon>
-          OJ&nbsp;管理
-        </el-menu-item>
-      </div>
-      <div @click.stop="initLoginCredentials()">
-        <el-menu-item index="7-3">
-          <el-icon>
-            <Close />
-          </el-icon>
-          退出登录
-        </el-menu-item>
-      </div>
-    </el-sub-menu>
-  </div>
-</el-menu></template>
+          <el-menu-item
+            index="7-2"
+            class="adminComponent"
+          >
+            <el-icon>
+              <Operation />
+            </el-icon>
+            OJ&nbsp;管理
+          </el-menu-item>
+        </div>
+        <div @click.stop="initLoginCredentials()">
+          <el-menu-item index="7-3">
+            <el-icon>
+              <Close />
+            </el-icon>
+            退出登录
+          </el-menu-item>
+        </div>
+      </el-sub-menu>
+    </div>
+  </el-menu>
+</template>
 
 
-<style scoped lang="scss">.flex-grow {
+<style scoped lang="scss">
+.usertype {
+  height: 22px;
+  width: 32px;
+  margin-right: 6px;
+  border-radius: 6px;
+  color: #fff;
+  text-align: center;
+  display: block;
+  line-height: 22px;
+}
+
+.userAdmin {
+  background-color: black;
+}
+
+.flex-grow {
   flex-grow: 1;
 }
 
@@ -206,4 +229,5 @@ function initLoginCredentials() {
 
 .navBarComponent {
   font-size: $fontSize4;
-}</style>
+}
+</style>

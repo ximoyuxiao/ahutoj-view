@@ -135,123 +135,160 @@ function exit() {
 onMounted(() => {
   checkPermission();
 });
+
+const handleOpen = (key: string, keyPath: string[]) => {
+  console.log(key, keyPath)
+};
+const handleClose = (key: string, keyPath: string[]) => {
+  console.log(key, keyPath)
+};
+
 </script>
 
 <template>
-  <el-menu
-    class="adminHeader"
-    mode="horizontal"
+  <el-container
     v-if="config.Administrator"
+    class="main"
   >
-    <el-row class="adminPageFlag">AHUT OJ 管理</el-row>
-    <router-link
-      v-if="config.ProblemAdmin"
-      active-class="selected"
-      to="/Admin/ProblemEdit"
-    >
-      <el-menu-item index="1">
-        题目
-      </el-menu-item>
-    </router-link>
-    <router-link
-      v-if="config.ContestAdmin"
-      active-class="selected"
-      to="/Admin/DataGenerator"
-    >
-      <el-menu-item index="2">
-        数据生成器
-      </el-menu-item>
-    </router-link>
-    <router-link
-      v-if="config.ContestAdmin"
-      active-class="selected"
-      to="/Admin/ContestEdit"
-    >
-      <el-menu-item index="3">
-        竞赛
-      </el-menu-item>
-    </router-link>
-    <router-link
-      v-if="config.ListAdmin"
-      active-class="selected"
-      to="/Admin/ListEdit"
-    >
-      <el-menu-item index="4">
-        题单
-      </el-menu-item>
-    </router-link>
-    <router-link
-      v-if="config.Administrator"
-      active-class="selected"
-      to="/Admin/UserEdit"
-    >
-      <el-menu-item index="5">
-        用户
-      </el-menu-item>
-    </router-link>
-    <router-link
-      v-if="config.SuperAdmin"
-      active-class="selected"
-      to="/Admin/AdminEdit"
-    >
-      <el-menu-item index="6">
-        权限
-      </el-menu-item>
-    </router-link>
-    <router-link
-      v-if="config.Administrator"
-      active-class="selected"
-      to="/Admin/NoticeEdit"
-    >
-      <el-menu-item index="7">
-        公告
-      </el-menu-item>
-    </router-link>
-  </el-menu>
-  <div class="admin Bottom">
-    <div class="content">
-      <router-view v-slot="{ Component }">
-        <transition enter-active-class="animate__animated animate__fadeInUp">
-          <component :is="Component" />
-        </transition>
-      </router-view>
-    </div>
-  </div>
+    <el-aside class="main-aside">
+      <el-menu
+        active-text-color="#ffd04b"
+        background-color="#262626"
+        class="menu"
+        default-active="/Admin/Stastics"
+        text-color="#fff"
+        @open="handleOpen"
+        @close="handleClose"
+        router
+      >
+        <el-menu-item index="/Admin/Stastics">
+          <el-icon>
+            <DataAnalysis />
+          </el-icon>
+          <span>报表</span>
+        </el-menu-item>
+        <el-menu-item
+          index="/Admin/ProblemEdit"
+          v-if="config.ProblemAdmin"
+        >
+          <el-icon>
+            <Tickets />
+          </el-icon>
+          <span>题目</span>
+        </el-menu-item>
+        <el-menu-item index="/Admin/DataGenerator">
+          <el-icon>
+            <Tickets />
+          </el-icon>
+          <span>数据生成器</span>
+        </el-menu-item>
+        <!-- <el-sub-menu
+          index="2"
+          v-if="config.ProblemAdmin"
+        >
+          <template #title>
+            <el-icon>
+              <Tickets />
+            </el-icon>
+            <span>题目</span>
+          </template>
+          <el-menu-item-group title="Group One">
+            <el-menu-item index="1-1">item one</el-menu-item>
+            <el-menu-item index="1-2">item two</el-menu-item>
+          </el-menu-item-group>
+          <el-sub-menu index="1-4">
+            <template #title>item four</template>
+            <el-menu-item index="1-4-1">item one</el-menu-item>
+          </el-sub-menu>
+        </el-sub-menu> -->
+        <!-- <el-menu-item index="2">
+          <el-icon>
+            <Coin />
+          </el-icon>
+          <span>数据</span>
+        </el-menu-item> -->
+        <el-menu-item
+          index="/Admin/ContestEdit"
+          v-if="config.ContestAdmin"
+        >
+          <el-icon>
+            <SwitchFilled />
+          </el-icon>
+          <span>比赛</span>
+        </el-menu-item>
+        <el-menu-item
+          index="/Admin/ListEdit"
+          v-if="config.ListAdmin"
+        >
+          <el-icon>
+            <Files />
+          </el-icon>
+          <span>题单</span>
+        </el-menu-item>
+        <el-menu-item
+          index="/Admin/UserEdit"
+          v-if="config.Administrator"
+        >
+          <el-icon>
+            <User />
+          </el-icon>
+          <span>用户</span>
+        </el-menu-item>
+        <el-menu-item
+          index="/Admin/AdminEdit"
+          v-if="config.SuperAdmin"
+        >
+          <el-icon>
+            <Lock />
+          </el-icon>
+          <span>权限</span>
+        </el-menu-item>
+        <el-menu-item
+          index="/Admin/NoticeEdit"
+          v-if="config.Administrator"
+        >
+          <el-icon>
+            <Notification />
+          </el-icon>
+          <span>公告</span>
+        </el-menu-item>
+      </el-menu>
+    </el-aside>
+    <el-main class="mainComponent">
+      <div class="admin Bottom">
+        <router-view v-slot="{ Component }">
+          <transition enter-active-class="animate__animated animate__fadeInUp">
+            <component :is="Component" />
+          </transition>
+        </router-view>
+      </div>
+    </el-main>
+  </el-container>
 </template>
 
 
 <style scoped lang="scss">
-.adminHeader {
-  height: 55px;
-  margin: 5px 0;
 
-  .el-menu-item {
-    font-size: $fontSize5;
+.mainComponent {
+  padding: 0;
+}
+
+.main {
+  // height: 100%;
+  height: calc(100vh - 57.8px);
+
+  .main-aside {
+    width: 160px;
+
+    .menu {
+      width: 160px;
+      height: 100%;
+    }
   }
 }
 
-.adminPageFlag {
-  font-size: $fontSize5;
-  align-self: center;
-  margin: 0 18px 0 18px;
-}
 
 .admin {
-  width: min(100% - 32px, 1200px);
-  // width: 100%;
-  // position: relative;
-  // // display: flex;
-  // // align-items: flex-start;
-  // box-sizing: border-box;
-  // z-index: 1;
-  align-self: center;
-  // align-items: center;
-
-
-  .content {
-    align-self: center;
-    // width: calc(100% - 260px);
-    // width: min(100% - 32px, 1200px);
-  }
+  width: min(100%, 1200px);
 }
 </style>

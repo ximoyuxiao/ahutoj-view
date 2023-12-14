@@ -4,15 +4,6 @@ import {
 	NavigationGuardNext,
 	RouteLocationNormalized,
 } from "vue-router";
-// import Home from "../pages/Home.vue";
-// import Problem from "../components/Problem.vue";
-// import Code from "../components/Code.vue";
-// import Contests from "../pages/Contests.vue";
-// import Contest from "../components/Contest.vue";
-// import ContestRank from "../components/ContestRank.vue";
-// import ProblemList from "../pages/ProblemList.vue";
-// import Status from "../pages/Status.vue";
-// import UserCenter from "../pages/UserCenter.vue";
 
 import Admin from "./admin";
 import { needLoginCertificate } from "./guard";
@@ -30,11 +21,6 @@ const router = createRouter({
 		{
 			path: "/Problems",
 			component: () => import("../pages/Problems.vue"),
-		},
-		{
-			path: "/Problem/:PID",
-			name: "Problem",
-			component: () => import("../pages/Problem.vue"),
 		},
 		{
 			path: "/Problem/:PID/:CID",

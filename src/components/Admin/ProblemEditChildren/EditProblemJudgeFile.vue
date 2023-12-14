@@ -2,6 +2,7 @@
 import { ElMessageBox } from "element-plus";
 import { getCurrentInstance, onMounted, reactive, ref } from "vue";
 import { FileUpdateUtils } from "../../../utils/fileUtils";
+import { Search } from '@element-plus/icons-vue'
 const { proxy } = getCurrentInstance() as any;
 
 //文件列表
@@ -172,138 +173,194 @@ onMounted(() => {
     search.getProblem(PID);
   }
 });
+
+const tableData = [
+  {
+  },
+]
+
 </script>
 
 <template>
-  <el-conatiner>
-    <el-header class="Container">
-      <span style="width: 70px">题号：</span>
-      <el-input
-        v-model="search.PID"
-        style="width: 200px"
-        v-on:focus="search.onFocus()"
-      />
-      <el-button
-        plain
-        v-on:click="search.getProblem(null)"
-      >
-        搜索
-      </el-button>
-    </el-header>
-    <el-main class="Container">
-      <div
-        class="preview"
-        v-show="search.isSearched"
-      >
-        <div class="fileList">
-          <div class="header">
-            <div>文件名</div>
-            <div>类型</div>
-            <div>大小</div>
-            <div>操作</div>
-          </div>
-          <div
-            id="notFound"
-            v-show="fileList.length == 0"
-          >
-            暂无文件
-          </div>
-          <div
-            class="fileItem"
-            v-for="(item, index) in fileList"
-            :key="item.Filename"
-          >
-            <div>{{ item.Filename }}</div>
-            <div>{{ item.Filename.split('.')[1] }}</div>
-            <div>{{ (item.FileSize / 1024).toFixed(2) }}KB</div>
-            <div>
-              <el-button
-                type="danger"
-                plain
-                size="small"
-                @click="deleteFile(index)"
-              >
-                删除
-              </el-button>
-              <el-button
-                v-if="item.Filename.split('.')[1] == 'zip'"
-                type="warning"
-                plain
-                size="small"
-                @click="unzipFile(index)"
-              >
-                解压
-              </el-button>
-            </div>
-          </div>
-        </div>
-        <el-upload
-          ref="upload"
-          class="uploadJson"
-          drag
-          accept=".zip,.in,.out"
-          :multiple="true"
-          :auto-upload="false"
-          :on-change="selectFile"
-          :on-remove="removeFile"
-        >
-          <el-icon class="el-icon--upload">
-            <upload-filled />
-          </el-icon>
-          <div class="el-upload__text">
-            以 zip/in/out 格式文件上传，点击或者拖拽
-          </div>
-        </el-upload>
-
-      </div>
-    </el-main>
-    <el-button
-      @click="uploadFileList"
-      type="primary"
-      class="uploadButton Top"
+  <el-container direction="horizontal">
+    <el-aside style="width: 287px; height: 100%;">
+      <el-container>
+        <el-header class="Container">
+          <el-row>
+            <span>题号</span>
+            <el-input
+              v-model="search.PID"
+              placeholder="P1000"
+              style="width: 203px;"
+              class="Left"
+            >
+              <template #append>
+                <el-button
+                  :icon="Search"
+                  v-on:click="search.getProblem(null)"
+                />
+              </template>
+            </el-input>
+          </el-row>
+        </el-header>
+      </el-container>
+    </el-aside>
+    <el-main
+      class="Left"
+      style="padding: 0 0 0 0"
     >
-      上传
-    </el-button>
-  </el-conatiner>
+      <el-conatiner style="width: 620px;">
+        <el-main class="Container">
+          <!-- <el-table
+            :data="tableData"
+            style="width: 100%"
+          >
+            <el-table-column label="文件名">
+              <template #default="scope">
+                <div style="display: flex; align-items: center">
+
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column label="类型">
+              <template #default="scope">
+                <div style="display: flex; align-items: center">
+
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column label="大小">
+              <template #default="scope">
+
+              </template>
+            </el-table-column>
+            <el-table-column label="操作">
+              <template #default="scope">
+                <el-button
+                  size="small"
+                  type="danger"
+                  @click="deleteFile(index)"
+                >删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table> -->
+          <div
+            class="preview Center"
+            v-show="search.isSearched"
+          >
+            <div class="fileList">
+              <div class="header">
+                <div>文件名</div>
+                <div>类型</div>
+                <div>大小</div>
+                <div>操作</div>
+              </div>
+              <div
+                id="notFound"
+                v-show="fileList.length == 0"
+              >
+                暂无文件
+              </div>
+              <div
+                class="fileItem"
+                v-for="(item, index) in fileList"
+                :key="item.Filename"
+              >
+                <div>{{ item.Filename }}</div>
+                <div>{{ item.Filename.split('.')[1] }}</div>
+                <div>{{ (item.FileSize / 1024 / 1024).toFixed(2) }} MB</div>
+                <div>
+                  <el-button
+                    type="danger"
+                    plain
+                    size="small"
+                    @click="deleteFile(index)"
+                  >
+                    删除
+                  </el-button>
+                  <el-button
+                    v-if="item.Filename.split('.')[1] == 'zip'"
+                    type="warning"
+                    plain
+                    size="small"
+                    @click="unzipFile(index)"
+                  >
+                    解压
+                  </el-button>
+                </div>
+              </div>
+            </div>
+            <el-upload
+              ref="upload"
+              class="uploadJson"
+              drag
+              accept=".zip,.in,.out"
+              :multiple="true"
+              :auto-upload="false"
+              :on-change="selectFile"
+              :on-remove="removeFile"
+            >
+              <el-icon class="el-icon--upload">
+                <upload-filled />
+              </el-icon>
+              <div class="el-upload__text">
+                以 zip/in/out 格式文件上传，点击或者拖拽
+              </div>
+            </el-upload>
+          </div>
+        </el-main>
+        <el-button
+          @click="uploadFileList"
+          type="primary"
+          class="uploadButton Top"
+        >
+          上传
+        </el-button>
+      </el-conatiner>
+    </el-main>
+  </el-container>
 </template>
 
 <style scoped lang="scss">
 .uploadButton {
   width: 100%;
   height: 50px;
-  border-radius: 12px;
-}
-
-.search {
-  display: flex;
-  justify-items: center;
-  align-content: center;
-  margin-bottom: 40px;
+  border-radius: 0 0 8px 8px;
 }
 
 span {
-  font-size: 22px;
-  width: 150px;
+  align-self: center;
+  display: flex;
+  font-size: $fontSize5;
   @include font_color("font1");
 }
 
+.uploadJson {
+  border-radius: 0 0 8px 8px;
+}
+
 .preview {
-  display: flex;
-  flex-direction: column;
+  // width: 600px;
+  // display: flex;
+  // flex-direction: column;
 
   .fileList {
     display: flex;
     flex-direction: column;
 
     .header {
+      height: 40px;
       display: grid;
       grid-template-columns: repeat(4, calc(100% / 4));
-      @include fill_color("fill34");
+      background: #f2f3f5;
+      border-radius: 8px 8px 0 0;
+      // @include fill_color("fill34");
       font-size: $fontSize7;
 
       >div {
+        line-height: 40px;
         box-sizing: border-box;
-        padding: 0 5px;
+        text-align: center;
         @include font_color("font1");
       }
     }
@@ -332,4 +389,5 @@ span {
       }
     }
   }
-}</style>
+}
+</style>
