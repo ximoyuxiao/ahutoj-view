@@ -2,31 +2,22 @@
   <el-menu
     class="ListEdit"
     mode="horizontal"
+    router
   >
-    <router-link
-      active-class="selected"
-      to="/Admin/NoticeEdit/AddNotice"
-    >
-      <el-menu-item index="1">
-        <el-icon>
-          <Plus />
-        </el-icon>
-        新增
-      </el-menu-item>
-    </router-link>
-    <router-link
-      active-class="selected"
-      to="/Admin/NoticeEdit/UpdateNotice"
-    >
-      <el-menu-item index="2">
-        <el-icon>
-          <Edit />
-        </el-icon>
-        编辑
-      </el-menu-item>
-    </router-link>
+    <el-menu-item index="/Admin/NoticeEdit/AddNotice">
+      <el-icon>
+        <Plus />
+      </el-icon>
+      新增
+    </el-menu-item>
+    <el-menu-item index="/Admin/NoticeEdit/UpdateNotice">
+      <el-icon>
+        <Edit />
+      </el-icon>
+      编辑
+    </el-menu-item>
   </el-menu>
-  <el-container>
+  <el-container class="Top Bottom">
     <el-main class="Container">
       <div class="ListEdit">
         <div class="content">
@@ -99,4 +90,5 @@ onMounted(() => {
     width: 100%;
     // min-height: 400px;
   }
-}</style>
+}
+</style>

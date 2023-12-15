@@ -158,7 +158,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-container class="Main">
+  <el-container class="Main Top Bottom">
     <el-aside class="Aside">
       <el-container
         direction="vertical"
@@ -185,7 +185,7 @@ onMounted(() => {
             </el-input>
           </el-row>
         </el-main>
-        <el-main class="Container filterContainer">
+        <el-main class="Container filterContainer Top">
           <el-row class="Row">
             <span class="FontSize16 Bold DarkGray">题库</span>
             <el-select
@@ -292,14 +292,6 @@ onMounted(() => {
           </el-radio-group> -->
         </div>
       </el-main>
-      <el-footer class="Container Footer ArtFont Bottom">
-        <el-row>
-          Anhui University of Technology
-        </el-row>
-        <el-row>
-          Online Judge &copy; 2019 - 2023
-        </el-row>
-      </el-footer>
     </el-container>
   </el-container>
 </template>

@@ -149,24 +149,16 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-container class="Main">
+  <el-container class="Main Top Bottom">
     <el-header class="Container" style="height: 100%;">
       <StatusSearch :query="query">
       </StatusSearch>
     </el-header>
     <!-- <el-container class="Left"> -->
-      <el-main class="Container">
+      <el-main class="Container Top">
         <StatusList :data="status.list">
         </StatusList>
       </el-main>
-      <el-footer class="Container Footer ArtFont Bottom">
-        <el-row>
-          Anhui University of Technology
-        </el-row>
-        <el-row>
-          Online Judge &copy; 2019 - 2023
-        </el-row>
-      </el-footer>
     <!-- </el-container> -->
   </el-container>
 </template>

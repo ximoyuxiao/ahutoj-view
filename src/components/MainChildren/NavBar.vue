@@ -52,22 +52,16 @@ function initLoginCredentials() {
     :ellipsis="false"
     :default-active="activeIndex"
     @select="handleSelect"
+    router
   >
-    <router-link to="/Home">
       <el-menu-item
-        index="0"
+        index="/Home"
         class="Bold navBarComponent"
       >
         AHUT OJ
       </el-menu-item>
-    </router-link>
-    <router-link
-      active-class="selected"
-      id="problems"
-      to="/Problems"
-    >
       <el-menu-item
-        index="1"
+        index="/Problems"
         class="navBarComponent"
       >
         <el-icon>
@@ -75,14 +69,8 @@ function initLoginCredentials() {
         </el-icon>
         题库
       </el-menu-item>
-    </router-link>
-    <router-link
-      active-class="selected"
-      id="contests"
-      to="/Contests"
-    >
       <el-menu-item
-        index="2"
+        index="/Contests"
         class="navBarComponent"
       >
         <el-icon>
@@ -90,14 +78,8 @@ function initLoginCredentials() {
         </el-icon>
         比赛
       </el-menu-item>
-    </router-link>
-    <router-link
-      active-class="selected"
-      id="Lists"
-      to="/Lists"
-    >
       <el-menu-item
-        index="3"
+        index="/Lists"
         class="navBarComponent"
       >
         <el-icon>
@@ -105,14 +87,8 @@ function initLoginCredentials() {
         </el-icon>
         题单
       </el-menu-item>
-    </router-link>
-    <router-link
-      active-class="selected"
-      id="status"
-      to="/Status"
-    >
       <el-menu-item
-        index="4"
+        index="/Status"
         class="navBarComponent"
       >
         <el-icon>
@@ -120,14 +96,8 @@ function initLoginCredentials() {
         </el-icon>
         状态
       </el-menu-item>
-    </router-link>
-    <router-link
-      active-class="selected"
-      id="status"
-      to="/About"
-    >
       <el-menu-item
-        index="5"
+        index="/About"
         class="navBarComponent"
       >
         <el-icon>
@@ -135,7 +105,6 @@ function initLoginCredentials() {
         </el-icon>
         关于
       </el-menu-item>
-    </router-link>
     <div class="flex-grow" />
     <el-menu-item
       index="6"

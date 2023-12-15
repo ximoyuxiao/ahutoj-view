@@ -14,32 +14,46 @@ const excellentXcpcers = ref([
     awards: "2023 ICPC 杭州 银奖;2023 ICPC 西安 铜奖;2023 ICPC 西安邀请赛 铜奖;2023 CCPC 湘潭邀请赛 铜奖",
     codeForces: "https://codeforces.com/profile/Angriliset",
   },
+  {
+    profilePhoto: "http://101.42.232.70/image/268a7e05739dae21e1dc4cbcca6ede8f1702563383232925106.jpg",
+    name: "高泽铭",
+    slogan: "积极向上，到处睡觉",
+    awards: "2023 ICPC 西安 银奖; 2023 ICPC 济南 铜奖;2023 CCPC 秦皇岛 铜奖;2023 CCPC 湘潭邀请赛 银奖;2023 ICPC 西安邀请赛 铜奖",
+    codeForces: "https://codeforces.com/profile/gameboygzm",
+  },
+  {
+    profilePhoto: "http://101.42.232.70/image/8a382dc33b7cb51d0118ff4eacef5c091702563708300740602.jpg",
+    name: "戴铃涛",
+    slogan: "做难事必有所得",
+    awards: "2023 ICPC 杭州 银奖;2023 ICPC 西安 铜奖",
+    codeForces: "https://codeforces.com/profile/1533050560",
+  },
+  {
+    profilePhoto: "http://101.42.232.70/image/d784aab1e9dc9a9dc6dd2874ae4f43ea1702563701136748819.jpg",
+    name: "林昊",
+    slogan: "积极向上，到处睡觉",
+    awards: "2023 ICPC 西安 银奖; 2023 ICPC 济南 铜奖;2023 CCPC 秦皇岛 铜奖;2023 CCPC 湘潭邀请赛 银奖;2023 ICPC 西安邀请赛 铜奖",
+    codeForces: "https://codeforces.com/profile/Llinhao",
+  },
+  {
+    profilePhoto: "http://101.42.232.70/image/15b19b3487c78db82227f6e23471e5461702564922339328955.jpg",
+    name: "翟智伟",
+    slogan: "你！真！棒！",
+    awards: "2023 ICPC 杭州 银奖;2023 ICPC 西安 铜奖",
+    codeForces: "https://codeforces.com/profile/Radiaa",
+  },
+  {
+    profilePhoto: "http://101.42.232.70/image/0cabaa7df372ab197830e5f33bf9fd4c1702615248064311977.png",
+    name: "万祎博",
+    slogan: "积极向上，到处睡觉",
+    awards: "2023 ICPC 西安 银奖; 2023 ICPC 济南 铜奖;2023 CCPC 秦皇岛 铜奖;2023 CCPC 湘潭邀请赛 银奖;2023 ICPC 西安邀请赛 铜奖",
+    codeForces: "https://codeforces.com/profile/wa_OIers",
+  },
   // {
-  //   profilePhoto: "1",
-  //   name: "林仁杰",
-  //   slogan: "1",
-  //   awards: "1",
-  //   codeForces: "",
-  // },
-  // {
-  //   profilePhoto: "1",
-  //   name: "林仁杰",
-  //   slogan: "1",
-  //   awards: "1",
-  //   codeForces: "",
-  // },
-  // {
-  //   profilePhoto: "1",
-  //   name: "林仁杰",
-  //   slogan: "1",
-  //   awards: "1",
-  //   codeForces: "",
-  // },
-  // {
-  //   profilePhoto: "1",
-  //   name: "林仁杰",
-  //   slogan: "1",
-  //   awards: "1",
+  //   profilePhoto: "",
+  //   name: "",
+  //   slogan: "",
+  //   awards: "",
   //   codeForces: "",
   // },
 ]);
@@ -47,7 +61,7 @@ const excellentXcpcers = ref([
 </script>
 
 <template>
-  <el-container class="Main">
+  <el-container class="Top Bottom Main">
     <el-main class="Container">
       <div class="Title">
         <el-tabs
@@ -55,12 +69,12 @@ const excellentXcpcers = ref([
           class=""
         >
           <el-tab-pane class="" label="优秀 xcpcers">
-            <el-row style="margin: 0 0 0 20px;">
+            <el-row style="margin: 0 0 0 20px;" :gutter="12">
               <el-col
                 v-for="(item, index) in excellentXcpcers"
                 :key="item"
-                :span="7"
-                style="margin: 16px 16px 0 0;"
+                :span="6"
+                style="margin-bottom: 12px;"
               >
                 <el-card
                   :body-style="{ padding: '0px' }"
@@ -70,7 +84,7 @@ const excellentXcpcers = ref([
                     :src=item.profilePhoto
                     class="image"
                   />
-                  <div style="padding: 14px">
+                  <div style="padding: 12px">
                     <p class="FontSize17">{{ item.name }}</p>
                     <p
                       class="FontSize14"
@@ -79,7 +93,7 @@ const excellentXcpcers = ref([
                       <el-tag
                         v-for="major in item.awards.split(/;/)"
                         :key="major"
-                        style="margin-top: 2px;"
+                        style="margin-top: 0px;"
                       >
                         {{ major }}
                       </el-tag>
@@ -107,14 +121,6 @@ const excellentXcpcers = ref([
         </el-tabs>
       </div>
     </el-main>
-    <el-footer class="Container Footer ArtFont Bottom">
-      <el-row>
-        Anhui University of Technology
-      </el-row>
-      <el-row>
-        Online Judge &copy; 2019 - 2023
-      </el-row>
-    </el-footer>
   </el-container>
 </template>
 

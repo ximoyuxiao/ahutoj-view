@@ -213,7 +213,7 @@ const tableData = [
     class="Main"
     style="color: white;"
   >
-    <el-container>
+    <el-container class="Top Bottom Main">
       <el-header
         class="Container StatusBarJUDGING"
         v-if="submit.Result == 'JUDGING'"
@@ -488,7 +488,7 @@ const tableData = [
           }} 个测试数据</div>
         </el-row>
       </el-header>
-      <el-header class="Container">
+      <el-header class="Container Top">
         <el-table
           :data="tableData"
           style="width: 100%"
@@ -574,86 +574,82 @@ const tableData = [
         class="Container"
         v-else-if="submit.hasCeInfo"
       >
-      <div class="title">错误信息</div>
-      <el-input
-        v-model="submit.CeInfo"
-        :autosize="{ minRows: 5 }"
-        readonly
-        resize="none"
-        show-word-limit
-        type="textarea"
-      />
-    </el-main>
-    <el-main
-      class="Container"
-      v-else-if="submit.Result == 'PE'"
-    >
-      <div class="title">格式有误</div>
-      <el-input
-        v-model="constValStore.SUBMIT_RESULT_PE"
-        :autosize="{ minRows: 5 }"
-        readonly
-        resize="none"
-        show-word-limit
-        type="textarea"
-      />
-    </el-main>
-    <el-main
-      class="Container"
-      v-else-if="submit.Result == 'FAILED'"
-    >
-      <div class="title">意外的错误</div>
-      <el-input
-        v-model="constValStore.SUBMIT_RESULT_FAILED"
-        :autosize="{ minRows: 3 }"
-        readonly
-        resize="none"
-        show-word-limit
-        type="textarea"
-      />
-      <div
-        class="rejudge cursor_pointer"
-        @click="rejudge"
+        <div class="title">错误信息</div>
+        <el-input
+          v-model="submit.CeInfo"
+          :autosize="{ minRows: 5 }"
+          readonly
+          resize="none"
+          show-word-limit
+          type="textarea"
+        />
+      </el-main>
+      <el-main
+        class="Container"
+        v-else-if="submit.Result == 'PE'"
       >
-        重判
-      </div>
-    </el-main>
-    <!-- <el-main class="Container" style=""> -->
-    <!-- <div class="Title Bold Bottom">代码</div> -->
-    <el-input
-      class="Top"
-      v-model="submit.Source"
-      :autosize="{ minRows: 5 }"
-      readonly
-      resize="none"
-      show-word-limit
-      type="textarea"
-      style="border-radius: 0px;"
-    />
-    <!-- </el-main> -->
-  </el-container>
-</div>
-<div class="Main">
-  <div
-    id="judging"
-    class="Container"
-    v-show="judging"
-    style="width: 100%; height: 200px;"
-  >
+        <div class="title">格式有误</div>
+        <el-input
+          v-model="constValStore.SUBMIT_RESULT_PE"
+          :autosize="{ minRows: 5 }"
+          readonly
+          resize="none"
+          show-word-limit
+          type="textarea"
+        />
+      </el-main>
+      <el-main
+        class="Container"
+        v-else-if="submit.Result == 'FAILED'"
+      >
+        <div class="title">意外的错误</div>
+        <el-input
+          v-model="constValStore.SUBMIT_RESULT_FAILED"
+          :autosize="{ minRows: 3 }"
+          readonly
+          resize="none"
+          show-word-limit
+          type="textarea"
+        />
+        <div
+          class="rejudge cursor_pointer"
+          @click="rejudge"
+        >
+          重判
+        </div>
+      </el-main>
+      <!-- <el-main class="Container" style=""> -->
+      <!-- <div class="Title Bold Bottom">代码</div> -->
+      <el-input
+        class="Top"
+        v-model="submit.Source"
+        :autosize="{ minRows: 5 }"
+        readonly
+        resize="none"
+        show-word-limit
+        type="textarea"
+        style="border-radius: 0px;"
+      />
+      <!-- </el-main> -->
+    </el-container>
   </div>
-</div>
-<div class="Main Bottom">
-  <el-footer class="Container Footer ArtFont Bottom">
-    <el-row>
-      Anhui University of Technology
-    </el-row>
-    <el-row>
-      Online Judge &copy; 2019 - 2023
-    </el-row>
-  </el-footer>
-</div></template>
+  <div class="Main Bottom">
+    <div
+      id="judging"
+      class="Container"
+      v-show="judging"
+      style="width: 100%; height: 200px;"
+    >
+    </div>
+  </div>
+</template>
 
-<style scoped lang="scss">.notFound {
+<style scoped lang="scss">
+
+.main {
+  height: calc(100vh - 58.5px - 80px);
+}
+.notFound {
   width: 100%;
   height: 300px;
   display: flex;
@@ -747,4 +743,5 @@ const tableData = [
 
 .ce .el-textarea__inner {
   color: rgb(233, 42, 42) !important;
-}</style>
+}
+</style>

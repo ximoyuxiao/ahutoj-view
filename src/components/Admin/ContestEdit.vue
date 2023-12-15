@@ -2,31 +2,22 @@
   <el-menu
     class="contestEdit"
     mode="horizontal"
+    router
   >
-    <router-link
-      active-class="selected"
-      to="/Admin/ContestEdit/AddContest"
-    >
-      <el-menu-item index="1">
-        <el-icon>
-          <Plus />
-        </el-icon>
-        新增
-      </el-menu-item>
-    </router-link>
-    <router-link
-      active-class="selected"
-      to="/Admin/ContestEdit/UpdateContest"
-    >
-      <el-menu-item index="2">
-        <el-icon>
-          <Edit />
-        </el-icon>
-        编辑
-      </el-menu-item>
-    </router-link>
+    <el-menu-item index="/Admin/ContestEdit/AddContest">
+      <el-icon>
+        <Plus />
+      </el-icon>
+      新增
+    </el-menu-item>
+    <el-menu-item index="/Admin/ContestEdit/UpdateContest">
+      <el-icon>
+        <Edit />
+      </el-icon>
+      编辑
+    </el-menu-item>
   </el-menu>
-  <el-container>
+  <el-container class="Top Bottom">
     <el-main class="Container">
       <div class="contestEdit">
         <div class="content">
@@ -87,4 +78,5 @@ export default {
     width: 100%;
     // min-height: 400px;
   }
-}</style>
+}
+</style>

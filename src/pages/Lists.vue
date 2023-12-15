@@ -80,7 +80,7 @@ function SyncUrl() {
 </script>
 
 <template>
-  <el-container class="Main">
+  <el-container class="Main Bottom Top">
     <el-aside
       class="Container"
       style="height: 100%; width: 350px;"
@@ -112,9 +112,7 @@ function SyncUrl() {
     </el-aside>
     <el-container class="Left">
       <el-main class="Container">
-        <div
-          class="ProblemList"
-        >
+        <div class="ProblemList">
           <div class="left">
             <div class="content">
               <div class="list">
@@ -168,14 +166,6 @@ function SyncUrl() {
           </div>
         </div>
       </el-main>
-      <el-footer class="Container Footer ArtFont Bottom">
-        <el-row>
-          Anhui University of Technology
-        </el-row>
-        <el-row>
-          Online Judge &copy; 2019 - 2023
-        </el-row>
-      </el-footer>
     </el-container>
   </el-container>
 </template>
@@ -251,4 +241,5 @@ function SyncUrl() {
       }
     }
   }
-}</style>
+}
+</style>

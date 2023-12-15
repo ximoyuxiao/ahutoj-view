@@ -2,31 +2,22 @@
   <el-menu
     class="contestEdit"
     mode="horizontal"
+    router
   >
-    <router-link
-      active-class="selected"
-      to="/Admin/AdminEdit/AddAdmin"
-    >
-      <el-menu-item index="1">
-        <el-icon>
-          <Plus />
-        </el-icon>
-        新增权限
-      </el-menu-item>
-    </router-link>
-    <router-link
-      active-class="selected"
-      to="/Admin/AdminEdit/UpdateAdmin"
-    >
-      <el-menu-item index="2">
-        <el-icon>
-          <Tickets />
-        </el-icon>
-        权限列表
-      </el-menu-item>
-    </router-link>
+    <el-menu-item index="/Admin/AdminEdit/AddAdmin">
+      <el-icon>
+        <Plus />
+      </el-icon>
+      新增权限
+    </el-menu-item>
+    <el-menu-item index="/Admin/AdminEdit/UpdateAdmin">
+      <el-icon>
+        <Tickets />
+      </el-icon>
+      权限列表
+    </el-menu-item>
   </el-menu>
-  <div class="AdminEdit">
+  <div class="AdminEdit Top Bottom">
     <div class="content">
       <router-view v-slot="{ Component }">
         <transition enter-active-class="animate__animated animate__fadeInRight">
@@ -82,4 +73,5 @@ const { proxy } = getCurrentInstance() as any;
     width: 100%;
     // min-height: 400px;
   }
-}</style>
+}
+</style>

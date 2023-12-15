@@ -127,7 +127,7 @@ onMounted(() => {
 });
 </script>
 <template>
-  <el-container class="Main" direction="">
+  <el-container class="Main Top Bottom" direction="">
     <el-main class="Container">
       <div class="contest">
         <div
@@ -250,14 +250,6 @@ onMounted(() => {
         </div>
       </div>
     </el-main>
-    <el-footer class="Container Footer ArtFont Bottom">
-      <el-row>
-        Anhui University of Technology
-      </el-row>
-      <el-row>
-        Online Judge &copy; 2019 - 2023
-      </el-row>
-    </el-footer>
   </el-container>
 </template>
 

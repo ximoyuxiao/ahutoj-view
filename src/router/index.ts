@@ -22,6 +22,11 @@ const router = createRouter({
 			path: "/Problems",
 			component: () => import("../pages/Problems.vue"),
 		},
+    {
+			path: "/Problem/:PID",
+			name: "Problem",
+			component: () => import("../pages/Problem.vue"),
+		},
 		{
 			path: "/Problem/:PID/:CID",
 			name: "ContestProblem",

@@ -292,7 +292,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-container class="Main">
+  <el-container class="Main Top Bottom">
     <el-header class="Container">
       <div class="infoBox">
         <!-- 头像背景效果 -->
@@ -356,7 +356,7 @@ onMounted(() => {
         </div>
       </div>
     </el-header>
-    <el-main class="Container">
+    <el-main class="Container Top">
       <div class="activityCalendarBox">
         <ActivityCalendar
           :data="activityCalendarConfig.data"
@@ -376,7 +376,7 @@ onMounted(() => {
         />
       </div>
     </el-main>
-    <el-container class="Bottom">
+    <el-container class="Bottom Top">
       <el-asider class="Container">
         <div class="leftBox">
           <div

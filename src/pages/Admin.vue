@@ -266,7 +266,6 @@ const handleClose = (key: string, keyPath: string[]) => {
   </el-container>
 </template>
 
-
 <style scoped lang="scss">
 
 .mainComponent {

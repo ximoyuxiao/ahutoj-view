@@ -2,42 +2,28 @@
   <el-menu
     class="UserEdit"
     mode="horizontal"
+    router
   >
-    <router-link
-      active-class="selected"
-      to="/Admin/UserEdit/AddUser"
-    >
-      <el-menu-item index="1">
-        <el-icon>
-          <Plus />
-        </el-icon>
-        新增
-      </el-menu-item>
-    </router-link>
-    <router-link
-      active-class="selected"
-      to="/Admin/UserEdit/UpdateUser"
-    >
-      <el-menu-item index="2">
-        <el-icon>
-          <Edit />
-        </el-icon>
-        编辑
-      </el-menu-item>
-    </router-link>
-    <router-link
-      active-class="selected"
-      to="/Admin/UserEdit/BatchAddUser"
-    >
-      <el-menu-item index="3">
-        <el-icon>
-          <Upload />
-        </el-icon>
-        批量导入
-      </el-menu-item>
-    </router-link>
+    <el-menu-item index="/Admin/UserEdit/AddUser">
+      <el-icon>
+        <Plus />
+      </el-icon>
+      新增
+    </el-menu-item>
+    <el-menu-item index="/Admin/UserEdit/UpdateUser">
+      <el-icon>
+        <Edit />
+      </el-icon>
+      编辑
+    </el-menu-item>
+    <el-menu-item index="/Admin/UserEdit/BatchAddUser">
+      <el-icon>
+        <Upload />
+      </el-icon>
+      批量导入
+    </el-menu-item>
   </el-menu>
-  <el-container>
+  <el-container class="Top Bottom">
     <el-main class="Container">
       <div class="UserEdit">
         <div class="content">
@@ -96,4 +82,5 @@ export default {
     width: 100%;
     // min-height: 500px;
   }
-}</style>
+}
+</style>
