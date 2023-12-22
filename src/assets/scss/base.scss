@@ -11,7 +11,7 @@
 }
 
 .DarkGray {
-  color: #3f3f3f;
+  color: #202020;
 }
 
 .Center {
@@ -19,6 +19,10 @@
   // align-self: center;
   // align-items: center;
   // align-content: center;
+}
+
+.NoWrap {
+  white-space: nowrap;
 }
 
 .Container {
@@ -31,6 +35,23 @@
   box-sizing: border-box;
   font-size: $fontSize3;
 }
+
+.SlideInDown {
+  @keyframes SlideInDown {
+    from {
+      transform: translate3d(0, -10%, 0);
+      visibility: visible;
+    }
+
+    to {
+      transform: translate3d(0, 2%, 0);
+    }
+  }
+
+  animation-name: SlideInDown;
+}
+
+
 
 .Top {
   margin-top: 16px;

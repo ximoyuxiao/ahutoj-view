@@ -232,11 +232,17 @@ onMounted(() => {
         v-if="!configStore.reload"
         v-slot="{ Component }"
       >
-        <component :is="Component" />
+        <transition
+          class="Component"
+          data-flag="Component"
+          enter-active-class="animate__animated animate__fadeInUp"
+        >
+          <component :is="Component" />
+        </transition>
       </router-view>
     </div>
   </div>
-  <el-footer class="Footer ArtFont Bottom">
+  <el-footer class="Footer ArtFont Bottom" v-show="config.showNav">
     <el-row style="margin: 10px 0 0 0;">
       Anhui University of Technology
     </el-row>
@@ -291,6 +297,19 @@ onMounted(() => {
 
 .animate__animated[data-flag="configDialog"] {
   animation-duration: 800ms;
+}
+
+// .animate__animated[data-flag="Component"] {
+//   animation-duration: 300ms;
+
+//   from {
+//     transform: translate3d(0, -10%, 0);
+//     visibility: visible;
+//   }
+// }
+
+.Component {
+  
 }
 
 .coverBox {

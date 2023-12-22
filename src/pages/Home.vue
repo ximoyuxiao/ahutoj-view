@@ -242,7 +242,7 @@ onMounted(() => {
         class="Container"
         style="height: 460px;"
       >
-        <div class="Title ArtFont Bold">
+        <div class="Title ArtFont Bold DarkGray">
           近期比赛
         </div>
         <div
@@ -335,7 +335,7 @@ onMounted(() => {
         class="Container Left"
         style="width: min(40%, 400px); height: 460px;"
       >
-        <div class="Title ArtFont Bold">
+        <div class="Title ArtFont Bold DarkGray">
           公告
         </div>
         <div

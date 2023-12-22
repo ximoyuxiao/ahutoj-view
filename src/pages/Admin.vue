@@ -257,7 +257,7 @@ const handleClose = (key: string, keyPath: string[]) => {
     <el-main class="mainComponent">
       <div class="admin Bottom">
         <router-view v-slot="{ Component }">
-          <transition enter-active-class="animate__animated animate__fadeInUp">
+          <transition enter-active-class="animate__animated SlideInDown">
             <component :is="Component" />
           </transition>
         </router-view>

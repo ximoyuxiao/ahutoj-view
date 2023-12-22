@@ -571,11 +571,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-container class="Main">
+  <el-container class="Main Top Bottom">
     <el-asider class="">
       <el-container class="Left">
         <el-affix>
-          <el-header style="width: 300px;" class="Container" v-if="contest.isContestProblem">
+          <el-header style="width: 300px;" class="Container Bottom" v-if="contest.isContestProblem">
             <el-row class="ArtFont contestHeader Bold">
               <div class="cursor_pointer" @click="backToContest">
                 <el-icon size="22px">

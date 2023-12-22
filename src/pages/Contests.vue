@@ -180,8 +180,8 @@ onMounted(() => {
                 @click="() => getContestById(item)"
               >
                 <el-row>
-                  <div class="cidFlag ArtFont Bold">&nbsp;#{{ item.CID }}&nbsp;</div>
-                  <div class="title ArtFont Bold">
+                  <div class="cidFlag Bold">&nbsp;#{{ item.CID }}&nbsp;</div>
+                  <div class="FontSize18 title Bold" style="margin-right: 8px;">
                     {{ item.Title }}
                   </div>
                   <div
@@ -217,7 +217,7 @@ onMounted(() => {
                   创建者：{{ item.UID }}
                   <el-divider direction="vertical" />
                 </div> -->
-                <el-row style="margin: 10px 0 0 0;">
+                <el-row class="FontSize14" style="margin: 10px 0 0 0;">
                   {{ proxy.Utils.TimeTools.timestampToTime(item.BeginTime) }}
                   <!-- - {{ proxy.Utils.TimeTools.timestampToTime(item.EndTime) }} -->
                   <el-divider direction="vertical" />
@@ -255,9 +255,6 @@ onMounted(() => {
 
 
 <style  scoped lang="scss">
-.title {
-  font-size: $fontSize8;
-}
 
 .interval {
   margin: 16px 0 0 0;
@@ -268,8 +265,10 @@ onMounted(() => {
 }
 
 .ctype {
-  padding: 3px 7px 0px 7px;
-  margin: 2px 2px 2px 10px;
+  // padding: 3px 7px 0px 7px;
+  margin: 0px 4px;
+  padding: 0 6px;
+  line-height: 30px;
   border-radius: 6px;
   color: #fff;
 }
@@ -283,8 +282,10 @@ onMounted(() => {
 }
 
 .openType {
-  padding: 3px 7px 0px 7px;
-  margin: 2px 2px 2px 10px;
+  // padding: 3px 7px 0px 7px;
+  margin: 0px 4px;
+  padding: 0 6px;
+  line-height: 28px;
   border-radius: 6px;
   color: #fff;
 }

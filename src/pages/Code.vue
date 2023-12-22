@@ -301,11 +301,6 @@ const tableData = [
           <div class="Title Bold ArtFont Left">
             Compile Error
           </div>
-          <div
-            class="Left"
-            style="font-size: 16px; margin-top: 4px;"
-          >通过了 {{ submit.PassSample }} / {{ submit.SampleNumber
-          }} 个测试数据</div>
         </el-row>
       </el-header>
       <el-header

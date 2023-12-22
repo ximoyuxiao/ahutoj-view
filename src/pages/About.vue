@@ -1,62 +1,24 @@
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useThemeSwitchStore } from "../pinia/themeSwitch";
 import MdEditor from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 const tabPosition = ref('left')
 const themeSwitchStore = useThemeSwitchStore();
 
-const excellentXcpcers = ref([
-  {
-    profilePhoto: "http://101.42.232.70/image/99109c659dbb279be78b8075cab3b7731702559837095399992.jpg",
-    name: "林仁杰",
-    slogan: "积极向上，到处睡觉",
-    awards: "2023 ICPC 杭州 银奖;2023 ICPC 西安 铜奖;2023 ICPC 西安邀请赛 铜奖;2023 CCPC 湘潭邀请赛 铜奖",
-    codeForces: "https://codeforces.com/profile/Angriliset",
-  },
-  {
-    profilePhoto: "http://101.42.232.70/image/268a7e05739dae21e1dc4cbcca6ede8f1702563383232925106.jpg",
-    name: "高泽铭",
-    slogan: "积极向上，到处睡觉",
-    awards: "2023 ICPC 西安 银奖; 2023 ICPC 济南 铜奖;2023 CCPC 秦皇岛 铜奖;2023 CCPC 湘潭邀请赛 银奖;2023 ICPC 西安邀请赛 铜奖",
-    codeForces: "https://codeforces.com/profile/gameboygzm",
-  },
-  {
-    profilePhoto: "http://101.42.232.70/image/8a382dc33b7cb51d0118ff4eacef5c091702563708300740602.jpg",
-    name: "戴铃涛",
-    slogan: "做难事必有所得",
-    awards: "2023 ICPC 杭州 银奖;2023 ICPC 西安 铜奖",
-    codeForces: "https://codeforces.com/profile/1533050560",
-  },
-  {
-    profilePhoto: "http://101.42.232.70/image/d784aab1e9dc9a9dc6dd2874ae4f43ea1702563701136748819.jpg",
-    name: "林昊",
-    slogan: "积极向上，到处睡觉",
-    awards: "2023 ICPC 西安 银奖; 2023 ICPC 济南 铜奖;2023 CCPC 秦皇岛 铜奖;2023 CCPC 湘潭邀请赛 银奖;2023 ICPC 西安邀请赛 铜奖",
-    codeForces: "https://codeforces.com/profile/Llinhao",
-  },
-  {
-    profilePhoto: "http://101.42.232.70/image/15b19b3487c78db82227f6e23471e5461702564922339328955.jpg",
-    name: "翟智伟",
-    slogan: "你！真！棒！",
-    awards: "2023 ICPC 杭州 银奖;2023 ICPC 西安 铜奖",
-    codeForces: "https://codeforces.com/profile/Radiaa",
-  },
-  {
-    profilePhoto: "http://101.42.232.70/image/0cabaa7df372ab197830e5f33bf9fd4c1702615248064311977.png",
-    name: "万祎博",
-    slogan: "积极向上，到处睡觉",
-    awards: "2023 ICPC 西安 银奖; 2023 ICPC 济南 铜奖;2023 CCPC 秦皇岛 铜奖;2023 CCPC 湘潭邀请赛 银奖;2023 ICPC 西安邀请赛 铜奖",
-    codeForces: "https://codeforces.com/profile/wa_OIers",
-  },
-  // {
-  //   profilePhoto: "",
-  //   name: "",
-  //   slogan: "",
-  //   awards: "",
-  //   codeForces: "",
-  // },
-]);
+import data_excellentXcpcers from '../assets/json/excellentXcpcers.json';
+import data_graduatedXcpcers from '../assets/json/graduatedXcpcers.json';
+import data_excellentGraduatedXcpcers from '../assets/json/excellentGraduatedXcpcers.json';
+
+const excellentXcpcers = ref([]);
+const graduatedXcpcers = ref([]);
+const excellentGraduatedXcpcers = ref([]);
+
+onMounted(() => {
+  excellentXcpcers.value = data_excellentXcpcers;
+  graduatedXcpcers.value = data_graduatedXcpcers;
+  excellentGraduatedXcpcers.value = data_excellentGraduatedXcpcers;
+});
 
 </script>
 
@@ -68,8 +30,14 @@ const excellentXcpcers = ref([
           :tab-position="tabPosition"
           class=""
         >
-          <el-tab-pane class="" label="优秀 xcpcers">
-            <el-row style="margin: 0 0 0 20px;" :gutter="12">
+          <el-tab-pane
+            class=""
+            label="在役优秀 Xcpcers"
+          >
+            <el-row
+              style="margin: 0 0 0 0px;"
+              :gutter="12"
+            >
               <el-col
                 v-for="(item, index) in excellentXcpcers"
                 :key="item"
@@ -90,13 +58,13 @@ const excellentXcpcers = ref([
                       class="FontSize14"
                       style="margin-top: 8px;"
                     >{{ item.slogan }}</p>
-                      <el-tag
-                        v-for="major in item.awards.split(/;/)"
-                        :key="major"
-                        style="margin-top: 0px;"
-                      >
-                        {{ major }}
-                      </el-tag>
+                    <el-tag
+                      v-for="major in item.awards.split(/;/)"
+                      :key="major"
+                      style="margin-top: 0px;"
+                    >
+                      {{ major }}
+                    </el-tag>
                     <div class="bottom">
                       <time class="time"></time>
                       <a
@@ -113,11 +81,116 @@ const excellentXcpcers = ref([
               </el-col>
             </el-row>
           </el-tab-pane>
-          <el-tab-pane label="OJ 信息">
+          <el-tab-pane label="往届优秀 Xcpcers">
+            <!-- <el-descriptions
+              class="margin-top"
+              title="With border"
+              :column="3"
+              :size=""
+              border
+              v-for="(item) in "
+            > -->
+            <el-descriptions
+              class="margin-top"
+              :column="3"
+              border
+              v-for="(item) in data_excellentGraduatedXcpcers"
+              style="margin: 24px 0 0 0;"
+            >
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item NoWrap">
+                    <el-icon>
+                      <user />
+                    </el-icon>
+                    姓名
+                  </div>
+                </template>
+                {{ item.Name }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item NoWrap">
+                    <el-icon>
+                      <office-building />
+                    </el-icon>
+                    单位
+                  </div>
+                </template>
+                {{ item.Company }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item NoWrap">
+                    职位/职称
+                  </div>
+                </template>
+                {{ item['Position/Title'] }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item NoWrap">
+                    <!-- <el-icon><Timer /></el-icon> -->
+                    毕业年份
+                  </div>
+                </template>
+                {{ item.GraduationYear }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item NoWrap">
+                    <!-- <el-icon>
+                      <ChatLineSquare />
+                    </el-icon> -->
+                    寄语
+                  </div>
+                </template>
+                {{ item.Greetings }}
+              </el-descriptions-item>
+            </el-descriptions>
           </el-tab-pane>
-          <el-tab-pane label="比赛"></el-tab-pane>
-          <el-tab-pane label="出题要求"></el-tab-pane>
-          <el-tab-pane label="To-do"></el-tab-pane>
+          <el-tab-pane label="退役 Xcpcers">
+            <el-table
+              :data="graduatedXcpcers"
+              stripe
+            >
+              <el-table-column
+                prop="Name"
+                label="姓名"
+                align="center"
+                width="120"
+              />
+              <el-table-column
+                prop="GraduationYear"
+                label="毕业年份"
+                align="center"
+                width="120"
+              />
+              <el-table-column
+                prop="City"
+                label="工作城市"
+                align="center"
+                width="120"
+              />
+              <el-table-column
+                prop="Company"
+                label="单位"
+                align="center"
+              />
+              <el-table-column
+                prop="Position/Title"
+                label="职务/职称"
+                align="center"
+              />
+            </el-table>
+          </el-tab-pane>
+          <!-- <el-tab-pane label=""></el-tab-pane> -->
+          <!-- <el-tab-pane label=""></el-tab-pane> -->
+          <!-- <el-tab-pane
+            label="OJ 信息"
+            stripe
+          >
+          </el-tab-pane> -->
         </el-tabs>
       </div>
     </el-main>

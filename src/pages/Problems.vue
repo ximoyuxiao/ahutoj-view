@@ -227,12 +227,40 @@ onMounted(() => {
         </el-main>
       </el-container>
     </el-aside>
-    <el-container class="Left Bottom">
+    <el-container class="Left Bottom" direction="vertical">
+      <!-- <el-main class="Container Bottom">
+        <el-row :gutter="12">
+          <el-col
+            v-for="(item, index) in search.data"
+            style="margin-bottom: 12px;"
+            :span="12"
+            :key="index"
+            class="item cursor_pointer"
+            @click="() => getProblemById(item.PID)"
+          >
+            1
+            <div class="FontSize16">
+              {{ item.PID }}&nbsp;{{ item.Title }}
+            </div>
+            <div
+              class="tag"
+              v-if="item.Label.length > 0"
+            >
+              <el-tag
+                v-for="major in item.Label.split(/;| /)"
+                :key="major"
+              >
+                {{ major }}
+              </el-tag>
+            </div>
+          </el-col>
+        </el-row>
+      </el-main> -->
       <el-main class="Container">
         <div
-        class="notFound"
+          class="notFound"
           v-if="search.Data.length == 0"
-          >
+        >
           <el-empty description="未找到结果" />
         </div>
         <div
@@ -248,8 +276,8 @@ onMounted(() => {
             :key="index"
             @click="() => getProblemById(item.PID)"
           >
-            <div class="FontSize18">
-              {{ item.PID }}&nbsp;{{ item.Title }}
+            <div class="FontSize18 Bold DarkGray">
+              {{ item.PID }}&nbsp;-&nbsp;{{ item.Title }}
             </div>
             <div
               class="tag"
@@ -281,7 +309,7 @@ onMounted(() => {
             :current-page="config.currentPage"
             @current-change="config.changePage"
           />
-          <!-- <el-radio-group
+          <el-radio-group
             v-model="config.limit"
             @change="config.changePage(1)"
             style="margin: 0 20px"
@@ -289,13 +317,12 @@ onMounted(() => {
             <el-radio-button :label="20" />
             <el-radio-button :label="30" />
             <el-radio-button :label="50" />
-          </el-radio-group> -->
+          </el-radio-group>
         </div>
       </el-main>
     </el-container>
   </el-container>
 </template>
-
 
 <style  scoped lang="scss">
 .Main {
@@ -326,6 +353,7 @@ onMounted(() => {
           span {
             line-height: 30px;
           }
+
           .problemBankSelect {
             // width: 190px;
           }
@@ -335,6 +363,7 @@ onMounted(() => {
           span {
             line-height: 30px;
           }
+
           .labelInput {
             width: 218px;
           }
@@ -472,4 +501,5 @@ span {
   }
 
   // }
-}</style>
+}
+</style>
