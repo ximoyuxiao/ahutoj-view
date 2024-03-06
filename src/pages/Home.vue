@@ -190,11 +190,12 @@ onMounted(() => {
 
 
 <template>
-  <!-- <el-dialog
+  <el-dialog
     v-model="centerDialogVisible"
-    :title=notices.noticeList[notices.Selected].Title
+
     close-icon="false"
     center
+    :append-to-body="true"
     style="border-radius: 8px; width: min(80%, 700px);"
   >
     <template #title>
@@ -222,7 +223,7 @@ onMounted(() => {
         </el-button>
       </span>
     </template>
-  </el-dialog> -->
+  </el-dialog>
   <div
     class="error"
     v-show="config.isError"
@@ -230,19 +231,12 @@ onMounted(() => {
     <el-empty description="数据同步失败，可能是网络问题，请稍后重试，或者联系网站运维人员。" />
   </div>
   <el-container class="Main">
-    <!-- <el-header class="Container">
-      <div>
-        <p><strong>安徽工业大学 Online Judge</strong> 欢迎各位<strong>安工大</strong>和<strong>皖江工</strong>新生老生参与本次招新赛</p>
-        <p>招新赛时间：13:00 ~ 18:00</p>
-        <p>请留意置顶公告，刷新即可获取最新公告</p>
-      </div>
-    </el-header> -->
     <el-container class="Top">
       <el-main
         class="Container"
         style="height: 460px;"
       >
-        <div class="Title ArtFont Bold DarkGray">
+        <div class="Title Bold DarkGray">
           近期比赛
         </div>
         <div
@@ -335,7 +329,7 @@ onMounted(() => {
         class="Container Left"
         style="width: min(40%, 400px); height: 460px;"
       >
-        <div class="Title ArtFont Bold DarkGray">
+        <div class="Title Bold DarkGray">
           公告
         </div>
         <div
@@ -356,24 +350,6 @@ onMounted(() => {
               </div>
             </div>
           </div>
-          <!-- <div class="right">
-          <div class="noticeItem">
-            <div class="item" v-if="notices.noticeList[notices.Selected]">
-              <div style="display: inline;">
-                <h3 style="display: inline-block;" class="title">
-                  {{ notices.noticeList[notices.Selected].Title }}
-                </h3>
-                <span class="rightTime">{{ notices.noticeList[notices.Selected].CreateTime ? (
-                  proxy.Utils.TimeTools.timestampToTime(notices.noticeList[notices.Selected].CreateTime)) : "" }}</span>
-              </div>
-              <hr>
-              <br>
-              <md-editor class="markDown" v-model="notices.noticeList[notices.Selected].Content"
-                :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'" preview-only />
-            </div>
-            <div v-else class="nothing"></div>
-          </div>
-        </div> -->
         </div>
       </el-asider>
     </el-container>

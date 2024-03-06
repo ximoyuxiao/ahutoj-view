@@ -267,7 +267,7 @@ onMounted(() => {
           class="info"
           v-else
         >
-          <div class="count">检索到 {{ config.Count }} 个题目</div>
+          <div class="count Bold DarkGray">检索到 {{ config.Count }} 个题目</div>
         </div>
         <div class="list">
           <div
@@ -276,10 +276,15 @@ onMounted(() => {
             :key="index"
             @click="() => getProblemById(item.PID)"
           >
-            <div class="FontSize18 Bold DarkGray">
-              {{ item.PID }}&nbsp;-&nbsp;{{ item.Title }}
+          <el-row>
+            <div class="FontSize18 Bold Gray">
+              {{ item.PID }}&nbsp;&nbsp;
             </div>
-            <div
+            <div class="FontSize18 DarkGray">
+              {{ item.Title }}
+            </div>
+          </el-row>
+          <div
               class="tag"
               v-if="item.Label.length > 0"
             >
@@ -371,10 +376,6 @@ onMounted(() => {
       }
     }
   }
-}
-
-el-aside {
-  // height: 100%;
 }
 
 span {
@@ -477,7 +478,7 @@ span {
       }
 
       .tag {
-        margin: 5px 0;
+        margin: 2px 0px;
 
         >span {
           margin: 1px 1px;

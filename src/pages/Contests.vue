@@ -142,7 +142,6 @@ onMounted(() => {
               :key="index"
             >
               <div class="goingFlag">
-                <!-- 未开始 -->
                 <template v-if="item.BeginTime > config.serverTime">
                   <div
                     class="waiting"
@@ -150,7 +149,6 @@ onMounted(() => {
                   >
                   </div>
                 </template>
-                <!-- 已开始 -->
                 <template v-else>
                   <div
                     v-if="item.EndTime > config.serverTime"

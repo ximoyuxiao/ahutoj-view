@@ -6,19 +6,22 @@ import "md-editor-v3/lib/style.css";
 const tabPosition = ref('left')
 const themeSwitchStore = useThemeSwitchStore();
 
-import data_excellentXcpcers from '../assets/json/excellentXcpcers.json';
-import data_graduatedXcpcers from '../assets/json/graduatedXcpcers.json';
-import data_excellentGraduatedXcpcers from '../assets/json/excellentGraduatedXcpcers.json';
+// import data_excellentXcpcers from '../assets/json/excellentXcpcers.json';
+// import data_graduatedXcpcers from '../assets/json/graduatedXcpcers.json';
+// import data_excellentGraduatedXcpcers from '../assets/json/excellentGraduatedXcpcers.json';
 
-const excellentXcpcers = ref([]);
-const graduatedXcpcers = ref([]);
-const excellentGraduatedXcpcers = ref([]);
+// const excellentXcpcers = ref(data_excellentXcpcers);
+// const graduatedXcpcers = ref(data_graduatedXcpcers);
+// const excellentGraduatedXcpcers = ref(data_excellentGraduatedXcpcers);
+// const excellentXcpcers = require('./assets/json/excellentXcpcers.json');
+// const graduatedXcpcers = require('../assets/json/graduatedXcpcers.json');
+// const excellentGraduatedXcpcers = require('../assets/json/excellentGraduatedXcpcers.json');
 
-onMounted(() => {
-  excellentXcpcers.value = data_excellentXcpcers;
-  graduatedXcpcers.value = data_graduatedXcpcers;
-  excellentGraduatedXcpcers.value = data_excellentGraduatedXcpcers;
-});
+// onMounted(() => {
+//   excellentXcpcers.value = data_excellentXcpcers;
+//   graduatedXcpcers.value = data_graduatedXcpcers;
+//   excellentGraduatedXcpcers.value = data_excellentGraduatedXcpcers;
+// });
 
 </script>
 
@@ -34,7 +37,7 @@ onMounted(() => {
             class=""
             label="在役优秀 Xcpcers"
           >
-            <el-row
+            <!-- <el-row
               style="margin: 0 0 0 0px;"
               :gutter="12"
             >
@@ -79,7 +82,7 @@ onMounted(() => {
                   </div>
                 </el-card>
               </el-col>
-            </el-row>
+            </el-row> -->
           </el-tab-pane>
           <el-tab-pane label="往届优秀 Xcpcers">
             <!-- <el-descriptions
@@ -90,7 +93,7 @@ onMounted(() => {
               border
               v-for="(item) in "
             > -->
-            <el-descriptions
+            <!-- <el-descriptions
               class="margin-top"
               :column="3"
               border
@@ -130,7 +133,6 @@ onMounted(() => {
               <el-descriptions-item>
                 <template #label>
                   <div class="cell-item NoWrap">
-                    <!-- <el-icon><Timer /></el-icon> -->
                     毕业年份
                   </div>
                 </template>
@@ -139,17 +141,14 @@ onMounted(() => {
               <el-descriptions-item>
                 <template #label>
                   <div class="cell-item NoWrap">
-                    <!-- <el-icon>
-                      <ChatLineSquare />
-                    </el-icon> -->
                     寄语
                   </div>
                 </template>
                 {{ item.Greetings }}
               </el-descriptions-item>
-            </el-descriptions>
+            </el-descriptions> -->
           </el-tab-pane>
-          <el-tab-pane label="退役 Xcpcers">
+          <!-- <el-tab-pane label="退役 Xcpcers">
             <el-table
               :data="graduatedXcpcers"
               stripe
@@ -183,7 +182,7 @@ onMounted(() => {
                 align="center"
               />
             </el-table>
-          </el-tab-pane>
+          </el-tab-pane> -->
           <!-- <el-tab-pane label=""></el-tab-pane> -->
           <!-- <el-tab-pane label=""></el-tab-pane> -->
           <!-- <el-tab-pane

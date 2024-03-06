@@ -247,7 +247,7 @@ onMounted(() => {
       Anhui University of Technology
     </el-row>
     <el-row>
-      Online Judge &copy; 2019 - 2023
+      Online Judge &copy; 2019 - 2024
     </el-row>
   </el-footer>
 </template>
@@ -297,19 +297,6 @@ onMounted(() => {
 
 .animate__animated[data-flag="configDialog"] {
   animation-duration: 800ms;
-}
-
-// .animate__animated[data-flag="Component"] {
-//   animation-duration: 300ms;
-
-//   from {
-//     transform: translate3d(0, -10%, 0);
-//     visibility: visible;
-//   }
-// }
-
-.Component {
-  
 }
 
 .coverBox {
