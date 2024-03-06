@@ -149,7 +149,7 @@ var contest = reactive<contestType>({
   Description: "",
   BeginTime: 0,
   EndTime: 0,
-  Type: "ACM",
+  Type: "ICPC",
   IsPublic: "公开",
   Pass: "",
   Problems: "",
@@ -180,7 +180,7 @@ var contest = reactive<contestType>({
         this.Description = data.Description;
         this.BeginTime = data.BeginTime;
         this.EndTime = data.EndTime;
-        this.Type = data.Type == constValStore.CONTEST_TYPE_ACM ? "ACM" : "OI";
+        this.Type = data.Type == constValStore.CONTEST_TYPE_ACM ? "ICPC" : "OI";
         this.IsPublic =
           data.IsPublic == constValStore.CONTEST_PUBLIC ? "公开" : "不公开";
         this.Pass = data.Pass;

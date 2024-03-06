@@ -158,7 +158,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-container class="Main">
+  <el-container class="Main Top Bottom">
     <el-aside class="Aside">
       <el-container
         direction="vertical"
@@ -185,7 +185,7 @@ onMounted(() => {
             </el-input>
           </el-row>
         </el-main>
-        <el-main class="Container filterContainer">
+        <el-main class="Container filterContainer Top">
           <el-row class="Row">
             <span class="FontSize16 Bold DarkGray">题库</span>
             <el-select
@@ -227,19 +227,47 @@ onMounted(() => {
         </el-main>
       </el-container>
     </el-aside>
-    <el-container class="Left Bottom">
+    <el-container class="Left Bottom" direction="vertical">
+      <!-- <el-main class="Container Bottom">
+        <el-row :gutter="12">
+          <el-col
+            v-for="(item, index) in search.data"
+            style="margin-bottom: 12px;"
+            :span="12"
+            :key="index"
+            class="item cursor_pointer"
+            @click="() => getProblemById(item.PID)"
+          >
+            1
+            <div class="FontSize16">
+              {{ item.PID }}&nbsp;{{ item.Title }}
+            </div>
+            <div
+              class="tag"
+              v-if="item.Label.length > 0"
+            >
+              <el-tag
+                v-for="major in item.Label.split(/;| /)"
+                :key="major"
+              >
+                {{ major }}
+              </el-tag>
+            </div>
+          </el-col>
+        </el-row>
+      </el-main> -->
       <el-main class="Container">
         <div
-        class="notFound"
+          class="notFound"
           v-if="search.Data.length == 0"
-          >
+        >
           <el-empty description="未找到结果" />
         </div>
         <div
           class="info"
           v-else
         >
-          <div class="count">检索到 {{ config.Count }} 个题目</div>
+          <div class="count Bold DarkGray">检索到 {{ config.Count }} 个题目</div>
         </div>
         <div class="list">
           <div
@@ -248,10 +276,15 @@ onMounted(() => {
             :key="index"
             @click="() => getProblemById(item.PID)"
           >
-            <div class="FontSize18">
-              {{ item.PID }}&nbsp;{{ item.Title }}
+          <el-row>
+            <div class="FontSize18 Bold Gray">
+              {{ item.PID }}&nbsp;&nbsp;
             </div>
-            <div
+            <div class="FontSize18 DarkGray">
+              {{ item.Title }}
+            </div>
+          </el-row>
+          <div
               class="tag"
               v-if="item.Label.length > 0"
             >
@@ -281,7 +314,7 @@ onMounted(() => {
             :current-page="config.currentPage"
             @current-change="config.changePage"
           />
-          <!-- <el-radio-group
+          <el-radio-group
             v-model="config.limit"
             @change="config.changePage(1)"
             style="margin: 0 20px"
@@ -289,21 +322,12 @@ onMounted(() => {
             <el-radio-button :label="20" />
             <el-radio-button :label="30" />
             <el-radio-button :label="50" />
-          </el-radio-group> -->
+          </el-radio-group>
         </div>
       </el-main>
-      <el-footer class="Container Footer ArtFont Bottom">
-        <el-row>
-          Anhui University of Technology
-        </el-row>
-        <el-row>
-          Online Judge &copy; 2019 - 2023
-        </el-row>
-      </el-footer>
     </el-container>
   </el-container>
 </template>
-
 
 <style  scoped lang="scss">
 .Main {
@@ -334,6 +358,7 @@ onMounted(() => {
           span {
             line-height: 30px;
           }
+
           .problemBankSelect {
             // width: 190px;
           }
@@ -343,6 +368,7 @@ onMounted(() => {
           span {
             line-height: 30px;
           }
+
           .labelInput {
             width: 218px;
           }
@@ -350,10 +376,6 @@ onMounted(() => {
       }
     }
   }
-}
-
-el-aside {
-  // height: 100%;
 }
 
 span {
@@ -456,7 +478,7 @@ span {
       }
 
       .tag {
-        margin: 5px 0;
+        margin: 2px 0px;
 
         >span {
           margin: 1px 1px;
@@ -480,4 +502,5 @@ span {
   }
 
   // }
-}</style>
+}
+</style>

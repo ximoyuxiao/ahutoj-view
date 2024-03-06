@@ -11,7 +11,11 @@
 }
 
 .DarkGray {
-  color: #3f3f3f;
+  color: #202020;
+}
+
+.Gray {
+  color: #3C3C3C;
 }
 
 .Center {
@@ -21,16 +25,37 @@
   // align-content: center;
 }
 
+.NoWrap {
+  white-space: nowrap;
+}
+
 .Container {
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
-  margin: 16px 0 0 0;
+  // margin: 16px 0 0 0;
   padding: 16px;
   height: auto;
   box-sizing: border-box;
   font-size: $fontSize3;
 }
+
+.SlideInDown {
+  @keyframes SlideInDown {
+    from {
+      transform: translate3d(0, -10%, 0);
+      visibility: visible;
+    }
+
+    to {
+      transform: translate3d(0, 2%, 0);
+    }
+  }
+
+  animation-name: SlideInDown;
+}
+
+
 
 .Top {
   margin-top: 16px;
@@ -42,6 +67,10 @@
 
 .Left {
   margin-left: 16px;
+}
+
+.Right {
+  margin-right: 16px;
 }
 
 .Footer {

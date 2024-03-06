@@ -571,11 +571,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-container class="Main">
+  <el-container class="Top Main Bottom">
     <el-asider class="">
       <el-container class="Left">
         <el-affix>
-          <el-header style="width: 300px;" class="Container" v-if="contest.isContestProblem">
+          <el-header style="width: 300px;" class="Container Bottom Top" v-if="contest.isContestProblem">
             <el-row class="ArtFont contestHeader Bold">
               <div class="cursor_pointer" @click="backToContest">
                 <el-icon size="22px">
@@ -753,14 +753,6 @@ onMounted(() => {
           </div>
         </div>
       </el-main>
-      <el-footer class="Container Footer ArtFont Bottom">
-        <el-row>
-          Anhui University of Technology
-        </el-row>
-        <el-row>
-          Online Judge &copy; 2019 - 2023
-        </el-row>
-      </el-footer>
     </el-container>
     <el-backtop style="height: 50px; width: 50px;" :right="80" :bottom="80" />
   </el-container>

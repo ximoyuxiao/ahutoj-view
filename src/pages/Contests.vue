@@ -127,7 +127,7 @@ onMounted(() => {
 });
 </script>
 <template>
-  <el-container class="Main" direction="">
+  <el-container class="Main Top Bottom" direction="">
     <el-main class="Container">
       <div class="contest">
         <div
@@ -142,7 +142,6 @@ onMounted(() => {
               :key="index"
             >
               <div class="goingFlag">
-                <!-- 未开始 -->
                 <template v-if="item.BeginTime > config.serverTime">
                   <div
                     class="waiting"
@@ -150,7 +149,6 @@ onMounted(() => {
                   >
                   </div>
                 </template>
-                <!-- 已开始 -->
                 <template v-else>
                   <div
                     v-if="item.EndTime > config.serverTime"
@@ -180,8 +178,8 @@ onMounted(() => {
                 @click="() => getContestById(item)"
               >
                 <el-row>
-                  <div class="cidFlag ArtFont Bold">&nbsp;#{{ item.CID }}&nbsp;</div>
-                  <div class="title ArtFont Bold">
+                  <div class="cidFlag Bold">&nbsp;#{{ item.CID }}&nbsp;</div>
+                  <div class="FontSize18 title Bold" style="margin-right: 8px;">
                     {{ item.Title }}
                   </div>
                   <div
@@ -217,7 +215,7 @@ onMounted(() => {
                   创建者：{{ item.UID }}
                   <el-divider direction="vertical" />
                 </div> -->
-                <el-row style="margin: 10px 0 0 0;">
+                <el-row class="FontSize14" style="margin: 10px 0 0 0;">
                   {{ proxy.Utils.TimeTools.timestampToTime(item.BeginTime) }}
                   <!-- - {{ proxy.Utils.TimeTools.timestampToTime(item.EndTime) }} -->
                   <el-divider direction="vertical" />
@@ -250,22 +248,11 @@ onMounted(() => {
         </div>
       </div>
     </el-main>
-    <el-footer class="Container Footer ArtFont Bottom">
-      <el-row>
-        Anhui University of Technology
-      </el-row>
-      <el-row>
-        Online Judge &copy; 2019 - 2023
-      </el-row>
-    </el-footer>
   </el-container>
 </template>
 
 
 <style  scoped lang="scss">
-.title {
-  font-size: $fontSize8;
-}
 
 .interval {
   margin: 16px 0 0 0;
@@ -276,8 +263,10 @@ onMounted(() => {
 }
 
 .ctype {
-  padding: 3px 7px 0px 7px;
-  margin: 2px 2px 2px 10px;
+  // padding: 3px 7px 0px 7px;
+  margin: 0px 4px;
+  padding: 0 6px;
+  line-height: 30px;
   border-radius: 6px;
   color: #fff;
 }
@@ -291,8 +280,10 @@ onMounted(() => {
 }
 
 .openType {
-  padding: 3px 7px 0px 7px;
-  margin: 2px 2px 2px 10px;
+  // padding: 3px 7px 0px 7px;
+  margin: 0px 4px;
+  padding: 0 6px;
+  line-height: 28px;
   border-radius: 6px;
   color: #fff;
 }

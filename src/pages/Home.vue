@@ -192,9 +192,10 @@ onMounted(() => {
 <template>
   <el-dialog
     v-model="centerDialogVisible"
-    :title=notices.noticeList[notices.Selected].Title
+
     close-icon="false"
     center
+    :append-to-body="true"
     style="border-radius: 8px; width: min(80%, 700px);"
   >
     <template #title>
@@ -227,42 +228,26 @@ onMounted(() => {
     class="error"
     v-show="config.isError"
   >
-    <el-empty description="数据同步失败,可能是网络问题，请稍后重试，或者联系网站运维人员。" />
+    <el-empty description="数据同步失败，可能是网络问题，请稍后重试，或者联系网站运维人员。" />
   </div>
   <el-container class="Main">
-    <!-- <el-header class="Container">
-      <div>
-        <p><strong>安徽工业大学 Online Judge</strong> 欢迎各位<strong>安工大</strong>和<strong>皖江工</strong>新生老生参与本次招新赛</p>
-        <p>招新赛时间：13:00 ~ 18:00</p>
-        <p>请留意置顶公告，刷新即可获取最新公告</p>
-      </div>
-    </el-header> -->
-    <el-container>
-      <el-main class="Container">
-        <div class="Title ArtFont Bold">
+    <el-container class="Top">
+      <el-main
+        class="Container"
+        style="height: 460px;"
+      >
+        <div class="Title Bold DarkGray">
           近期比赛
         </div>
         <div
           class="contestsPreview"
           v-show="!config.isError"
         >
-          <!-- <div class="left">
-            <div :class="(contests.showListIndex == 1 ? 'selected ' : '') + 'liveContests cursor_pointer'"
-              @click="contests.show(1)">
-              <div>正 进 行</div>
-            </div>
-            <div :class="(contests.showListIndex == 2 ? 'selected ' : '') + 'waitingContests cursor_pointer'"
-              @click="contests.show(2)">
-              <div>等 待 中</div>
-            </div>
-            <div :class="(contests.showListIndex == 3 ? 'selected ' : '') + 'overContests cursor_pointer'"
-              @click="contests.show(3)">
-              <div>已 结 束</div>
-            </div>
-          </div> -->
-          <div class="right">
+          <div
+            class="right"
+            style="height: 396px;"
+          >
             <div class="waitingContests">
-              <!-- <div class="waitingContests" v-show="contests.showListIndex == 2"> -->
               <div
                 class="cursor_pointer"
                 :class="item.Title != '' ? 'item' : 'nothing'"
@@ -287,7 +272,6 @@ onMounted(() => {
               </div>
             </div>
             <div class="liveContests">
-              <!-- <div class="liveContests" v-show="contests.showListIndex == 1"> -->
               <div
                 class="cursor_pointer"
                 :class="item.Title != '' ? 'item' : 'nothing'"
@@ -312,7 +296,6 @@ onMounted(() => {
               </div>
             </div>
             <div class="overContests">
-              <!-- <div class="overContests" v-show="contests.showListIndex == 3"> -->
               <div
                 class="cursor_pointer"
                 :class="item.Title != '' ? 'item' : 'nothing'"
@@ -339,18 +322,20 @@ onMounted(() => {
                 </div>
               </div>
             </div>
-            <!-- </transition> -->
           </div>
         </div>
       </el-main>
       <el-asider
         class="Container Left"
-        style="width: min(40%, 400px);"
+        style="width: min(40%, 400px); height: 460px;"
       >
-        <div class="Title ArtFont Bold">
+        <div class="Title Bold DarkGray">
           公告
         </div>
-        <div class="notice">
+        <div
+          class="notice"
+          style="height: 396px;"
+        >
           <div class="left">
             <div class="noticeItem">
               <div
@@ -365,42 +350,17 @@ onMounted(() => {
               </div>
             </div>
           </div>
-          <!-- <div class="right">
-          <div class="noticeItem">
-            <div class="item" v-if="notices.noticeList[notices.Selected]">
-              <div style="display: inline;">
-                <h3 style="display: inline-block;" class="title">
-                  {{ notices.noticeList[notices.Selected].Title }}
-                </h3>
-                <span class="rightTime">{{ notices.noticeList[notices.Selected].CreateTime ? (
-                  proxy.Utils.TimeTools.timestampToTime(notices.noticeList[notices.Selected].CreateTime)) : "" }}</span>
-              </div>
-              <hr>
-              <br>
-              <md-editor class="markDown" v-model="notices.noticeList[notices.Selected].Content"
-                :theme="themeSwitchStore.theme > 0 ? 'light' : 'dark'" preview-only />
-            </div>
-            <div v-else class="nothing"></div>
-          </div>
-        </div> -->
         </div>
       </el-asider>
     </el-container>
-    <el-footer class="Container Footer ArtFont Bottom">
-      <el-row>
-        Anhui University of Technology
-      </el-row>
-      <el-row>
-        Online Judge &copy; 2019 - 2023
-      </el-row>
-    </el-footer>
   </el-container>
-  <div class="Home">
-  </div>
 </template>
 
 
 <style scoped lang="scss">
+.Main {
+  height: calc(100vh - 58.5px - 80px);
+}
 .markDown {
   background-color: transparent !important;
 }
@@ -441,7 +401,7 @@ onMounted(() => {
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-        border-radius: 8px;
+        border-radius: 5px;
         box-sizing: border-box;
         padding: 0px 10px;
         margin: 8px 0 0 0;
@@ -497,7 +457,7 @@ onMounted(() => {
         height: 100%;
         display: flex;
         flex-direction: column;
-        border-radius: 8px;
+        border-radius: 5px;
         box-sizing: border-box;
         padding: 4px 12px;
         @include fill_color("fill3");
@@ -545,64 +505,10 @@ onMounted(() => {
   display: flex;
   // margin: 20px 0;
 
-  .left {
-    width: 50px;
-    z-index: 2;
-
-    >div {
-      height: 160px;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-sizing: border-box;
-      transition-duration: 200ms;
-
-      &:hover {
-        @include fill_color("fill15");
-      }
-
-      >div {
-        writing-mode: vertical-lr;
-        @include font_color("font1");
-        font-size: $fontSize5;
-      }
-    }
-
-    .liveContests {
-      @include fill_color("fill1");
-      border-start-start-radius: 8px;
-    }
-
-    .waitingContests {
-      @include fill_color("fill1");
-    }
-
-    .overContests {
-      @include fill_color("fill1");
-      border-end-start-radius: 8px;
-    }
-
-    .selected {
-      @include fill_color("fill14");
-      border-left: 6px solid;
-      @include border_color("fill12");
-
-      >div {
-        @include font_color("fill11");
-      }
-    }
-  }
-
   .right {
     position: relative;
-    width: calc(100% - 0px);
+    width: 100%;
     height: 420px;
-    z-index: 1;
-    // @include fill_color("fill1");
-    border-start-end-radius: 8px;
-    border-end-end-radius: 8px;
-    overflow: hidden;
 
     >div {
       position: absolute;
@@ -613,7 +519,6 @@ onMounted(() => {
       flex-direction: column;
       justify-content: space-around;
       box-sizing: border-box;
-      padding: 4px 2px 0px 2px;
       animation-duration: 600ms;
 
       .item {
@@ -621,9 +526,9 @@ onMounted(() => {
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-        border-radius: 8px;
+        border-radius: 5px;
         box-sizing: border-box;
-        padding: 4px 12px;
+        padding: 4px 10px;
         @include fill_color("fill3");
         // @include box_shadow(0, 0, 5px, 1px, "fill54");
         font-size: $fontSize8;
@@ -646,9 +551,9 @@ onMounted(() => {
 
       .nothing {
         height: 70px;
-        border-radius: 8px;
+        border-radius: 5px;
         box-sizing: border-box;
-        padding: 4px 12px;
+        padding: 4px 10px;
         @include fill_color("fill2");
       }
     }
@@ -689,5 +594,4 @@ onMounted(() => {
       }
     }
   }
-}
-</style>
+}</style>

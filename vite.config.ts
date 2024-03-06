@@ -1,7 +1,8 @@
 import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { visualizer } from "rollup-plugin-visualizer";
-import externalGlobals from "rollup-plugin-external-globals";
+import externalGlobals from "rollup-plugin-external-globals"
+// import json from '@rollup/plugin-json';;
 
 //CDN 引入
 const CDN_Vue = {

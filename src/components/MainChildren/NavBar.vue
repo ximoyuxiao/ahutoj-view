@@ -52,94 +52,63 @@ function initLoginCredentials() {
     :ellipsis="false"
     :default-active="activeIndex"
     @select="handleSelect"
+    router
   >
-    <router-link to="/Home">
-      <el-menu-item
-        index="0"
-        class="Bold navBarComponent"
-      >
-        AHUT OJ
-      </el-menu-item>
-    </router-link>
-    <router-link
-      active-class="selected"
-      id="problems"
-      to="/Problems"
+    <el-menu-item
+      index="/Home"
+      class="Bold navBarComponent"
     >
-      <el-menu-item
-        index="1"
-        class="navBarComponent"
-      >
-        <el-icon>
-          <Files />
-        </el-icon>
-        题库
-      </el-menu-item>
-    </router-link>
-    <router-link
-      active-class="selected"
-      id="contests"
-      to="/Contests"
+      AHUT OJ
+    </el-menu-item>
+    <el-menu-item
+      index="/Problems"
+      class="navBarComponent"
     >
-      <el-menu-item
-        index="2"
-        class="navBarComponent"
-      >
-        <el-icon>
-          <SwitchFilled />
-        </el-icon>
-        比赛
-      </el-menu-item>
-    </router-link>
-    <router-link
-      active-class="selected"
-      id="Lists"
-      to="/Lists"
+      <el-icon>
+        <Files />
+      </el-icon>
+      题库
+    </el-menu-item>
+    <el-menu-item
+      index="/Contests"
+      class="navBarComponent"
     >
-      <el-menu-item
-        index="3"
-        class="navBarComponent"
-      >
-        <el-icon>
-          <Tickets />
-        </el-icon>
-        题单
-      </el-menu-item>
-    </router-link>
-    <router-link
-      active-class="selected"
-      id="status"
-      to="/Status"
+      <el-icon>
+        <SwitchFilled />
+      </el-icon>
+      比赛
+    </el-menu-item>
+    <el-menu-item
+      index="/Lists"
+      class="navBarComponent"
     >
-      <el-menu-item
-        index="4"
-        class="navBarComponent"
-      >
-        <el-icon>
-          <DataAnalysis />
-        </el-icon>
-        状态
-      </el-menu-item>
-    </router-link>
-    <router-link
-      active-class="selected"
-      id="status"
-      to="/About"
+      <el-icon>
+        <Tickets />
+      </el-icon>
+      题单
+    </el-menu-item>
+    <el-menu-item
+      index="/Status"
+      class="navBarComponent"
     >
-      <el-menu-item
-        index="5"
-        class="navBarComponent"
-      >
-        <el-icon>
-          <InfoFilled />
-        </el-icon>
-        关于
-      </el-menu-item>
-    </router-link>
+      <el-icon>
+        <DataAnalysis />
+      </el-icon>
+      状态
+    </el-menu-item>
+    <el-menu-item
+      index="/About"
+      class="navBarComponent"
+    >
+      <el-icon>
+        <InfoFilled />
+      </el-icon>
+      关于
+    </el-menu-item>
     <div class="flex-grow" />
     <el-menu-item
-      index="6"
       @click="props.config"
+      index=""
     >
       <el-icon size="55px">
         <Setting />
@@ -148,13 +117,13 @@ function initLoginCredentials() {
     <div v-if="userDataStore.UserName == ''">
       <el-menu-item
         @click="props.login"
-        index="7"
+        index=""
       >
         登录
       </el-menu-item>
     </div>
     <div v-else>
-      <el-sub-menu index="8">
+      <el-sub-menu index="">
         <template #title>
           <div
             v-if="userDataStore.PermissionMap > 3"
@@ -166,7 +135,7 @@ function initLoginCredentials() {
         </template>
         <div @click.stop="intoUserCenter()">
           <el-menu-item
-            index="7-1"
+            index=""
             class="adminComponent"
           >
             <el-icon>

@@ -1,0 +1,122 @@
+[
+  {
+      "profilePhoto": "http://101.42.232.70/image/eba3100d3539210e12af19076b3a56e11702870181119308057.png",
+      "Name": "黄宇晨",
+      "GraduationYear": "2014届计算机科学与技术专业毕业生",
+      "Company": "Meta (Facebook)",
+      "Position/Title": "Senior Research Scientist ",
+      "AnnualSalary": "39w 美元",
+      "Awards": "",
+      "Greetings": "在ACM队的经历对我而言是一段难忘的记忆，那时候我们会坐在一起肩并肩讨论如何攻克各种各样的算法难题。对算法与数据结构的理解是我们搭建高效系统的基石，也是我们在Meta以及Google对所有工程技术岗位面试候选人的最主要评判标准。我期待我们的团队可以培养出更多优秀的ACMer，一方面为学校取得各种各样的荣誉，另一方面也为工业界提供更多对细节的优化精益求精的人才！"
+  },
+  {
+      "profilePhoto": "http://101.42.232.70/image/bbadb480a28993897c62af246675cb8c1702870399082125986.png",
+      "Name": "李叶",
+      "GraduationYear": "2013届计算机科学与技术专业毕业生",
+      "Company": "合肥本源量子计算科技有限责任公司",
+      "Position/Title": "量子应用部部长",
+      "AnnualSalary": "",
+      "Awards": "安徽省ACM竞赛三等奖",
+      "Greetings": "当你加入这个团队，你就已经战胜80%的人了。团队成员亦师亦友，找到一群志同道合的小伙伴是很幸运的一件事，请珍惜这段时光。在此期间请不要轻言放弃，而要不断磨炼和提升自己，以梦为马，不负韶华。加油！"
+  },
+  {
+      "profilePhoto": "http://101.42.232.70/image/e1f3c883710a7fa577f5b08fa3cbcf3f1702870627522258867.png",
+      "Name": "张月明",
+      "GraduationYear": "2015届网络工程专业毕业生",
+      "Company": "zoom ",
+      "Position/Title": "研发工程师",
+      "AnnualSalary": "30-50w",
+      "Awards": "安徽省大学生程序设计竞赛一等奖",
+      "Greetings": "希望学弟学妹们趁着大学时间比较多可以多刷题，多看书。看《算法》，看《算法导论》，看完书后更多的练习，想提高编程和解题能力，熟悉常见题型后多练习是唯一的捷径。刷题不仅可以帮助你们在比赛的时候更多的做出题目，在日后的工作面试中会发现面试里面的题目比acm里面的题目简单多了。欢迎毕业的时候找我内推。"
+  },
+  {
+      "profilePhoto": "http://101.42.232.70/image/0ffa70cd661b216e83ec86fedb2d266c1702870763829404841.png",
+      "Name": "张李杨",
+      "GraduationYear": "2015届网络专业毕业生",
+      "Company": "科大讯飞",
+      "Position/Title": "软件工程师",
+      "AnnualSalary": "30-50w",
+      "Awards": "安徽省ACM三等奖",
+      "Greetings": "持续学习，养成终身学习的习惯，活到老，学到老。"
+  },
+  {
+      "profilePhoto": "http://101.42.232.70/image/8d157f250143de70b6417a30988280521702870834860918136.png",
+      "Name": "詹隽",
+      "GraduationYear": "2013届网络工程专业毕业生",
+      "Company": "华为",
+      "Position/Title": "研发工程师",
+      "AnnualSalary": "",
+      "Awards": "安徽省程序设计大赛二等奖",
+      "Greetings": "脚踏实地，夯实基础。"
+  },
+  {
+      "profilePhoto": "http://101.42.232.70/image/c47f2a4ab4755969e4e3d8586675fb461702870923828716729.png",
+      "Name": "杨立",
+      "GraduationYear": "2013届软件工程专业毕业生",
+      "Company": "阿里巴巴集团",
+      "Position/Title": "技术专家",
+      "AnnualSalary": "",
+      "Awards": "“达内杯”ACM/ICPC程序设计大赛三等奖 “远东理工杯”全国机器人锦标赛暨2012年FIRA世界杯机器人大赛中国队选拔赛 类人型舞蹈类：单人项目 二等奖 “上海太敬杯”国际仿人机器人奥林匹克大赛（IHOG）类人型体操类：广播体操项目 二等奖",
+      "Greetings": "ACM竞赛不仅仅是一块基础的试金石，也是提升个人、团队分析、解决问题及创新能力的重要练武场，对当前的学习及未来的科研、工作实践都会有着持续潜移默化的正向影响。作为早期队员，非常开心看到我们的队伍与精神不断传承与壮大，同时为学弟学妹及指导老师们历年持续取得的优异成绩感到骄傲，希望大家继续摘星，取得更高的荣誉。"
+  },
+  {
+      "profilePhoto": "http://101.42.232.70/image/6da039633e21384f343635e6438740cb1702870968859008818.png",
+      "Name": "许梦",
+      "GraduationYear": "2014届物联网专业毕业生",
+      "Company": "亚信科技",
+      "Position/Title": "测试工程师",
+      "AnnualSalary": "20w",
+      "Awards": "蓝桥杯省三等奖，京胜杯三等奖",
+      "Greetings": "希望我们ACM团队能越做越大，越做越强，涌现出更多优秀的人才，成为安徽省ACM的骄傲，培育出很多IT界的姣姣者。"
+  },
+  {
+      "profilePhoto": "http://101.42.232.70/image/fd1a693ab3943fdc6fadafc188fa00651702871024939759074.png",
+      "Name": "王宣东",
+      "GraduationYear": "2017届软件工程专业毕业生",
+      "Company": "百度",
+      "Position/Title": "前端开发工程师",
+      "AnnualSalary": "",
+      "Awards": "“蓝桥杯”安徽省一等奖 “京胜杯”安徽省二等奖",
+      "Greetings": "望ACM团队越办越好，望学弟学妹们能够从中找到乐趣、学到知识、得到提升。"
+  },
+  {
+      "profilePhoto": "http://101.42.232.70/image/2d6aacae2815e7b6aa30237757c677711702871080593051287.png",
+      "Name": "王凡",
+      "GraduationYear": "2016届软件工程专业毕业生",
+      "Company": "中科院合肥物质科学研究院",
+      "Position/Title": "在站博士后",
+      "AnnualSalary": "25万起（研究院标准）",
+      "Awards": "安徽省程序设计大赛二等奖",
+      "Greetings": "怀揣梦想，敢于挑战；立足当下而登高望远；不负韶华，不负师恩。"
+  },
+  {
+      "profilePhoto": "http://101.42.232.70/image/ac94be61141b2a0fa50ebf9ae17751081702871115857796855.png",
+      "Name": "孙勇",
+      "GraduationYear": "2015届电子信息工程专业毕业生",
+      "Company": "腾讯(上海)科技有限公司",
+      "Position/Title": "后台开发工程师",
+      "AnnualSalary": "",
+      "Awards": "",
+      "Greetings": "珍惜时间和精力，多刷题，多比赛，不怕困难不怕输。"
+  },
+  {
+      "profilePhoto": "http://101.42.232.70/image/90cafedcc484fdde385c89f5481bd39b1702873958932913373.png",
+      "Name": "朱宇航",
+      "GraduationYear": "2020届网络工程专业毕业生",
+      "Company": "合肥杰发科技有限公司",
+      "Position/Title": "系统开发工程师(文件系统方向)",
+      "AnnualSalary": "37万",
+      "Awards": "蓝桥杯省赛一等奖，蓝桥杯国赛二等奖，CCPC 安徽省省赛 一等奖，ICPC 南昌全国邀请赛 铜奖，CCPC 湘潭中国邀请赛 铜奖",
+      "Greetings": "希望我们ACM团队可以在ICPC/CCPC高水平比赛中取得更好的成绩。"
+  },
+  {
+      "profilePhoto": "http://101.42.232.70/image/e9c9f8b9225a97a0d4047728a32506c41702874007043968120.png",
+      "Name": "赵阳",
+      "GraduationYear": "2015届计算机科学与技术专业毕业生",
+      "Company": "腾讯科技有限公司",
+      "Position/Title": "数据库内核工程师",
+      "AnnualSalary": "100万",
+      "Awards": "",
+      "Greetings": "打好基础，不要浮躁，基础好了才能走得更远。"
+  }
+]

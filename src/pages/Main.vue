@@ -166,7 +166,6 @@ onMounted(() => {
       />
     </transition>
     <!-- 登录窗口背景遮罩 -->
-
     <transition
       data-flag="cover"
       enter-active-class="animate__animated animate__fadeInUp"
@@ -233,29 +232,40 @@ onMounted(() => {
         v-if="!configStore.reload"
         v-slot="{ Component }"
       >
-        <component :is="Component" />
+        <transition
+          class="Component"
+          data-flag="Component"
+          enter-active-class="animate__animated animate__fadeInUp"
+        >
+          <component :is="Component" />
+        </transition>
       </router-view>
     </div>
   </div>
-  <!-- <div class="Footer">
-    <div class="ArtFont">
-      <el-row>
-        Anhui University of Technology
-      </el-row>
-      <el-row>
-        Online Judge &copy; 2019 - 2023
-      </el-row>
-    </div>
-  </div> -->
+  <el-footer class="Footer ArtFont Bottom" v-show="config.showNav">
+    <el-row style="margin: 10px 0 0 0;">
+      Anhui University of Technology
+    </el-row>
+    <el-row>
+      Online Judge &copy; 2019 - 2024
+    </el-row>
+  </el-footer>
 </template>
 
 <style  scoped lang="scss">
+.el-container {
+  min-height: 100vh;
+}
+
 .Footer {
+  height: 80px;
   background-color: #333333;
   color: white;
   margin-bottom: 0px;
-  height: 100vh;
-  padding: 10px 50px;
+  padding: 10px 40px;
+  // position: absolute;
+  // bottom: 0;
+  // width: 100%;
 }
 
 .main {

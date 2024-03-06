@@ -1,66 +1,51 @@
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useThemeSwitchStore } from "../pinia/themeSwitch";
 import MdEditor from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 const tabPosition = ref('left')
 const themeSwitchStore = useThemeSwitchStore();
 
-const excellentXcpcers = ref([
-  {
-    profilePhoto: "http://101.42.232.70/image/99109c659dbb279be78b8075cab3b7731702559837095399992.jpg",
-    name: "林仁杰",
-    slogan: "积极向上，到处睡觉",
-    awards: "2023 ICPC 杭州 银奖;2023 ICPC 西安 铜奖;2023 ICPC 西安邀请赛 铜奖;2023 CCPC 湘潭邀请赛 铜奖",
-    codeForces: "https://codeforces.com/profile/Angriliset",
-  },
-  // {
-  //   profilePhoto: "1",
-  //   name: "林仁杰",
-  //   slogan: "1",
-  //   awards: "1",
-  //   codeForces: "",
-  // },
-  // {
-  //   profilePhoto: "1",
-  //   name: "林仁杰",
-  //   slogan: "1",
-  //   awards: "1",
-  //   codeForces: "",
-  // },
-  // {
-  //   profilePhoto: "1",
-  //   name: "林仁杰",
-  //   slogan: "1",
-  //   awards: "1",
-  //   codeForces: "",
-  // },
-  // {
-  //   profilePhoto: "1",
-  //   name: "林仁杰",
-  //   slogan: "1",
-  //   awards: "1",
-  //   codeForces: "",
-  // },
-]);
+// import data_excellentXcpcers from '../assets/json/excellentXcpcers.json';
+// import data_graduatedXcpcers from '../assets/json/graduatedXcpcers.json';
+// import data_excellentGraduatedXcpcers from '../assets/json/excellentGraduatedXcpcers.json';
+
+// const excellentXcpcers = ref(data_excellentXcpcers);
+// const graduatedXcpcers = ref(data_graduatedXcpcers);
+// const excellentGraduatedXcpcers = ref(data_excellentGraduatedXcpcers);
+// const excellentXcpcers = require('./assets/json/excellentXcpcers.json');
+// const graduatedXcpcers = require('../assets/json/graduatedXcpcers.json');
+// const excellentGraduatedXcpcers = require('../assets/json/excellentGraduatedXcpcers.json');
+
+// onMounted(() => {
+//   excellentXcpcers.value = data_excellentXcpcers;
+//   graduatedXcpcers.value = data_graduatedXcpcers;
+//   excellentGraduatedXcpcers.value = data_excellentGraduatedXcpcers;
+// });
 
 </script>
 
 <template>
-  <el-container class="Main">
+  <el-container class="Top Bottom Main">
     <el-main class="Container">
       <div class="Title">
         <el-tabs
           :tab-position="tabPosition"
           class=""
         >
-          <el-tab-pane class="" label="优秀 xcpcers">
-            <el-row style="margin: 0 0 0 20px;">
+          <el-tab-pane
+            class=""
+            label="在役优秀 Xcpcers"
+          >
+            <!-- <el-row
+              style="margin: 0 0 0 0px;"
+              :gutter="12"
+            >
               <el-col
                 v-for="(item, index) in excellentXcpcers"
                 :key="item"
-                :span="7"
-                style="margin: 16px 16px 0 0;"
+                :span="6"
+                style="margin-bottom: 12px;"
               >
                 <el-card
                   :body-style="{ padding: '0px' }"
@@ -70,19 +55,19 @@ const excellentXcpcers = ref([
                     :src=item.profilePhoto
                     class="image"
                   />
-                  <div style="padding: 14px">
+                  <div style="padding: 12px">
                     <p class="FontSize17">{{ item.name }}</p>
                     <p
                       class="FontSize14"
                       style="margin-top: 8px;"
                     >{{ item.slogan }}</p>
-                      <el-tag
-                        v-for="major in item.awards.split(/;/)"
-                        :key="major"
-                        style="margin-top: 2px;"
-                      >
-                        {{ major }}
-                      </el-tag>
+                    <el-tag
+                      v-for="major in item.awards.split(/;/)"
+                      :key="major"
+                      style="margin-top: 0px;"
+                    >
+                      {{ major }}
+                    </el-tag>
                     <div class="bottom">
                       <time class="time"></time>
                       <a
@@ -97,24 +82,117 @@ const excellentXcpcers = ref([
                   </div>
                 </el-card>
               </el-col>
-            </el-row>
+            </el-row> -->
           </el-tab-pane>
-          <el-tab-pane label="OJ 信息">
+          <el-tab-pane label="往届优秀 Xcpcers">
+            <!-- <el-descriptions
+              class="margin-top"
+              title="With border"
+              :column="3"
+              :size=""
+              border
+              v-for="(item) in "
+            > -->
+            <!-- <el-descriptions
+              class="margin-top"
+              :column="3"
+              border
+              v-for="(item) in data_excellentGraduatedXcpcers"
+              style="margin: 24px 0 0 0;"
+            >
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item NoWrap">
+                    <el-icon>
+                      <user />
+                    </el-icon>
+                    姓名
+                  </div>
+                </template>
+                {{ item.Name }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item NoWrap">
+                    <el-icon>
+                      <office-building />
+                    </el-icon>
+                    单位
+                  </div>
+                </template>
+                {{ item.Company }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item NoWrap">
+                    职位/职称
+                  </div>
+                </template>
+                {{ item['Position/Title'] }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item NoWrap">
+                    毕业年份
+                  </div>
+                </template>
+                {{ item.GraduationYear }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item NoWrap">
+                    寄语
+                  </div>
+                </template>
+                {{ item.Greetings }}
+              </el-descriptions-item>
+            </el-descriptions> -->
           </el-tab-pane>
-          <el-tab-pane label="比赛"></el-tab-pane>
-          <el-tab-pane label="出题要求"></el-tab-pane>
-          <el-tab-pane label="To-do"></el-tab-pane>
+          <!-- <el-tab-pane label="退役 Xcpcers">
+            <el-table
+              :data="graduatedXcpcers"
+              stripe
+            >
+              <el-table-column
+                prop="Name"
+                label="姓名"
+                align="center"
+                width="120"
+              />
+              <el-table-column
+                prop="GraduationYear"
+                label="毕业年份"
+                align="center"
+                width="120"
+              />
+              <el-table-column
+                prop="City"
+                label="工作城市"
+                align="center"
+                width="120"
+              />
+              <el-table-column
+                prop="Company"
+                label="单位"
+                align="center"
+              />
+              <el-table-column
+                prop="Position/Title"
+                label="职务/职称"
+                align="center"
+              />
+            </el-table>
+          </el-tab-pane> -->
+          <!-- <el-tab-pane label=""></el-tab-pane> -->
+          <!-- <el-tab-pane label=""></el-tab-pane> -->
+          <!-- <el-tab-pane
+            label="OJ 信息"
+            stripe
+          >
+          </el-tab-pane> -->
         </el-tabs>
       </div>
     </el-main>
-    <el-footer class="Container Footer ArtFont Bottom">
-      <el-row>
-        Anhui University of Technology
-      </el-row>
-      <el-row>
-        Online Judge &copy; 2019 - 2023
-      </el-row>
-    </el-footer>
   </el-container>
 </template>
 

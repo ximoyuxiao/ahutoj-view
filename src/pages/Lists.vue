@@ -80,41 +80,33 @@ function SyncUrl() {
 </script>
 
 <template>
-  <el-container class="Main">
-    <el-aside
-      class="Container"
-      style="height: 100%; width: 350px;"
-    >
-      <div
-        class="search"
-        style="padding: 10px;"
-      >
-        <div style="font-size: 16px;">题单 ID</div>
-        <el-input
-          class="Left"
-          v-model="config.search"
-          placeholder="例如 1000"
-          clearable
-          style="width: 127px;"
-        />
-        <el-button
-          v-on:click="getListByLID()"
-          class="searchButton"
-          type="primary"
-        >
-          <el-icon size="16px">
-            <Position />
-          </el-icon>
-          &nbsp;跳转
-        </el-button>
-      </div>
-
+  <el-container class="Main Bottom Top">
+    <el-aside>
+      <el-main class="Container">
+        <el-row class="Row">
+          <span class="FontSize16 Bold DarkGray">题单 ID</span>
+          <el-input
+            v-model="config.search"
+            placeholder="e.g. 1000"
+            type="text"
+            class="Left goToListInput input-with-select"
+          >
+            <template #append>
+              <el-button
+                v-on:click="getListByLID()"
+                type="primary"
+                class="goToProblemButton Bold"
+              >
+                跳转
+              </el-button>
+            </template>
+          </el-input>
+        </el-row>
+      </el-main>
     </el-aside>
     <el-container class="Left">
       <el-main class="Container">
-        <div
-          class="ProblemList"
-        >
+        <div class="ProblemList">
           <div class="left">
             <div class="content">
               <div class="list">
@@ -129,19 +121,18 @@ function SyncUrl() {
                     <el-row>
                       <div
                         id="LID"
-                        class="Bold ArtFont"
-                      >#{{ item.LID }}</div>&nbsp;
+                        class="FontSize14 Bold"
+                      >#{{ item.LID }}&nbsp;-&nbsp;</div>
                       <div
                         id="Title"
-                        class="Bold Title ArtFont"
+                        class="FontSize18 Bold  Bold"
                       >{{ item.Title }}</div>
-                      <div class="ltype ltypeOffcial Bold">
+                      <div class="FontSize14 ltype ltypeOffcial Bold" style="line-height: 24px;">
                         官方
                       </div>
                     </el-row>
-                    <div class="Interval"></div>
                     <!-- <div id="UID">创建者：{{ item.UID }}</div> -->
-                    <div id="Time">{{ proxy.Utils.TimeTools.timestampToTime(item.StartTime) }}</div>
+                    <div class="Time">{{ proxy.Utils.TimeTools.timestampToTime(item.StartTime) }}</div>
                   </div>
                 </div>
               </div>
@@ -168,19 +159,20 @@ function SyncUrl() {
           </div>
         </div>
       </el-main>
-      <el-footer class="Container Footer ArtFont Bottom">
-        <el-row>
-          Anhui University of Technology
-        </el-row>
-        <el-row>
-          Online Judge &copy; 2019 - 2023
-        </el-row>
-      </el-footer>
     </el-container>
   </el-container>
 </template>
 
 <style  scoped lang="scss">
+span {
+  line-height: 30px;
+}
+
+.goToListInput {
+  border-radius: 5px 0 0 5px;
+  width: 195px;
+}
+
 .searchButton {
   margin: 0 0 0 10px;
   padding: 0px 20px 0px 20px;
@@ -188,8 +180,12 @@ function SyncUrl() {
   font-weight: bold;
 }
 
+.Time {
+  margin: 4px 0 4px 0;
+}
+
 .ltype {
-  padding: 3px 7px 0px 7px;
+  padding: 0 8px;
   margin: 2px 2px 2px 10px;
   border-radius: 6px;
   color: #fff;
@@ -251,4 +247,5 @@ function SyncUrl() {
       }
     }
   }
-}</style>
+}
+</style>

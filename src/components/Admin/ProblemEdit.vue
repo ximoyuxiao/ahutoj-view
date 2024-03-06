@@ -8,7 +8,7 @@ export default {
   <el-menu
     class="ProblemEdit"
     mode="horizontal"
-    router="true"
+    router
   >
     <el-menu-item index="/Admin/ProblemEdit/AddProblem">
       <el-icon>
@@ -47,7 +47,7 @@ export default {
       导出
     </el-menu-item>
   </el-menu>
-  <div class="ProblemEdit">
+  <div class="ProblemEdit Top Bottom">
     <div class="content">
       <router-view v-slot="{ Component }">
         <transition enter-active-class="animate__animated animate__fadeInRight">

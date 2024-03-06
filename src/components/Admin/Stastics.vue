@@ -8,7 +8,7 @@ const themeSwitchStore = useThemeSwitchStore();
 </script>
 
 <template>
-  <el-container class="Main">
+  <el-container class="Main Top Bottom">
     <!-- <el-header class="Container">
         </el-header> -->
     <!-- <el-row>
